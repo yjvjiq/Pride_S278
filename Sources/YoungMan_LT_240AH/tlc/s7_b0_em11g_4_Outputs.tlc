@@ -1,0 +1,43 @@
+%implements s7_b0_em11g_4_Outputs "C"
+
+%function Outputs(block, system) Output
+%assign cfgTxt = ""
+%openfile cfgTxt
+%assign localVarDecl = ""
+%openfile localVarDecl
+real32_T rtb_Add;
+%closefile localVarDecl
+/* Switch: '<S9>/Switch' incorporates:
+ *  Constant: '<S10>/Constant'
+ *  Constant: '<S11>/Constant'
+ *  Constant: '<S5>/Constant4'
+ *  Constant: '<S9>/zero'
+ *  DataTypeConversion: '<S5>/Data Type Conversion'
+ *  Inport: '<Root>/Tavg'
+ *  Logic: '<S9>/and'
+ *  RelationalOperator: '<S10>/Compare'
+ *  RelationalOperator: '<S11>/Compare'
+ *  Sum: '<S5>/Add'
+ */
+if (((real32_T)Tavg/*@>667*/ - 40.0F/*@>701:2*/ > 0.0F)/*@>699*/ && ((real32_T)Tavg/*@>667*/ - 40.0F/*@>700:2*/ < 57.0F)) {
+    /* Lookup_n-D: '<S9>/linearizationSOF' incorporates:
+ *  Inport: '<Root>/g_socValue'
+ */
+    rtb_Add = look2_iflf_binlxpw(Can_g_socValue, (real32_T)Tavg/*@>667*/ - 40.0F, %<(SLibCGIR_CSCPAddr(16, 12, "", -1, "", 0))>, %<(SLibCGIR_CSCPAddr(19, 9, "", -1, "", 0))>, %<(SLibCGIR_CSCPAddr(13, 108, "", -1, "", 0))>, YoungMan_LT_ConstP.linearizationSOF_maxIndex_f, 12UL);
+} else {
+    rtb_Add = 0.0F;
+}
+/* End of Switch: '<S9>/Switch' */
+
+/* Gain: '<S5>/Gain' */
+BiggestFeedbackCurt_Model = %<(SLibCG_SE(SLibCGIR_CSCP(9, 1, "", -1, "", 0)))>/*@>677*/ * rtb_Add;
+%closefile cfgTxt
+%<cfgTxt>
+%assign fcnProtoType = ""
+%openfile fcnProtoType
+static void YoungM_PulseRechargePowerAdjust(\
+%assign comma = ""
+%closefile fcnProtoType
+%<SLibCG_SetFcnProtoType(4, 0, fcnProtoType)>
+%<LibSetSystemField(system, "CachedOutputLocalVars", localVarDecl)>
+%endfunction
