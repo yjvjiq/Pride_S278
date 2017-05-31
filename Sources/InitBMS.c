@@ -87,18 +87,18 @@ void delay(unsigned int t)
 void InitialBMS(void)
 {
     unsigned char SetTime[7];
-			
-	  TurnOff_ALL();// Turn off all relays. then check their state.
-	  
-	  status_group1.Bit.St_BMS =3;//高压断开  上电发无效值
-    status_group2.Bit.St_Ele_Relay = 1;//受电弓继电器未连接
-    status_group2.Bit.St_CHG_Connect = 1;//充电连接状态未连接
-    status_group3.Bit.St_Charge = 3;//充电状态设置为无效
+    	
+    TurnOff_ALL();// Turn off all relays. then check their state.
     
-	  //TurnOn_CC2();//12V系统 屏蔽就是24V
-	  g_sysPara[PARA_BMU_NUMBER]=BMU_NUMBER;
+    status_group1.Bit.St_BMS = 3;           //高压断开  上电发无效值
+    status_group2.Bit.St_Ele_Relay = 1;     //受电弓继电器未连接
+    status_group2.Bit.St_CHG_Connect = 1;   //充电连接状态未连接
+    status_group3.Bit.St_Charge = 3;        //充电状态设置为无效
+    
+    //TurnOn_CC2();//12V系统 屏蔽就是24V
+    g_sysPara[PARA_BMU_NUMBER]=BMU_NUMBER;
 		
-	  if(ENDFLAG!=ReadEndFlag())   //ENDFLAG=98 //是否要下载出厂参数？
+	  if(ENDFLAG != ReadEndFlag())   //ENDFLAG=98 //是否要下载出厂参数？
 	  {
 		    InitDefaultParam();
 		    //设置时钟

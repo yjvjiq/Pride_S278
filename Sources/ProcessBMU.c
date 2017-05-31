@@ -97,323 +97,320 @@ void BMU_initial(void)
 void BMU_Processure(void)
 {
     unsigned long framID;
-	  unsigned int i,boxNumber=0;
+    unsigned int i,boxNumber=0;
 	   
-	  if((Int_Flag&0x08)==0x08) //若接收到1个数据，进行数据处理
-	  {
-  		  Int_Flag &= 0xf7;//清中断标志		
-  		  		  			  		
-  	 	  g_group = 0;  		
+    if((Int_Flag&0x08)==0x08) //若接收到1个数据，进行数据处理
+    {
+        Int_Flag &= 0xf7;//清中断标志		
+          			  		
+        g_group = 0;  		
 
-  			
-  			framID = g_mboxID;      
-  			g_group = framID&0x000000ff;
-  			g_group--;
-           /*
-  			framID = framID>>4;
-  			framID = framID & 0x03ffffff;
-           */
-          	framID = framID>>8;
-  			framID = framID & 0x003fffff;
-  			
-  			
 
-  			switch(framID)  //解析数据
-  			{
-  			    case 0x018FF11://BMU标识信息；硬件版本、软件版本、通讯协议版本等；0x18FF110x
-  				 	    //if(recogBMUtoBMSmessage != bufL)
-  					    //	recogBMStoBMUflag = 0; //辨识失败
-  					    //else
-  						  recogBMStoBMUflag = 1; //辨识成功								
-  					    break;	  
-  				  case 0x018FF13://电池配置信息1，6802的个数、电池采压数量、采温数量；CC2
-  				      switch(g_group) 
-  				      {
-      				      case 0:
-      				          g_configFlag |= 0x00000001;
-      				          break;
-      				      case 1:
-      				          g_configFlag |= 0x00000002;
-      				          break;
-      				      case 2:
-      				          g_configFlag |= 0x00000004;
-      				          break;
-      				      case 3:
-      				          g_configFlag |= 0x00000008;
-      				          break;
-      				      case 4:
-      				          g_configFlag |= 0x00000010;
-      				          break;
-      				      case 5:
-      				          g_configFlag |= 0x00000020;
-      				          break;
-      				      case 6:
-      				          g_configFlag |= 0x00000040;
-      				          break;
-      				      case 7:
-      				          g_configFlag |= 0x00000080;
-      				          break;
-      				      case 8:
-      				          g_configFlag |= 0x00000100;
-      				          break;
-      				      case 9:
-      				          g_configFlag |= 0x00000200;
-      				          break;
-      				      case 10:
-      				          g_configFlag |= 0x00000400;
-      				          break;
-      				      case 11:
-      				          g_configFlag |= 0x00000800;
-      				          break;
-      				      case 12:
-      				          g_configFlag |= 0x00001000;
-      				          break;
-      				      case 13:
-      				          g_configFlag |= 0x00002000;
-      				          break;
-      				      case 14:
-      				          g_configFlag |= 0x00004000;
-      				          break;
-      				      case 15:
-      				          g_configFlag |= 0x00008000;
-      				          break;
-      				      case 16:
-      				          g_configFlag |= 0x00010000;
-      				          break;
-      				      case 17:
-      				          g_configFlag |= 0x00020000;
-      				          break;      				                				          
-  				      }
-  				      
-  					    g_bmu2_number_v[g_group] = g_mboxData[boxNumber][0]&0x07; //&0x07;//BMU1带6802的个数
-      					g_bmu2_number_t[g_group] = (g_mboxData[boxNumber][0]&0x70)>>4; //&0x07;
-                
-      					g_cell_number_v[g_group][0]=g_mboxData[boxNumber][1]&0x0f;
-      					g_cell_number_t[g_group][0]=(g_mboxData[boxNumber][1]&0xf0)>>4;
+        framID = g_mboxID;      
+        g_group = framID&0x000000ff;
+        g_group--;
+        /*
+        framID = framID>>4;
+        framID = framID & 0x03ffffff;
+        */
+        framID = framID>>8;
+        framID = framID & 0x003fffff;
 
-      					g_cell_number_v[g_group][1]=g_mboxData[boxNumber][2]&0x0f;
-      					g_cell_number_t[g_group][1]=(g_mboxData[boxNumber][2]&0xf0)>>4;
+		switch(framID)  //解析数据
+		{
+    	    case 0x018FF11://BMU标识信息；硬件版本、软件版本、通讯协议版本等；0x18FF110x
+			 	    //if(recogBMUtoBMSmessage != bufL)
+				    //	recogBMStoBMUflag = 0; //辨识失败
+				    //else
+					  recogBMStoBMUflag = 1; //辨识成功								
+				    break;	  
+            case 0x018FF13://电池配置信息1，6802的个数、电池采压数量、采温数量；CC2
+                switch(g_group) 
+                {
+                    case 0:
+                      g_configFlag |= 0x00000001;
+                      break;
+                    case 1:
+                      g_configFlag |= 0x00000002;
+                      break;
+                    case 2:
+                      g_configFlag |= 0x00000004;
+                      break;
+                    case 3:
+                      g_configFlag |= 0x00000008;
+                      break;
+                    case 4:
+                      g_configFlag |= 0x00000010;
+                      break;
+                    case 5:
+                      g_configFlag |= 0x00000020;
+                      break;
+                    case 6:
+                      g_configFlag |= 0x00000040;
+                      break;
+                    case 7:
+                      g_configFlag |= 0x00000080;
+                      break;
+                    case 8:
+                      g_configFlag |= 0x00000100;
+                      break;
+                    case 9:
+                      g_configFlag |= 0x00000200;
+                      break;
+                    case 10:
+                      g_configFlag |= 0x00000400;
+                      break;
+                    case 11:
+                      g_configFlag |= 0x00000800;
+                      break;
+                    case 12:
+                      g_configFlag |= 0x00001000;
+                      break;
+                    case 13:
+                      g_configFlag |= 0x00002000;
+                      break;
+                    case 14:
+                      g_configFlag |= 0x00004000;
+                      break;
+                    case 15:
+                      g_configFlag |= 0x00008000;
+                      break;
+                    case 16:
+                      g_configFlag |= 0x00010000;
+                      break;
+                    case 17:
+                      g_configFlag |= 0x00020000;
+                      break;      				                				          
+                }
+			      
+			    g_bmu2_number_v[g_group] = g_mboxData[boxNumber][0]&0x07; //&0x07;//BMU1带6802的个数
+				g_bmu2_number_t[g_group] = (g_mboxData[boxNumber][0]&0x70)>>4; //&0x07;
+        
+				g_cell_number_v[g_group][0]=g_mboxData[boxNumber][1]&0x0f;
+				g_cell_number_t[g_group][0]=(g_mboxData[boxNumber][1]&0xf0)>>4;
 
-      					g_cell_number_v[g_group][2]=g_mboxData[boxNumber][3]&0x0f;
-      					g_cell_number_t[g_group][2]=(g_mboxData[boxNumber][3]&0xf0)>>4;
+				g_cell_number_v[g_group][1]=g_mboxData[boxNumber][2]&0x0f;
+				g_cell_number_t[g_group][1]=(g_mboxData[boxNumber][2]&0xf0)>>4;
 
-      					g_cell_number_v[g_group][3]=g_mboxData[boxNumber][4]&0x0f;
-      					g_cell_number_t[g_group][3]=(g_mboxData[boxNumber][4]&0xf0)>>4;
+				g_cell_number_v[g_group][2]=g_mboxData[boxNumber][3]&0x0f;
+				g_cell_number_t[g_group][2]=(g_mboxData[boxNumber][3]&0xf0)>>4;
 
-      					g_cell_number_v[g_group][4]=g_mboxData[boxNumber][5]&0x0f;	
-      					g_cell_number_t[g_group][4]=(g_mboxData[boxNumber][5]&0xf0)>>4;	
-      					
-      																		
-  					    break;
-  				  case 0x018FF14://电池配置信息3，6802的个数、电池采压数量、采温数量；CC3
-  					    break;
-  			    case 0x018FF16:   //判断生命信号 是否接收完一个周期
-      				  switch(g_group) 
-  				      {
-      				      case 0:
-      				          g_circleFlag |= 0x00000001;
-      				          break;
-      				      case 1:
-      				          g_circleFlag |= 0x00000002;
-      				          break;
-      				      case 2:
-      				          g_circleFlag |= 0x00000004;
-      				          break;
-      				      case 3:
-      				          g_circleFlag |= 0x00000008;
-      				          break;
-      				      case 4:
-      				          g_circleFlag |= 0x00000010;
-      				          break;
-      				      case 5:
-      				          g_circleFlag |= 0x00000020;
-      				          break;
-      				      case 6:
-      				          g_circleFlag |= 0x00000040;
-      				          break;
-      				      case 7:
-      				          g_circleFlag |= 0x00000080;
-      				          break;
-      				      case 8:
-      				          g_circleFlag |= 0x00000100;
-      				          break;
-      				      case 9:
-      				          g_circleFlag |= 0x00000200;
-      				          break;
-      				      case 10:
-      				          g_circleFlag |= 0x00000400;
-      				          break;
-      				      case 11:
-      				          g_circleFlag |= 0x00000800;
-      				          break;
-      				      case 12:
-      				          g_circleFlag |= 0x00001000;
-      				          break;
-      				      case 13:
-      				          g_circleFlag |= 0x00002000;
-      				          break;
-      				      case 14:
-      				          g_circleFlag |= 0x00004000;
-      				          break;
-      				      case 15:
-      				          g_circleFlag |= 0x00008000;
-      				          break;
-      				      case 16:
-      				          g_circleFlag |= 0x00010000;
-      				          break;
-      				      case 17:
-      				          g_circleFlag |= 0x00020000;
-      				          break;      				                				          
-  				      }
-      				   
-      				  //State_Box_Online=g_circleFlag;
-  			        break;
-  				    				  //******group#1*******
-  				  //********************
-  				  case 0x0018FF21://组号＃1，电池的采压值＃1，可采集4路电压:
-  				      for(i=0;i<4;i++)
-  				      {
-  				          g_singleCellVoltage[g_group][0][i]=g_mboxData[boxNumber][2*i+1]|(unsigned int)g_mboxData[boxNumber][2*i]<<8;
-  				      }
-      					break;
-  				  case 0x0018FF22://组号＃1，电池的采压值＃2，可采集4路电压:
-  				      for(i=0;i<4;i++)
-  				      {
-  				          g_singleCellVoltage[g_group][0][4+i]=g_mboxData[boxNumber][2*i+1]|(unsigned int)g_mboxData[boxNumber][2*i]<<8;
-  				      }
-      					break;
-  				  case 0x0018FF23://组号＃1，电池的采压值＃3，可采集4路电压；  				  
-  				      for(i=0;i<4;i++)
-  				      {
-  				          g_singleCellVoltage[g_group][0][8+i]=g_mboxData[boxNumber][2*i+1]|(unsigned int)g_mboxData[boxNumber][2*i]<<8;
-  				      } 
-      					break;  			  		
-  				  case 0x0018FF37://组号＃1，电池的欠压过压标志
-      					//g_groupUVflag[g_group][0] = g_mboxData[boxNumber][1]|(unsigned int)g_mboxData[boxNumber][0]<<8;
-      					//g_groupOVflag[g_group][0] = g_mboxData[boxNumber][3]|(unsigned int)g_mboxData[boxNumber][2]<<8;
-      					break;  				
-  				  case 0x0018FF41://组号＃1，电池的采温值＃1，可杉?路温度；
-      					for(i=0;i<2;i++)
-      					    g_singleCellTemperature[g_group][0][i]= g_mboxData[boxNumber][i];
-      					break; 	
-  				  //******** group#2**********
-  				  //**************************
-  				  case 0x0018FF24://组号＃2，电池的采压值＃1，可采集4路电压；
-  				    	for(i=0;i<4;i++)
-  				      {
-  				          g_singleCellVoltage[g_group][1][i]=g_mboxData[boxNumber][2*i+1]|(unsigned int)g_mboxData[boxNumber][2*i]<<8;
-  				      }
-      					break;
-  				  case 0x0018FF25://组号＃2，电池的采压值＃2，可采集4路电压；
-  				      for(i=0;i<4;i++)
-  				      {
-  				          g_singleCellVoltage[g_group][1][4+i]=g_mboxData[boxNumber][2*i+1]|(unsigned int)g_mboxData[boxNumber][2*i]<<8;
-  				      }
-      					break;
-  				  case 0x0018FF26://组号＃2，电池的采压值＃3，可采集4路电压；
-  				    	for(i=0;i<4;i++)
-  				      {
-  				          g_singleCellVoltage[g_group][1][8+i]=g_mboxData[boxNumber][2*i+1]|(unsigned int)g_mboxData[boxNumber][2*i]<<8;
-  				      }
-      					break;  					
-  				  case 0x0018FF38://组号＃2，电池的欠压过压标志
-      					//g_groupUVflag[g_group][1] = g_mboxData[boxNumber][1]|(unsigned int)g_mboxData[boxNumber][0]<<8;
-      					//g_groupOVflag[g_group][1] = g_mboxData[boxNumber][3]|(unsigned int)g_mboxData[boxNumber][2]<<8;
-      					break;     			  
-  				  case 0x0018FF42://组号＃2，电池的采温值＃1，可采集8路温度；  				 
-  				      for(i=0;i<2;i++)
-  					        g_singleCellTemperature[g_group][1][i]= g_mboxData[boxNumber][i];
-  					    break;
-  				  //******group#3********
-  				  //*********************
-  				  case 0x0018FF27://组号＃3，电池的采压值＃1，可采集4路电压；
-  				    	for(i=0;i<4;i++)
-  				      {
-  				          g_singleCellVoltage[g_group][2][i]=g_mboxData[boxNumber][2*i+1]|(unsigned int)g_mboxData[boxNumber][2*i]<<8;
-  				      }
-      					break;
-  				  case 0x0018FF28://组号＃3，电池的采压值＃2，可采集4路电压；
-  				      for(i=0;i<4;i++)
-  				      {
-  				          g_singleCellVoltage[g_group][2][4+i]=g_mboxData[boxNumber][2*i+1]|(unsigned int)g_mboxData[boxNumber][2*i]<<8;
-  				      }
-      					break;
-  				  case 0x0018FF29://组号＃3，电池的采压值＃3，可采集4路电压；
-  				    	for(i=0;i<4;i++)
-  				      {
-  				          g_singleCellVoltage[g_group][2][8+i]=g_mboxData[boxNumber][2*i+1]|(unsigned int)g_mboxData[boxNumber][2*i]<<8;
-  				      }
-      					break;
-  					
-  				  case 0x0018FF39://组号＃3，电池的欠压过压标志
-      					//g_groupUVflag[g_group][2] = g_mboxData[boxNumber][1]|(unsigned int)g_mboxData[boxNumber][0]<<8;
-      					//g_groupOVflag[g_group][2] = g_mboxData[boxNumber][3]|(unsigned int)g_mboxData[boxNumber][2]<<8;
-      					break; 					
-  				  case 0x0018FF43://组号＃3，电池的采温值＃1，可杉?路温度；  				
-      					for(i=0;i<2;i++)
-      					    g_singleCellTemperature[g_group][2][i]= g_mboxData[boxNumber][i];
-      					break;  	
-  				  //*******group#4*******
-  				  //*********************
-  				  case 0x0018FF2a://组号＃4，电池的采压值＃1，可采集4路电压；
-  				    	for(i=0;i<4;i++)
-  				      {
-  				          g_singleCellVoltage[g_group][3][i]=g_mboxData[boxNumber][2*i+1]|(unsigned int)g_mboxData[boxNumber][2*i]<<8;
-  				      }
-      					break;
-  				  case 0x0018FF2b://组号＃4，电池的采压值＃2，可采集4路电压；
-  				    	for(i=0;i<4;i++)
-  				      {
-  				          g_singleCellVoltage[g_group][3][4+i]=g_mboxData[boxNumber][2*i+1]|(unsigned int)g_mboxData[boxNumber][2*i]<<8;
-  				      }
-      					break;
-  				  case 0x0018FF2c://组号＃4，电池的采压值＃3，可采集4路电压； 
-  				    	for(i=0;i<4;i++)
-  				      {
-  				          g_singleCellVoltage[g_group][3][8+i]=g_mboxData[boxNumber][2*i+1]|(unsigned int)g_mboxData[boxNumber][2*i]<<8;
-  				      }
-      					break;
-  				  case 0x0018FF3a://组号＃4，电池的欠压过压标志  				  
-      					//g_groupUVflag[g_group][3] = g_mboxData[boxNumber][1]|(unsigned int)g_mboxData[boxNumber][0]<<8;
-      					//g_groupOVflag[g_group][3] = g_mboxData[boxNumber][3]|(unsigned int)g_mboxData[boxNumber][2]<<8;
-      					break;  				
-  				  case 0x0018FF44://组号＃4，电池的采温值＃1，可采集8路温度  				 
-      				  for(i=0;i<2;i++)
-      					    g_singleCellTemperature[g_group][3][i]= g_mboxData[boxNumber][i];
-      					break;
-  				  //******group#5********
-  				  //*********************
-  				  case 0x0018FF2d://组号＃5，电池的采压值＃1，可采集4路电压；	
-  				    	for(i=0;i<4;i++)
-  				      {
-  				          g_singleCellVoltage[g_group][4][i]=g_mboxData[boxNumber][2*i+1]|(unsigned int)g_mboxData[boxNumber][2*i]<<8;
-  				      }
-      					break;
-  				  case 0x0018FF2e://组号＃5，电池的采压值＃2，可采集4路电压；
-  				    	for(i=0;i<4;i++)
-  				      {
-  				          g_singleCellVoltage[g_group][4][4+i]=g_mboxData[boxNumber][2*i+1]|(unsigned int)g_mboxData[boxNumber][2*i]<<8;
-  				      }
-      					break;
-  				  case 0x0018FF2f://组号＃5，电池的采压值＃3，可采集4路电压；  
-  				    	for(i=0;i<4;i++)
-  				      {
-  				          g_singleCellVoltage[g_group][4][8+i]=g_mboxData[boxNumber][2*i+1]|(unsigned int)g_mboxData[boxNumber][2*i]<<8;
-  				      }
+				g_cell_number_v[g_group][3]=g_mboxData[boxNumber][4]&0x0f;
+				g_cell_number_t[g_group][3]=(g_mboxData[boxNumber][4]&0xf0)>>4;
 
-      					break;  					
-  				  case 0x0018FF3b://组号＃5，电池的欠压过压标志
-      					//circleFlag |= 0x10000000;
-      					//g_groupUVflag[g_group][4] = g_mboxData[boxNumber][1]|(unsigned int)g_mboxData[boxNumber][0]<<8;
-      					//g_groupOVflag[g_group][4] = g_mboxData[boxNumber][3]|(unsigned int)g_mboxData[boxNumber][2]<<8;
-      					break;  					
-  				  case 0x0018FF45://组号＃5，电池的采温值＃1，可采集8路温度；  			
-      				  for(i=0;i<2;i++)
-      					   g_singleCellTemperature[g_group][4][i]= g_mboxData[boxNumber][i];
-      					break;		 
-  				  default:
-  					    break;
-  			} // end switch(framID)  //解析数据
+				g_cell_number_v[g_group][4]=g_mboxData[boxNumber][5]&0x0f;	
+				g_cell_number_t[g_group][4]=(g_mboxData[boxNumber][5]&0xf0)>>4;	
+																	
+			    break;
+            case 0x018FF14://电池配置信息3，6802的个数、电池采压数量、采温数量；CC3
+				break;
+		    case 0x018FF16:   //判断生命信号 是否接收完一个周期
+                switch(g_group) 
+                {
+                    case 0:
+                      g_circleFlag |= 0x00000001;
+                      break;
+                    case 1:
+                      g_circleFlag |= 0x00000002;
+                      break;
+                    case 2:
+                      g_circleFlag |= 0x00000004;
+                      break;
+                    case 3:
+                      g_circleFlag |= 0x00000008;
+                      break;
+                    case 4:
+                      g_circleFlag |= 0x00000010;
+                      break;
+                    case 5:
+                      g_circleFlag |= 0x00000020;
+                      break;
+                    case 6:
+                      g_circleFlag |= 0x00000040;
+                      break;
+                    case 7:
+                      g_circleFlag |= 0x00000080;
+                      break;
+                    case 8:
+                      g_circleFlag |= 0x00000100;
+                      break;
+                    case 9:
+                      g_circleFlag |= 0x00000200;
+                      break;
+                    case 10:
+                      g_circleFlag |= 0x00000400;
+                      break;
+                    case 11:
+                      g_circleFlag |= 0x00000800;
+                      break;
+                    case 12:
+                      g_circleFlag |= 0x00001000;
+                      break;
+                    case 13:
+                      g_circleFlag |= 0x00002000;
+                      break;
+                    case 14:
+                      g_circleFlag |= 0x00004000;
+                      break;
+                    case 15:
+                      g_circleFlag |= 0x00008000;
+                      break;
+                    case 16:
+                      g_circleFlag |= 0x00010000;
+                      break;
+                    case 17:
+                      g_circleFlag |= 0x00020000;
+                      break;      				                				          
+                }
+  				   
+  				  //State_Box_Online=g_circleFlag;
+		        break;
+			  //******group#1*******
+			  //********************
+			  case 0x0018FF21://组号＃1，电池的采压值＃1，可采集4路电压:
+			      for(i=0;i<4;i++)
+			      {
+			          g_singleCellVoltage[g_group][0][i]=g_mboxData[boxNumber][2*i+1]|(unsigned int)g_mboxData[boxNumber][2*i]<<8;
+			      }
+  					break;
+			  case 0x0018FF22://组号＃1，电池的采压值＃2，可采集4路电压:
+			      for(i=0;i<4;i++)
+			      {
+			          g_singleCellVoltage[g_group][0][4+i]=g_mboxData[boxNumber][2*i+1]|(unsigned int)g_mboxData[boxNumber][2*i]<<8;
+			      }
+  					break;
+			  case 0x0018FF23://组号＃1，电池的采压值＃3，可采集4路电压；  				  
+			      for(i=0;i<4;i++)
+			      {
+			          g_singleCellVoltage[g_group][0][8+i]=g_mboxData[boxNumber][2*i+1]|(unsigned int)g_mboxData[boxNumber][2*i]<<8;
+			      } 
+  					break;  			  		
+			  case 0x0018FF37://组号＃1，电池的欠压过压标志
+  					//g_groupUVflag[g_group][0] = g_mboxData[boxNumber][1]|(unsigned int)g_mboxData[boxNumber][0]<<8;
+  					//g_groupOVflag[g_group][0] = g_mboxData[boxNumber][3]|(unsigned int)g_mboxData[boxNumber][2]<<8;
+  					break;  				
+			  case 0x0018FF41://组号＃1，电池的采温值＃1，可杉?路温度；
+  					for(i=0;i<2;i++)
+  					    g_singleCellTemperature[g_group][0][i]= g_mboxData[boxNumber][i];
+  					break; 	
+			  //******** group#2**********
+			  //**************************
+			  case 0x0018FF24://组号＃2，电池的采压值＃1，可采集4路电压；
+			    	for(i=0;i<4;i++)
+			      {
+			          g_singleCellVoltage[g_group][1][i]=g_mboxData[boxNumber][2*i+1]|(unsigned int)g_mboxData[boxNumber][2*i]<<8;
+			      }
+  					break;
+			  case 0x0018FF25://组号＃2，电池的采压值＃2，可采集4路电压；
+			      for(i=0;i<4;i++)
+			      {
+			          g_singleCellVoltage[g_group][1][4+i]=g_mboxData[boxNumber][2*i+1]|(unsigned int)g_mboxData[boxNumber][2*i]<<8;
+			      }
+  					break;
+			  case 0x0018FF26://组号＃2，电池的采压值＃3，可采集4路电压；
+			    	for(i=0;i<4;i++)
+			      {
+			          g_singleCellVoltage[g_group][1][8+i]=g_mboxData[boxNumber][2*i+1]|(unsigned int)g_mboxData[boxNumber][2*i]<<8;
+			      }
+  					break;  					
+			  case 0x0018FF38://组号＃2，电池的欠压过压标志
+  					//g_groupUVflag[g_group][1] = g_mboxData[boxNumber][1]|(unsigned int)g_mboxData[boxNumber][0]<<8;
+  					//g_groupOVflag[g_group][1] = g_mboxData[boxNumber][3]|(unsigned int)g_mboxData[boxNumber][2]<<8;
+  					break;     			  
+			  case 0x0018FF42://组号＃2，电池的采温值＃1，可采集8路温度；  				 
+			      for(i=0;i<2;i++)
+				        g_singleCellTemperature[g_group][1][i]= g_mboxData[boxNumber][i];
+				    break;
+			  //******group#3********
+			  //*********************
+			  case 0x0018FF27://组号＃3，电池的采压值＃1，可采集4路电压；
+			    	for(i=0;i<4;i++)
+			      {
+			          g_singleCellVoltage[g_group][2][i]=g_mboxData[boxNumber][2*i+1]|(unsigned int)g_mboxData[boxNumber][2*i]<<8;
+			      }
+  					break;
+			  case 0x0018FF28://组号＃3，电池的采压值＃2，可采集4路电压；
+			      for(i=0;i<4;i++)
+			      {
+			          g_singleCellVoltage[g_group][2][4+i]=g_mboxData[boxNumber][2*i+1]|(unsigned int)g_mboxData[boxNumber][2*i]<<8;
+			      }
+  					break;
+			  case 0x0018FF29://组号＃3，电池的采压值＃3，可采集4路电压；
+			    	for(i=0;i<4;i++)
+			      {
+			          g_singleCellVoltage[g_group][2][8+i]=g_mboxData[boxNumber][2*i+1]|(unsigned int)g_mboxData[boxNumber][2*i]<<8;
+			      }
+  					break;
+				
+			  case 0x0018FF39://组号＃3，电池的欠压过压标志
+  					//g_groupUVflag[g_group][2] = g_mboxData[boxNumber][1]|(unsigned int)g_mboxData[boxNumber][0]<<8;
+  					//g_groupOVflag[g_group][2] = g_mboxData[boxNumber][3]|(unsigned int)g_mboxData[boxNumber][2]<<8;
+  					break; 					
+			  case 0x0018FF43://组号＃3，电池的采温值＃1，可杉?路温度；  				
+  					for(i=0;i<2;i++)
+  					    g_singleCellTemperature[g_group][2][i]= g_mboxData[boxNumber][i];
+  					break;  	
+			  //*******group#4*******
+			  //*********************
+			  case 0x0018FF2a://组号＃4，电池的采压值＃1，可采集4路电压；
+			    	for(i=0;i<4;i++)
+			      {
+			          g_singleCellVoltage[g_group][3][i]=g_mboxData[boxNumber][2*i+1]|(unsigned int)g_mboxData[boxNumber][2*i]<<8;
+			      }
+  					break;
+			  case 0x0018FF2b://组号＃4，电池的采压值＃2，可采集4路电压；
+			    	for(i=0;i<4;i++)
+			      {
+			          g_singleCellVoltage[g_group][3][4+i]=g_mboxData[boxNumber][2*i+1]|(unsigned int)g_mboxData[boxNumber][2*i]<<8;
+			      }
+  					break;
+			  case 0x0018FF2c://组号＃4，电池的采压值＃3，可采集4路电压； 
+			    	for(i=0;i<4;i++)
+			      {
+			          g_singleCellVoltage[g_group][3][8+i]=g_mboxData[boxNumber][2*i+1]|(unsigned int)g_mboxData[boxNumber][2*i]<<8;
+			      }
+  					break;
+			  case 0x0018FF3a://组号＃4，电池的欠压过压标志  				  
+  					//g_groupUVflag[g_group][3] = g_mboxData[boxNumber][1]|(unsigned int)g_mboxData[boxNumber][0]<<8;
+  					//g_groupOVflag[g_group][3] = g_mboxData[boxNumber][3]|(unsigned int)g_mboxData[boxNumber][2]<<8;
+  					break;  				
+			  case 0x0018FF44://组号＃4，电池的采温值＃1，可采集8路温度  				 
+  				  for(i=0;i<2;i++)
+  					    g_singleCellTemperature[g_group][3][i]= g_mboxData[boxNumber][i];
+  					break;
+			  //******group#5********
+			  //*********************
+			  case 0x0018FF2d://组号＃5，电池的采压值＃1，可采集4路电压；	
+			    	for(i=0;i<4;i++)
+			      {
+			          g_singleCellVoltage[g_group][4][i]=g_mboxData[boxNumber][2*i+1]|(unsigned int)g_mboxData[boxNumber][2*i]<<8;
+			      }
+  					break;
+			  case 0x0018FF2e://组号＃5，电池的采压值＃2，可采集4路电压；
+			    	for(i=0;i<4;i++)
+			      {
+			          g_singleCellVoltage[g_group][4][4+i]=g_mboxData[boxNumber][2*i+1]|(unsigned int)g_mboxData[boxNumber][2*i]<<8;
+			      }
+  					break;
+			  case 0x0018FF2f://组号＃5，电池的采压值＃3，可采集4路电压；  
+			    	for(i=0;i<4;i++)
+			      {
+			          g_singleCellVoltage[g_group][4][8+i]=g_mboxData[boxNumber][2*i+1]|(unsigned int)g_mboxData[boxNumber][2*i]<<8;
+			      }
+
+  					break;  					
+			  case 0x0018FF3b://组号＃5，电池的欠压过压标志
+  					//circleFlag |= 0x10000000;
+  					//g_groupUVflag[g_group][4] = g_mboxData[boxNumber][1]|(unsigned int)g_mboxData[boxNumber][0]<<8;
+  					//g_groupOVflag[g_group][4] = g_mboxData[boxNumber][3]|(unsigned int)g_mboxData[boxNumber][2]<<8;
+  					break;  					
+			  case 0x0018FF45://组号＃5，电池的采温值＃1，可采集8路温度；  			
+  				  for(i=0;i<2;i++)
+  					   g_singleCellTemperature[g_group][4][i]= g_mboxData[boxNumber][i];
+  					break;		 
+			  default:
+				    break;
+		} // end switch(framID)  //解析数据
     }
 }
 //******************************************************************************
@@ -437,116 +434,135 @@ unsigned char ModelLocation(unsigned char Addr)
 //******************************************************************************
 unsigned char bmuProcess2(void)//
 {
-    unsigned int buf=0,tmpMax=0,tmpMin=0;
-	  unsigned char tmperatMax=0,tmperatMin=0; 
-	  unsigned int i,j,k,h,t,boxNumber=0,count=0;
-	  unsigned long sum=0;
-	  unsigned int cell[650];
-	  unsigned char ti=0,ci=0;
-	  unsigned char HighBMUAddr=0,HighBMUGroupNum=0,HighBMUNum=0;
-	  unsigned char LowBMUAddr=0,LowBMUGroupNum=0,LowBMUNum=0;
-	  static unsigned char ErrorBMUAddr=0;
-	  static unsigned char ErrorBMUGroup=0;
-	  static unsigned char ErrorBMULocation=0;
-	  static unsigned char TemLossState=0;
-	  static unsigned char TemLossTime=0;
-	  for(i=0;i<650;i++)
-		{
-			  cell[i]=0;
-		}	
+    unsigned int            buf=0,tmpMax=0,tmpMin=0;
+    unsigned char           tmperatMax=0,tmperatMin=0; 
+    unsigned int            i,j,k,h,t,boxNumber=0,count=0;
+    unsigned long           sum=0;
+    unsigned int            cell[650];
+    unsigned char           ti=0,ci=0;
+    unsigned char           HighBMUAddr=0,HighBMUGroupNum=0,HighBMUNum=0;
+    unsigned char           LowBMUAddr=0,LowBMUGroupNum=0,LowBMUNum=0;
+    static unsigned char    ErrorBMUAddr=0;
+    static unsigned char    ErrorBMUGroup=0;
+    static unsigned char    ErrorBMULocation=0;
+    static unsigned char    TemLossState=0;
+    static unsigned char    TemLossTime=0;
+    U8 cnt = 0;
+    
+    for(i=0;i<650;i++)
+    {
+        cell[i]=0;
+    }	
 
     if((g_circleFlag==G_BMU_CIRCLE_FLAG)&&(g_configFlag==G_BMU_CIRCLE_FLAG))//如果收到所有的报文，则处理    
     {    
-    		g_circleFlag=0; //配置信息1分钟才发一次，所以不能在这里把它的标志位清掉。 		  
-    		  
-    	  //计算电池单体最高和最低电压,温度
-    		h=0;    		
-    		sum = 0;
-    		tmpMax = g_singleCellVoltage[0][0][0];
-    		tmpMin = g_singleCellVoltage[0][0][0];
-    		tmperatMax = g_singleCellTemperature[0][0][0];
-    		tmperatMin = g_singleCellTemperature[0][0][0];
-    			
-    		for(i=0;i<BMU_NUMBER;i++)
-    		    for(j=0;j<g_bmu2_number_v[i];j++)
-    				    for(k=0;k<g_cell_number_v[i][j];k++)
-    					  {    						      						     						    
-    						    if(g_singleCellVoltage[i][j][k]>=tmpMax)
-    						    {
+        g_circleFlag=0; //配置信息1分钟才发一次，所以不能在这里把它的标志位清掉。 		  
+
+        //计算电池单体最高和最低电压,温度
+        h=0;    		
+        sum = 0;
+        tmpMax      = g_singleCellVoltage[0][0][0];
+        tmpMin      = g_singleCellVoltage[0][0][0];
+        tmperatMax  = g_singleCellTemperature[0][0][0];
+        tmperatMin  = g_singleCellTemperature[0][0][0];
+
+        for(i=0;i<BMU_NUMBER;i++){
+            for(j=0;j<g_bmu2_number_v[i];j++){
+    		    for(k=0;k<g_cell_number_v[i][j];k++)
+                {    						      						     						    
+                    if(g_singleCellVoltage[i][j][k] >= tmpMax)
+    				{
                         //HighVolNum=36*i+12*j+k+1;
                         HighVolNum=h;
-    							      tmpMax = g_singleCellVoltage[i][j][k];
-    						    }
-    						    if(g_singleCellVoltage[i][j][k]<=tmpMin)
-    						    {
+    					tmpMax = g_singleCellVoltage[i][j][k];
+    				}
+    				
+                    if(g_singleCellVoltage[i][j][k] <= tmpMin)
+                    {
                         //
                         //LowVolNum=36*i+12*j+k+1;
                         LowVolNum=h;
-    							      tmpMin = g_singleCellVoltage[i][j][k];
-    						    }
-    						    cell[h] = g_singleCellVoltage[i][j][k];
-    						    h++;
-    						    sum += 	(unsigned long)g_singleCellVoltage[i][j][k];
-    					  }
+                        tmpMin = g_singleCellVoltage[i][j][k];
+                    }
+                    cell[h] = g_singleCellVoltage[i][j][k];
+                    h++;
+                    sum += 	(unsigned long)g_singleCellVoltage[i][j][k];
+                }
+            }
+        }
         
         g_highestCellVoltage = (float)tmpMax/10000;
-    	  g_lowestCellVoltage = (float)tmpMin/10000;
-    	    	  
-    		g_systemVoltage = sum/30000;
-    	  g_averageVoltage = ((float)sum/h/10000);
-    		for(i=CELL_VOLTAGE_0;i<CELL_VOLTAGE_36+1;i++)
+        g_lowestCellVoltage = (float)tmpMin/10000;
+
+        g_systemVoltage = sum/30000;
+        g_averageVoltage = ((float)sum/h/10000);
+        
+        /* //store all the cell voltage.
+        for(i=CELL_VOLTAGE_0;i<CELL_VOLTAGE_36+1;i++){
             g_storageSysVariableCell[i] = (unsigned int)(cell[i-CELL_VOLTAGE_0]);
-              		
-    		//***温度部分处理***********************************************************************************		      	
-    		t=0;
-    		sum = 0;
-    		count = 0;		
-    		for(i=0;i<BMU_NUMBER;i++)
-    				for(j=0;j<g_bmu2_number_t[i];j++)
-    					  for(k=0;k<g_cell_number_t[i][j];k++)
-    					  {    						
-    						    if(((g_singleCellTemperature[i][j][k]&0x00ff) >5)&&((g_singleCellTemperature[i][j][k]&0x00ff)<240))//求平均温度时 去掉短路或断路情况 
-    						    {    						  
-    							      if((g_singleCellTemperature[i][j][k]&0x00ff) >= (tmperatMax&0x00ff))
-    							      {
-                            HighTemNum=count;
+        }
+        */
+        
+        // store every BMU's max and min cell voltage.
+        for(cnt=0;cnt<BMU_NUMBER;cnt++){
+            g_storageSysVariableCell[cnt] = 0;
+        }
+        
+
+        //***温度部分处理***********************************************************************************		      	
+        t=0;
+        sum = 0;
+        count = 0;
+		for(i=0;i<BMU_NUMBER;i++){
+    		for(j=0;j<g_bmu2_number_t[i];j++){
+                for(k=0;k<g_cell_number_t[i][j];k++)
+                {
+                    if(((g_singleCellTemperature[i][j][k]&0x00ff) > 5)&&((g_singleCellTemperature[i][j][k]&0x00ff)<240))//求平均温度时 去掉短路或断路情况 
+                    {
+                        if((g_singleCellTemperature[i][j][k]&0x00ff) >= (tmperatMax&0x00ff))
+                	    {
                             //HighTemNum=3*i+1*j+k+1;
-    								        tmperatMax = g_singleCellTemperature[i][j][k]&0x00ff;
-    							      }
-    							      if((g_singleCellTemperature[i][j][k]&0x00ff) <= (tmperatMin&0x00ff))
-    							      {
+                            HighTemNum=count;
+                            tmperatMax = g_singleCellTemperature[i][j][k] & 0x00ff;
+                        }
+                        if((g_singleCellTemperature[i][j][k]&0x00ff) <= (tmperatMin&0x00ff))
+                        {
                             //LowTemNum=3*i+1*j+k+1;
                             LowTemNum=count;
-    								        tmperatMin = g_singleCellTemperature[i][j][k]&0x00ff;
-    							      }
-    					          t++;
-    					          sum += g_singleCellTemperature[i][j][k]&0x00ff;
-    					      } 
-    					      /*else
-    					      {
-    					      	  if((i==ErrorBMUAddr)&&(j==ErrorBMUGroup)&&(k==ErrorBMULocation))
-    					      	  {
-    					      	      TemLossTime++;
-    					      	  }
-    					      	  if(TemLossTime>=50)
-    					      	  {
-    					      	      TemLossTime=57;
-    					      	      TemLossState=1;
-    					      	  }
-    					      	  ErrorBMUAddr=i;
-	                      ErrorBMUGroup=j;
-	                      ErrorBMULocation=k;
-	                       
-    					      }*/
-    						    g_storageSysVariableT[count]=g_singleCellTemperature[i][j][k]&0x00ff;
-    						    count ++;    							
-    					  }
-    					  
+                            tmperatMin = g_singleCellTemperature[i][j][k]&0x00ff;
+                	    }
+                        t++;
+                        sum += g_singleCellTemperature[i][j][k]&0x00ff;
+                    }
+                    /*
+                    else
+                    {
+                        if((i==ErrorBMUAddr)&&(j==ErrorBMUGroup)&&(k==ErrorBMULocation))
+                        {
+                            TemLossTime++;
+                        }
+                        if(TemLossTime>=50)
+                        {
+                            TemLossTime=57;
+                            TemLossState=1;
+                        }
+                        ErrorBMUAddr=i;
+                        ErrorBMUGroup=j;
+                        ErrorBMULocation=k;
+                    }
+                    */
+                    
+                    g_storageSysVariableT[count] = g_singleCellTemperature[i][j][k] & 0x00ff;
+                    count ++;    							
+                }
+    		}
+		}
+		
         g_lowestTemperature = tmperatMin;
-    	  g_highestTemperature = tmperatMax;   //注意温度有48的偏移量
-    		sum = sum- g_highestTemperature-g_lowestTemperature;
-    	  //g_averageTemperature = (unsigned char)(sum/(t-2));
-    	  g_averageTemperature = Tavg;
+        g_highestTemperature = tmperatMax;   //注意温度有48的偏移量
+        sum = sum- g_highestTemperature-g_lowestTemperature;
+        //g_averageTemperature = (unsigned char)(sum/(t-2));
+        g_averageTemperature = Tavg;
     	    
     			//将单体温度重新分组5组。且转换成char类型
     			/*ti = 0;

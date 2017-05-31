@@ -24,16 +24,16 @@
 //任务列表
 static TASK_COMPONENTS TaskComps[] = 
 { 
-    {0, 1,    1,    TaskCurrentDetect},         //电流检测任务 1ms检测一次电流值 //0 标志位，1，
-    {0, 700,  700,  TaskSocProcess},            //SOC处理
-    {0, 297,   300,   TaskBmuProcess},            // BMU数据处理任务//以前60ms
-    {0, 17,   20,   TaskVoltage},               // 总电压计算   .
-    {0, 297,  300,  TaskInsulation},            // 绝缘电阻计算 //该处时间最小600MS，不能太小  80ms
-    {0, 97,  100,   TaskReport2PC},             //发送报文到上位机
-    {0, 5,    5,    TaskStatusMachine},         //状态机处理
-    {0, 997, 1000,  TaskFaultProcess},          //100ms故障处理
-    //{0, 8,    8,    TaskRechargeDC},            //直流充电 不能放开
-    {0, 9,   10,    TaskRecordProcess},        //历史记录处理
+    {0, 1,      1,      TaskCurrentDetect},         // 电流检测任务 1ms检测一次电流值 //0 标志位，1，
+    {0, 700,    700,    TaskSocProcess},            // SOC处理
+    {0, 297,    300,    TaskBmuProcess},            // BMU数据处理任务//以前60ms
+    {0, 17,     20,     TaskVoltage},               // 总电压计算   .
+    {0, 297,    300,    TaskInsulation},            // 绝缘电阻计算 //该处时间最小600MS，不能太小  80ms
+    {0, 97,     100,    TaskReport2PC},             // 发送报文到上位机
+    {0, 5,      5,      TaskStatusMachine},         // 状态机处理
+    {0, 997,    1000,   TaskFaultProcess},          // 100ms故障处理
+    //{0, 8,      8,    TaskRechargeDC},            // 直流充电 不能放开
+    {0, 9,      10,     TaskRecordProcess},         // 历史记录处理
       
 };
 

@@ -21,62 +21,61 @@
 
 ///////////////////////////////////系统参数//////////////////////////////////
 
-#define PROJECT_NAME 279  //项目代号
+#define PROJECT_NAME                278     //项目代号
 
-#define StoreAHState 0            //定义是否可以存储
-#define BMU_NUMBER 18              // BMU个数
-#define G_BMU_CIRCLE_FLAG 0x3FFFF    //BMU个数
-#define CELL_NUM       612         //电池节数
-#define CELL_TEMP_NUM  54     //温度采集点个数
-#define CELL_VOL_GROUP  204     //单体电压分组数/5个C箱分为180/3=60 ??????????
-#define CELL_TEMP_GROUP  9     //单体温度分组数/5个C箱分为54/6=9??????????????
-//#define C              150        //充电倍率
-#define SetCap              150        //充电倍率  为了区分C  C查找起来太多了  
-#define DubugMode      1          //发送状态机报文
+#define StoreAHState                0       //定义是否可以存储
+#define BMU_NUMBER                  18      //BMU个数
+#define G_BMU_CIRCLE_FLAG           0x3FFFF //BMU个数
+#define CELL_NUM                    612     //电池节数
+#define CELL_TEMP_NUM               54      //温度采集点个数
+#define CELL_VOL_GROUP              204     //单体电压分组数/5个C箱分为180/3=60 ??????????
+#define CELL_TEMP_GROUP             9       //单体温度分组数/5个C箱分为54/6=9??????????????
+//#define C                         150     //充电倍率
+#define SetCap                      150     //充电倍率  为了区分C  C查找起来太多了  
+#define DubugMode                   1       //发送状态机报文
 
 //////////////////////////////////直流快充//////////////////////////////////
-#define HIGHEST_ALLOWED_CHARGE_CV 3.65    //最大允许充电单体电压 V
-#define HIGHEST_ALLOWED_CHARGE_V  744.6     //最大允许充电总电压 V   3.65*204=744.6
-#define LOWEST_ALLOWED_CHARGE_V  673.2     //最低允许充电总电压 V   3.3*204=673.2
+#define HIGHEST_ALLOWED_CHARGE_CV   3.65    //最大允许充电单体电压 CV
+#define HIGHEST_ALLOWED_CHARGE_V    744.6   //最大允许充电总电压 V   3.65*204=744.6
+#define LOWEST_ALLOWED_CHARGE_V     673.2   //最低允许充电总电压 V   3.3*204=673.2
 
-#define HIGHEST_ALLOWED_CHARGE_T 57       //最大允许充电和工作温度   57
-#define LOWEST_ALLOWED_CHARGE_T 0       //最低允许充电温度   0
-#define LOWEST_ALLOWED_WORK_T -20       //最低允许工作温度   -20
+#define HIGHEST_ALLOWED_CHARGE_T    57      //最大允许充电和工作温度   57
+#define LOWEST_ALLOWED_CHARGE_T     0       //最低允许充电温度   0
+#define LOWEST_ALLOWED_WORK_T       -20     //最低允许工作温度   -20
 
-#define CHARGE_CUTDOWN_CV1 3.55           //第一次降流电压
-#define CHARGE_CUTDOWN_CV2 3.55           //第二次降流电压
-#define HIGHEST_ALLOWED_CHARGE_A  150.0   //直流最大允许充电电流 A
-#define SYS_NOMINAL_AH 150                //系统额定容量 AH
-#define SYS_NOMINAL_V  652.8                //系统额定电压 V//3.2*204= 652.8
-#define SYS_KWH        97.9               //系统能量  //150*652.8=97920WH
-#define LOWEST_ALLOWED_DISCHARGE_V  510   //最小允许充电总电压 V   2.5*204=510
-#define CONSTANT_VOL_WORK 1               //恒压工作
-#define CONSTANT_CURT_WORK 2              //恒流工作
-#define CELL_TYPE 3                       //01铅酸电池;02镍氢电池;03:磷酸铁锂;04:锰酸铁锂;
-                                         //05:钴酸锂;06:三元;07:聚合物;08:钛酸锂;FFH:其他
+#define CHARGE_CUTDOWN_CV1          3.55    //第一次降流电压
+#define CHARGE_CUTDOWN_CV2          3.55    //第二次降流电压
+#define HIGHEST_ALLOWED_CHARGE_A    150.0   //直流最大允许充电电流 A
+#define SYS_NOMINAL_AH              150     //系统额定容量 AH
+#define SYS_NOMINAL_V               652.8   //系统额定电压 V//3.2*204= 652.8
+#define SYS_KWH                     97.9    //系统能量  //150*652.8=97920WH
+#define LOWEST_ALLOWED_DISCHARGE_V  510     //最小允许充电总电压 V   2.5*204=510
+#define CONSTANT_VOL_WORK           1       //恒压工作
+#define CONSTANT_CURT_WORK          2       //恒流工作
+#define CELL_TYPE                   3       //01铅酸电池;02镍氢电池;03:磷酸铁锂;04:锰酸铁锂;
+                                            //05:钴酸锂;06:三元;07:聚合物;08:钛酸锂;FFH:其他
                                           
-#define HIGHEST_VOL 7344 //CML充电机规格:最大输出能力  3.6*204*10
-#define LOWEST_VOL 6528 //CML充电机规格:最小输出能力   3.2*204*10
+#define HIGHEST_VOL                 7344    //CML充电机规格:最大输出能力  3.6*204*10
+#define LOWEST_VOL                  6528    //CML充电机规格:最小输出能力   3.2*204*10
 
-#define CC2VOLHIGH 7.5  //CC2测量范围高
-#define CC2VOLLOW  4.2  //CC2测量范围低
+#define CC2VOLHIGH                  7.5     //CC2测量范围高
+#define CC2VOLLOW                   4.2     //CC2测量范围低
 
 ////////////////////////加热参数配置//////////////////////////////////////////////
-#define HIGHEST_ALLOWED_HEAT_CHARGE_V 673.2      //最大允许加热充电总电压 V   3.3*204=673.2
-#define HIGHEST_ALLOWED_HEAT_CHARGE_C 2.13        //最大允许加热充电电流 A                       ??
-#define START_ALLOWED_PreHEAT_CHARGE_TEM 0   //开启预加热阀值  上电如果小于此值 直接进入加热                               ??
-#define STOP_ALLOWED_PreHEAT_CHARGE_TEM 5    //关闭预加热阀值                                  ??
-#define START_ALLOWED_HEAT_CHARGE_TEM 10       //开启加热阀值 上电如果小于此值 进入边充电边加热 
-#define STOP_ALLOWED_HEAT_CHARGE_TEM  15       //关闭加热阀值 
-#define BACK_HEAT_TEM  -1       //关闭加热阀值 
-#define COOL_TYPE  1       //1 自然冷却 2：风扇冷却 3：水冷
-
+#define HIGHEST_ALLOWED_HEAT_CHARGE_V       673.2   //最大允许加热充电总电压 V   3.3*204=673.2
+#define HIGHEST_ALLOWED_HEAT_CHARGE_C       2.13    //最大允许加热充电电流 A                       ??
+#define START_ALLOWED_PreHEAT_CHARGE_TEM    0       //开启预加热阀值  上电如果小于此值 直接进入加热                               ??
+#define STOP_ALLOWED_PreHEAT_CHARGE_TEM     5       //关闭预加热阀值                                  ??
+#define START_ALLOWED_HEAT_CHARGE_TEM       10      //开启加热阀值 上电如果小于此值 进入边充电边加热 
+#define STOP_ALLOWED_HEAT_CHARGE_TEM        15      //关闭加热阀值 
+#define BACK_HEAT_TEM                       -1      //关闭加热阀值 
+#define COOL_TYPE                           1       //1 自然冷却 2：风扇冷却 3：水冷
 
 ///////////////////////BMS最后保护的阀值///////////////////////
-#define LOWEST_CELL_VOL  2.0       //放电最小单体电压
-#define HIGHEST_CELL_VOL 3.85     //充电单体最大单体电压
-#define HIGHEST_BATT_VOL 775.2       //最大总电压3.8*204 = 775.2
-#define HIGHEST_TEM 60             //最高温度60
+#define LOWEST_CELL_VOL     2.0     //放电最小单体电压
+#define HIGHEST_CELL_VOL    3.85    //充电单体最大单体电压
+#define HIGHEST_BATT_VOL    775.2   //最大总电压3.8*204 = 775.2
+#define HIGHEST_TEM         60      //最高温度60
 
 //////////////////////BMS功率变化速度//////////////////////////
 #define POWERSPEED  0.5       //功率的变化速度
@@ -142,6 +141,10 @@
 #define  ulong unsigned long
 #define  HIGH 0
 #define  LOW 1
+
+#define U8  uchar
+#define U16 uint
+#define U32 ulong
 
 // 任务结构
 typedef struct _TASK_COMPONENTS

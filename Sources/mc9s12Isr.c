@@ -287,6 +287,7 @@ interrupt void RTI_ISR(void)      //1ms中断一次
     CRGFLG = 0x80; 
 }
 #pragma CODE_SEG DEFAULT
+
 //******************************************************************************
 //* Function name:   ADC0_ISR
 //* Description:     ADC中断子程序,获取2个AD通道的电流  DHAB/S24
@@ -297,8 +298,10 @@ interrupt void RTI_ISR(void)      //1ms中断一次
 interrupt void ADC0_ISR(void) 
 {	
 	  static unsigned char ADcount=0;   
-	  ac[ADcount]=(((float)ATD0DR1-ADCLC)*5.0/4096-2.5)*250;//CUR_AD用于大电流通道  CUR_AD1  //S24
-	  ax[ADcount]=(((float)ATD0DR0-ADCLX)*5.0/4096-2.5)*37.45;//X_AD  //用于小通道 CUR_AD2 电流
+	  //ac[ADcount]=(((float)ATD0DR1-ADCLC)*5.0/4096-2.5)*250;      //CUR_AD用于大电流通道  CUR_AD1  //S24
+      //ax[ADcount]=(((float)ATD0DR0-ADCLX)*5.0/4096-2.5)*37.45;    //X_AD  //用于小通道 CUR_AD2 电流
+	  ac[ADcount]=(((float)ATD0DR1-ADCLC) * 5.0 / 4096 - 2.5) * 370;    //CUR_AD用于大电流通道  CUR_AD1, S133, G = 2.7mV/A
+	  ax[ADcount]=(((float)ATD0DR0-ADCLX) * 5.0 / 4096 - 2.5) * 37.45;  //X_AD,用于小通道 CUR_AD2 电流, S133, G = 26.7mV/A
 	  ATD0STAT0_SCF=1;	//清除队列完成标志	                                                                                  
 	  ADcount++;	
 	 
@@ -310,6 +313,7 @@ interrupt void ADC0_ISR(void)
 	  }	
 }
 #pragma CODE_SEG DEFAULT
+
 //******************************************************************************
 //* Function name:   CAN0_RECEIVE_ISR
 //* Description:     CAN0接收中断子程序,在该项目中用于接收交流充电机发来的报文0x6d0
