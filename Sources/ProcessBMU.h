@@ -40,8 +40,10 @@ extern unsigned char g_cell_number_v[BMU_NUMBER][5];
 extern unsigned char g_bmu2_number_t[BMU_NUMBER];
 extern unsigned char g_cell_number_t[BMU_NUMBER][5];
 
-extern unsigned char g_cellVol[CELL_VOL_GROUP][6];
-extern unsigned char g_cellTemperature[CELL_TEMP_GROUP][6];
+//extern unsigned char g_cellVol[CELL_VOL_GROUP][6];
+//extern unsigned char g_cellTemperature[CELL_TEMP_GROUP][6];
+extern unsigned char g_cellVol[BMU_NUMBER][36]; // re-group all the cell voltage. 18 BMU and 36 cells in each BMU.
+extern unsigned char g_cellTemperature[BMU_NUMBER][3]; // re-group all the cell temperature. 18 BMU and 3 temperatures in each BMU.
 
 extern unsigned long g_circleFlag; //一个循环完成的标志
 extern unsigned long g_configFlag;//收到配置信息标志，用于判断BMU个数，6805组数和单体个数
