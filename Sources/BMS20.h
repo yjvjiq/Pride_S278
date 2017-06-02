@@ -27,9 +27,9 @@
 #define BMU_NUMBER                  18      //BMU¸öÊı
 #define G_BMU_CIRCLE_FLAG           0x3FFFF //BMU¸öÊı
 #define CELL_NUM                    612     //µç³Ø½ÚÊı
-#define CELL_TEMP_NUM               54      //ÎÂ¶È²É¼¯µã¸öÊı
-#define CELL_VOL_GROUP              204     //µ¥ÌåµçÑ¹·Ö×éÊı/5¸öCÏä·ÖÎª180/3=60 ??????????
-#define CELL_TEMP_GROUP             9       //µ¥ÌåÎÂ¶È·Ö×éÊı/5¸öCÏä·ÖÎª54/6=9??????????????
+#define CELL_TEMP_NUM               51      //15Ã—3 +ï¼“Ã—ï¼’ï¼ï¼•ï¼‘ï¼Œï¼‘ï¼˜ï¼Šï¼“ï¼ï¼•ï¼”
+#define CELL_VOL_GROUP              304     //the number of cell voltage group, 612/3=304, 3 cells/group
+#define CELL_TEMP_GROUP             17      //the number of cell temperature group, 51/3=17, 3 temps/group
 //#define C                         150     //³äµç±¶ÂÊ
 #define SetCap                      150     //³äµç±¶ÂÊ  ÎªÁËÇø·ÖC  C²éÕÒÆğÀ´Ì«¶àÁË  
 #define DubugMode                   1       //·¢ËÍ×´Ì¬»ú±¨ÎÄ

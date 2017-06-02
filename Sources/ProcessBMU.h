@@ -15,15 +15,14 @@
 //----------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------
 
-#define SIX802_NUMBER 5    // 每个BMU对应的6802个数
-#define CELL_NUMBER 12   //每个6802对应的单体个数
-#define Tem_NUMBER 2   //每个6802对应的温度个数
+#define CELL_NUMBER 36   //每个6802对应的单体个数
+#define Tem_NUMBER 3   //每个6802对应的温度个数
 #define SLAVE_NUMBER_BEIQI 8  //北汽要求的从板个数
 ///////////////////////////////////////////////////////////////////////////////////////////
 //************ ProcessBMU.c ****************************************
 extern unsigned char g_group;  //BMU1 组号， 从0~15
-extern unsigned int g_singleCellVoltage[BMU_NUMBER][SIX802_NUMBER][CELL_NUMBER];  //BMU1号, 6802（组）号, 单体电池号
-extern unsigned char g_singleCellTemperature[BMU_NUMBER][SIX802_NUMBER][Tem_NUMBER];// 2,5,2;
+extern unsigned int g_singleCellVoltage[BMU_NUMBER][CELL_NUMBER];  //BMU1号, 6802（组）号, 单体电池号
+extern unsigned char g_singleCellTemperature[BMU_NUMBER][Tem_NUMBER];// 2,5,2;
 
 
 extern float g_highestCellVoltage;
@@ -40,10 +39,10 @@ extern unsigned char g_cell_number_v[BMU_NUMBER][5];
 extern unsigned char g_bmu2_number_t[BMU_NUMBER];
 extern unsigned char g_cell_number_t[BMU_NUMBER][5];
 
-//extern unsigned char g_cellVol[CELL_VOL_GROUP][6];
-//extern unsigned char g_cellTemperature[CELL_TEMP_GROUP][6];
-extern unsigned char g_cellVol[BMU_NUMBER][36]; // re-group all the cell voltage. 18 BMU and 36 cells in each BMU.
-extern unsigned char g_cellTemperature[BMU_NUMBER][3]; // re-group all the cell temperature. 18 BMU and 3 temperatures in each BMU.
+extern unsigned char g_cellVol[CELL_VOL_GROUP][6];
+extern unsigned char g_cellTemperature[CELL_TEMP_GROUP][6];
+//extern unsigned int  g_cell_volt_array[CELL_VOL_GROUP*6];
+//extern unsigned char g_cell_temp_array[CELL_TEMP_GROUP*6];
 
 extern unsigned long g_circleFlag; //一个循环完成的标志
 extern unsigned long g_configFlag;//收到配置信息标志，用于判断BMU个数，6805组数和单体个数

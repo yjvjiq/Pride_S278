@@ -512,40 +512,43 @@ void BMS_To_VCU_BatteryMsg8(void)
 }
 
 
-void BMS_To_VCU_BatCellVolData(unsigned char group)
+void BMS_To_VCU_BatCellVolData(void)
 {
-  struct can_msg mg;
+	struct can_msg mg;
 	unsigned int buff;
 	unsigned char i;
 	unsigned char tt=100;
+	static U8 pack_cnt = 0;
+	static U8 cell_cnt = 0;
+	
+	mg.RTR= FALSE;
+	mg.len = 8;
+	mg.prty = 0;
+	mg.id= 0x1c15d0d2;
+	
+	mg.data[0] = cell_cnt;		//start at 0, 0~255
+	mg.data[1] = pack_cnt + 1;	//start at 1, 1~255 
+	
+	mg.data[2] = (U8)(g_CellVoltage[pack_cnt][cell_cnt] & 0x00ff);
+	mg.data[3] = (U8)((g_CellVoltage[pack_cnt][cell_cnt] >> 8) & 0x00ff);
+	
+	mg.data[4] = (U8)(g_CellVoltage[pack_cnt][cell_cnt+1] & 0x00ff);
+	mg.data[5] = (U8)((g_CellVoltage[pack_cnt][cell_cnt+1] >> 8) & 0x00ff);
+	
+	mg.data[6] = (U8)(g_CellVoltage[pack_cnt][cell_cnt+2] & 0x00ff);
+	mg.data[7] = (U8)((g_CellVoltage[pack_cnt][cell_cnt+2] >> 8) & 0x00ff);
 
-  mg.RTR= FALSE;  
-  mg.len = 8;
-  mg.prty = 0;     
-  
-  mg.data[0] = group+1; // 从1开始
-  mg.data[1] = group/12+1;//60组除以5箱=12  +1是因为从0开始
+	cell_cnt += 3;
+	if(cell_cnt >= 36){
+		cell_cnt = 0;
+		pack_cnt++;
+		if(pack_cnt >= BMU_NUMBER){
+			pack_cnt = 0;
+		}
+	}
 	
-	
-	//for(i=0;i<6;i++)
-	//    mg.data[i+2]= g_cellVol[group][i];//  
-	    
-  buff = (unsigned int)(g_storageSysVariableCell[3*group]*0.1);//存的单体电压是5位数的，所以乘以0.1
-	mg.data[2]= buff;//电池单体电压(1) 低字节
-	mg.data[3]= buff>>8;//电池单体电压(1) 高字节
-	
-	buff = (unsigned int)(g_storageSysVariableCell[1+3*group]*0.1);//存的单体电压是5位数的，所以乘以0.1
-	mg.data[4]= buff;//电池单体电压(1) 低字节
-	mg.data[5]= buff>>8;//电池单体电压(1) 高字节
-	
-	buff = (unsigned int)(g_storageSysVariableCell[2+3*group]*0.1);//存的单体电压是5位数的，所以乘以0.1
-	mg.data[6]= buff;//电池单体电压(1) 低字节
-	mg.data[7]= buff>>8;//电池单体电压(1) 高字节
-	    
-  mg.id= 0x1c15d0d2;
-  	     
 	while((!MSCAN0SendMsg(mg))&&(tt>0))
-        tt--; 
+		tt--;
 }
 
 //******************************************************************************
@@ -556,22 +559,21 @@ void BMS_To_VCU_BatCellVolData(unsigned char group)
 //******************************************************************************
 void BMS_To_VCU_BatCellTempData(unsigned char group)
 {
-  struct can_msg mg;
-	unsigned int buff;
-	unsigned char i;
-	unsigned char tt=100;
+    struct can_msg mg;
+    unsigned int buff;
+    unsigned char i;
+    unsigned char tt=100;
 
-  mg.RTR= FALSE;  
-  mg.len = 8;
-  mg.prty = 0;     
-  
-  mg.data[0] = group+1;
-  mg.data[1] = group+1;//+1是因为从0开始
+    mg.RTR= FALSE;  
+    mg.len = 8;
+    mg.prty = 0;     
+    mg.id= 0x1c64d0d2;
+
+    mg.data[0] = group;
+    mg.data[1] = group+1;//+1是因为从0开始
 	
 	for(i=2;i<8;i++)
 	    mg.data[i]= g_cellTemperature[group][i-2]+10;//+10是因为偏移量为-50
-	    
-  mg.id= 0x1c64d0d2;
   	     
 	while((!MSCAN0SendMsg(mg))&&(tt>0))
         tt--; 
