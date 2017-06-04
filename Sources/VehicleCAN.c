@@ -518,35 +518,46 @@ void BMS_To_VCU_BatCellVolData(void)
 	unsigned int buff;
 	unsigned char i;
 	unsigned char tt=100;
-	static U8 pack_cnt = 0;
-	static U8 cell_cnt = 0;
+	static U8 v_pack_cnt = 0;
+	static U8 v_cell_cnt = 0;
 	
 	mg.RTR= FALSE;
 	mg.len = 8;
 	mg.prty = 0;
 	mg.id= 0x1c15d0d2;
 	
-	mg.data[0] = cell_cnt;		//start at 0, 0~255
-	mg.data[1] = pack_cnt + 1;	//start at 1, 1~255 
+	mg.data[0] = v_cell_cnt;		//start at 0, 0~255, serial number
+	mg.data[1] = v_pack_cnt + 1;	//start at 1, 1~255, group number 
 	
-	mg.data[2] = (U8)(g_CellVoltage[pack_cnt][cell_cnt] & 0x00ff);
-	mg.data[3] = (U8)((g_CellVoltage[pack_cnt][cell_cnt] >> 8) & 0x00ff);
+	mg.data[2] = (U8)(g_CellVoltage[v_pack_cnt][v_cell_cnt] & 0x00ff);
+	mg.data[3] = (U8)((g_CellVoltage[v_pack_cnt][v_cell_cnt] >> 8) & 0x00ff);
 	
-	mg.data[4] = (U8)(g_CellVoltage[pack_cnt][cell_cnt+1] & 0x00ff);
-	mg.data[5] = (U8)((g_CellVoltage[pack_cnt][cell_cnt+1] >> 8) & 0x00ff);
+	mg.data[4] = (U8)(g_CellVoltage[v_pack_cnt][v_cell_cnt+1] & 0x00ff);
+	mg.data[5] = (U8)((g_CellVoltage[v_pack_cnt][v_cell_cnt+1] >> 8) & 0x00ff);
 	
-	mg.data[6] = (U8)(g_CellVoltage[pack_cnt][cell_cnt+2] & 0x00ff);
-	mg.data[7] = (U8)((g_CellVoltage[pack_cnt][cell_cnt+2] >> 8) & 0x00ff);
+	mg.data[6] = (U8)(g_CellVoltage[v_pack_cnt][v_cell_cnt+2] & 0x00ff);
+	mg.data[7] = (U8)((g_CellVoltage[v_pack_cnt][v_cell_cnt+2] >> 8) & 0x00ff);
 
-	cell_cnt += 3;
-	if(cell_cnt >= 36){
-		cell_cnt = 0;
-		pack_cnt++;
-		if(pack_cnt >= BMU_NUMBER){
-			pack_cnt = 0;
-		}
-	}
-	
+	v_cell_cnt += 3;
+    /* pack2, pack8, pack14, just have 24 cells in the pack, so re-fill the content here */
+    if(v_pack_cnt == 2 || v_pack_cnt == 8 || v_pack_cnt == 14){
+        if(v_cell_cnt >= 24){
+    		v_cell_cnt = 0;
+    		v_pack_cnt++;
+    		if(v_pack_cnt >= BMU_NUMBER){
+    			v_pack_cnt = 0;
+    		}
+        }
+    }
+    else{
+    	if(v_cell_cnt >= 36){
+    		v_cell_cnt = 0;
+    		v_pack_cnt++;
+    		if(v_pack_cnt >= BMU_NUMBER){
+    			v_pack_cnt = 0;
+    		}
+    	}
+    }
 	while((!MSCAN0SendMsg(mg))&&(tt>0))
 		tt--;
 }
@@ -557,23 +568,41 @@ void BMS_To_VCU_BatCellVolData(void)
 //* EntryParameter : None
 //* ReturnValue    : None
 //******************************************************************************
-void BMS_To_VCU_BatCellTempData(unsigned char group)
+void BMS_To_VCU_BatCellTempData(void)
 {
     struct can_msg mg;
-    unsigned int buff;
-    unsigned char i;
-    unsigned char tt=100;
-
+    U16 buff;
+    U8 i;
+    U8 tt=100;
+    static U8 T_pack_cnt = 0;
+    
     mg.RTR= FALSE;  
     mg.len = 8;
     mg.prty = 0;     
     mg.id= 0x1c64d0d2;
 
-    mg.data[0] = group;
-    mg.data[1] = group+1;//+1是因为从0开始
+    mg.data[0] = 0;                 //T_temp_cnt;        //serial number, start at 0, 0~255
+    mg.data[1] = T_pack_cnt + 1;    //group number, start at 1, 1~255
 	
+	mg.data[2] = g_CellTemperature[T_pack_cnt][0];
+	mg.data[3] = g_CellTemperature[T_pack_cnt][1];
+	
+	if(T_pack_cnt == 2 || T_pack_cnt == 8 || T_pack_cnt == 14){
+	    mg.data[4] = g_CellTemperature[T_pack_cnt][0];
+	} else{
+	    mg.data[4] = g_CellTemperature[T_pack_cnt][2];
+	}
+	
+	mg.data[5] = g_CellTemperature[T_pack_cnt][0];
+    mg.data[6] = g_CellTemperature[T_pack_cnt][0];
+    mg.data[7] = g_CellTemperature[T_pack_cnt][0];
+    
+    T_pack_cnt++;
+    
+    /*
 	for(i=2;i<8;i++)
-	    mg.data[i]= g_cellTemperature[group][i-2]+10;//+10是因为偏移量为-50
+	    mg.data[i]= g_cellTemperature[group][i-2] + 10;//+10是因为偏移量为-50
+  	*/
   	     
 	while((!MSCAN0SendMsg(mg))&&(tt>0))
         tt--; 

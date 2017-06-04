@@ -184,12 +184,15 @@ void SendMes(void)
         PIT_70ms_Counter0++; //500ms
         if(PIT_70ms_Counter0>10)  //100ms发一帧
         {
-            BMS_To_VCU_BatCellVolData(CellNum);
+            BMS_To_VCU_BatCellVolData();
+            /*
             CellNum++;
             if(CellNum>=CELL_VOL_GROUP) 
             {
                 CellNum=0;
             }
+            */
+            
             PIT_70ms_Counter0=0;
         } 
     //if(1 == VCU_CellRequest.Bit.CellTempReq )  //0x1c64D0D2
@@ -197,13 +200,14 @@ void SendMes(void)
         PIT_300ms_Counter1++;//ms
         if(PIT_300ms_Counter1>=20)//200ms发一个
         {
-            BMS_To_VCU_BatCellTempData(TemNum);
+            BMS_To_VCU_BatCellTempData();
+            /*
             TemNum++;
             if(TemNum>=CELL_TEMP_GROUP) //-1是因为从0开始
             {
                 TemNum=0;
             }
-                
+            */
             PIT_300ms_Counter1=0;
         } 
 }

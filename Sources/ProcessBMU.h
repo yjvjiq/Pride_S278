@@ -15,14 +15,15 @@
 //----------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------
 
-#define CELL_NUMBER 36   //每个6802对应的单体个数
-#define Tem_NUMBER 3   //每个6802对应的温度个数
-#define SLAVE_NUMBER_BEIQI 8  //北汽要求的从板个数
+#define SIX802_NUMBER       5   // 每个BMU的6802的个数
+#define CELL_NUMBER         36  //每个6802对应的单体个数
+#define Tem_NUMBER          3   //每个6802对应的温度个数
+#define SLAVE_NUMBER_BEIQI  8   //北汽要求的从板个数
 ///////////////////////////////////////////////////////////////////////////////////////////
 //************ ProcessBMU.c ****************************************
 extern unsigned char g_group;  //BMU1 组号， 从0~15
-extern unsigned int g_singleCellVoltage[BMU_NUMBER][CELL_NUMBER];  //BMU1号, 6802（组）号, 单体电池号
-extern unsigned char g_singleCellTemperature[BMU_NUMBER][Tem_NUMBER];// 2,5,2;
+extern unsigned int g_CellVoltage[BMU_NUMBER][CELL_NUMBER];  //BMU1号, 6802（组）号, 单体电池号
+extern unsigned char g_CellTemperature[BMU_NUMBER][Tem_NUMBER];// 2,5,2;
 
 
 extern float g_highestCellVoltage;

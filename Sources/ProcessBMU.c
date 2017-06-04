@@ -328,7 +328,7 @@ void BMU_Processure(void)
 				}
 				break;						
 			case 0x0018FF27://BMU number = group; #7 frame, 4 cells each frame.
-				if(group == 2 || group == 8 || group == 14){
+				if(g_group == 2 || g_group == 8 || g_group == 14){
     				for(i=0;i<4;i++)
     				{
     					g_CellVoltage[g_group][24+i] = 0;
@@ -342,7 +342,7 @@ void BMU_Processure(void)
 				}
 				break;
 			case 0x0018FF28://BMU number = group; #8 frame, 4 cells each frame.
-				if(group == 2 || group == 8 || group == 14){
+				if(g_group == 2 || g_group == 8 || g_group == 14){
     				for(i=0;i<4;i++)
     				{
     					g_CellVoltage[g_group][28+i] = 0;
@@ -356,7 +356,7 @@ void BMU_Processure(void)
 				}
 				break;
 			case 0x0018FF29://BMU number = group; #9 frame, 4 cells each frame.
-				if(group == 2 || group == 8 || group == 14){
+				if(g_group == 2 || g_group == 8 || g_group == 14){
     				for(i=0;i<4;i++)
     				{
     					g_CellVoltage[g_group][32+i] = 0;
@@ -379,7 +379,7 @@ void BMU_Processure(void)
 				}
 				break;
              case 0x0018FF43://BMU number = group; #3 frame, 1 temperature each frame.
-             	if(group == 2 || group == 8 || group == 14){
+             	if(g_group == 2 || g_group == 8 || g_group == 14){
 	                for(i=0;i<1;i++){
 	                    g_CellTemperature[g_group][i]= 0;
 	                }
@@ -561,7 +561,7 @@ unsigned char bmuProcess2(void)//
 //		for(i=0;i<BMU_NUMBER;i++){
 //			for(j=0;j<g_bmu2_number_v[i];j++){
 //				for(k=0;k<g_cell_number_v[i][j];k++){
-					g_cell_volt_array[h] = g_CellVoltage[i][j][k];
+//					g_cell_volt_array[h] = g_CellVoltage[i][j][k];
 //					h++;
 //				}
 //			}

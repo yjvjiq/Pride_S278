@@ -389,12 +389,14 @@ void parametersClean(void)
     unsigned int i,j,k;
   
 	  for(i=0;i<BMU_NUMBER;i++)
-		    for(j=0;j<SIX802_NUMBER;j++)
+		    //for(j=0;j<SIX802_NUMBER;j++)
 			      for(k=0;k<CELL_NUMBER;k++)
 			      {				
-				        g_singleCellVoltage[i][j][k]=0;
+				        //g_singleCellVoltage[i][j][k]=0;
+				        g_CellVoltage[i][k]=0;
 				        if(k<Tem_NUMBER)//k<2;
-				            g_singleCellTemperature[i][j][k]=0;
+				            //g_singleCellTemperature[i][j][k]=0;
+				            g_CellTemperature[i][k]=0;
 			      }	
     g_highestCellVoltage = 0;
 	  g_lowestCellVoltage = 0;

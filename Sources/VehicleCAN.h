@@ -311,8 +311,8 @@ extern void BMS_To_VCU_BatteryMsg5(void);
 extern void BMS_To_VCU_BatteryMsg6(void);
 extern void BMS_To_VCU_BatteryMsg7(void);
 extern void BMS_To_VCU_BatteryMsg8(void);
-extern void BMS_To_VCU_BatCellVolData(unsigned char group);
-extern void BMS_To_VCU_BatCellTempData(unsigned char group);
+extern void BMS_To_VCU_BatCellVolData(void);
+extern void BMS_To_VCU_BatCellTempData(void);
 extern void BMS_VCU_WIFE(void);
                     
 
