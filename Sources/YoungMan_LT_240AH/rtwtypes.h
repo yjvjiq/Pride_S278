@@ -5,7 +5,7 @@
  *
  * Model version                  : 1.1149
  * Simulink Coder version         : 8.10 (R2016a) 10-Feb-2016
- * C/C++ source code generated on : Fri May 12 15:07:17 2017
+ * C/C++ source code generated on : Sat May 27 11:21:57 2017
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Freescale->HC(S)12

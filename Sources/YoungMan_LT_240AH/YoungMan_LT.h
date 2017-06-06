@@ -5,7 +5,7 @@
  *
  * Model version                  : 1.1149
  * Simulink Coder version         : 8.10 (R2016a) 10-Feb-2016
- * C/C++ source code generated on : Fri May 12 15:07:17 2017
+ * C/C++ source code generated on : Sat May 27 11:21:57 2017
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Freescale->HC(S)12
@@ -111,20 +111,20 @@ extern void YoungMan_LT_terminate(void);
 
 /* Declaration for custom storage class: Default */
 extern real32_T CAP_CONST_CAL;
-extern real32_T DisChargeCurrentTable[132];/* maximum discharge current, row: SOC, collumn: T  */
-extern uint16_T Factor_ChargeEndSOCAjust[161];
-extern real32_T Factor_PowerOnSOCAjust[6];
-extern real32_T FastChargeCurrentTable[168];
-extern real32_T FeedBackCurrentTable[108];/* maximum discharge current, row: SOC, collumn: T  */
-extern real32_T SOC_Discharge[11];
-extern real32_T SOC_FastCharge[12];
-extern real32_T SOC_Feedback[12];      /* row for max dicharge current table */
-extern real32_T T_ChargeEndSOCAjust[7];
-extern real32_T T_Discharge[12];       /* collumn for max discharge current table */
-extern real32_T T_Facdback[9];
-extern real32_T T_FastCharge[14];
-extern real32_T T_PowerOnSOCAjust[6];
-extern real32_T V_CellLowest[23];
+extern real32_T DisChargeCurrentTable[204];/* maximum discharge current, row: SOC, collumn: T  */
+extern uint16_T Factor_ChargeEndSOCAjust[64];
+extern real32_T Factor_PowerOnSOCAjust[8];
+extern real32_T FastChargeCurrentTable[176];
+extern real32_T FeedBackCurrentTable[208];/* maximum discharge current, row: SOC, collumn: T  */
+extern real32_T SOC_Discharge[12];
+extern real32_T SOC_FastCharge[11];
+extern real32_T SOC_Feedback[13];      /* row for max dicharge current table */
+extern real32_T T_ChargeEndSOCAjust[8];
+extern real32_T T_Discharge[17];       /* collumn for max discharge current table */
+extern real32_T T_Facdback[16];
+extern real32_T T_FastCharge[16];
+extern real32_T T_PowerOnSOCAjust[8];
+extern real32_T V_CellLowest[8];
 
 /* Real-time Model object */
 extern RT_MODEL_YoungMan_LT_T *const YoungMan_LT_M;

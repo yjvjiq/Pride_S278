@@ -50,15 +50,14 @@ typedef union{
 	unsigned int word;                             
 
 	struct {
-	
-		word F0_Battery_Under_Voltage2:1;//
-		word F1_DisCharge_Over_Current2:1;//	
-		word F2_Cell_Under_Voltage2:1; //
-		word F3_CellUnbalance2:1; //
-		word F4_tempUnbalance2:1;//
-		word F5_Over_Temp2:1; //
-	  word F6_Fire_Warning2:1; //
-		  word F715_Reverse:9;	      	        		       
+        word F0_Battery_Under_Voltage2:1;//
+        word F1_DisCharge_Over_Current2:1;//	
+        word F2_Cell_Under_Voltage2:1; //
+        word F3_CellUnbalance2:1; //
+        word F4_tempUnbalance2:1;//
+        word F5_Over_Temp2:1; //
+        word F6_Fire_Warning2:1; //
+        word F715_Reverse:9;	      	        		       
 	}Bit;
 }CUTDISCURT50;
 extern CUTDISCURT50 CutDisCurt50;
@@ -164,15 +163,15 @@ typedef union{
 	unsigned int word;
 	struct {
 		
-		word F0_Charge_Over_Current2:1; //
-	  word F1_tempUnbalance2:1;       //
-	  word F2_Over_Temp2:1;          //
-	  word F3_Low_Isolation2:1;             //
-	  word F4_Fire_Warning2:1;             //
-	  word F5_CHG_Socket2:1;	        //
-	  word F6_CellUnbalance2:1;//
+        word F0_Charge_Over_Current2:1; //
+        word F1_tempUnbalance2:1;       //
+        word F2_Over_Temp2:1;          //
+        word F3_Low_Isolation2:1;             //
+        word F4_Fire_Warning2:1;             //
+        word F5_CHG_Socket2:1;	        //
+        word F6_CellUnbalance2:1;//
 
-	    word F7F15_Reverse:9;   	        		       
+        word F7F15_Reverse:9;   	        		       
 	}Bit;                                
 }CUTDCCHACURT50;
 extern CUTDCCHACURT50 CutDCChaCurt50;

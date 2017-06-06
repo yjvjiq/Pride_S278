@@ -25,7 +25,7 @@
 <tr name="7" id="7">
 <td>7</td><td><span class="ct"> * Simulink Coder version         : 8.10 (R2016a) 10-Feb-2016</span></td></tr>
 <tr name="8" id="8">
-<td>8</td><td><span class="ct"> * C/C++ source code generated on : Fri May 12 15:07:17 2017</span></td></tr>
+<td>8</td><td><span class="ct"> * C/C++ source code generated on : Sat May 27 11:21:57 2017</span></td></tr>
 <tr name="9" id="9">
 <td>9</td><td><span class="ct"> *</span></td></tr>
 <tr name="10" id="10">
@@ -237,33 +237,33 @@
 <tr name="113" id="113">
 <td>113</td><td><span class="kw">extern</span> <a id="113c8" class="tk">real32_T</a> <a id="113c17" class="tk">CAP_CONST_CAL</a>;</td></tr>
 <tr name="114" id="114">
-<td>114</td><td><span class="kw">extern</span> <a id="114c8" class="tk">real32_T</a> <a id="114c17" class="tk">DisChargeCurrentTable</a>[132];<span class="ct">/* maximum discharge current, row: SOC, collumn: T  */</span></td></tr>
+<td>114</td><td><span class="kw">extern</span> <a id="114c8" class="tk">real32_T</a> <a id="114c17" class="tk">DisChargeCurrentTable</a>[204];<span class="ct">/* maximum discharge current, row: SOC, collumn: T  */</span></td></tr>
 <tr name="115" id="115">
-<td>115</td><td><span class="kw">extern</span> <a id="115c8" class="tk">uint16_T</a> <a id="115c17" class="tk">Factor_ChargeEndSOCAjust</a>[161];</td></tr>
+<td>115</td><td><span class="kw">extern</span> <a id="115c8" class="tk">uint16_T</a> <a id="115c17" class="tk">Factor_ChargeEndSOCAjust</a>[64];</td></tr>
 <tr name="116" id="116">
-<td>116</td><td><span class="kw">extern</span> <a id="116c8" class="tk">real32_T</a> <a id="116c17" class="tk">Factor_PowerOnSOCAjust</a>[6];</td></tr>
+<td>116</td><td><span class="kw">extern</span> <a id="116c8" class="tk">real32_T</a> <a id="116c17" class="tk">Factor_PowerOnSOCAjust</a>[8];</td></tr>
 <tr name="117" id="117">
-<td>117</td><td><span class="kw">extern</span> <a id="117c8" class="tk">real32_T</a> <a id="117c17" class="tk">FastChargeCurrentTable</a>[168];</td></tr>
+<td>117</td><td><span class="kw">extern</span> <a id="117c8" class="tk">real32_T</a> <a id="117c17" class="tk">FastChargeCurrentTable</a>[176];</td></tr>
 <tr name="118" id="118">
-<td>118</td><td><span class="kw">extern</span> <a id="118c8" class="tk">real32_T</a> <a id="118c17" class="tk">FeedBackCurrentTable</a>[108];<span class="ct">/* maximum discharge current, row: SOC, collumn: T  */</span></td></tr>
+<td>118</td><td><span class="kw">extern</span> <a id="118c8" class="tk">real32_T</a> <a id="118c17" class="tk">FeedBackCurrentTable</a>[208];<span class="ct">/* maximum discharge current, row: SOC, collumn: T  */</span></td></tr>
 <tr name="119" id="119">
-<td>119</td><td><span class="kw">extern</span> <a id="119c8" class="tk">real32_T</a> <a id="119c17" class="tk">SOC_Discharge</a>[11];</td></tr>
+<td>119</td><td><span class="kw">extern</span> <a id="119c8" class="tk">real32_T</a> <a id="119c17" class="tk">SOC_Discharge</a>[12];</td></tr>
 <tr name="120" id="120">
-<td>120</td><td><span class="kw">extern</span> <a id="120c8" class="tk">real32_T</a> <a id="120c17" class="tk">SOC_FastCharge</a>[12];</td></tr>
+<td>120</td><td><span class="kw">extern</span> <a id="120c8" class="tk">real32_T</a> <a id="120c17" class="tk">SOC_FastCharge</a>[11];</td></tr>
 <tr name="121" id="121">
-<td>121</td><td><span class="kw">extern</span> <a id="121c8" class="tk">real32_T</a> <a id="121c17" class="tk">SOC_Feedback</a>[12];      <span class="ct">/* row for max dicharge current table */</span></td></tr>
+<td>121</td><td><span class="kw">extern</span> <a id="121c8" class="tk">real32_T</a> <a id="121c17" class="tk">SOC_Feedback</a>[13];      <span class="ct">/* row for max dicharge current table */</span></td></tr>
 <tr name="122" id="122">
-<td>122</td><td><span class="kw">extern</span> <a id="122c8" class="tk">real32_T</a> <a id="122c17" class="tk">T_ChargeEndSOCAjust</a>[7];</td></tr>
+<td>122</td><td><span class="kw">extern</span> <a id="122c8" class="tk">real32_T</a> <a id="122c17" class="tk">T_ChargeEndSOCAjust</a>[8];</td></tr>
 <tr name="123" id="123">
-<td>123</td><td><span class="kw">extern</span> <a id="123c8" class="tk">real32_T</a> <a id="123c17" class="tk">T_Discharge</a>[12];       <span class="ct">/* collumn for max discharge current table */</span></td></tr>
+<td>123</td><td><span class="kw">extern</span> <a id="123c8" class="tk">real32_T</a> <a id="123c17" class="tk">T_Discharge</a>[17];       <span class="ct">/* collumn for max discharge current table */</span></td></tr>
 <tr name="124" id="124">
-<td>124</td><td><span class="kw">extern</span> <a id="124c8" class="tk">real32_T</a> <a id="124c17" class="tk">T_Facdback</a>[9];</td></tr>
+<td>124</td><td><span class="kw">extern</span> <a id="124c8" class="tk">real32_T</a> <a id="124c17" class="tk">T_Facdback</a>[16];</td></tr>
 <tr name="125" id="125">
-<td>125</td><td><span class="kw">extern</span> <a id="125c8" class="tk">real32_T</a> <a id="125c17" class="tk">T_FastCharge</a>[14];</td></tr>
+<td>125</td><td><span class="kw">extern</span> <a id="125c8" class="tk">real32_T</a> <a id="125c17" class="tk">T_FastCharge</a>[16];</td></tr>
 <tr name="126" id="126">
-<td>126</td><td><span class="kw">extern</span> <a id="126c8" class="tk">real32_T</a> <a id="126c17" class="tk">T_PowerOnSOCAjust</a>[6];</td></tr>
+<td>126</td><td><span class="kw">extern</span> <a id="126c8" class="tk">real32_T</a> <a id="126c17" class="tk">T_PowerOnSOCAjust</a>[8];</td></tr>
 <tr name="127" id="127">
-<td>127</td><td><span class="kw">extern</span> <a id="127c8" class="tk">real32_T</a> <a id="127c17" class="tk">V_CellLowest</a>[23];</td></tr>
+<td>127</td><td><span class="kw">extern</span> <a id="127c8" class="tk">real32_T</a> <a id="127c17" class="tk">V_CellLowest</a>[8];</td></tr>
 <tr name="128" id="128">
 <td>128</td><td></td></tr>
 <tr name="129" id="129">

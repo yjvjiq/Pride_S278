@@ -4,7 +4,7 @@ CompiledModel {
   Version		  "8.10 (R2016a) 10-Feb-2016"
   SimulinkVersion	  "8.7"
   ModelVersion		  "1.1149"
-  GeneratedOn		  "Fri May 12 15:07:17 2017"
+  GeneratedOn		  "Sat May 27 11:21:56 2017"
   HasSimStructVars	  0
   HasCodeVariants	  0
   AccessFunctionHFileName ""
@@ -596,7 +596,7 @@ CompiledModel {
     tlcLanguage		    "C"
     tlcTargetType	    "RT"
   }
-  RTWContext		  [-1349242560, 1]
+  RTWContext		  [138164192, 2]
   RTWCGIR		  1
   TLCBlkFcnInCGIR	  1
   SLCI			  off
@@ -631,7 +631,7 @@ CompiledModel {
   NumZCEvents		  0
   ZCVectorlength	  0
   NumBlockSignals	  32
-  NumBlockParams	  703
+  NumBlockParams	  791
   NumAlgebraicLoops	  0
   HasRootTriggerPort	  no
   HasRootEnablePort	  no
@@ -2311,7 +2311,7 @@ CompiledModel {
     LocalBlockOutput {
       Identifier	      "rtb_Compare_j"
       SysCsIdx		      [6, 0]
-      CGTypeIdx		      45
+      CGTypeIdx		      43
       ContainerCGTypeIdx      8
       LogicalSrc	      B3
       SigDeclSysIdx	      6
@@ -2322,7 +2322,7 @@ CompiledModel {
     LocalBlockOutput {
       Identifier	      "rtb_Compare_l"
       SysCsIdx		      [6, 0]
-      CGTypeIdx		      45
+      CGTypeIdx		      43
       ContainerCGTypeIdx      8
       LogicalSrc	      B4
       SigDeclSysIdx	      6
@@ -2333,7 +2333,7 @@ CompiledModel {
     LocalBlockOutput {
       Identifier	      "rtb_and_k"
       SysCsIdx		      [6, 0]
-      CGTypeIdx		      45
+      CGTypeIdx		      43
       ContainerCGTypeIdx      8
       LogicalSrc	      B5
       SigDeclSysIdx	      6
@@ -2355,7 +2355,7 @@ CompiledModel {
     LocalBlockOutput {
       Identifier	      "rtb_Add_k"
       SysCsIdx		      [4, 0]
-      CGTypeIdx		      46
+      CGTypeIdx		      44
       ContainerCGTypeIdx      4
       LogicalSrc	      B7
       SigDeclSysIdx	      4
@@ -2378,7 +2378,7 @@ CompiledModel {
     LocalBlockOutput {
       Identifier	      "rtb_Add_j"
       SysCsIdx		      [2, 0]
-      CGTypeIdx		      46
+      CGTypeIdx		      44
       ContainerCGTypeIdx      4
       LogicalSrc	      B9
       SigDeclSysIdx	      2
@@ -2423,7 +2423,7 @@ CompiledModel {
     LocalBlockOutput {
       Identifier	      "rtb_Compare"
       SysCsIdx		      [1, 0]
-      CGTypeIdx		      45
+      CGTypeIdx		      43
       ContainerCGTypeIdx      8
       LogicalSrc	      B13
       SigDeclSysIdx	      1
@@ -2434,7 +2434,7 @@ CompiledModel {
     LocalBlockOutput {
       Identifier	      "rtb_Compare_g"
       SysCsIdx		      [1, 0]
-      CGTypeIdx		      45
+      CGTypeIdx		      43
       ContainerCGTypeIdx      8
       LogicalSrc	      B14
       SigDeclSysIdx	      1
@@ -2445,7 +2445,7 @@ CompiledModel {
     LocalBlockOutput {
       Identifier	      "rtb_and"
       SysCsIdx		      [1, 0]
-      CGTypeIdx		      45
+      CGTypeIdx		      43
       ContainerCGTypeIdx      8
       LogicalSrc	      B15
       SigDeclSysIdx	      1
@@ -3123,7 +3123,7 @@ CompiledModel {
     ArgDefIdx		    -1
     MemoryMapIdx	    [-1, -1, -1]
     OriginalDataTypeIdx	    0
-    CGTypeIdx		    47
+    CGTypeIdx		    45
     Tunable		    off
     OrigIdentifier	    ""
     StorageClass	    Auto
@@ -3291,7 +3291,7 @@ CompiledModel {
       MemoryMapIdx	      [-1, -1, -1]
       HasObject		      0
       OriginalDataTypeIdx     0
-      CGTypeIdx		      47
+      CGTypeIdx		      45
       WorkspaceVarName	      ""
       IsPseudoWorkspaceVar    no
       Tunable		      no
@@ -3321,7 +3321,7 @@ CompiledModel {
       Value		      [40.0F]
       OriginalDataTypeIdx     1
       CGTypeIdx		      18
-      ContainerCGTypeIdx      48
+      ContainerCGTypeIdx      46
       ReferencedBy	      Matrix(3,4)
 [[1, 0, 0, 0]; [3, 0, 0, 0]; [6, 0, 0, 0];]
       GraphicalRef	      Matrix(3,2)
@@ -3336,7 +3336,7 @@ CompiledModel {
       Value		      [-30.0F]
       OriginalDataTypeIdx     1
       CGTypeIdx		      18
-      ContainerCGTypeIdx      48
+      ContainerCGTypeIdx      46
       ReferencedBy	      Matrix(1,4)
 [[1, 0, 1, 0];]
       GraphicalRef	      Matrix(1,2)
@@ -3351,7 +3351,7 @@ CompiledModel {
       Value		      [57.0F]
       OriginalDataTypeIdx     1
       CGTypeIdx		      18
-      ContainerCGTypeIdx      48
+      ContainerCGTypeIdx      46
       ReferencedBy	      Matrix(2,4)
 [[1, 0, 2, 0]; [6, 0, 2, 0];]
       GraphicalRef	      Matrix(2,2)
@@ -3366,7 +3366,7 @@ CompiledModel {
       Value		      [0.0F]
       OriginalDataTypeIdx     1
       CGTypeIdx		      18
-      ContainerCGTypeIdx      48
+      ContainerCGTypeIdx      46
       ReferencedBy	      Matrix(3,4)
 [[1, 0, 3, 0]; [6, 0, 3, 0]; [6, 0, 1, 0];]
       GraphicalRef	      Matrix(3,2)
@@ -3378,9 +3378,9 @@ CompiledModel {
     Parameter {
       Identifier	      "linearizationSOF_maxIndex"
       LogicalSrc	      P4
-      Value		      [10U, 11U]
+      Value		      [11U, 16U]
       OriginalDataTypeIdx     7
-      CGTypeIdx		      42
+      CGTypeIdx		      40
       ReferencedBy	      Matrix(1,4)
 [[7, 0, 10, 3];]
       GraphicalRef	      Matrix(1,2)
@@ -3393,9 +3393,9 @@ CompiledModel {
     Parameter {
       Identifier	      "uDLookupTable3_maxIndex"
       LogicalSrc	      P5
-      Value		      [22U, 6U]
+      Value		      [7U, 7U]
       OriginalDataTypeIdx     7
-      CGTypeIdx		      42
+      CGTypeIdx		      40
       ReferencedBy	      Matrix(1,4)
 [[7, 0, 10, 13];]
       GraphicalRef	      Matrix(1,2)
@@ -3408,9 +3408,9 @@ CompiledModel {
     Parameter {
       Identifier	      "uDLookupTable3_maxIndex_g"
       LogicalSrc	      P6
-      Value		      [13U, 11U]
+      Value		      [15U, 10U]
       OriginalDataTypeIdx     7
-      CGTypeIdx		      42
+      CGTypeIdx		      40
       ReferencedBy	      Matrix(1,4)
 [[7, 0, 10, 18];]
       GraphicalRef	      Matrix(1,2)
@@ -3423,9 +3423,9 @@ CompiledModel {
     Parameter {
       Identifier	      "linearizationSOF_maxIndex_f"
       LogicalSrc	      P7
-      Value		      [11U, 8U]
+      Value		      [12U, 15U]
       OriginalDataTypeIdx     7
-      CGTypeIdx		      42
+      CGTypeIdx		      40
       ReferencedBy	      Matrix(1,4)
 [[7, 0, 10, 26];]
       GraphicalRef	      Matrix(1,2)
@@ -3441,7 +3441,7 @@ CompiledModel {
       Value		      [40U]
       OriginalDataTypeIdx     3
       CGTypeIdx		      19
-      ContainerCGTypeIdx      49
+      ContainerCGTypeIdx      47
       ReferencedBy	      Matrix(2,4)
 [[2, 0, 0, 0]; [4, 0, 0, 0];]
       GraphicalRef	      Matrix(2,2)
@@ -3456,10 +3456,10 @@ CompiledModel {
       WorkspaceVarName	      "CAP_CONST_CAL"
       Tunable		      yes
       StorageClass	      "Custom"
-      Value		      [240.0F]
+      Value		      [150.0F]
       OriginalDataTypeIdx     1
       CGTypeIdx		      18
-      ContainerCGTypeIdx      48
+      ContainerCGTypeIdx      46
       ReferencedBy	      Matrix(3,4)
 [[7, 0, 10, 8]; [7, 0, 10, 19]; [7, 0, 10, 31];]
       GraphicalRef	      Matrix(3,2)
@@ -3471,7 +3471,7 @@ CompiledModel {
 	Package			Simulink
 	Class			Parameter
 	ObjectProperties {
-	  Value			  240.0
+	  Value			  150.0
 	  CoderInfo {
 	    Object {
 	      Package		      Simulink
@@ -3556,7 +3556,7 @@ CompiledModel {
 	  Min			  []
 	  Max			  []
 	  DocUnits		  ""
-	  Dimensions		  [11.0, 12.0]
+	  Dimensions		  [12.0, 17.0]
 	}
       }
     }
@@ -3566,7 +3566,7 @@ CompiledModel {
       WorkspaceVarName	      "Factor_PowerOnSOCAjust"
       Tunable		      yes
       StorageClass	      "Custom"
-      Value		      [0.8159F, 0.8833F, 0.936F, 0.9692F, 0.9886F, 1.0F]
+      Value		      [0.6346F, 0.7105F, 0.7811F, 0.8448F, 0.9066F, 0.9523F, 0.9887F, 1.0F]
       OriginalDataTypeIdx     1
       CGTypeIdx		      23
       ContainerCGTypeIdx      22
@@ -3581,7 +3581,8 @@ CompiledModel {
 	Package			Simulink
 	Class			Parameter
 	ObjectProperties {
-	  Value			  [0.8159, 0.8833, 0.936, 0.9692, 0.9886, 1.0]
+	  Value			  Vector(8)
+[0.6346, 0.7105, 0.7811, 0.8448, 0.9066, 0.9523, 0.9887, 1.0]
 	  CoderInfo {
 	    Object {
 	      Package		      Simulink
@@ -3611,7 +3612,7 @@ CompiledModel {
 	  Min			  []
 	  Max			  []
 	  DocUnits		  ""
-	  Dimensions		  [1.0, 6.0]
+	  Dimensions		  [1.0, 8.0]
 	}
       }
     }
@@ -3666,7 +3667,7 @@ CompiledModel {
 	  Min			  []
 	  Max			  []
 	  DocUnits		  ""
-	  Dimensions		  [14.0, 12.0]
+	  Dimensions		  [16.0, 11.0]
 	}
       }
     }
@@ -3721,7 +3722,7 @@ CompiledModel {
 	  Min			  []
 	  Max			  []
 	  DocUnits		  ""
-	  Dimensions		  [12.0, 9.0]
+	  Dimensions		  [13.0, 16.0]
 	}
       }
     }
@@ -3776,7 +3777,7 @@ CompiledModel {
 	  Min			  []
 	  Max			  []
 	  DocUnits		  ""
-	  Dimensions		  [1.0, 11.0]
+	  Dimensions		  [1.0, 12.0]
 	}
       }
     }
@@ -3831,7 +3832,7 @@ CompiledModel {
 	  Min			  []
 	  Max			  []
 	  DocUnits		  ""
-	  Dimensions		  [1.0, 12.0]
+	  Dimensions		  [1.0, 11.0]
 	}
       }
     }
@@ -3843,8 +3844,8 @@ CompiledModel {
       StorageClass	      "Custom"
       Value		      SLData(10)
       OriginalDataTypeIdx     1
-      CGTypeIdx		      31
-      ContainerCGTypeIdx      30
+      CGTypeIdx		      33
+      ContainerCGTypeIdx      32
       ReferencedBy	      Matrix(1,4)
 [[7, 0, 10, 24];]
       GraphicalRef	      Matrix(1,2)
@@ -3886,7 +3887,7 @@ CompiledModel {
 	  Min			  []
 	  Max			  []
 	  DocUnits		  ""
-	  Dimensions		  [1.0, 12.0]
+	  Dimensions		  [1.0, 13.0]
 	}
       }
     }
@@ -3896,10 +3897,10 @@ CompiledModel {
       WorkspaceVarName	      "T_ChargeEndSOCAjust"
       Tunable		      yes
       StorageClass	      "Custom"
-      Value		      [0.0F, 5.0F, 10.0F, 15.0F, 20.0F, 25.0F, 35.0F]
+      Value		      [0.0F, 5.0F, 10.0F, 15.0F, 20.0F, 25.0F, 35.0F, 45.0F]
       OriginalDataTypeIdx     1
-      CGTypeIdx		      33
-      ContainerCGTypeIdx      32
+      CGTypeIdx		      23
+      ContainerCGTypeIdx      22
       ReferencedBy	      Matrix(1,4)
 [[7, 0, 10, 12];]
       GraphicalRef	      Matrix(1,2)
@@ -3911,8 +3912,8 @@ CompiledModel {
 	Package			Simulink
 	Class			Parameter
 	ObjectProperties {
-	  Value			  Vector(7)
-[0.0, 5.0, 10.0, 15.0, 20.0, 25.0, 35.0]
+	  Value			  Vector(8)
+[0.0, 5.0, 10.0, 15.0, 20.0, 25.0, 35.0, 45.0]
 	  CoderInfo {
 	    Object {
 	      Package		      Simulink
@@ -3942,7 +3943,7 @@ CompiledModel {
 	  Min			  []
 	  Max			  []
 	  DocUnits		  ""
-	  Dimensions		  [1.0, 7.0]
+	  Dimensions		  [1.0, 8.0]
 	}
       }
     }
@@ -3954,8 +3955,8 @@ CompiledModel {
       StorageClass	      "Custom"
       Value		      SLData(12)
       OriginalDataTypeIdx     1
-      CGTypeIdx		      31
-      ContainerCGTypeIdx      30
+      CGTypeIdx		      35
+      ContainerCGTypeIdx      34
       ReferencedBy	      Matrix(1,4)
 [[7, 0, 10, 2];]
       GraphicalRef	      Matrix(1,2)
@@ -3997,7 +3998,7 @@ CompiledModel {
 	  Min			  []
 	  Max			  []
 	  DocUnits		  ""
-	  Dimensions		  [1.0, 12.0]
+	  Dimensions		  [1.0, 17.0]
 	}
       }
     }
@@ -4007,70 +4008,14 @@ CompiledModel {
       WorkspaceVarName	      "T_Facdback"
       Tunable		      yes
       StorageClass	      "Custom"
-      Value		      [-10.0F, 0.0F, 10.0F, 20.0F, 30.0F, 40.0F, 50.0F, 52.0F, 57.0F]
-      OriginalDataTypeIdx     1
-      CGTypeIdx		      35
-      ContainerCGTypeIdx      34
-      ReferencedBy	      Matrix(1,4)
-[[7, 0, 10, 25];]
-      GraphicalRef	      Matrix(1,2)
-[[7, 4];]
-      GraphicalSource	      [-1, -1]
-      OwnerSysIdx	      [7, -1]
-      HasObject		      1
-      Object {
-	Package			Simulink
-	Class			Parameter
-	ObjectProperties {
-	  Value			  Vector(9)
-[-10.0, 0.0, 10.0, 20.0, 30.0, 40.0, 50.0, 52.0, 57.0]
-	  CoderInfo {
-	    Object {
-	      Package		      Simulink
-	      Class		      CoderInfo
-	      ObjectProperties {
-		StorageClass		"Custom"
-		TypeQualifier		""
-		Alias			""
-		Alignment		-1
-		CSCPackageName		"Simulink"
-		ParameterOrSignal	"Parameter"
-		CustomStorageClass	"Default"
-		CustomAttributes {
-		  Object {
-		    Package		    SimulinkCSC
-		    Class		    AttribClass_Simulink_Default
-		    ObjectProperties {
-		    ConcurrentAccess	    0
-		    }
-		  }
-		}
-	      }
-	    }
-	  }
-	  Description		  ""
-	  DataType		  "single"
-	  Min			  []
-	  Max			  []
-	  DocUnits		  ""
-	  Dimensions		  [1.0, 9.0]
-	}
-      }
-    }
-    Parameter {
-      Identifier	      "T_FastCharge"
-      LogicalSrc	      P20
-      WorkspaceVarName	      "T_FastCharge"
-      Tunable		      yes
-      StorageClass	      "Custom"
       Value		      SLData(14)
       OriginalDataTypeIdx     1
       CGTypeIdx		      37
       ContainerCGTypeIdx      36
       ReferencedBy	      Matrix(1,4)
-[[7, 0, 10, 16];]
+[[7, 0, 10, 25];]
       GraphicalRef	      Matrix(1,2)
-[[3, 3];]
+[[7, 4];]
       GraphicalSource	      [-1, -1]
       OwnerSysIdx	      [7, -1]
       HasObject		      1
@@ -4108,79 +4053,24 @@ CompiledModel {
 	  Min			  []
 	  Max			  []
 	  DocUnits		  ""
-	  Dimensions		  [1.0, 14.0]
+	  Dimensions		  [1.0, 16.0]
 	}
       }
     }
     Parameter {
-      Identifier	      "T_PowerOnSOCAjust"
-      LogicalSrc	      P21
-      WorkspaceVarName	      "T_PowerOnSOCAjust"
-      Tunable		      yes
-      StorageClass	      "Custom"
-      Value		      [-25.0F, -15.0F, -5.0F, 5.0F, 15.0F, 25.0F]
-      OriginalDataTypeIdx     1
-      CGTypeIdx		      23
-      ContainerCGTypeIdx      22
-      ReferencedBy	      Matrix(1,4)
-[[7, 0, 10, 22];]
-      GraphicalRef	      Matrix(1,2)
-[[4, 2];]
-      GraphicalSource	      [-1, -1]
-      OwnerSysIdx	      [7, -1]
-      HasObject		      1
-      Object {
-	Package			Simulink
-	Class			Parameter
-	ObjectProperties {
-	  Value			  [-25.0, -15.0, -5.0, 5.0, 15.0, 25.0]
-	  CoderInfo {
-	    Object {
-	      Package		      Simulink
-	      Class		      CoderInfo
-	      ObjectProperties {
-		StorageClass		"Custom"
-		TypeQualifier		""
-		Alias			""
-		Alignment		-1
-		CSCPackageName		"Simulink"
-		ParameterOrSignal	"Parameter"
-		CustomStorageClass	"Default"
-		CustomAttributes {
-		  Object {
-		    Package		    SimulinkCSC
-		    Class		    AttribClass_Simulink_Default
-		    ObjectProperties {
-		    ConcurrentAccess	    0
-		    }
-		  }
-		}
-	      }
-	    }
-	  }
-	  Description		  ""
-	  DataType		  "single"
-	  Min			  []
-	  Max			  []
-	  DocUnits		  ""
-	  Dimensions		  [1.0, 6.0]
-	}
-      }
-    }
-    Parameter {
-      Identifier	      "V_CellLowest"
-      LogicalSrc	      P22
-      WorkspaceVarName	      "V_CellLowest"
+      Identifier	      "T_FastCharge"
+      LogicalSrc	      P20
+      WorkspaceVarName	      "T_FastCharge"
       Tunable		      yes
       StorageClass	      "Custom"
       Value		      SLData(16)
       OriginalDataTypeIdx     1
-      CGTypeIdx		      39
-      ContainerCGTypeIdx      38
+      CGTypeIdx		      37
+      ContainerCGTypeIdx      36
       ReferencedBy	      Matrix(1,4)
-[[7, 0, 10, 11];]
+[[7, 0, 10, 16];]
       GraphicalRef	      Matrix(1,2)
-[[2, 1];]
+[[3, 3];]
       GraphicalSource	      [-1, -1]
       OwnerSysIdx	      [7, -1]
       HasObject		      1
@@ -4218,7 +4108,119 @@ CompiledModel {
 	  Min			  []
 	  Max			  []
 	  DocUnits		  ""
-	  Dimensions		  [1.0, 23.0]
+	  Dimensions		  [1.0, 16.0]
+	}
+      }
+    }
+    Parameter {
+      Identifier	      "T_PowerOnSOCAjust"
+      LogicalSrc	      P21
+      WorkspaceVarName	      "T_PowerOnSOCAjust"
+      Tunable		      yes
+      StorageClass	      "Custom"
+      Value		      [-20.0F, -15.0F, -10.0F, -5.0F, 0.0F, 5.0F, 10.0F, 15.0F]
+      OriginalDataTypeIdx     1
+      CGTypeIdx		      23
+      ContainerCGTypeIdx      22
+      ReferencedBy	      Matrix(1,4)
+[[7, 0, 10, 22];]
+      GraphicalRef	      Matrix(1,2)
+[[4, 2];]
+      GraphicalSource	      [-1, -1]
+      OwnerSysIdx	      [7, -1]
+      HasObject		      1
+      Object {
+	Package			Simulink
+	Class			Parameter
+	ObjectProperties {
+	  Value			  Vector(8)
+[-20.0, -15.0, -10.0, -5.0, 0.0, 5.0, 10.0, 15.0]
+	  CoderInfo {
+	    Object {
+	      Package		      Simulink
+	      Class		      CoderInfo
+	      ObjectProperties {
+		StorageClass		"Custom"
+		TypeQualifier		""
+		Alias			""
+		Alignment		-1
+		CSCPackageName		"Simulink"
+		ParameterOrSignal	"Parameter"
+		CustomStorageClass	"Default"
+		CustomAttributes {
+		  Object {
+		    Package		    SimulinkCSC
+		    Class		    AttribClass_Simulink_Default
+		    ObjectProperties {
+		    ConcurrentAccess	    0
+		    }
+		  }
+		}
+	      }
+	    }
+	  }
+	  Description		  ""
+	  DataType		  "single"
+	  Min			  []
+	  Max			  []
+	  DocUnits		  ""
+	  Dimensions		  [1.0, 8.0]
+	}
+      }
+    }
+    Parameter {
+      Identifier	      "V_CellLowest"
+      LogicalSrc	      P22
+      WorkspaceVarName	      "V_CellLowest"
+      Tunable		      yes
+      StorageClass	      "Custom"
+      Value		      [3.389F, 3.399F, 3.405F, 3.422F, 3.44F, 3.475F, 3.63F, 3.65F]
+      OriginalDataTypeIdx     1
+      CGTypeIdx		      23
+      ContainerCGTypeIdx      22
+      ReferencedBy	      Matrix(1,4)
+[[7, 0, 10, 11];]
+      GraphicalRef	      Matrix(1,2)
+[[2, 1];]
+      GraphicalSource	      [-1, -1]
+      OwnerSysIdx	      [7, -1]
+      HasObject		      1
+      Object {
+	Package			Simulink
+	Class			Parameter
+	ObjectProperties {
+	  Value			  Vector(8)
+[3.389, 3.399, 3.405, 3.422, 3.44, 3.475, 3.63, 3.65]
+	  CoderInfo {
+	    Object {
+	      Package		      Simulink
+	      Class		      CoderInfo
+	      ObjectProperties {
+		StorageClass		"Custom"
+		TypeQualifier		""
+		Alias			""
+		Alignment		-1
+		CSCPackageName		"Simulink"
+		ParameterOrSignal	"Parameter"
+		CustomStorageClass	"Default"
+		CustomAttributes {
+		  Object {
+		    Package		    SimulinkCSC
+		    Class		    AttribClass_Simulink_Default
+		    ObjectProperties {
+		    ConcurrentAccess	    0
+		    }
+		  }
+		}
+	      }
+	    }
+	  }
+	  Description		  ""
+	  DataType		  "single"
+	  Min			  []
+	  Max			  []
+	  DocUnits		  ""
+	  Dimensions		  [1.0, 8.0]
 	}
       }
     }
@@ -4230,9 +4232,9 @@ CompiledModel {
       StorageClass	      "Custom"
       Value		      SLData(18)
       OriginalDataTypeIdx     14
-      CGTypeIdx		      41
-      ContainerCGTypeIdx      40
-      OriginalCGTypeIdx	      41
+      CGTypeIdx		      39
+      ContainerCGTypeIdx      38
+      OriginalCGTypeIdx	      39
       ReferencedBy	      Matrix(1,4)
 [[7, 0, 10, 10];]
       GraphicalRef	      Matrix(1,2)
@@ -4274,7 +4276,7 @@ CompiledModel {
 	  Min			  []
 	  Max			  []
 	  DocUnits		  ""
-	  Dimensions		  [23.0, 7.0]
+	  Dimensions		  [8.0, 8.0]
 	}
       }
     }
@@ -5299,7 +5301,7 @@ CompiledModel {
   }
   CanonicalPrmArgDefDefaults {
     OriginalDataTypeIdx	    0
-    CGTypeIdx		    47
+    CGTypeIdx		    45
     IsUsed		    yes
     DeclareAsPointer	    no
   }
@@ -5523,7 +5525,7 @@ CompiledModel {
 	Value			[40.0F]
 	OriginalDataTypeIdx	1
 	CGTypeIdx		18
-	ContainerCGTypeIdx	48
+	ContainerCGTypeIdx	46
 	String			""
 	StringTransformed	"40"
 	StringType		"Computed"
@@ -5563,7 +5565,7 @@ CompiledModel {
 	Value			[-30.0F]
 	OriginalDataTypeIdx	1
 	CGTypeIdx		18
-	ContainerCGTypeIdx	48
+	ContainerCGTypeIdx	46
 	String			""
 	StringType		"Computed"
 	NeedParenthesis		1
@@ -5603,7 +5605,7 @@ CompiledModel {
 	Value			[57.0F]
 	OriginalDataTypeIdx	1
 	CGTypeIdx		18
-	ContainerCGTypeIdx	48
+	ContainerCGTypeIdx	46
 	String			""
 	StringType		"Computed"
       }
@@ -5641,7 +5643,7 @@ CompiledModel {
 	Value			[0.0F]
 	OriginalDataTypeIdx	1
 	CGTypeIdx		18
-	ContainerCGTypeIdx	48
+	ContainerCGTypeIdx	46
 	String			""
 	StringTransformed	"0"
 	StringType		"Computed"
@@ -5829,7 +5831,7 @@ CompiledModel {
 	Value			[40U]
 	OriginalDataTypeIdx	3
 	CGTypeIdx		19
-	ContainerCGTypeIdx	49
+	ContainerCGTypeIdx	47
 	String			""
 	StringTransformed	"40"
 	StringType		"Computed"
@@ -5985,7 +5987,7 @@ CompiledModel {
 	Value			[40.0F]
 	OriginalDataTypeIdx	1
 	CGTypeIdx		18
-	ContainerCGTypeIdx	48
+	ContainerCGTypeIdx	46
 	String			""
 	StringTransformed	"40"
 	StringType		"Computed"
@@ -6140,7 +6142,7 @@ CompiledModel {
 	Value			[40U]
 	OriginalDataTypeIdx	3
 	CGTypeIdx		19
-	ContainerCGTypeIdx	49
+	ContainerCGTypeIdx	47
 	String			""
 	StringTransformed	"40"
 	StringType		"Computed"
@@ -6390,7 +6392,7 @@ CompiledModel {
 	Value			[40.0F]
 	OriginalDataTypeIdx	1
 	CGTypeIdx		18
-	ContainerCGTypeIdx	48
+	ContainerCGTypeIdx	46
 	String			""
 	StringTransformed	"40"
 	StringType		"Computed"
@@ -6430,7 +6432,7 @@ CompiledModel {
 	Value			[0.0F]
 	OriginalDataTypeIdx	1
 	CGTypeIdx		18
-	ContainerCGTypeIdx	48
+	ContainerCGTypeIdx	46
 	String			""
 	StringType		"Computed"
       }
@@ -6469,7 +6471,7 @@ CompiledModel {
 	Value			[57.0F]
 	OriginalDataTypeIdx	1
 	CGTypeIdx		18
-	ContainerCGTypeIdx	48
+	ContainerCGTypeIdx	46
 	String			""
 	StringType		"Computed"
       }
@@ -6507,7 +6509,7 @@ CompiledModel {
 	Value			[0.0F]
 	OriginalDataTypeIdx	1
 	CGTypeIdx		18
-	ContainerCGTypeIdx	48
+	ContainerCGTypeIdx	46
 	String			""
 	StringTransformed	"0"
 	StringType		"Computed"
@@ -6980,12 +6982,12 @@ CompiledModel {
       TID		      0
       firstEntryOfTsMapIsGCD  yes
       NumDataOutputPorts      0
-      TLCFileName	      "s7_b0_em11g"
+      TLCFileName	      "s7_b0_t6ith"
       OpaqueBlockMethode {
 	HasOutputs		1
 	HasModelInitialize	1
       }
-      Parameters	      [32, 703]
+      Parameters	      [32, 791]
       Parameter {
 	Name			"Table"
 	MdlPrmIdx		10
@@ -7011,17 +7013,17 @@ CompiledModel {
 	MdlPrmIdx		18
 	Value			SLData(22)
 	OriginalDataTypeIdx	1
-	CGTypeIdx		31
-	ContainerCGTypeIdx	30
+	CGTypeIdx		35
+	ContainerCGTypeIdx	34
 	String			"T_Discharge"
 	StringType		"Expression"
       }
       Parameter {
 	Name			"maxIndex"
 	MdlPrmIdx		4
-	Value			[10U, 11U]
+	Value			[11U, 16U]
 	OriginalDataTypeIdx	7
-	CGTypeIdx		42
+	CGTypeIdx		40
 	String			""
 	StringType		"Computed"
 	NeedParenthesis		1
@@ -7032,7 +7034,7 @@ CompiledModel {
 	Value			[40.0F]
 	OriginalDataTypeIdx	1
 	CGTypeIdx		18
-	ContainerCGTypeIdx	48
+	ContainerCGTypeIdx	46
 	String			""
 	StringTransformed	"40"
 	StringType		"Computed"
@@ -7043,7 +7045,7 @@ CompiledModel {
 	Value			[-30.0F]
 	OriginalDataTypeIdx	1
 	CGTypeIdx		18
-	ContainerCGTypeIdx	48
+	ContainerCGTypeIdx	46
 	String			""
 	StringTransformed	"const"
 	StringType		"Computed"
@@ -7055,7 +7057,7 @@ CompiledModel {
 	Value			[57.0F]
 	OriginalDataTypeIdx	1
 	CGTypeIdx		18
-	ContainerCGTypeIdx	48
+	ContainerCGTypeIdx	46
 	String			""
 	StringTransformed	"const"
 	StringType		"Computed"
@@ -7066,7 +7068,7 @@ CompiledModel {
 	Value			[0.0F]
 	OriginalDataTypeIdx	1
 	CGTypeIdx		18
-	ContainerCGTypeIdx	48
+	ContainerCGTypeIdx	46
 	String			""
 	StringTransformed	"0"
 	StringType		"Computed"
@@ -7074,10 +7076,10 @@ CompiledModel {
       Parameter {
 	Name			"Gain"
 	MdlPrmIdx		9
-	Value			[240.0F]
+	Value			[150.0F]
 	OriginalDataTypeIdx	1
 	CGTypeIdx		18
-	ContainerCGTypeIdx	48
+	ContainerCGTypeIdx	46
 	String			"CAP_CONST_CAL"
 	StringType		"Expression"
       }
@@ -7087,7 +7089,7 @@ CompiledModel {
 	Value			[40U]
 	OriginalDataTypeIdx	3
 	CGTypeIdx		19
-	ContainerCGTypeIdx	49
+	ContainerCGTypeIdx	47
 	String			""
 	StringTransformed	"40"
 	StringType		"Computed"
@@ -7097,37 +7099,37 @@ CompiledModel {
 	MdlPrmIdx		23
 	Value			SLData(23)
 	OriginalDataTypeIdx	14
-	CGTypeIdx		41
-	ContainerCGTypeIdx	40
+	CGTypeIdx		39
+	ContainerCGTypeIdx	38
 	String			"Factor_ChargeEndSOCAjust"
 	StringType		"Expression"
       }
       Parameter {
 	Name			"BreakpointsForDimension1"
 	MdlPrmIdx		22
-	Value			SLData(24)
+	Value			[3.389F, 3.399F, 3.405F, 3.422F, 3.44F, 3.475F, 3.63F, 3.65F]
 	OriginalDataTypeIdx	1
-	CGTypeIdx		39
-	ContainerCGTypeIdx	38
+	CGTypeIdx		23
+	ContainerCGTypeIdx	22
 	String			"V_CellLowest"
 	StringType		"Expression"
       }
       Parameter {
 	Name			"BreakpointsForDimension2"
 	MdlPrmIdx		17
-	Value			[0.0F, 5.0F, 10.0F, 15.0F, 20.0F, 25.0F, 35.0F]
+	Value			[0.0F, 5.0F, 10.0F, 15.0F, 20.0F, 25.0F, 35.0F, 45.0F]
 	OriginalDataTypeIdx	1
-	CGTypeIdx		33
-	ContainerCGTypeIdx	32
+	CGTypeIdx		23
+	ContainerCGTypeIdx	22
 	String			"T_ChargeEndSOCAjust"
 	StringType		"Expression"
       }
       Parameter {
 	Name			"maxIndex"
 	MdlPrmIdx		5
-	Value			[22U, 6U]
+	Value			[7U, 7U]
 	OriginalDataTypeIdx	7
-	CGTypeIdx		42
+	CGTypeIdx		40
 	String			""
 	StringType		"Computed"
 	NeedParenthesis		1
@@ -7138,7 +7140,7 @@ CompiledModel {
 	Value			[40.0F]
 	OriginalDataTypeIdx	1
 	CGTypeIdx		18
-	ContainerCGTypeIdx	48
+	ContainerCGTypeIdx	46
 	String			""
 	StringTransformed	"40"
 	StringType		"Computed"
@@ -7146,7 +7148,7 @@ CompiledModel {
       Parameter {
 	Name			"Table"
 	MdlPrmIdx		12
-	Value			SLData(25)
+	Value			SLData(24)
 	OriginalDataTypeIdx	1
 	CGTypeIdx		25
 	ContainerCGTypeIdx	24
@@ -7156,7 +7158,7 @@ CompiledModel {
       Parameter {
 	Name			"BreakpointsForDimension1"
 	MdlPrmIdx		20
-	Value			SLData(26)
+	Value			SLData(25)
 	OriginalDataTypeIdx	1
 	CGTypeIdx		37
 	ContainerCGTypeIdx	36
@@ -7166,7 +7168,7 @@ CompiledModel {
       Parameter {
 	Name			"BreakpointsForDimension2"
 	MdlPrmIdx		15
-	Value			SLData(27)
+	Value			SLData(26)
 	OriginalDataTypeIdx	1
 	CGTypeIdx		31
 	ContainerCGTypeIdx	30
@@ -7176,9 +7178,9 @@ CompiledModel {
       Parameter {
 	Name			"maxIndex"
 	MdlPrmIdx		6
-	Value			[13U, 11U]
+	Value			[15U, 10U]
 	OriginalDataTypeIdx	7
-	CGTypeIdx		42
+	CGTypeIdx		40
 	String			""
 	StringType		"Computed"
 	NeedParenthesis		1
@@ -7186,10 +7188,10 @@ CompiledModel {
       Parameter {
 	Name			"Gain"
 	MdlPrmIdx		9
-	Value			[240.0F]
+	Value			[150.0F]
 	OriginalDataTypeIdx	1
 	CGTypeIdx		18
-	ContainerCGTypeIdx	48
+	ContainerCGTypeIdx	46
 	String			"CAP_CONST_CAL"
 	StringType		"Expression"
       }
@@ -7199,7 +7201,7 @@ CompiledModel {
 	Value			[40U]
 	OriginalDataTypeIdx	3
 	CGTypeIdx		19
-	ContainerCGTypeIdx	49
+	ContainerCGTypeIdx	47
 	String			""
 	StringTransformed	"40"
 	StringType		"Computed"
@@ -7207,7 +7209,7 @@ CompiledModel {
       Parameter {
 	Name			"Table"
 	MdlPrmIdx		11
-	Value			[0.8159F, 0.8833F, 0.936F, 0.9692F, 0.9886F, 1.0F]
+	Value			[0.6346F, 0.7105F, 0.7811F, 0.8448F, 0.9066F, 0.9523F, 0.9887F, 1.0F]
 	OriginalDataTypeIdx	1
 	CGTypeIdx		23
 	ContainerCGTypeIdx	22
@@ -7217,7 +7219,7 @@ CompiledModel {
       Parameter {
 	Name			"BreakpointsForDimension1"
 	MdlPrmIdx		21
-	Value			[-25.0F, -15.0F, -5.0F, 5.0F, 15.0F, 25.0F]
+	Value			[-20.0F, -15.0F, -10.0F, -5.0F, 0.0F, 5.0F, 10.0F, 15.0F]
 	OriginalDataTypeIdx	1
 	CGTypeIdx		23
 	ContainerCGTypeIdx	22
@@ -7227,7 +7229,7 @@ CompiledModel {
       Parameter {
 	Name			"Table"
 	MdlPrmIdx		13
-	Value			SLData(28)
+	Value			SLData(27)
 	OriginalDataTypeIdx	1
 	CGTypeIdx		27
 	ContainerCGTypeIdx	26
@@ -7237,29 +7239,29 @@ CompiledModel {
       Parameter {
 	Name			"BreakpointsForDimension1"
 	MdlPrmIdx		16
-	Value			SLData(29)
+	Value			SLData(28)
 	OriginalDataTypeIdx	1
-	CGTypeIdx		31
-	ContainerCGTypeIdx	30
+	CGTypeIdx		33
+	ContainerCGTypeIdx	32
 	String			"SOC_Feedback\n"
 	StringType		"Expression"
       }
       Parameter {
 	Name			"BreakpointsForDimension2"
 	MdlPrmIdx		19
-	Value			[-10.0F, 0.0F, 10.0F, 20.0F, 30.0F, 40.0F, 50.0F, 52.0F, 57.0F]
+	Value			SLData(29)
 	OriginalDataTypeIdx	1
-	CGTypeIdx		35
-	ContainerCGTypeIdx	34
+	CGTypeIdx		37
+	ContainerCGTypeIdx	36
 	String			"T_Facdback\n"
 	StringType		"Expression"
       }
       Parameter {
 	Name			"maxIndex"
 	MdlPrmIdx		7
-	Value			[11U, 8U]
+	Value			[12U, 15U]
 	OriginalDataTypeIdx	7
-	CGTypeIdx		42
+	CGTypeIdx		40
 	String			""
 	StringType		"Computed"
 	NeedParenthesis		1
@@ -7270,7 +7272,7 @@ CompiledModel {
 	Value			[40.0F]
 	OriginalDataTypeIdx	1
 	CGTypeIdx		18
-	ContainerCGTypeIdx	48
+	ContainerCGTypeIdx	46
 	String			""
 	StringTransformed	"40"
 	StringType		"Computed"
@@ -7281,7 +7283,7 @@ CompiledModel {
 	Value			[0.0F]
 	OriginalDataTypeIdx	1
 	CGTypeIdx		18
-	ContainerCGTypeIdx	48
+	ContainerCGTypeIdx	46
 	String			""
 	StringTransformed	"const"
 	StringType		"Computed"
@@ -7292,7 +7294,7 @@ CompiledModel {
 	Value			[57.0F]
 	OriginalDataTypeIdx	1
 	CGTypeIdx		18
-	ContainerCGTypeIdx	48
+	ContainerCGTypeIdx	46
 	String			""
 	StringTransformed	"const"
 	StringType		"Computed"
@@ -7303,7 +7305,7 @@ CompiledModel {
 	Value			[0.0F]
 	OriginalDataTypeIdx	1
 	CGTypeIdx		18
-	ContainerCGTypeIdx	48
+	ContainerCGTypeIdx	46
 	String			""
 	StringTransformed	"0"
 	StringType		"Computed"
@@ -7311,10 +7313,10 @@ CompiledModel {
       Parameter {
 	Name			"Gain"
 	MdlPrmIdx		9
-	Value			[240.0F]
+	Value			[150.0F]
 	OriginalDataTypeIdx	1
 	CGTypeIdx		18
-	ContainerCGTypeIdx	48
+	ContainerCGTypeIdx	46
 	String			"CAP_CONST_CAL"
 	StringType		"Expression"
       }
@@ -7337,8 +7339,8 @@ CompiledModel {
   SFLibraryNames {
     NumUniqueCharts	    0
   }
-  BlockParamChecksum	  ["2851382660U", "1271876165U", "2866264963U", "1588251204U"]
-  ModelChecksum		  ["3192830347U", "3278798628U", "1926139024U", "1095735006U"]
+  BlockParamChecksum	  ["3226767462U", "718151292U", "3230005938U", "1390552405U"]
+  ModelChecksum		  ["1472713766U", "3104632920U", "2659106239U", "3643182798U"]
   IncludeCodeGenSettings  1
   ExportPeriodicFcnCallCG 1
   IsAsyncAndRateGroupingUnified	0
@@ -7356,7 +7358,7 @@ CompiledModel {
       CGTypeIdx		      0
       Alignment		      -1
     }
-    NumCGTypes		    50
+    NumCGTypes		    48
     DeclareUsedMultiWordBits 0
     IndexType		    4
     CGType {
@@ -7466,69 +7468,56 @@ CompiledModel {
       BaseIdx		      3
     }
     CGType {
-      Width		      132
+      Width		      204
       Constructor	      "matrix"
       BaseIdx		      1
       NumDimensions	      1
-      Dimensions	      [132]
+      Dimensions	      [204]
     }
     CGType {
-      Width		      132
+      Width		      204
       Constructor	      "matrix"
       BaseIdx		      1
-      Dimensions	      [11, 12]
+      Dimensions	      [12, 17]
     }
     CGType {
-      Width		      6
-      Constructor	      "matrix"
-      BaseIdx		      1
-      NumDimensions	      1
-      Dimensions	      [6]
-    }
-    CGType {
-      Width		      6
-      Constructor	      "matrix"
-      BaseIdx		      1
-      Dimensions	      [1, 6]
-    }
-    CGType {
-      Width		      168
+      Width		      8
       Constructor	      "matrix"
       BaseIdx		      1
       NumDimensions	      1
-      Dimensions	      [168]
+      Dimensions	      [8]
     }
     CGType {
-      Width		      168
+      Width		      8
       Constructor	      "matrix"
       BaseIdx		      1
-      Dimensions	      [14, 12]
+      Dimensions	      [1, 8]
     }
     CGType {
-      Width		      108
-      Constructor	      "matrix"
-      BaseIdx		      1
-      NumDimensions	      1
-      Dimensions	      [108]
-    }
-    CGType {
-      Width		      108
-      Constructor	      "matrix"
-      BaseIdx		      1
-      Dimensions	      [12, 9]
-    }
-    CGType {
-      Width		      11
+      Width		      176
       Constructor	      "matrix"
       BaseIdx		      1
       NumDimensions	      1
-      Dimensions	      [11]
+      Dimensions	      [176]
     }
     CGType {
-      Width		      11
+      Width		      176
       Constructor	      "matrix"
       BaseIdx		      1
-      Dimensions	      [1, 11]
+      Dimensions	      [16, 11]
+    }
+    CGType {
+      Width		      208
+      Constructor	      "matrix"
+      BaseIdx		      1
+      NumDimensions	      1
+      Dimensions	      [208]
+    }
+    CGType {
+      Width		      208
+      Constructor	      "matrix"
+      BaseIdx		      1
+      Dimensions	      [13, 16]
     }
     CGType {
       Width		      12
@@ -7544,69 +7533,69 @@ CompiledModel {
       Dimensions	      [1, 12]
     }
     CGType {
-      Width		      7
+      Width		      11
       Constructor	      "matrix"
       BaseIdx		      1
       NumDimensions	      1
-      Dimensions	      [7]
+      Dimensions	      [11]
     }
     CGType {
-      Width		      7
+      Width		      11
       Constructor	      "matrix"
       BaseIdx		      1
-      Dimensions	      [1, 7]
+      Dimensions	      [1, 11]
     }
     CGType {
-      Width		      9
-      Constructor	      "matrix"
-      BaseIdx		      1
-      NumDimensions	      1
-      Dimensions	      [9]
-    }
-    CGType {
-      Width		      9
-      Constructor	      "matrix"
-      BaseIdx		      1
-      Dimensions	      [1, 9]
-    }
-    CGType {
-      Width		      14
+      Width		      13
       Constructor	      "matrix"
       BaseIdx		      1
       NumDimensions	      1
-      Dimensions	      [14]
+      Dimensions	      [13]
     }
     CGType {
-      Width		      14
+      Width		      13
       Constructor	      "matrix"
       BaseIdx		      1
-      Dimensions	      [1, 14]
+      Dimensions	      [1, 13]
     }
     CGType {
-      Width		      23
+      Width		      17
       Constructor	      "matrix"
       BaseIdx		      1
       NumDimensions	      1
-      Dimensions	      [23]
+      Dimensions	      [17]
     }
     CGType {
-      Width		      23
+      Width		      17
       Constructor	      "matrix"
       BaseIdx		      1
-      Dimensions	      [1, 23]
+      Dimensions	      [1, 17]
     }
     CGType {
-      Width		      161
+      Width		      16
+      Constructor	      "matrix"
+      BaseIdx		      1
+      NumDimensions	      1
+      Dimensions	      [16]
+    }
+    CGType {
+      Width		      16
+      Constructor	      "matrix"
+      BaseIdx		      1
+      Dimensions	      [1, 16]
+    }
+    CGType {
+      Width		      64
       Constructor	      "matrix"
       BaseIdx		      5
       NumDimensions	      1
-      Dimensions	      [161]
+      Dimensions	      [64]
     }
     CGType {
-      Width		      161
+      Width		      64
       Constructor	      "matrix"
       BaseIdx		      14
-      Dimensions	      [23, 7]
+      Dimensions	      [8, 8]
     }
     CGType {
       Width		      2
@@ -7644,19 +7633,19 @@ CompiledModel {
 	}
 	Member {
 	  Name			  "linearizationSOF_maxIndex"
-	  CGTypeIdx		  42
+	  CGTypeIdx		  40
 	}
 	Member {
 	  Name			  "uDLookupTable3_maxIndex"
-	  CGTypeIdx		  42
+	  CGTypeIdx		  40
 	}
 	Member {
 	  Name			  "uDLookupTable3_maxIndex_g"
-	  CGTypeIdx		  42
+	  CGTypeIdx		  40
 	}
 	Member {
 	  Name			  "linearizationSOF_maxIndex_f"
-	  CGTypeIdx		  42
+	  CGTypeIdx		  40
 	}
 	Member {
 	  Name			  "pooled4"
@@ -7739,14 +7728,14 @@ CompiledModel {
     RTWCGModule {
       RateGrouping	      0
       PeriodicRateGrouping    0
-      TLCFileName	      "s7_b0_em11g_0"
+      TLCFileName	      "s7_b0_t6ith_0"
       RTWFcnConst {
 	HasInstanceSetup	"no"
 	baseTidOfTasks		"[0]"
 	Outputs_Function {
 	  HasTidArg		  0
 	  HasCpiArg		  0
-	  TLCFileName		  "s7_b0_em11g_0_Outputs"
+	  TLCFileName		  "s7_b0_t6ith_0_Outputs"
 	  StackSize		  4
 	}
       }
@@ -7769,14 +7758,14 @@ CompiledModel {
     RTWCGModule {
       RateGrouping	      0
       PeriodicRateGrouping    0
-      TLCFileName	      "s7_b0_em11g_1"
+      TLCFileName	      "s7_b0_t6ith_1"
       RTWFcnConst {
 	HasInstanceSetup	"no"
 	baseTidOfTasks		"[0]"
 	Outputs_Function {
 	  HasTidArg		  0
 	  HasCpiArg		  0
-	  TLCFileName		  "s7_b0_em11g_1_Outputs"
+	  TLCFileName		  "s7_b0_t6ith_1_Outputs"
 	  StackSize		  0
 	}
       }
@@ -7798,14 +7787,14 @@ CompiledModel {
     RTWCGModule {
       RateGrouping	      0
       PeriodicRateGrouping    0
-      TLCFileName	      "s7_b0_em11g_2"
+      TLCFileName	      "s7_b0_t6ith_2"
       RTWFcnConst {
 	HasInstanceSetup	"no"
 	baseTidOfTasks		"[0]"
 	Outputs_Function {
 	  HasTidArg		  0
 	  HasCpiArg		  0
-	  TLCFileName		  "s7_b0_em11g_2_Outputs"
+	  TLCFileName		  "s7_b0_t6ith_2_Outputs"
 	  StackSize		  4
 	}
       }
@@ -7828,14 +7817,14 @@ CompiledModel {
     RTWCGModule {
       RateGrouping	      0
       PeriodicRateGrouping    0
-      TLCFileName	      "s7_b0_em11g_3"
+      TLCFileName	      "s7_b0_t6ith_3"
       RTWFcnConst {
 	HasInstanceSetup	"no"
 	baseTidOfTasks		"[0]"
 	Outputs_Function {
 	  HasTidArg		  0
 	  HasCpiArg		  0
-	  TLCFileName		  "s7_b0_em11g_3_Outputs"
+	  TLCFileName		  "s7_b0_t6ith_3_Outputs"
 	  StackSize		  0
 	}
       }
@@ -7857,14 +7846,14 @@ CompiledModel {
     RTWCGModule {
       RateGrouping	      0
       PeriodicRateGrouping    0
-      TLCFileName	      "s7_b0_em11g_4"
+      TLCFileName	      "s7_b0_t6ith_4"
       RTWFcnConst {
 	HasInstanceSetup	"no"
 	baseTidOfTasks		"[0]"
 	Outputs_Function {
 	  HasTidArg		  0
 	  HasCpiArg		  0
-	  TLCFileName		  "s7_b0_em11g_4_Outputs"
+	  TLCFileName		  "s7_b0_t6ith_4_Outputs"
 	  StackSize		  4
 	}
       }
@@ -7887,20 +7876,20 @@ CompiledModel {
     RTWCGModule {
       RateGrouping	      0
       PeriodicRateGrouping    0
-      TLCFileName	      "s7_b0_em11g"
+      TLCFileName	      "s7_b0_t6ith"
       RTWFcnConst {
 	HasInstanceSetup	"no"
 	baseTidOfTasks		"[0]"
 	Outputs_Function {
 	  HasTidArg		  0
 	  HasCpiArg		  0
-	  TLCFileName		  "s7_b0_em11g_Outputs"
+	  TLCFileName		  "s7_b0_t6ith_Outputs"
 	  StackSize		  4
 	}
 	ModelInitialize_Function {
 	  HasTidArg		  0
 	  HasCpiArg		  0
-	  TLCFileName		  "s7_b0_em11g_ModelInitialize"
+	  TLCFileName		  "s7_b0_t6ith_ModelInitialize"
 	  StackSize		  0
 	}
       }
@@ -7948,7 +7937,7 @@ CompiledModel {
       SysIdx		      7
       HasElement	      "CONSTP_YOUNGMAN_LT_T_VARIANT_EXISTS"
       InstanceIdx	      -1
-      CGTypeIdx		      44
+      CGTypeIdx		      42
       GlobalOffset	      0
       NumVarGroupElements     9
       VarGroupElements	      [CP0, CP1, CP2, CP3, CP4, CP5, CP6, CP7, CP8]

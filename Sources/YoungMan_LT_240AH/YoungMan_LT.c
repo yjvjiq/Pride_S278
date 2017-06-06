@@ -5,7 +5,7 @@
  *
  * Model version                  : 1.1149
  * Simulink Coder version         : 8.10 (R2016a) 10-Feb-2016
- * C/C++ source code generated on : Fri May 12 15:07:17 2017
+ * C/C++ source code generated on : Sat May 27 11:21:57 2017
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Freescale->HC(S)12
@@ -82,113 +82,121 @@ real32_T BiggestDischargeCurt_Model;   /* '<S1>/Gain'
 /* Exported data definition */
 
 /* Definition for custom storage class: Default */
-real32_T CAP_CONST_CAL = 240.0F;
-real32_T DisChargeCurrentTable[132] = { 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F,
+real32_T CAP_CONST_CAL = 150.0F;
+real32_T DisChargeCurrentTable[204] = { 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F,
+  0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.1F, 0.21F, 0.32F, 0.42F, 0.42F, 0.42F,
+  0.42F, 0.42F, 0.42F, 0.42F, 0.42F, 0.0F, 0.21F, 0.42F, 0.48F, 0.84F, 0.84F,
+  0.84F, 0.84F, 0.84F, 0.84F, 0.84F, 0.84F, 0.0F, 0.21F, 0.42F, 0.63F, 0.84F,
+  0.84F, 0.84F, 0.84F, 0.84F, 0.84F, 0.84F, 0.84F, 0.0F, 0.21F, 0.42F, 0.69F,
+  0.84F, 0.84F, 0.84F, 0.84F, 0.84F, 0.84F, 0.84F, 0.84F, 0.0F, 0.37F, 0.82F,
+  0.82F, 1.68F, 1.68F, 1.68F, 1.87F, 1.87F, 1.87F, 1.87F, 1.87F, 0.0F, 0.41F,
+  0.89F, 0.89F, 1.83F, 1.83F, 1.83F, 2.03F, 2.03F, 2.03F, 2.03F, 2.03F, 0.0F,
+  0.74F, 1.28F, 1.28F, 2.02F, 2.02F, 2.02F, 2.35F, 2.35F, 2.35F, 2.35F, 2.35F,
+  0.0F, 0.87F, 1.39F, 1.39F, 2.1F, 2.1F, 2.1F, 2.6F, 2.6F, 2.6F, 2.6F, 2.6F,
+  0.0F, 1.01F, 1.51F, 1.51F, 2.18F, 2.18F, 2.18F, 2.67F, 2.67F, 2.67F, 2.67F,
+  2.67F, 0.0F, 1.21F, 2.21F, 2.21F, 2.67F, 2.67F, 2.67F, 2.67F, 2.67F, 2.67F,
+  2.67F, 2.67F, 0.0F, 1.26F, 2.51F, 2.67F, 2.67F, 2.67F, 2.67F, 2.67F, 2.67F,
+  2.67F, 2.67F, 2.67F, 0.0F, 1.26F, 2.51F, 2.67F, 2.67F, 2.67F, 2.67F, 2.67F,
+  2.67F, 2.67F, 2.67F, 2.67F, 0.0F, 1.26F, 1.68F, 1.68F, 2.4F, 2.4F, 2.4F, 2.4F,
+  2.4F, 2.4F, 2.4F, 2.4F, 0.0F, 0.63F, 0.84F, 0.84F, 1.2F, 1.2F, 1.2F, 1.2F,
+  1.2F, 1.2F, 1.2F, 1.2F, 0.0F, 0.36F, 0.5F, 0.5F, 0.72F, 0.72F, 0.72F, 0.72F,
+  0.72F, 0.72F, 0.72F, 0.72F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F,
+  0.0F, 0.0F, 0.0F, 0.0F } ;           /* maximum discharge current, row: SOC, collumn: T  */
+
+uint16_T Factor_ChargeEndSOCAjust[64] = { 22365U, 23773U, 24698U, 29920U, 33731U,
+  36352U, 38010U, 38080U, 24307U, 25696U, 27814U, 33398U, 35770U, 37360U, 38400U,
+  38400U, 26173U, 31610U, 33782U, 36627U, 37715U, 38400U, 38400U, 38400U, 31782U,
+  35520U, 36352U, 37798U, 38400U, 38400U, 38400U, 38400U, 34509U, 36886U, 37530U,
+  38400U, 38400U, 38400U, 38400U, 38400U, 36666U, 38029U, 38400U, 38400U, 38400U,
+  38400U, 38400U, 38400U, 38141U, 38400U, 38400U, 38400U, 38400U, 38400U, 38400U,
+  38400U, 38400U, 38400U, 38400U, 38400U, 38400U, 38400U, 38400U, 38400U } ;
+
+real32_T Factor_PowerOnSOCAjust[8] = { 0.6346F, 0.7105F, 0.7811F, 0.8448F,
+  0.9066F, 0.9523F, 0.9887F, 1.0F } ;
+
+real32_T FastChargeCurrentTable[176] = { 0.0F, 0.2F, 0.4F, 0.6F, 1.0F, 1.5F,
+  1.5F, 1.5F, 5.2F, 5.2F, 5.2F, 5.2F, 1.0F, 0.5F, 0.3F, 0.0F, 0.0F, 0.2F, 0.4F,
+  0.6F, 1.0F, 1.5F, 1.5F, 1.5F, 5.2F, 5.2F, 5.2F, 5.2F, 1.0F, 0.5F, 0.3F, 0.0F,
+  0.0F, 0.2F, 0.4F, 0.6F, 1.0F, 1.5F, 1.5F, 1.5F, 5.2F, 5.2F, 5.2F, 5.2F, 1.0F,
+  0.5F, 0.3F, 0.0F, 0.0F, 0.2F, 0.4F, 0.6F, 1.0F, 1.5F, 1.5F, 1.5F, 5.2F, 5.2F,
+  5.2F, 5.2F, 1.0F, 0.5F, 0.3F, 0.0F, 0.0F, 0.2F, 0.4F, 0.6F, 1.0F, 1.5F, 1.5F,
+  1.5F, 5.2F, 5.2F, 5.2F, 5.2F, 1.0F, 0.5F, 0.3F, 0.0F, 0.0F, 0.2F, 0.4F, 0.6F,
+  1.0F, 1.5F, 1.5F, 1.5F, 5.2F, 5.2F, 5.2F, 5.2F, 1.0F, 0.5F, 0.3F, 0.0F, 0.0F,
+  0.2F, 0.4F, 0.6F, 1.0F, 1.5F, 1.5F, 1.5F, 5.2F, 5.2F, 5.2F, 5.2F, 1.0F, 0.5F,
+  0.3F, 0.0F, 0.0F, 0.2F, 0.4F, 0.6F, 1.0F, 1.5F, 1.5F, 1.5F, 5.2F, 5.2F, 5.2F,
+  5.2F, 1.0F, 0.5F, 0.3F, 0.0F, 0.0F, 0.1F, 0.2F, 0.3F, 0.5F, 1.0F, 1.5F, 1.5F,
+  5.2F, 5.2F, 5.2F, 5.2F, 1.0F, 0.5F, 0.3F, 0.0F, 0.0F, 0.1F, 0.2F, 0.3F, 0.5F,
+  1.0F, 1.0F, 1.0F, 3.0F, 3.0F, 1.0F, 1.0F, 0.5F, 0.2F, 0.12F, 0.0F, 0.0F, 0.1F,
+  0.1F, 0.15F, 0.3F, 0.5F, 0.5F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 0.5F, 0.2F, 0.12F,
+  0.0F } ;
+
+real32_T FeedBackCurrentTable[208] = { 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F,
+  0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.1F, 0.1F, 0.1F, 0.1F, 0.1F, 0.1F, 0.1F,
+  0.1F, 0.05F, 0.05F, 0.0F, 0.0F, 0.0F, 0.2F, 0.2F, 0.2F, 0.2F, 0.2F, 0.2F, 0.2F,
+  0.2F, 0.1F, 0.1F, 0.1F, 0.0F, 0.0F, 0.2F, 0.2F, 0.2F, 0.2F, 0.2F, 0.2F, 0.2F,
+  0.2F, 0.1F, 0.1F, 0.1F, 0.0F, 0.0F, 0.4F, 0.4F, 0.4F, 0.4F, 0.4F, 0.4F, 0.4F,
+  0.4F, 0.4F, 0.2F, 0.2F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F,
+  1.0F, 1.0F, 0.5F, 0.5F, 0.0F, 0.0F, 1.5F, 1.5F, 1.5F, 1.5F, 1.5F, 1.5F, 1.5F,
+  1.5F, 1.5F, 1.5F, 1.0F, 0.0F, 0.0F, 2.5F, 2.5F, 2.5F, 2.5F, 2.5F, 2.5F, 2.5F,
+  2.5F, 2.5F, 2.0F, 2.0F, 0.0F, 0.0F, 2.67F, 2.67F, 2.67F, 2.67F, 2.67F, 2.67F,
+  2.67F, 2.67F, 2.67F, 2.67F, 2.67F, 0.0F, 0.0F, 2.67F, 2.67F, 2.67F, 2.67F,
+  2.67F, 2.67F, 2.67F, 2.67F, 2.67F, 2.67F, 2.67F, 0.0F, 0.0F, 2.67F, 2.67F,
+  2.67F, 2.67F, 2.67F, 2.67F, 2.67F, 2.67F, 2.67F, 2.67F, 1.0F, 0.0F, 0.0F,
+  2.67F, 2.67F, 2.67F, 2.67F, 2.67F, 2.67F, 2.67F, 2.67F, 2.67F, 2.67F, 1.0F,
+  0.0F, 0.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 0.5F,
+  0.0F, 0.0F, 0.5F, 0.5F, 0.5F, 0.5F, 0.5F, 0.5F, 0.5F, 0.5F, 0.5F, 0.5F, 0.2F,
+  0.0F, 0.0F, 0.3F, 0.3F, 0.3F, 0.3F, 0.3F, 0.3F, 0.3F, 0.3F, 0.3F, 0.3F, 0.12F,
   0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F,
-  0.0F, 0.0F, 0.0F, 0.05F, 0.15F, 0.15F, 0.15F, 0.3F, 0.3F, 0.3F, 0.3F, 0.3F,
-  0.3F, 0.0F, 0.3F, 0.5F, 0.5F, 0.5F, 0.8F, 0.8F, 0.8F, 0.8F, 0.8F, 0.8F, 0.0F,
-  0.5F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 0.0F, 0.5F, 1.0F,
-  1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 0.0F, 0.5F, 1.2F, 1.2F, 1.2F,
-  1.2F, 1.2F, 1.2F, 1.2F, 1.2F, 1.2F, 0.0F, 1.0F, 1.2F, 1.2F, 1.2F, 1.5F, 1.5F,
-  1.5F, 1.5F, 1.5F, 1.5F, 0.0F, 1.0F, 1.2F, 1.2F, 1.2F, 1.5F, 1.5F, 1.5F, 1.5F,
-  1.5F, 1.5F, 0.0F, 1.0F, 1.2F, 1.2F, 1.2F, 1.5F, 1.5F, 1.5F, 1.5F, 1.5F, 1.5F,
-  0.0F, 0.6F, 0.72F, 0.72F, 0.72F, 0.9F, 0.9F, 0.9F, 0.9F, 0.9F, 0.9F, 0.0F,
-  0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F } ;/* maximum discharge current, row: SOC, collumn: T  */
+  0.0F, 0.0F } ;                       /* maximum discharge current, row: SOC, collumn: T  */
 
-uint16_T Factor_ChargeEndSOCAjust[161] = { 30167U, 34745U, 38796U, 41771U,
-  42205U, 46215U, 46583U, 53384U, 56493U, 56609U, 57819U, 59171U, 59220U, 60023U,
-  60468U, 60681U, 60772U, 60997U, 61004U, 61019U, 61027U, 61147U, 61262U, 38047U,
-  40190U, 44408U, 48524U, 49099U, 53806U, 54155U, 58837U, 60305U, 60361U, 60865U,
-  61424U, 61440U, 61440U, 61440U, 61440U, 61440U, 61440U, 61440U, 61440U, 61440U,
-  61440U, 61440U, 40480U, 46169U, 51145U, 54050U, 54448U, 57615U, 57798U, 60139U,
-  60873U, 60901U, 61152U, 61440U, 61440U, 61440U, 61440U, 61440U, 61440U, 61440U,
-  61440U, 61440U, 61440U, 61440U, 61440U, 42914U, 52148U, 57882U, 59577U, 59797U,
-  61424U, 61440U, 61440U, 61440U, 61440U, 61440U, 61440U, 61440U, 61440U, 61440U,
-  61440U, 61440U, 61440U, 61440U, 61440U, 61440U, 61440U, 61440U, 46884U, 55209U,
-  59256U, 60477U, 60619U, 61440U, 61440U, 61440U, 61440U, 61440U, 61440U, 61440U,
-  61440U, 61440U, 61440U, 61440U, 61440U, 61440U, 61440U, 61440U, 61440U, 61440U,
-  61440U, 50857U, 58271U, 60631U, 61376U, 61440U, 61440U, 61440U, 61440U, 61440U,
-  61440U, 61440U, 61440U, 61440U, 61440U, 61440U, 61440U, 61440U, 61440U, 61440U,
-  61440U, 61440U, 61440U, 61440U, 61440U, 61440U, 61440U, 61440U, 61440U, 61440U,
-  61440U, 61440U, 61440U, 61440U, 61440U, 61440U, 61440U, 61440U, 61440U, 61440U,
-  61440U, 61440U, 61440U, 61440U, 61440U, 61440U, 61440U } ;
+real32_T SOC_Discharge[12] = { 0.0F, 0.1F, 0.2F, 0.3F, 0.4F, 0.5F, 0.6F, 0.7F,
+  0.8F, 0.9F, 0.95F, 1.0F } ;
 
-real32_T Factor_PowerOnSOCAjust[6] = { 0.8159F, 0.8833F, 0.936F, 0.9692F,
-  0.9886F, 1.0F } ;
-
-real32_T FastChargeCurrentTable[168] = { 0.0F, 0.0F, 0.1F, 0.1F, 0.3F, 0.3F,
-  0.5F, 0.5F, 1.0F, 1.0F, 1.0F, 0.3F, 0.18F, 0.0F, 0.0F, 0.0F, 0.1F, 0.1F, 0.3F,
-  0.3F, 0.5F, 0.5F, 1.0F, 1.0F, 1.0F, 0.3F, 0.18F, 0.0F, 0.0F, 0.0F, 0.1F, 0.1F,
-  0.3F, 0.3F, 0.5F, 0.5F, 1.0F, 1.0F, 1.0F, 0.3F, 0.18F, 0.0F, 0.0F, 0.0F, 0.1F,
-  0.1F, 0.3F, 0.3F, 0.5F, 0.5F, 1.0F, 1.0F, 1.0F, 0.3F, 0.18F, 0.0F, 0.0F, 0.0F,
-  0.1F, 0.1F, 0.3F, 0.3F, 0.5F, 0.5F, 1.0F, 1.0F, 1.0F, 0.3F, 0.18F, 0.0F, 0.0F,
-  0.0F, 0.1F, 0.1F, 0.3F, 0.3F, 0.5F, 0.5F, 1.0F, 1.0F, 1.0F, 0.3F, 0.18F, 0.0F,
-  0.0F, 0.0F, 0.1F, 0.1F, 0.3F, 0.3F, 0.5F, 0.5F, 1.0F, 1.0F, 1.0F, 0.3F, 0.18F,
-  0.0F, 0.0F, 0.0F, 0.1F, 0.1F, 0.3F, 0.3F, 0.5F, 0.5F, 1.0F, 1.0F, 1.0F, 0.3F,
-  0.18F, 0.0F, 0.0F, 0.0F, 0.1F, 0.1F, 0.3F, 0.3F, 0.5F, 0.5F, 1.0F, 1.0F, 1.0F,
-  0.3F, 0.18F, 0.0F, 0.0F, 0.0F, 0.1F, 0.1F, 0.3F, 0.3F, 0.5F, 0.5F, 0.75F, 0.8F,
-  0.8F, 0.3F, 0.18F, 0.0F, 0.0F, 0.0F, 0.1F, 0.1F, 0.3F, 0.3F, 0.5F, 0.5F, 0.75F,
-  0.8F, 0.8F, 0.3F, 0.18F, 0.0F, 0.0F, 0.0F, 0.1F, 0.1F, 0.3F, 0.3F, 0.5F, 0.5F,
-  0.75F, 0.8F, 0.8F, 0.3F, 0.18F, 0.0F } ;
-
-real32_T FeedBackCurrentTable[108] = { 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F,
-  0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F,
-  0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 0.0F,
-  0.0F, 0.0F, 0.0F, 1.5F, 1.5F, 1.5F, 1.5F, 1.5F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F,
-  0.0F, 0.0F, 1.5F, 1.5F, 1.5F, 1.5F, 1.5F, 1.5F, 1.5F, 1.5F, 1.0F, 1.0F, 0.0F,
-  0.0F, 1.5F, 1.5F, 1.5F, 1.5F, 1.5F, 1.5F, 1.5F, 1.5F, 1.0F, 1.0F, 0.0F, 0.0F,
-  1.5F, 1.5F, 1.5F, 1.5F, 1.5F, 1.5F, 1.5F, 1.5F, 1.0F, 1.0F, 0.0F, 0.0F, 0.9F,
-  0.9F, 0.9F, 0.9F, 0.9F, 0.9F, 0.9F, 0.9F, 0.6F, 0.6F, 0.0F, 0.0F, 0.0F, 0.0F,
-  0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F } ;/* maximum discharge current, row: SOC, collumn: T  */
-
-real32_T SOC_Discharge[11] = { 0.0F, 0.1F, 0.2F, 0.3F, 0.4F, 0.5F, 0.6F, 0.7F,
+real32_T SOC_FastCharge[11] = { 0.0F, 0.1F, 0.2F, 0.3F, 0.4F, 0.5F, 0.6F, 0.7F,
   0.8F, 0.9F, 1.0F } ;
 
-real32_T SOC_FastCharge[12] = { 0.0F, 0.1F, 0.2F, 0.3F, 0.4F, 0.5F, 0.6F, 0.7F,
-  0.79F, 0.8F, 0.9F, 1.0F } ;
+real32_T SOC_Feedback[13] = { 0.0F, 0.1F, 0.2F, 0.3F, 0.4F, 0.5F, 0.6F, 0.65F,
+  0.7F, 0.8F, 0.9F, 0.95F, 1.0F } ;    /* row for max dicharge current table */
 
-real32_T SOC_Feedback[12] = { 0.0F, 0.1F, 0.2F, 0.3F, 0.4F, 0.5F, 0.6F, 0.7F,
-  0.8F, 0.9F, 0.95F, 1.0F } ;          /* row for max dicharge current table */
+real32_T T_ChargeEndSOCAjust[8] = { 0.0F, 5.0F, 10.0F, 15.0F, 20.0F, 25.0F,
+  35.0F, 45.0F } ;
 
-real32_T T_ChargeEndSOCAjust[7] = { 0.0F, 5.0F, 10.0F, 15.0F, 20.0F, 25.0F,
-  35.0F } ;
+real32_T T_Discharge[17] = { -30.0F, -25.0F, -20.0F, -18.0F, -15.0F, -10.0F,
+  -5.0F, 0.0F, 5.0F, 10.0F, 20.0F, 25.0F, 40.0F, 45.0F, 50.0F, 52.0F, 57.0F } ;/* collumn for max discharge current table */
 
-real32_T T_Discharge[12] = { -40.0F, -30.0F, -20.0F, -10.0F, 0.0F, 10.0F, 20.0F,
-  30.0F, 40.0F, 50.0F, 52.0F, 57.0F } ;/* collumn for max discharge current table */
+real32_T T_Facdback[16] = { -15.0F, -10.0F, -5.0F, 0.0F, 5.0F, 10.0F, 15.0F,
+  20.0F, 25.0F, 35.0F, 40.0F, 45.0F, 47.0F, 50.0F, 52.0F, 57.0F } ;
 
-real32_T T_Facdback[9] = { -10.0F, 0.0F, 10.0F, 20.0F, 30.0F, 40.0F, 50.0F,
-  52.0F, 57.0F } ;
+real32_T T_FastCharge[16] = { 0.0F, 2.0F, 5.0F, 7.0F, 10.0F, 12.0F, 15.0F, 20.0F,
+  23.0F, 35.0F, 40.0F, 45.0F, 47.0F, 50.0F, 52.0F, 57.0F } ;
 
-real32_T T_FastCharge[14] = { -10.0F, 0.0F, 2.0F, 5.0F, 7.0F, 10.0F, 12.0F,
-  15.0F, 20.0F, 25.0F, 45.0F, 50.0F, 52.0F, 57.0F } ;
+real32_T T_PowerOnSOCAjust[8] = { -20.0F, -15.0F, -10.0F, -5.0F, 0.0F, 5.0F,
+  10.0F, 15.0F } ;
 
-real32_T T_PowerOnSOCAjust[6] = { -25.0F, -15.0F, -5.0F, 5.0F, 15.0F, 25.0F } ;
-
-real32_T V_CellLowest[23] = { 3.38F, 3.39F, 3.4F, 3.406F, 3.407F, 3.417F, 3.418F,
-  3.44F, 3.458F, 3.459F, 3.47F, 3.49F, 3.491F, 3.52F, 3.55F, 3.57F, 3.58F,
-  3.608F, 3.609F, 3.611F, 3.612F, 3.63F, 3.65F } ;
+real32_T V_CellLowest[8] = { 3.389F, 3.399F, 3.405F, 3.422F, 3.44F, 3.475F,
+  3.63F, 3.65F } ;
 
 /* Constant parameters (auto storage) */
 const ConstP_YoungMan_LT_T YoungMan_LT_ConstP = {
   /* Computed Parameter: linearizationSOF_maxIndex
    * Referenced by: '<S6>/linearizationSOF'
    */
-  { 10U, 11U },
+  { 11U, 16U },
 
   /* Computed Parameter: uDLookupTable3_maxIndex
    * Referenced by: '<S2>/2-D Lookup Table3'
    */
-  { 22U, 6U },
+  { 7U, 7U },
 
   /* Computed Parameter: uDLookupTable3_maxIndex_g
    * Referenced by: '<S3>/2-D Lookup Table3'
    */
-  { 13U, 11U },
+  { 15U, 10U },
 
   /* Computed Parameter: linearizationSOF_maxIndex_f
    * Referenced by: '<S9>/linearizationSOF'
    */
-  { 11U, 8U }
+  { 12U, 15U }
 };
 
 /* Real-time model */
@@ -560,7 +568,7 @@ void YoungMa_BigDischargePowerAdjust(void)
      */
     rtb_Add = look2_iflf_binlxpw(Can_g_socValue, (real32_T)Tavg - 40.0F,
       (&(SOC_Discharge[0])), (&(T_Discharge[0])), (&(DisChargeCurrentTable[0])),
-      YoungMan_LT_ConstP.linearizationSOF_maxIndex, 11UL);
+      YoungMan_LT_ConstP.linearizationSOF_maxIndex, 12UL);
   } else {
     rtb_Add = 0.0F;
   }
@@ -583,7 +591,7 @@ void YoungMan_LT_ChargeEndSOCAjust(void)
   ChargeEndSOCAjustFactor = look2_ifs16bfflftu16n8_PYqzO3tA(g_lowestCellVoltage,
     Tavg - 40, (&(V_CellLowest[0])), (&(T_ChargeEndSOCAjust[0])),
     (&(Factor_ChargeEndSOCAjust[0])), YoungMan_LT_ConstP.uDLookupTable3_maxIndex,
-    23UL);
+    8UL);
 }
 
 /* Output and update for atomic system: '<Root>/FastChrgPowerAjust' */
@@ -600,7 +608,7 @@ void YoungMan_LT_FastChrgPowerAjust(void)
    */
   rtb_uDLookupTable3 = look2_iflf_linlxpw((real32_T)Tavg - 40.0F, Can_g_socValue,
     (&(T_FastCharge[0])), (&(SOC_FastCharge[0])), (&(FastChargeCurrentTable[0])),
-    YoungMan_LT_ConstP.uDLookupTable3_maxIndex_g, 14UL);
+    YoungMan_LT_ConstP.uDLookupTable3_maxIndex_g, 16UL);
 
   /* Gain: '<S3>/Gain' */
   m_askcurrent_Model = CAP_CONST_CAL * rtb_uDLookupTable3;
@@ -615,7 +623,7 @@ void YoungMan_LT_PowerOnSOCAjust(void)
    *  Sum: '<S4>/Add'
    */
   PowerOnSOCAjustFactor = look1_iflf_binlxpw((real32_T)g_lowestTemperature -
-    40.0F, (&(T_PowerOnSOCAjust[0])), (&(Factor_PowerOnSOCAjust[0])), 5UL);
+    40.0F, (&(T_PowerOnSOCAjust[0])), (&(Factor_PowerOnSOCAjust[0])), 7UL);
 }
 
 /* Output and update for atomic system: '<Root>/PulseRechargePowerAdjust' */
@@ -641,7 +649,7 @@ void YoungM_PulseRechargePowerAdjust(void)
      */
     rtb_Add = look2_iflf_binlxpw(Can_g_socValue, (real32_T)Tavg - 40.0F,
       (&(SOC_Feedback[0])), (&(T_Facdback[0])), (&(FeedBackCurrentTable[0])),
-      YoungMan_LT_ConstP.linearizationSOF_maxIndex_f, 12UL);
+      YoungMan_LT_ConstP.linearizationSOF_maxIndex_f, 13UL);
   } else {
     rtb_Add = 0.0F;
   }

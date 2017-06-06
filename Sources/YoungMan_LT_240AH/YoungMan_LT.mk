@@ -2,7 +2,7 @@
 ## Makefile generated for Simulink model 'YoungMan_LT'. 
 ## 
 ## Makefile     : YoungMan_LT.mk
-## Generated on : Fri May 12 15:07:21 2017
+## Generated on : Sat May 27 11:22:06 2017
 ## MATLAB Coder version: 3.1 (R2016a)
 ## 
 ## Build Info:
