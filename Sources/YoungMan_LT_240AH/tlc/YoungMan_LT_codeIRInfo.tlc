@@ -1,5 +1,5 @@
 %function FcnLoadCodeIRInfo() Output 
-codeIRInfoStruct = load('E:\WorkModels\YoungMan_LT\YoungMan_LT_ert_rtw\tlc\codeIRInfo.mat');
+codeIRInfoStruct = load('E:\模型留存\新版模型\YoungMan_LT（新版SOF等模型）\S278_code\YoungMan_LT_ert_rtw\tlc\codeIRInfo.mat');
 codeInfo = codeIRInfoStruct.codeInfo;
 %endfunction
 
@@ -29,10 +29,10 @@ codeInfo = codeIRInfoStruct.codeInfo;
 %endfunction
 
 %function FcnGetUnsetParamIdxFromIRInfo() void
-%assign tmpIdx = Matrix(15,2)[[9, 0]; [10, 1]; [11, 2]; [12, 3]; ...
-[13, 4]; [14, 5]; [15, 6]; [16, 7]; [17, 8]; ...
-[18, 9]; [19, 10]; [20, 11]; [21, 12]; [22, 13]; ...
-[23, 14]; ]
+%assign tmpIdx = Matrix(15,2)[[10, 0]; [11, 1]; [12, 2]; [13, 3]; ...
+[14, 4]; [15, 5]; [16, 6]; [17, 7]; [18, 8]; ...
+[19, 9]; [20, 10]; [21, 11]; [22, 12]; [23, 13]; ...
+[24, 14]; ]
 %return tmpIdx 
 %endfunction
 

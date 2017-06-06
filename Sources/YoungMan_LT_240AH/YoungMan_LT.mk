@@ -2,12 +2,12 @@
 ## Makefile generated for Simulink model 'YoungMan_LT'. 
 ## 
 ## Makefile     : YoungMan_LT.mk
-## Generated on : Sat May 27 11:22:06 2017
+## Generated on : Tue Jun 06 16:32:22 2017
 ## MATLAB Coder version: 3.1 (R2016a)
 ## 
 ## Build Info:
 ## 
-## Final product: $(RELATIVE_PATH_TO_ANCHOR)\YoungMan_LT.exe
+## Final product: $(RELATIVE_PATH_TO_ANCHOR)/YoungMan_LT.exe
 ## Product type : executable
 ## Build type   : Top-Level Standalone Executable
 ## 
@@ -29,11 +29,11 @@
 PRODUCT_NAME              = YoungMan_LT
 MAKEFILE                  = YoungMan_LT.mk
 COMPUTER                  = PCWIN64
-MATLAB_ROOT               = C:\PROGRA~1\MATLAB\R2016a
-MATLAB_BIN                = C:\PROGRA~1\MATLAB\R2016a\bin
-MATLAB_ARCH_BIN           = C:\PROGRA~1\MATLAB\R2016a\bin\win64
+MATLAB_ROOT               = D:/MATLAB~1
+MATLAB_BIN                = D:/MATLAB~1/bin
+MATLAB_ARCH_BIN           = D:/MATLAB~1/bin/win64
 MASTER_ANCHOR_DIR         = 
-START_DIR                 = E:\WorkModels\YoungMan_LT
+START_DIR                 = E:/模型留存/新版模型/YoungMan_LT（新版SOF等模型）/S278_code
 ARCH                      = win64
 SOLVER                    = 
 SOLVER_OBJ                = 
@@ -42,50 +42,32 @@ TGT_FCN_LIB               = None
 MODELREF_LINK_RSPFILE_NAME = YoungMan_LT_ref.rsp
 RELATIVE_PATH_TO_ANCHOR   = ..
 MODELREF_LINK_RSPFILE     = YoungMan_LT_ref.rsp
-PERL                      = $(MATLAB_ROOT)\sys\perl\win32\bin\perl.exe
-GEN_LNK_SCRIPT            = $(MATLAB_ROOT)\rtw\c\tools\mkvc_lnk.pl
+PERL                      = $(MATLAB_ROOT)/sys/perl/win32/bin/perl.exe
+GEN_LNK_SCRIPT            = $(MATLAB_ROOT)/rtw/c/tools/mkvc_lnk.pl
 CMD_FILE                  = $(PRODUCT_NAME).lnk
-NODEBUG                   = 1
 
 ###########################################################################
 ## TOOLCHAIN SPECIFICATIONS
 ###########################################################################
 
-# Toolchain Name:          Microsoft Visual C++ 2010 v10.0 | nmake (64-bit Windows)
-# Supported Version(s):    10.0
+# Toolchain Name:          LCC-win64 v2.4.1 | gmake (64-bit Windows)
+# Supported Version(s):    2.4.1
 # ToolchainInfo Version:   R2016a
 # Specification Revision:  1.0
 # 
-
-!include <ntwin32.mak>
-
-
-#-------------------------------------------
-# Macros assumed to be defined elsewhere
-#-------------------------------------------
-
-# NODEBUG
-# cvarsdll
-# cvarsmt
-# conlibsmt
-# ldebug
-# conflags
-# cflags
 
 #-----------
 # MACROS
 #-----------
 
-MEX_OPTS_FILE       = $(MATLAB_ROOT)\bin\$(ARCH)\mexopts\msvc100opts.bat
-MW_EXTERNLIB_DIR    = $(MATLAB_ROOT)\extern\lib\win64\microsoft
-MW_LIB_DIR          = $(MATLAB_ROOT)\lib\win64
-MEX_ARCH            = -win64
-CPU                 = AMD64
-APPVER              = 5.02
-CVARSFLAG           = $(cvarsmt)
-CFLAGS_ADDITIONAL   = -D_CRT_SECURE_NO_WARNINGS
-CPPFLAGS_ADDITIONAL = -EHs -D_CRT_SECURE_NO_WARNINGS
-LIBS_TOOLCHAIN      = $(conlibs)
+SHELL              = cmd
+LCC_ROOT           = $(MATLAB_ROOT)/sys/lcc64/lcc64
+LCC_BUILDLIB       = $(LCC_ROOT)/bin/buildlib
+LCC_LIB            = $(LCC_ROOT)/lib64
+MW_EXTERNLIB_DIR   = $(MATLAB_ROOT)/extern/lib/win64/microsoft
+MW_LIB_DIR         = $(MATLAB_ROOT)/lib/win64
+TOOLCHAIN_INCLUDES = -I$(LCC_ROOT)/include64
+MEX_OPTS_FILE      = $(MATLAB_ROOT/rtw/c/tools/lcc-win64.xml
 
 TOOLCHAIN_SRCS = 
 TOOLCHAIN_INCS = 
@@ -95,24 +77,21 @@ TOOLCHAIN_LIBS =
 # BUILD TOOL COMMANDS
 #------------------------
 
-# C Compiler: Microsoft Visual C Compiler
-CC = cl
+# C Compiler: Lcc-win64 C Compiler
+CC_PATH = $(LCC_ROOT)/bin
+CC = $(CC_PATH)/lcc64
 
-# Linker: Microsoft Visual C Linker
-LD = link
+# Linker: Lcc-win64 Linker
+LD_PATH = $(LCC_ROOT)/bin
+LD = $(LD_PATH)/lcclnk64
 
-# C++ Compiler: Microsoft Visual C++ Compiler
-CPP = cl
-
-# C++ Linker: Microsoft Visual C++ Linker
-CPP_LD = link
-
-# Archiver: Microsoft Visual C/C++ Archiver
-AR = lib
+# Archiver: Lcc-win64 Archiver
+AR_PATH = $(LCC_ROOT)/bin
+AR = $(AR_PATH)/lcclib64
 
 # MEX Tool: MEX Tool
 MEX_PATH = $(MATLAB_BIN)
-MEX = $(MEX_PATH)\mex
+MEX = $(MEX_PATH)/mex
 
 # Download: Download
 DOWNLOAD =
@@ -120,50 +99,40 @@ DOWNLOAD =
 # Execute: Execute
 EXECUTE = $(PRODUCT)
 
-# Builder: NMAKE Utility
-MAKE = nmake
+# Builder: GMAKE Utility
+MAKE_PATH = %MATLAB%\bin\win64
+MAKE = $(MAKE_PATH)/gmake
 
 
 #-------------------------
 # Directives/Utilities
 #-------------------------
 
-CDEBUG              = -Zi
+CDEBUG              = -g
 C_OUTPUT_FLAG       = -Fo
-LDDEBUG             = /DEBUG
-OUTPUT_FLAG         = -out:
-CPPDEBUG            = -Zi
-CPP_OUTPUT_FLAG     = -Fo
-CPPLDDEBUG          = /DEBUG
-OUTPUT_FLAG         = -out:
+LDDEBUG             =
+OUTPUT_FLAG         = -o
 ARDEBUG             =
-STATICLIB_OUTPUT_FLAG = -out:
+STATICLIB_OUTPUT_FLAG = /out:
 MEX_DEBUG           = -g
-RM                  = @del
+RM                  = @del /F
 ECHO                = @echo
-MV                  = @ren
-RUN                 = @cmd /C
+MV                  = @move
+RUN                 =
 
 #----------------------------------------
 # "Faster Builds" Build Configuration
 #----------------------------------------
 
-ARFLAGS              = /nologo
-CFLAGS               = $(cflags) $(CVARSFLAG) $(CFLAGS_ADDITIONAL) \
-                       /Od /Oy-
-CPPFLAGS             = /TP $(cflags) $(CVARSFLAG) $(CPPFLAGS_ADDITIONAL) \
-                       /Od /Oy-
-CPP_LDFLAGS          = $(ldebug) $(conflags) $(LIBS_TOOLCHAIN)
-CPP_SHAREDLIB_LDFLAGS  = $(ldebug) $(conflags) $(LIBS_TOOLCHAIN) \
-                         -dll -def:$(DEF_FILE)
+ARFLAGS              =
+CFLAGS               = -c -w -noregistrylookup -nodeclspec -I$(LCC_ROOT)/include64
 DOWNLOAD_FLAGS       =
 EXECUTE_FLAGS        =
-LDFLAGS              = $(ldebug) $(conflags) $(LIBS_TOOLCHAIN)
-MEX_CFLAGS           = $(MEX_ARCH) OPTIMFLAGS="/Od /Oy- $(MDFLAG) $(DEFINES)" $(MEX_OPTS_FLAG)
-MEX_LDFLAGS          = LDFLAGS=='$$LDFLAGS'
+LDFLAGS              = -s -L$(LCC_LIB) $(LDFLAGS_ADDITIONAL)
+MEX_CFLAGS           = -win64 $(MEX_SRC) $(MEX_OPT_FILE)$(INCLUDES) -outdir $(RELATIVE_PATH_TO_ANCHOR)
+MEX_LDFLAGS          = LINKFLAGS="$$LINKFLAGS $(LDFLAGS_ADDITIONAL)"
 MAKE_FLAGS           = -f $(MAKEFILE)
-SHAREDLIB_LDFLAGS    = $(ldebug) $(conflags) $(LIBS_TOOLCHAIN) \
-                       -dll -def:$(DEF_FILE)
+SHAREDLIB_LDFLAGS    = -dll -entry LibMain -s -L$(LCC_LIB) $(LDFLAGS_ADDITIONAL) $(DEF_FILE)
 
 #--------------------
 # File extensions
@@ -172,11 +141,6 @@ SHAREDLIB_LDFLAGS    = $(ldebug) $(conflags) $(LIBS_TOOLCHAIN) \
 H_EXT               = .h
 OBJ_EXT             = .obj
 C_EXT               = .c
-EXE_EXT             = .exe
-SHAREDLIB_EXT       = .dll
-HPP_EXT             = .hpp
-OBJ_EXT             = .obj
-CPP_EXT             = .cpp
 EXE_EXT             = .exe
 SHAREDLIB_EXT       = .dll
 STATICLIB_EXT       = .lib
@@ -188,7 +152,7 @@ MAKE_EXT            = .mk
 ## OUTPUT INFO
 ###########################################################################
 
-PRODUCT = $(RELATIVE_PATH_TO_ANCHOR)\YoungMan_LT.exe
+PRODUCT = $(RELATIVE_PATH_TO_ANCHOR)/YoungMan_LT.exe
 PRODUCT_TYPE = "executable"
 BUILD_TYPE = "Top-Level Standalone Executable"
 
@@ -196,7 +160,7 @@ BUILD_TYPE = "Top-Level Standalone Executable"
 ## INCLUDE PATHS
 ###########################################################################
 
-INCLUDES_BUILDINFO = $(MATLAB_ROOT)\simulink\include\sf_runtime;$(START_DIR)\YoungMan_LT_ert_rtw;$(START_DIR);$(MATLAB_ROOT)\extern\include;$(MATLAB_ROOT)\simulink\include;$(MATLAB_ROOT)\rtw\c\src;$(MATLAB_ROOT)\rtw\c\src\ext_mode\common;$(MATLAB_ROOT)\rtw\c\ert
+INCLUDES_BUILDINFO = -I$(MATLAB_ROOT)/simulink/include/sf_runtime -I$(START_DIR)/YoungMan_LT_ert_rtw -I$(START_DIR) -IE:/模型留存/新版模型/YoungMan_LT（新版SOF等模型） -I$(MATLAB_ROOT)/extern/include -I$(MATLAB_ROOT)/simulink/include -I$(MATLAB_ROOT)/rtw/c/src -I$(MATLAB_ROOT)/rtw/c/src/ext_mode/common -I$(MATLAB_ROOT)/rtw/c/ert
 
 INCLUDES = $(INCLUDES_BUILDINFO)
 
@@ -214,9 +178,9 @@ DEFINES = $(DEFINES_BUILD_ARGS) $(DEFINES_IMPLIED) $(DEFINES_STANDARD)
 ## SOURCE FILES
 ###########################################################################
 
-SRCS = $(START_DIR)\YoungMan_LT_ert_rtw\YoungMan_LT.c
+SRCS = $(START_DIR)/YoungMan_LT_ert_rtw/YoungMan_LT.c
 
-MAIN_SRC = $(MATLAB_ROOT)\rtw\c\src\common\rt_main.c
+MAIN_SRC = $(MATLAB_ROOT)/rtw/c/src/common/rt_main.c
 
 ALL_SRCS = $(SRCS) $(MAIN_SRC)
 
@@ -256,34 +220,26 @@ SYSTEM_LIBS =
 # C Compiler
 #---------------
 
-CFLAGS_BASIC = $(DEFINES) 
+CFLAGS_BASIC = $(DEFINES) $(INCLUDES)
 
-CFLAGS = $(CFLAGS) $(CFLAGS_BASIC)
-
-#-----------------
-# C++ Compiler
-#-----------------
-
-CPPFLAGS_BASIC = $(DEFINES) 
-
-CPPFLAGS = $(CPPFLAGS) $(CPPFLAGS_BASIC)
+CFLAGS += $(CFLAGS_BASIC)
 
 ###########################################################################
 ## PHONY TARGETS
 ###########################################################################
 
-.PHONY : all build buildobj clean info prebuild download execute set_environment_variables
+.PHONY : all build buildobj clean info prebuild download execute
 
 
 all : build
-	@cmd /C "@echo ### Successfully generated all binary outputs."
+	@echo "### Successfully generated all binary outputs."
 
 
-build : set_environment_variables prebuild $(PRODUCT)
+build : prebuild $(PRODUCT)
 
 
-buildobj : set_environment_variables prebuild $(OBJS) $(PREBUILT_OBJS)
-	@cmd /C "@echo ### Successfully generated all binary outputs."
+buildobj : prebuild $(OBJS) $(PREBUILT_OBJS)
+	@echo "### Successfully generated all binary outputs."
 
 
 prebuild : 
@@ -293,14 +249,9 @@ download : build
 
 
 execute : download
-	@cmd /C "@echo ### Invoking postbuild tool "Execute" ..."
+	@echo "### Invoking postbuild tool "Execute" ..."
 	$(EXECUTE) $(EXECUTE_FLAGS)
-	@cmd /C "@echo ### Done invoking postbuild tool."
-
-
-set_environment_variables : 
-	@set INCLUDE=$(INCLUDES);$(INCLUDE)
-	@set LIB=$(LIB)
+	@echo "### Done invoking postbuild tool."
 
 
 ###########################################################################
@@ -312,10 +263,10 @@ set_environment_variables :
 #-------------------------------------------
 
 $(PRODUCT) : $(OBJS) $(PREBUILT_OBJS) $(MAIN_OBJ)
-	$(PERL) $(GEN_LNK_SCRIPT) $(CMD_FILE) $(OBJS)
-	@cmd /C "@echo ### Creating standalone executable "$(PRODUCT)" ..."
-	$(LD) $(LDFLAGS) -out:$(PRODUCT) @$(CMD_FILE) $(MAIN_OBJ) $(SYSTEM_LIBS) $(TOOLCHAIN_LIBS)
-	@cmd /C "@echo ### Created: $(PRODUCT)"
+	$(PERL) $(GEN_LNK_SCRIPT) $(CMD_FILE) $(subst /,\,$(OBJS))
+	@echo "### Creating standalone executable "$(PRODUCT)" ..."
+	$(LD) $(LDFLAGS) -o $(PRODUCT) @$(CMD_FILE) $(subst /,\,$(subst /,\,$(MAIN_OBJ))) $(subst /,\,$(subst /,\,$(SYSTEM_LIBS))) $(subst /,\,$(subst /,\,$(TOOLCHAIN_LIBS)))
+	@echo "### Created: $(PRODUCT)"
 	$(RM) $(CMD_FILE)
 
 
@@ -327,56 +278,32 @@ $(PRODUCT) : $(OBJS) $(PREBUILT_OBJS) $(MAIN_OBJ)
 # SOURCE-TO-OBJECT
 #---------------------
 
-.c.obj :
-	$(CC) $(CFLAGS) -Fo"$@" "$<"
+%.obj : %.c
+	$(CC) $(CFLAGS) -Fo"$@" $(subst /,\,"$<")
 
 
-.cpp.obj :
-	$(CPP) $(CPPFLAGS) -Fo"$@" "$<"
+%.obj : $(RELATIVE_PATH_TO_ANCHOR)/%.c
+	$(CC) $(CFLAGS) -Fo"$@" $(subst /,\,"$<")
 
 
-{$(RELATIVE_PATH_TO_ANCHOR)}.c.obj :
-	$(CC) $(CFLAGS) -Fo"$@" "$<"
+%.obj : $(START_DIR)/YoungMan_LT_ert_rtw/%.c
+	$(CC) $(CFLAGS) -Fo"$@" $(subst /,\,"$<")
 
 
-{$(RELATIVE_PATH_TO_ANCHOR)}.cpp.obj :
-	$(CPP) $(CPPFLAGS) -Fo"$@" "$<"
+%.obj : $(START_DIR)/%.c
+	$(CC) $(CFLAGS) -Fo"$@" $(subst /,\,"$<")
 
 
-{$(START_DIR)\YoungMan_LT_ert_rtw}.c.obj :
-	$(CC) $(CFLAGS) -Fo"$@" "$<"
+%.obj : $(MATLAB_ROOT)/rtw/c/src/%.c
+	$(CC) $(CFLAGS) -Fo"$@" $(subst /,\,"$<")
 
 
-{$(START_DIR)\YoungMan_LT_ert_rtw}.cpp.obj :
-	$(CPP) $(CPPFLAGS) -Fo"$@" "$<"
+%.obj : $(MATLAB_ROOT)/simulink/src/%.c
+	$(CC) $(CFLAGS) -Fo"$@" $(subst /,\,"$<")
 
 
-{$(START_DIR)}.c.obj :
-	$(CC) $(CFLAGS) -Fo"$@" "$<"
-
-
-{$(START_DIR)}.cpp.obj :
-	$(CPP) $(CPPFLAGS) -Fo"$@" "$<"
-
-
-{$(MATLAB_ROOT)\rtw\c\src}.c.obj :
-	$(CC) $(CFLAGS) -Fo"$@" "$<"
-
-
-{$(MATLAB_ROOT)\rtw\c\src}.cpp.obj :
-	$(CPP) $(CPPFLAGS) -Fo"$@" "$<"
-
-
-{$(MATLAB_ROOT)\simulink\src}.c.obj :
-	$(CC) $(CFLAGS) -Fo"$@" "$<"
-
-
-{$(MATLAB_ROOT)\simulink\src}.cpp.obj :
-	$(CPP) $(CPPFLAGS) -Fo"$@" "$<"
-
-
-{$(MATLAB_ROOT)\rtw\c\src\common}.c.obj :
-	$(CC) $(CFLAGS) -Fo"$@" "$<"
+rt_main.obj : $(MATLAB_ROOT)/rtw/c/src/common/rt_main.c
+	$(CC) $(CFLAGS) -Fo"$@" $(subst /,\,"$<")
 
 
 ###########################################################################
@@ -391,35 +318,32 @@ $(ALL_OBJS) : $(MAKEFILE) rtw_proj.tmw
 ###########################################################################
 
 info : 
-	@cmd /C "@echo ### PRODUCT = $(PRODUCT)"
-	@cmd /C "@echo ### PRODUCT_TYPE = $(PRODUCT_TYPE)"
-	@cmd /C "@echo ### BUILD_TYPE = $(BUILD_TYPE)"
-	@cmd /C "@echo ### INCLUDES = $(INCLUDES)"
-	@cmd /C "@echo ### DEFINES = $(DEFINES)"
-	@cmd /C "@echo ### ALL_SRCS = $(ALL_SRCS)"
-	@cmd /C "@echo ### ALL_OBJS = $(ALL_OBJS)"
-	@cmd /C "@echo ### LIBS = $(LIBS)"
-	@cmd /C "@echo ### MODELREF_LIBS = $(MODELREF_LIBS)"
-	@cmd /C "@echo ### SYSTEM_LIBS = $(SYSTEM_LIBS)"
-	@cmd /C "@echo ### TOOLCHAIN_LIBS = $(TOOLCHAIN_LIBS)"
-	@cmd /C "@echo ### CFLAGS = $(CFLAGS)"
-	@cmd /C "@echo ### LDFLAGS = $(LDFLAGS)"
-	@cmd /C "@echo ### SHAREDLIB_LDFLAGS = $(SHAREDLIB_LDFLAGS)"
-	@cmd /C "@echo ### CPPFLAGS = $(CPPFLAGS)"
-	@cmd /C "@echo ### CPP_LDFLAGS = $(CPP_LDFLAGS)"
-	@cmd /C "@echo ### CPP_SHAREDLIB_LDFLAGS = $(CPP_SHAREDLIB_LDFLAGS)"
-	@cmd /C "@echo ### ARFLAGS = $(ARFLAGS)"
-	@cmd /C "@echo ### MEX_CFLAGS = $(MEX_CFLAGS)"
-	@cmd /C "@echo ### MEX_LDFLAGS = $(MEX_LDFLAGS)"
-	@cmd /C "@echo ### DOWNLOAD_FLAGS = $(DOWNLOAD_FLAGS)"
-	@cmd /C "@echo ### EXECUTE_FLAGS = $(EXECUTE_FLAGS)"
-	@cmd /C "@echo ### MAKE_FLAGS = $(MAKE_FLAGS)"
+	@echo "### PRODUCT = $(PRODUCT)"
+	@echo "### PRODUCT_TYPE = $(PRODUCT_TYPE)"
+	@echo "### BUILD_TYPE = $(BUILD_TYPE)"
+	@echo "### INCLUDES = $(INCLUDES)"
+	@echo "### DEFINES = $(DEFINES)"
+	@echo "### ALL_SRCS = $(ALL_SRCS)"
+	@echo "### ALL_OBJS = $(ALL_OBJS)"
+	@echo "### LIBS = $(LIBS)"
+	@echo "### MODELREF_LIBS = $(MODELREF_LIBS)"
+	@echo "### SYSTEM_LIBS = $(SYSTEM_LIBS)"
+	@echo "### TOOLCHAIN_LIBS = $(TOOLCHAIN_LIBS)"
+	@echo "### CFLAGS = $(CFLAGS)"
+	@echo "### LDFLAGS = $(LDFLAGS)"
+	@echo "### SHAREDLIB_LDFLAGS = $(SHAREDLIB_LDFLAGS)"
+	@echo "### ARFLAGS = $(ARFLAGS)"
+	@echo "### MEX_CFLAGS = $(MEX_CFLAGS)"
+	@echo "### MEX_LDFLAGS = $(MEX_LDFLAGS)"
+	@echo "### DOWNLOAD_FLAGS = $(DOWNLOAD_FLAGS)"
+	@echo "### EXECUTE_FLAGS = $(EXECUTE_FLAGS)"
+	@echo "### MAKE_FLAGS = $(MAKE_FLAGS)"
 
 
 clean : 
 	$(ECHO) "### Deleting all derived files..."
-	@if exist $(PRODUCT) $(RM) $(PRODUCT)
-	$(RM) $(ALL_OBJS)
+	$(RM) $(subst /,\,$(PRODUCT))
+	$(RM) $(subst /,\,$(ALL_OBJS))
 	$(ECHO) "### Deleted all derived files."
 
 

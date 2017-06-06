@@ -3,8 +3,8 @@ CompiledModel {
   OrigName		  "YoungMan_LT"
   Version		  "8.10 (R2016a) 10-Feb-2016"
   SimulinkVersion	  "8.7"
-  ModelVersion		  "1.1149"
-  GeneratedOn		  "Sat May 27 11:21:56 2017"
+  ModelVersion		  "1.1154"
+  GeneratedOn		  "Tue Jun 06 16:32:05 2017"
   HasSimStructVars	  0
   HasCodeVariants	  0
   AccessFunctionHFileName ""
@@ -596,12 +596,13 @@ CompiledModel {
     tlcLanguage		    "C"
     tlcTargetType	    "RT"
   }
-  RTWContext		  [138164192, 2]
+  RTWContext		  [326268384, 2]
   RTWCGIR		  1
   TLCBlkFcnInCGIR	  1
   SLCI			  off
   SubsystemHdlForRightClickBuild 0.0
-  LocalSharedCodeManagerFile "E:\\WorkModels\\YoungMan_LT\\slprj\\ert\\_sharedutils\\shared_file.dmr"
+  LocalSharedCodeManagerFile "E:\\模型留存\\新版模型\\YoungMan_LT（新版SOF等模型）\\S278_code\\slprj\\ert\\_sharedutil"
+  "s\\shared_file.dmr"
   DataLoggingOpts {
     SaveFormat		    4
     MaxRows		    0
@@ -1211,7 +1212,7 @@ CompiledModel {
 	Parameter {
 	  Name			  "CAP_CONST_CAL"
 	  SLName		  "Gain"
-	  _idx			  9
+	  _idx			  10
 	  IsUsedInTrivialExpr	  1
 	}
 	NumParameters		1
@@ -1244,19 +1245,19 @@ CompiledModel {
 	Parameter {
 	  Name			  "Factor_ChargeEndSOCAjust"
 	  SLName		  "Table"
-	  _idx			  23
+	  _idx			  24
 	  IsUsedInTrivialExpr	  1
 	}
 	Parameter {
 	  Name			  "V_CellLowest"
 	  SLName		  "BreakpointsForDimension1"
-	  _idx			  22
+	  _idx			  23
 	  IsUsedInTrivialExpr	  1
 	}
 	Parameter {
 	  Name			  "T_ChargeEndSOCAjust"
 	  SLName		  "BreakpointsForDimension2"
-	  _idx			  17
+	  _idx			  18
 	  IsUsedInTrivialExpr	  1
 	}
 	NumParameters		3
@@ -1300,7 +1301,7 @@ CompiledModel {
 	Parameter {
 	  Name			  "CAP_CONST_CAL"
 	  SLName		  "Gain"
-	  _idx			  9
+	  _idx			  10
 	  IsUsedInTrivialExpr	  1
 	}
 	NumParameters		1
@@ -1313,19 +1314,19 @@ CompiledModel {
 	Parameter {
 	  Name			  "FastChargeCurrentTable"
 	  SLName		  "Table"
-	  _idx			  12
+	  _idx			  13
 	  IsUsedInTrivialExpr	  1
 	}
 	Parameter {
 	  Name			  "T_FastCharge"
 	  SLName		  "BreakpointsForDimension1"
-	  _idx			  20
+	  _idx			  21
 	  IsUsedInTrivialExpr	  1
 	}
 	Parameter {
 	  Name			  "SOC_FastCharge"
 	  SLName		  "BreakpointsForDimension2"
-	  _idx			  15
+	  _idx			  16
 	  IsUsedInTrivialExpr	  1
 	}
 	NumParameters		3
@@ -1364,13 +1365,13 @@ CompiledModel {
 	Parameter {
 	  Name			  "Factor_PowerOnSOCAjust"
 	  SLName		  "Table"
-	  _idx			  11
+	  _idx			  12
 	  IsUsedInTrivialExpr	  1
 	}
 	Parameter {
 	  Name			  "T_PowerOnSOCAjust"
 	  SLName		  "BreakpointsForDimension1"
-	  _idx			  21
+	  _idx			  22
 	  IsUsedInTrivialExpr	  1
 	}
 	NumParameters		2
@@ -1424,7 +1425,7 @@ CompiledModel {
 	Parameter {
 	  Name			  "CAP_CONST_CAL"
 	  SLName		  "Gain"
-	  _idx			  9
+	  _idx			  10
 	  IsUsedInTrivialExpr	  1
 	}
 	NumParameters		1
@@ -1478,19 +1479,19 @@ CompiledModel {
 	Parameter {
 	  Name			  "DisChargeCurrentTable"
 	  SLName		  "Table"
-	  _idx			  10
+	  _idx			  11
 	  IsUsedInTrivialExpr	  1
 	}
 	Parameter {
 	  Name			  "SOC_Discharge"
 	  SLName		  "BreakpointsForDimension1"
-	  _idx			  14
+	  _idx			  15
 	  IsUsedInTrivialExpr	  1
 	}
 	Parameter {
 	  Name			  "T_Discharge"
 	  SLName		  "BreakpointsForDimension2"
-	  _idx			  18
+	  _idx			  19
 	  IsUsedInTrivialExpr	  1
 	}
 	NumParameters		3
@@ -1544,19 +1545,19 @@ CompiledModel {
 	Parameter {
 	  Name			  "FeedBackCurrentTable"
 	  SLName		  "Table"
-	  _idx			  13
+	  _idx			  14
 	  IsUsedInTrivialExpr	  1
 	}
 	Parameter {
 	  Name			  "SOC_Feedback"
 	  SLName		  "BreakpointsForDimension1"
-	  _idx			  16
+	  _idx			  17
 	  IsUsedInTrivialExpr	  1
 	}
 	Parameter {
 	  Name			  "T_Facdback"
 	  SLName		  "BreakpointsForDimension2"
-	  _idx			  19
+	  _idx			  20
 	  IsUsedInTrivialExpr	  1
 	}
 	NumParameters		3
@@ -2817,7 +2818,7 @@ CompiledModel {
       TID		      constant
       LogicalSrc	      B22
       ConstExpr		      1
-      InitialValue	      [0.0F]
+      InitialValue	      [-15.0F]
       GrSrc		      [11, 0, 0, -1]
       SigSrc		      [6, 0, 1, 0]
       SysNum		      7
@@ -3269,10 +3270,10 @@ CompiledModel {
     Alignment		    -1
   }
   ModelParameters {
-    NumParameters	    24
+    NumParameters	    25
     NumInrtP		    0
     NumConstPrmsWithInit    0
-    NumConstPrms	    9
+    NumConstPrms	    10
     NumExportedGlobal	    0
     NumImportedExtern	    0
     NumImportedExternPointer 0
@@ -3367,17 +3368,32 @@ CompiledModel {
       OriginalDataTypeIdx     1
       CGTypeIdx		      18
       ContainerCGTypeIdx      46
-      ReferencedBy	      Matrix(3,4)
-[[1, 0, 3, 0]; [6, 0, 3, 0]; [6, 0, 1, 0];]
-      GraphicalRef	      Matrix(3,2)
-[[6, 2]; [7, 2]; [11, 0];]
+      ReferencedBy	      Matrix(2,4)
+[[1, 0, 3, 0]; [6, 0, 3, 0];]
+      GraphicalRef	      Matrix(2,2)
+[[6, 2]; [7, 2];]
       GraphicalSource	      [6, 2]
       OwnerSysIdx	      [7, -1]
       InConstSection	      1
     }
     Parameter {
-      Identifier	      "linearizationSOF_maxIndex"
+      Identifier	      "Constant_Value_j"
       LogicalSrc	      P4
+      Value		      [-15.0F]
+      OriginalDataTypeIdx     1
+      CGTypeIdx		      18
+      ContainerCGTypeIdx      46
+      ReferencedBy	      Matrix(1,4)
+[[6, 0, 1, 0];]
+      GraphicalRef	      Matrix(1,2)
+[[11, 0];]
+      GraphicalSource	      [11, 0]
+      OwnerSysIdx	      [7, -1]
+      InConstSection	      1
+    }
+    Parameter {
+      Identifier	      "linearizationSOF_maxIndex"
+      LogicalSrc	      P5
       Value		      [11U, 16U]
       OriginalDataTypeIdx     7
       CGTypeIdx		      40
@@ -3392,7 +3408,7 @@ CompiledModel {
     }
     Parameter {
       Identifier	      "uDLookupTable3_maxIndex"
-      LogicalSrc	      P5
+      LogicalSrc	      P6
       Value		      [7U, 7U]
       OriginalDataTypeIdx     7
       CGTypeIdx		      40
@@ -3407,7 +3423,7 @@ CompiledModel {
     }
     Parameter {
       Identifier	      "uDLookupTable3_maxIndex_g"
-      LogicalSrc	      P6
+      LogicalSrc	      P7
       Value		      [15U, 10U]
       OriginalDataTypeIdx     7
       CGTypeIdx		      40
@@ -3422,7 +3438,7 @@ CompiledModel {
     }
     Parameter {
       Identifier	      "linearizationSOF_maxIndex_f"
-      LogicalSrc	      P7
+      LogicalSrc	      P8
       Value		      [12U, 15U]
       OriginalDataTypeIdx     7
       CGTypeIdx		      40
@@ -3437,7 +3453,7 @@ CompiledModel {
     }
     Parameter {
       Identifier	      "pooled4"
-      LogicalSrc	      P8
+      LogicalSrc	      P9
       Value		      [40U]
       OriginalDataTypeIdx     3
       CGTypeIdx		      19
@@ -3452,7 +3468,7 @@ CompiledModel {
     }
     Parameter {
       Identifier	      "CAP_CONST_CAL"
-      LogicalSrc	      P9
+      LogicalSrc	      P10
       WorkspaceVarName	      "CAP_CONST_CAL"
       Tunable		      yes
       StorageClass	      "Custom"
@@ -3507,7 +3523,7 @@ CompiledModel {
     }
     Parameter {
       Identifier	      "DisChargeCurrentTable"
-      LogicalSrc	      P10
+      LogicalSrc	      P11
       WorkspaceVarName	      "DisChargeCurrentTable"
       Tunable		      yes
       StorageClass	      "Custom"
@@ -3562,7 +3578,7 @@ CompiledModel {
     }
     Parameter {
       Identifier	      "Factor_PowerOnSOCAjust"
-      LogicalSrc	      P11
+      LogicalSrc	      P12
       WorkspaceVarName	      "Factor_PowerOnSOCAjust"
       Tunable		      yes
       StorageClass	      "Custom"
@@ -3618,7 +3634,7 @@ CompiledModel {
     }
     Parameter {
       Identifier	      "FastChargeCurrentTable"
-      LogicalSrc	      P12
+      LogicalSrc	      P13
       WorkspaceVarName	      "FastChargeCurrentTable"
       Tunable		      yes
       StorageClass	      "Custom"
@@ -3673,7 +3689,7 @@ CompiledModel {
     }
     Parameter {
       Identifier	      "FeedBackCurrentTable"
-      LogicalSrc	      P13
+      LogicalSrc	      P14
       WorkspaceVarName	      "FeedBackCurrentTable"
       Tunable		      yes
       StorageClass	      "Custom"
@@ -3728,7 +3744,7 @@ CompiledModel {
     }
     Parameter {
       Identifier	      "SOC_Discharge"
-      LogicalSrc	      P14
+      LogicalSrc	      P15
       WorkspaceVarName	      "SOC_Discharge"
       Tunable		      yes
       StorageClass	      "Custom"
@@ -3783,7 +3799,7 @@ CompiledModel {
     }
     Parameter {
       Identifier	      "SOC_FastCharge"
-      LogicalSrc	      P15
+      LogicalSrc	      P16
       WorkspaceVarName	      "SOC_FastCharge"
       Tunable		      yes
       StorageClass	      "Custom"
@@ -3838,7 +3854,7 @@ CompiledModel {
     }
     Parameter {
       Identifier	      "SOC_Feedback"
-      LogicalSrc	      P16
+      LogicalSrc	      P17
       WorkspaceVarName	      "SOC_Feedback"
       Tunable		      yes
       StorageClass	      "Custom"
@@ -3893,7 +3909,7 @@ CompiledModel {
     }
     Parameter {
       Identifier	      "T_ChargeEndSOCAjust"
-      LogicalSrc	      P17
+      LogicalSrc	      P18
       WorkspaceVarName	      "T_ChargeEndSOCAjust"
       Tunable		      yes
       StorageClass	      "Custom"
@@ -3949,7 +3965,7 @@ CompiledModel {
     }
     Parameter {
       Identifier	      "T_Discharge"
-      LogicalSrc	      P18
+      LogicalSrc	      P19
       WorkspaceVarName	      "T_Discharge"
       Tunable		      yes
       StorageClass	      "Custom"
@@ -4004,7 +4020,7 @@ CompiledModel {
     }
     Parameter {
       Identifier	      "T_Facdback"
-      LogicalSrc	      P19
+      LogicalSrc	      P20
       WorkspaceVarName	      "T_Facdback"
       Tunable		      yes
       StorageClass	      "Custom"
@@ -4059,7 +4075,7 @@ CompiledModel {
     }
     Parameter {
       Identifier	      "T_FastCharge"
-      LogicalSrc	      P20
+      LogicalSrc	      P21
       WorkspaceVarName	      "T_FastCharge"
       Tunable		      yes
       StorageClass	      "Custom"
@@ -4114,7 +4130,7 @@ CompiledModel {
     }
     Parameter {
       Identifier	      "T_PowerOnSOCAjust"
-      LogicalSrc	      P21
+      LogicalSrc	      P22
       WorkspaceVarName	      "T_PowerOnSOCAjust"
       Tunable		      yes
       StorageClass	      "Custom"
@@ -4170,7 +4186,7 @@ CompiledModel {
     }
     Parameter {
       Identifier	      "V_CellLowest"
-      LogicalSrc	      P22
+      LogicalSrc	      P23
       WorkspaceVarName	      "V_CellLowest"
       Tunable		      yes
       StorageClass	      "Custom"
@@ -4226,7 +4242,7 @@ CompiledModel {
     }
     Parameter {
       Identifier	      "Factor_ChargeEndSOCAjust"
-      LogicalSrc	      P23
+      LogicalSrc	      P24
       WorkspaceVarName	      "Factor_ChargeEndSOCAjust"
       Tunable		      yes
       StorageClass	      "Custom"
@@ -5826,7 +5842,7 @@ CompiledModel {
 	ASTNode {
 	  IsNonTerminal		  0
 	  Op			  SL_CALCULATED
-	  ModelParameterIdx	  8
+	  ModelParameterIdx	  9
 	}
 	Value			[40U]
 	OriginalDataTypeIdx	3
@@ -6137,7 +6153,7 @@ CompiledModel {
 	ASTNode {
 	  IsNonTerminal		  0
 	  Op			  SL_CALCULATED
-	  ModelParameterIdx	  8
+	  ModelParameterIdx	  9
 	}
 	Value			[40U]
 	OriginalDataTypeIdx	3
@@ -6427,14 +6443,15 @@ CompiledModel {
 	ASTNode {
 	  IsNonTerminal		  0
 	  Op			  SL_CALCULATED
-	  ModelParameterIdx	  3
+	  ModelParameterIdx	  4
 	}
-	Value			[0.0F]
+	Value			[-15.0F]
 	OriginalDataTypeIdx	1
 	CGTypeIdx		18
 	ContainerCGTypeIdx	46
 	String			""
 	StringType		"Computed"
+	NeedParenthesis		1
       }
       Value		      Parameter[0]
       VariantCondition	      ""
@@ -6982,7 +6999,7 @@ CompiledModel {
       TID		      0
       firstEntryOfTsMapIsGCD  yes
       NumDataOutputPorts      0
-      TLCFileName	      "s7_b0_t6ith"
+      TLCFileName	      "s7_b0_p7fci"
       OpaqueBlockMethode {
 	HasOutputs		1
 	HasModelInitialize	1
@@ -6990,7 +7007,7 @@ CompiledModel {
       Parameters	      [32, 791]
       Parameter {
 	Name			"Table"
-	MdlPrmIdx		10
+	MdlPrmIdx		11
 	Value			SLData(20)
 	OriginalDataTypeIdx	1
 	CGTypeIdx		21
@@ -7000,7 +7017,7 @@ CompiledModel {
       }
       Parameter {
 	Name			"BreakpointsForDimension1"
-	MdlPrmIdx		14
+	MdlPrmIdx		15
 	Value			SLData(21)
 	OriginalDataTypeIdx	1
 	CGTypeIdx		29
@@ -7010,7 +7027,7 @@ CompiledModel {
       }
       Parameter {
 	Name			"BreakpointsForDimension2"
-	MdlPrmIdx		18
+	MdlPrmIdx		19
 	Value			SLData(22)
 	OriginalDataTypeIdx	1
 	CGTypeIdx		35
@@ -7020,7 +7037,7 @@ CompiledModel {
       }
       Parameter {
 	Name			"maxIndex"
-	MdlPrmIdx		4
+	MdlPrmIdx		5
 	Value			[11U, 16U]
 	OriginalDataTypeIdx	7
 	CGTypeIdx		40
@@ -7075,7 +7092,7 @@ CompiledModel {
       }
       Parameter {
 	Name			"Gain"
-	MdlPrmIdx		9
+	MdlPrmIdx		10
 	Value			[150.0F]
 	OriginalDataTypeIdx	1
 	CGTypeIdx		18
@@ -7085,7 +7102,7 @@ CompiledModel {
       }
       Parameter {
 	Name			"Value"
-	MdlPrmIdx		8
+	MdlPrmIdx		9
 	Value			[40U]
 	OriginalDataTypeIdx	3
 	CGTypeIdx		19
@@ -7096,7 +7113,7 @@ CompiledModel {
       }
       Parameter {
 	Name			"Table"
-	MdlPrmIdx		23
+	MdlPrmIdx		24
 	Value			SLData(23)
 	OriginalDataTypeIdx	14
 	CGTypeIdx		39
@@ -7106,7 +7123,7 @@ CompiledModel {
       }
       Parameter {
 	Name			"BreakpointsForDimension1"
-	MdlPrmIdx		22
+	MdlPrmIdx		23
 	Value			[3.389F, 3.399F, 3.405F, 3.422F, 3.44F, 3.475F, 3.63F, 3.65F]
 	OriginalDataTypeIdx	1
 	CGTypeIdx		23
@@ -7116,7 +7133,7 @@ CompiledModel {
       }
       Parameter {
 	Name			"BreakpointsForDimension2"
-	MdlPrmIdx		17
+	MdlPrmIdx		18
 	Value			[0.0F, 5.0F, 10.0F, 15.0F, 20.0F, 25.0F, 35.0F, 45.0F]
 	OriginalDataTypeIdx	1
 	CGTypeIdx		23
@@ -7126,7 +7143,7 @@ CompiledModel {
       }
       Parameter {
 	Name			"maxIndex"
-	MdlPrmIdx		5
+	MdlPrmIdx		6
 	Value			[7U, 7U]
 	OriginalDataTypeIdx	7
 	CGTypeIdx		40
@@ -7147,7 +7164,7 @@ CompiledModel {
       }
       Parameter {
 	Name			"Table"
-	MdlPrmIdx		12
+	MdlPrmIdx		13
 	Value			SLData(24)
 	OriginalDataTypeIdx	1
 	CGTypeIdx		25
@@ -7157,7 +7174,7 @@ CompiledModel {
       }
       Parameter {
 	Name			"BreakpointsForDimension1"
-	MdlPrmIdx		20
+	MdlPrmIdx		21
 	Value			SLData(25)
 	OriginalDataTypeIdx	1
 	CGTypeIdx		37
@@ -7167,7 +7184,7 @@ CompiledModel {
       }
       Parameter {
 	Name			"BreakpointsForDimension2"
-	MdlPrmIdx		15
+	MdlPrmIdx		16
 	Value			SLData(26)
 	OriginalDataTypeIdx	1
 	CGTypeIdx		31
@@ -7177,7 +7194,7 @@ CompiledModel {
       }
       Parameter {
 	Name			"maxIndex"
-	MdlPrmIdx		6
+	MdlPrmIdx		7
 	Value			[15U, 10U]
 	OriginalDataTypeIdx	7
 	CGTypeIdx		40
@@ -7187,7 +7204,7 @@ CompiledModel {
       }
       Parameter {
 	Name			"Gain"
-	MdlPrmIdx		9
+	MdlPrmIdx		10
 	Value			[150.0F]
 	OriginalDataTypeIdx	1
 	CGTypeIdx		18
@@ -7197,7 +7214,7 @@ CompiledModel {
       }
       Parameter {
 	Name			"Value"
-	MdlPrmIdx		8
+	MdlPrmIdx		9
 	Value			[40U]
 	OriginalDataTypeIdx	3
 	CGTypeIdx		19
@@ -7208,7 +7225,7 @@ CompiledModel {
       }
       Parameter {
 	Name			"Table"
-	MdlPrmIdx		11
+	MdlPrmIdx		12
 	Value			[0.6346F, 0.7105F, 0.7811F, 0.8448F, 0.9066F, 0.9523F, 0.9887F, 1.0F]
 	OriginalDataTypeIdx	1
 	CGTypeIdx		23
@@ -7218,7 +7235,7 @@ CompiledModel {
       }
       Parameter {
 	Name			"BreakpointsForDimension1"
-	MdlPrmIdx		21
+	MdlPrmIdx		22
 	Value			[-20.0F, -15.0F, -10.0F, -5.0F, 0.0F, 5.0F, 10.0F, 15.0F]
 	OriginalDataTypeIdx	1
 	CGTypeIdx		23
@@ -7228,7 +7245,7 @@ CompiledModel {
       }
       Parameter {
 	Name			"Table"
-	MdlPrmIdx		13
+	MdlPrmIdx		14
 	Value			SLData(27)
 	OriginalDataTypeIdx	1
 	CGTypeIdx		27
@@ -7238,7 +7255,7 @@ CompiledModel {
       }
       Parameter {
 	Name			"BreakpointsForDimension1"
-	MdlPrmIdx		16
+	MdlPrmIdx		17
 	Value			SLData(28)
 	OriginalDataTypeIdx	1
 	CGTypeIdx		33
@@ -7248,7 +7265,7 @@ CompiledModel {
       }
       Parameter {
 	Name			"BreakpointsForDimension2"
-	MdlPrmIdx		19
+	MdlPrmIdx		20
 	Value			SLData(29)
 	OriginalDataTypeIdx	1
 	CGTypeIdx		37
@@ -7258,7 +7275,7 @@ CompiledModel {
       }
       Parameter {
 	Name			"maxIndex"
-	MdlPrmIdx		7
+	MdlPrmIdx		8
 	Value			[12U, 15U]
 	OriginalDataTypeIdx	7
 	CGTypeIdx		40
@@ -7279,14 +7296,15 @@ CompiledModel {
       }
       Parameter {
 	Name			"Value"
-	MdlPrmIdx		3
-	Value			[0.0F]
+	MdlPrmIdx		4
+	Value			[-15.0F]
 	OriginalDataTypeIdx	1
 	CGTypeIdx		18
 	ContainerCGTypeIdx	46
 	String			""
 	StringTransformed	"const"
 	StringType		"Computed"
+	NeedParenthesis		1
       }
       Parameter {
 	Name			"Value"
@@ -7312,7 +7330,7 @@ CompiledModel {
       }
       Parameter {
 	Name			"Gain"
-	MdlPrmIdx		9
+	MdlPrmIdx		10
 	Value			[150.0F]
 	OriginalDataTypeIdx	1
 	CGTypeIdx		18
@@ -7339,8 +7357,8 @@ CompiledModel {
   SFLibraryNames {
     NumUniqueCharts	    0
   }
-  BlockParamChecksum	  ["3226767462U", "718151292U", "3230005938U", "1390552405U"]
-  ModelChecksum		  ["1472713766U", "3104632920U", "2659106239U", "3643182798U"]
+  BlockParamChecksum	  ["858526536U", "1947714519U", "4207487692U", "3945237692U"]
+  ModelChecksum		  ["2094435759U", "1202004686U", "3593460851U", "2472574598U"]
   IncludeCodeGenSettings  1
   ExportPeriodicFcnCallCG 1
   IsAsyncAndRateGroupingUnified	0
@@ -7614,7 +7632,7 @@ CompiledModel {
       Name		      "ConstP_YoungMan_LT_T"
       Constructor	      "struct"
       Members {
-	NumMembers		9
+	NumMembers		10
 	Member {
 	  Name			  "pooled1"
 	  CGTypeIdx		  1
@@ -7629,6 +7647,10 @@ CompiledModel {
 	}
 	Member {
 	  Name			  "pooled3"
+	  CGTypeIdx		  1
+	}
+	Member {
+	  Name			  "Constant_Value_j"
 	  CGTypeIdx		  1
 	}
 	Member {
@@ -7728,14 +7750,14 @@ CompiledModel {
     RTWCGModule {
       RateGrouping	      0
       PeriodicRateGrouping    0
-      TLCFileName	      "s7_b0_t6ith_0"
+      TLCFileName	      "s7_b0_p7fci_0"
       RTWFcnConst {
 	HasInstanceSetup	"no"
 	baseTidOfTasks		"[0]"
 	Outputs_Function {
 	  HasTidArg		  0
 	  HasCpiArg		  0
-	  TLCFileName		  "s7_b0_t6ith_0_Outputs"
+	  TLCFileName		  "s7_b0_p7fci_0_Outputs"
 	  StackSize		  4
 	}
       }
@@ -7758,14 +7780,14 @@ CompiledModel {
     RTWCGModule {
       RateGrouping	      0
       PeriodicRateGrouping    0
-      TLCFileName	      "s7_b0_t6ith_1"
+      TLCFileName	      "s7_b0_p7fci_1"
       RTWFcnConst {
 	HasInstanceSetup	"no"
 	baseTidOfTasks		"[0]"
 	Outputs_Function {
 	  HasTidArg		  0
 	  HasCpiArg		  0
-	  TLCFileName		  "s7_b0_t6ith_1_Outputs"
+	  TLCFileName		  "s7_b0_p7fci_1_Outputs"
 	  StackSize		  0
 	}
       }
@@ -7787,14 +7809,14 @@ CompiledModel {
     RTWCGModule {
       RateGrouping	      0
       PeriodicRateGrouping    0
-      TLCFileName	      "s7_b0_t6ith_2"
+      TLCFileName	      "s7_b0_p7fci_2"
       RTWFcnConst {
 	HasInstanceSetup	"no"
 	baseTidOfTasks		"[0]"
 	Outputs_Function {
 	  HasTidArg		  0
 	  HasCpiArg		  0
-	  TLCFileName		  "s7_b0_t6ith_2_Outputs"
+	  TLCFileName		  "s7_b0_p7fci_2_Outputs"
 	  StackSize		  4
 	}
       }
@@ -7817,14 +7839,14 @@ CompiledModel {
     RTWCGModule {
       RateGrouping	      0
       PeriodicRateGrouping    0
-      TLCFileName	      "s7_b0_t6ith_3"
+      TLCFileName	      "s7_b0_p7fci_3"
       RTWFcnConst {
 	HasInstanceSetup	"no"
 	baseTidOfTasks		"[0]"
 	Outputs_Function {
 	  HasTidArg		  0
 	  HasCpiArg		  0
-	  TLCFileName		  "s7_b0_t6ith_3_Outputs"
+	  TLCFileName		  "s7_b0_p7fci_3_Outputs"
 	  StackSize		  0
 	}
       }
@@ -7846,14 +7868,14 @@ CompiledModel {
     RTWCGModule {
       RateGrouping	      0
       PeriodicRateGrouping    0
-      TLCFileName	      "s7_b0_t6ith_4"
+      TLCFileName	      "s7_b0_p7fci_4"
       RTWFcnConst {
 	HasInstanceSetup	"no"
 	baseTidOfTasks		"[0]"
 	Outputs_Function {
 	  HasTidArg		  0
 	  HasCpiArg		  0
-	  TLCFileName		  "s7_b0_t6ith_4_Outputs"
+	  TLCFileName		  "s7_b0_p7fci_4_Outputs"
 	  StackSize		  4
 	}
       }
@@ -7876,20 +7898,20 @@ CompiledModel {
     RTWCGModule {
       RateGrouping	      0
       PeriodicRateGrouping    0
-      TLCFileName	      "s7_b0_t6ith"
+      TLCFileName	      "s7_b0_p7fci"
       RTWFcnConst {
 	HasInstanceSetup	"no"
 	baseTidOfTasks		"[0]"
 	Outputs_Function {
 	  HasTidArg		  0
 	  HasCpiArg		  0
-	  TLCFileName		  "s7_b0_t6ith_Outputs"
+	  TLCFileName		  "s7_b0_p7fci_Outputs"
 	  StackSize		  4
 	}
 	ModelInitialize_Function {
 	  HasTidArg		  0
 	  HasCpiArg		  0
-	  TLCFileName		  "s7_b0_t6ith_ModelInitialize"
+	  TLCFileName		  "s7_b0_p7fci_ModelInitialize"
 	  StackSize		  0
 	}
       }
@@ -7939,8 +7961,8 @@ CompiledModel {
       InstanceIdx	      -1
       CGTypeIdx		      42
       GlobalOffset	      0
-      NumVarGroupElements     9
-      VarGroupElements	      [CP0, CP1, CP2, CP3, CP4, CP5, CP6, CP7, CP8]
+      NumVarGroupElements     10
+      VarGroupElements	      [CP0, CP1, CP2, CP3, CP4, CP5, CP6, CP7, CP8, CP9]
     }
     VarGroupVarIdx	    []
   }

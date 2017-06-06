@@ -125,7 +125,7 @@ void errorSystemVoltageOV(void)
     //CutDCChaCurt70.Bit.F0_Battery_Over_Voltage3=Error[1];
     //CutACChaCurt70.Bit.F0_Battery_Over_Voltage3=Error[1]; 
     
-    //2级处理
+    //level 2 process
     Can554Byte0.Bit.F2_systemOV2=Error[2] ;
     CutChaCurt50.Bit.F0_Battery_Over_Voltage2=Error[2] ;
     CutDCChaCurt0.Bit.F0_Battery_Over_Voltage21=Error[2] ;  
@@ -156,7 +156,7 @@ void errorSystemVoltageUV(void) //恢复,上报
     unsigned char Level=0; 
     ///////////////////上报故障等级数/////////////////////////
     
-    Level= TotalVoltageUnderVoltage_custom(g_systemVoltage,g_highVoltageV3); 
+    Level = TotalVoltageUnderVoltage_custom(g_systemVoltage,g_highVoltageV3); 
     
     for(i=1;i<4;i++) 
        if(i==Level) 
@@ -180,7 +180,7 @@ void errorSystemVoltageUV(void) //恢复,上报
         status_group1.Bit.St_BMS =2;//BMS状态高压断开
 
     }
-    CutDisCurt0.Bit.F0_Battery_Under_Voltage1=Error[3];
+    CutDisCurt0.Bit.F0_Battery_Under_Voltage1 = Error[3];
     
 }
 
@@ -205,23 +205,24 @@ void errorDischargeOC(void) //恢复;上报不处理
         if(i==Level) 
             Error[i]=1;
      
-    Error_Group3.Bit.F6_DisChg_Over_I=Level;//整车CAN赋值         
-    //1级故障处理
-    Can554Byte3.Bit.F0_DisChaOCurt1=Error[1];
-    //CutDisCurt70.Bit.F1_DisCharge_Over_Current3=Error[1];
+    Error_Group3.Bit.F6_DisChg_Over_I=Level;//整车CAN赋值 
+    
+//	//1级故障处理
+	Can554Byte3.Bit.F0_DisChaOCurt1=Error[1];
+//	CutDisCurt70.Bit.F1_DisCharge_Over_Current3=Error[1];
 
-    //2级故障处理
-    Can554Byte1.Bit.F0_DisChaOCurt2=Error[2];//to PC
-    //CutDisCurt50.Bit.F1_DisCharge_Over_Current2=Error[2];
-     
-    //3级故障处理
-    /*if(Error[3]) 
-    {
-        g_caution_Flag_2 |= 0x01;//to PC
-        //status_group2.Bit.BMS_PowerOff_Req = 2;//BMS高压下电请求
-    }
-     */
-    //CutDisCurt0.Bit.F2_DisCharge_Over_Current1=Error[3];
+//	//2级故障处理
+	Can554Byte1.Bit.F0_DisChaOCurt2=Error[2];//to PC
+//	CutDisCurt50.Bit.F1_DisCharge_Over_Current2=Error[2];
+
+//	//3级故障处理
+//	if(Error[3]) 
+//    {
+//        g_caution_Flag_2 |= 0x01;//to PC
+//        //status_group2.Bit.BMS_PowerOff_Req = 2;//BMS高压下电请求
+//    }
+
+//	CutDisCurt0.Bit.F2_DisCharge_Over_Current1=Error[3];
 }
 //******************************************************************************
 //* Function name:    errorChargeOC
@@ -238,11 +239,11 @@ void errorChargeOC(void)
     
     if(g_BmsModeFlag == DISCHARGING)//放电模式
     {
-        curtValue=BiggestFeedbackCurt; //回馈电流为负值
+        curtValue = BiggestFeedbackCurt; //回馈电流为负值
     }
     else if((g_BmsModeFlag == FASTRECHARGING)||(g_BmsModeFlag == RECHARGING)) //快充模式
     {
-        curtValue=m_askcurrent;
+        curtValue = m_askcurrent;
     } 
     ///////////////////上报故障等级数/////////////////////////    
     Level=ChargeOverCurrent_custom((-g_systemCurrent),curtValue);    
@@ -257,34 +258,39 @@ void errorChargeOC(void)
         Error_Group1.Bit.F4_Ch_Over_I = Level;//整车CAN赋值,充电功率
         
     }    
-    if(Level>=1)
+    if(Level>=1){
         Error_Group6.Bit.F5_Chg_C_Over = 1;//整车CAN赋值,充电电流超限报警
-    else
+    }
+    else{
         Error_Group6.Bit.F5_Chg_C_Over = 0;//整车CAN赋值,充电电流超限报警
-    //1级故障处理
-    Can554Byte2.Bit.F7_ChangerOCurt1=Error[1];//to PC
-    //CutChaCurt70.Bit.F1_Charge_Over_Current3=Error[1];
-    //CutDCChaCurt70.Bit.F1_Charge_Over_Current3=Error[1];
-    //CutACChaCurt70.Bit.F1_Charge_Over_Current3=Error[1];
+    }
+	
+//	//1级故障处理
+	Can554Byte2.Bit.F7_ChangerOCurt1=Error[1];//to PC
+//	CutChaCurt70.Bit.F1_Charge_Over_Current3=Error[1];
+//	CutDCChaCurt70.Bit.F1_Charge_Over_Current3=Error[1];
+//	CutACChaCurt70.Bit.F1_Charge_Over_Current3=Error[1];
     
-    //2级故障处理
-    Can554Byte0.Bit.F7_ChangerOCurt2=Error[2];//to PC
-    //CutChaCurt50.Bit.F1_Charge_Over_Current2=Error[2];
-    //CutDCChaCurt50.Bit.F0_Charge_Over_Current2=Error[2];
-    //CutACChaCurt50.Bit.F0_Charge_Over_Current2=Error[2];
+//	//2级故障处理
+	Can554Byte0.Bit.F7_ChangerOCurt2=Error[2];//to PC
+//	CutChaCurt50.Bit.F1_Charge_Over_Current2=Error[2];
+//	CutDCChaCurt50.Bit.F0_Charge_Over_Current2=Error[2];
+//	CutACChaCurt50.Bit.F0_Charge_Over_Current2=Error[2];
     
-    //3级故障处理
-    //if(Error[3])
-    //{
-     //   g_caution_Flag_1 |=0x80;//to PC
-        //if(g_BmsModeFlag == DISCHARGING)
-            //status_group2.Bit.BMS_PowerOff_Req = 2;//BMS高压下电请求
-   // }
+//	//3级故障处理
+//	if(Error[3])
+//	{
+//		g_caution_Flag_1 |=0x80;//to PC
+//		if(g_BmsModeFlag == DISCHARGING){
+//			status_group2.Bit.BMS_PowerOff_Req = 2;//BMS高压下电请求
+//		}
+//	 }
 
-    //CutChaCurt0.Bit.F2_Charge_Over_Current1=Error[3];
-    //CutDCChaCurt0.Bit.F3_Charge_Over_Current1=Error[3];
-    //CutACChaCurt0.Bit.F3_Charge_Over_Current1=Error[3];
+//	CutChaCurt0.Bit.F2_Charge_Over_Current1=Error[3];
+//	CutDCChaCurt0.Bit.F3_Charge_Over_Current1=Error[3];
+//	CutACChaCurt0.Bit.F3_Charge_Over_Current1=Error[3];
 }
+
 //******************************************************************************
 //* Function name:    errorCellVoltageOV
 //* Description:      单体过压故障,1级故障不恢复,2,3,4级故障可恢复,直流除外,若直流上报2级故障,可以到1也可以到3,如果1级直接不恢复  
@@ -293,41 +299,44 @@ void errorChargeOC(void)
 //******************************************************************************
 void errorCellVoltageOV(void)
 {
-
     unsigned char Error[4]={0};
     unsigned char i;
-    unsigned char Level=0; 
+    unsigned char Level=0;
+	
     //上报故障等级等级数 
-    Level=CellOverVoltage_custom(g_highestCellVoltage,g_BmsModeFlag);      
-    for(i=1;i<4;i++) 
-       if(i==Level) 
-           Error[i]=1;
-    
-    Error_Group2.Bit.F0_Cell_Over_V=Level;//整车CAN赋值
-    //1级处理 
-    Can554Byte2.Bit.F3_cellOV1=Error[1];
-    //CutChaCurt70.Bit.F2_Cell_Over_Voltage3=Error[1];
-    CutACChaCurt0.Bit.F4_Cell_Over_Voltage321=Error[1];
-    CutDCChaCurt0.Bit.F4_Cell_Over_Voltage321=Error[1];
-    
-    //2级处理     
-    Can554Byte0.Bit.F3_cellOV2=Error[2];//to PC
-    CutChaCurt50.Bit.F2_Cell_Over_Voltage2=Error[2];
-    CutDCChaCurt0.Bit.F4_Cell_Over_Voltage321=Error[2];
-    CutACChaCurt0.Bit.F4_Cell_Over_Voltage321=Error[2]; 
-    
-    //3级处理
-    if(Error[3]) 
-    {
-        g_caution_Flag_1 |= 0x08;//to PC
-        if(g_BmsModeFlag == DISCHARGING)
-            status_group1.Bit.St_BMS =2;//BMS状态高压断开
+    Level = CellOverVoltage_custom(g_highestCellVoltage,g_BmsModeFlag);      
+    for(i=1;i<4;i++){
+       if(i == Level){
+           Error[i] = 1;
+       }
     }
-    CutDisCurt0.Bit.F10_Cell_Over_Voltage1= Error[3];
-    CutChaCurt0.Bit.F3_Cell_Over_Voltage1=Error[3];
-    CutACChaCurt0.Bit.F4_Cell_Over_Voltage321=Error[3];
-    CutDCChaCurt0.Bit.F4_Cell_Over_Voltage321=Error[3];
-        
+    
+    Error_Group2.Bit.F0_Cell_Over_V = Level;//will be send to vehicle CAN    
+    
+    //level 1 process
+    Can554Byte2.Bit.F3_cellOV1					= Error[1];
+//	CutChaCurt70.Bit.F2_Cell_Over_Voltage3		= Error[1];
+	CutACChaCurt0.Bit.F4_Cell_Over_Voltage321	= Error[1];
+	CutDCChaCurt0.Bit.F4_Cell_Over_Voltage321	= Error[1];
+	
+	//level 2 process
+	Can554Byte0.Bit.F3_cellOV2					= Error[2];//to PC
+	CutChaCurt50.Bit.F2_Cell_Over_Voltage2		= Error[2];
+	CutDCChaCurt0.Bit.F4_Cell_Over_Voltage321	= Error[2];
+	CutACChaCurt0.Bit.F4_Cell_Over_Voltage321	= Error[2];
+	
+	//level 3 process
+	if(Error[3])
+	{
+	    g_caution_Flag_1 |= 0x08;//to PC
+	    if(g_BmsModeFlag == DISCHARGING){
+	        status_group1.Bit.St_BMS = 2;//BMS staus is HV OFF
+	    }
+	}
+	CutDisCurt0.Bit.F10_Cell_Over_Voltage1		= Error[3];
+	CutChaCurt0.Bit.F3_Cell_Over_Voltage1		= Error[3];
+	CutACChaCurt0.Bit.F4_Cell_Over_Voltage321	= Error[3];
+	CutDCChaCurt0.Bit.F4_Cell_Over_Voltage321	= Error[3];
 }
 //******************************************************************************
 //* Function name:   errorCellVoltageUV
@@ -340,29 +349,32 @@ void errorCellVoltageUV(void)//上报不处理,充电不上报,恢复
     unsigned char i;
     unsigned char Error[4]={0};
     unsigned char Level=0; 
-
+	
     Level=CellUnderVoltage_custom(g_lowestCellVoltage);
-    for(i=1;i<4;i++)
-        if(i==Level)
+    for(i=1;i<4;i++){
+        if(i==Level){
             Error[i]=1;
-      
+        }
+    }
+	
     Error_Group2.Bit.F2_Cell_Under_V=Level;//整车CAN赋值
+    
     //1级故障处理
     Can554Byte2.Bit.F1_cellUV1=Error[1];//to PC
-    //CutDisCurt70.Bit.F2_Cell_Under_Voltage3=Error[1];
+//	CutDisCurt70.Bit.F2_Cell_Under_Voltage3=Error[1];
 
     //2级故障处理
-    Can554Byte0.Bit.F1_cellUV2=Error[2];//to PC
-    CutDisCurt50.Bit.F2_Cell_Under_Voltage2=Error[2];
-     
-    //3级故障处理
-    if(Error[3])
-    {
-        g_caution_Flag_1 |= 0x02;//to PC
-            status_group1.Bit.St_BMS =2;//BMS状态高压断开
-    }
-    CutDisCurt0.Bit.F3_Cell_Under_Voltage1=Error[3];
-    CutChaCurt0.Bit.F10_Cell_Under_Voltage1=Error[3];
+	Can554Byte0.Bit.F1_cellUV2=Error[2];//to PC
+	CutDisCurt50.Bit.F2_Cell_Under_Voltage2=Error[2];
+	 
+	//3级故障处理
+	if(Error[3])
+	{
+		g_caution_Flag_1 |= 0x02;//to PC
+		status_group1.Bit.St_BMS =2;//BMS状态高压断开
+	}
+	CutDisCurt0.Bit.F3_Cell_Under_Voltage1 = Error[3];
+	CutChaCurt0.Bit.F10_Cell_Under_Voltage1 = Error[3];
 
 }
 //******************************************************************************

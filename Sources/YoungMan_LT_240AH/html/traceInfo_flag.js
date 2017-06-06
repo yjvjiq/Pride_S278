@@ -13,9 +13,9 @@ function TraceInfoFlag() {
     this.traceFlag["YoungMan_LT.c:625c76"]=1;
     this.traceFlag["YoungMan_LT.c:646c23"]=1;
     this.traceFlag["YoungMan_LT.c:646c31"]=1;
-    this.traceFlag["YoungMan_LT.c:646c39"]=1;
-    this.traceFlag["YoungMan_LT.c:646c58"]=1;
-    this.traceFlag["YoungMan_LT.c:646c66"]=1;
+    this.traceFlag["YoungMan_LT.c:646c41"]=1;
+    this.traceFlag["YoungMan_LT.c:646c60"]=1;
+    this.traceFlag["YoungMan_LT.c:646c68"]=1;
     this.traceFlag["YoungMan_LT.c:650c65"]=1;
     this.traceFlag["YoungMan_LT.c:660c45"]=1;
 }

@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'YoungMan_LT'.
  *
- * Model version                  : 1.1149
+ * Model version                  : 1.1154
  * Simulink Coder version         : 8.10 (R2016a) 10-Feb-2016
- * C/C++ source code generated on : Sat May 27 11:21:57 2017
+ * C/C++ source code generated on : Tue Jun 06 16:32:07 2017
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Freescale->HC(S)12
@@ -643,7 +643,7 @@ void YoungM_PulseRechargePowerAdjust(void)
    *  RelationalOperator: '<S11>/Compare'
    *  Sum: '<S5>/Add'
    */
-  if (((real32_T)Tavg - 40.0F > 0.0F) && ((real32_T)Tavg - 40.0F < 57.0F)) {
+  if (((real32_T)Tavg - 40.0F > -15.0F) && ((real32_T)Tavg - 40.0F < 57.0F)) {
     /* Lookup_n-D: '<S9>/linearizationSOF' incorporates:
      *  Inport: '<Root>/g_socValue'
      */
