@@ -362,7 +362,7 @@ void errorCellVoltageUV(void)//上报不处理,充电不上报,恢复
     //1级故障处理
     Can554Byte2.Bit.F1_cellUV1=Error[1];//to PC
 //	CutDisCurt70.Bit.F2_Cell_Under_Voltage3=Error[1];
-
+	
     //2级故障处理
 	Can554Byte0.Bit.F1_cellUV2=Error[2];//to PC
 	CutDisCurt50.Bit.F2_Cell_Under_Voltage2=Error[2];
@@ -375,8 +375,8 @@ void errorCellVoltageUV(void)//上报不处理,充电不上报,恢复
 	}
 	CutDisCurt0.Bit.F3_Cell_Under_Voltage1 = Error[3];
 	CutChaCurt0.Bit.F10_Cell_Under_Voltage1 = Error[3];
-
 }
+
 //******************************************************************************
 //* Function name:    errorCurrSensor
 //* Description:      电流传感器故障 
@@ -394,23 +394,26 @@ Bool errorCurrSensorIniatial(void) //上电前检测2次
         if(i==Level)
             Error[i]=1;
         
-    if(Error[1])
+    if(Error[1]){
         g_caution_Flag_3 |=0x02; //to PC      //电流传感器故障
+	}
+	
     //hardware_error2.Bit.F7_I_Ga_Err = 1;
-    /*if(g_BmsModeFlag == DISCHARGING) 
-    {
-        CutDisCurt0.Bit.F4_I_Sener_Err = 1;
-        CutChaCurt0.Bit.F4_I_Sener_Err = 1;
-        status_group2.Bit.BMS_PowerOff_Req = 2;//BMS高压下电请求 
-    }
-    else if(g_BmsModeFlag == FASTRECHARGING)
-        CutDCChaCurt0.Bit.F5_I_Sener_Err =1;
-    else if(g_BmsModeFlag == RECHARGING)
-        CutACChaCurt0.Bit.F5_I_Sener_Err =1;
-               
-    }*/    
+//	if(g_BmsModeFlag == DISCHARGING) 
+//	{
+//	    CutDisCurt0.Bit.F4_I_Sener_Err = 1;
+//	    CutChaCurt0.Bit.F4_I_Sener_Err = 1;
+//	    status_group2.Bit.BMS_PowerOff_Req = 2;//BMS高压下电请求 
+//	}
+//	else if(g_BmsModeFlag == FASTRECHARGING)
+//	    CutDCChaCurt0.Bit.F5_I_Sener_Err =1;
+//	else if(g_BmsModeFlag == RECHARGING)
+//	    CutACChaCurt0.Bit.F5_I_Sener_Err =1;
+//	           
+//	}   
     return 0;  
 }
+
 //******************************************************************************
 //* Function name:    errorCurrSensor
 //* Description:      温度传感器故障 
@@ -426,26 +429,28 @@ Bool errorCurrSensorIniatial(void) //上电前检测2次
 //******************************************************************************
 void errorCellUnbalance(void)//
 {
-    unsigned char Error[4]={0};
-    unsigned char i;
-    unsigned char Level=0;
+	unsigned char Error[4]={0};
+	unsigned char i;
+	unsigned char Level=0;
 
-    //上报故障等级     
-    Level=CellVolUnbalance_custom(g_highestCellVoltage,g_lowestCellVoltage);
-    for(i=1;i<4;i++) 
-       if(i==Level) 
+	//上报故障等级     
+	Level=CellVolUnbalance_custom(g_highestCellVoltage,g_lowestCellVoltage);
+	for(i=1;i<4;i++){
+       if(i==Level){
            Error[i]=1;
-       
-    Error_Group5.Bit.F4_Cell_Dif_V=Level;//整车CAN赋值 
-    //2级故障处理
-    Can554Byte1.Bit.F2_CellUnbalance2=Error[2];//to PC
-    CutDisCurt50.Bit.F3_CellUnbalance2=Error[2];
-    CutChaCurt50.Bit.F6_CellUnbalance2=Error[2];
-    CutDCChaCurt50.Bit.F6_CellUnbalance2=Error[2];
-    CutACChaCurt50.Bit.F5_CellUnbalance2=Error[2];
-
-     
+       }
+	}
+	   
+	Error_Group5.Bit.F4_Cell_Dif_V = Level;//整车CAN赋值 
+	
+	//2级故障处理
+	Can554Byte1.Bit.F2_CellUnbalance2		= Error[2];//to PC
+	CutDisCurt50.Bit.F3_CellUnbalance2		= Error[2];
+	CutChaCurt50.Bit.F6_CellUnbalance2		= Error[2];
+	CutDCChaCurt50.Bit.F6_CellUnbalance2	= Error[2];
+	CutACChaCurt50.Bit.F5_CellUnbalance2	= Error[2];
 }
+
 //******************************************************************************
 //* Function name:    errorTemUnbalance
 //* Description:    单体温度不均衡故障 
@@ -454,36 +459,39 @@ void errorCellUnbalance(void)//
 //******************************************************************************
 void errorTemUnbalance(void)//
 {
-    unsigned char Error[4]={0};
-    unsigned char i;
-    unsigned char Level;
-    //float Tmp_H,Tmp_L;
-    //Tmp_H=(float)g_highestTemperature;
-    //Tmp_L=(float)g_lowestTemperature;
-    
+	unsigned char Error[4]={0};
+	unsigned char i;
+	unsigned char Level;
+	//float Tmp_H,Tmp_L;
+	//Tmp_H=(float)g_highestTemperature;
+	//Tmp_L=(float)g_lowestTemperature;
+
     //上报故障等级
-    Level=CellTempUnbalance_custom(g_highestTemperature,g_lowestTemperature);
-    for(i=1;i<4;i++)
-        if(i==Level)
-            Error[i]=1;
-        
-    Error_Group5.Bit.F2_Cell_Dif_T=Level;//整车CAN赋值 
-    //1级故障处理
-    Can554Byte3.Bit.F3_tempUnbalance1=Error[1];//to PC
-    //CutDisCurt70.Bit.F3_tempUnbalance3=Error[3];
-    //CutChaCurt70.Bit.F3_tempUnbalance3=Error[3];
-    //CutDCChaCurt70.Bit.F2_tempUnbalance3=Error[3];
-    //CutACChaCurt70.Bit.F2_tempUnbalance3=Error[3];
-    
-    //2级故障处理
-    Can554Byte1.Bit.F3_tempUnbalance2=Error[2];//to PC
-    CutDisCurt50.Bit.F4_tempUnbalance2=Error[2];
-    CutChaCurt50.Bit.F3_tempUnbalance2=Error[2];
-    CutDCChaCurt50.Bit.F1_tempUnbalance2=Error[2];
-    CutACChaCurt50.Bit.F1_tempUnbalance2=Error[2];
-    
-    
+    Level = CellTempUnbalance_custom(g_highestTemperature,g_lowestTemperature);
+	
+    for(i=1;i<4;i++){
+       if(i==Level){
+           Error[i]=1;
+       }
+    }
+	
+    Error_Group5.Bit.F2_Cell_Dif_T = Level;//整车CAN赋值 
+	
+	//1级故障处理
+	Can554Byte3.Bit.F3_tempUnbalance1=Error[1];//to PC
+//	CutDisCurt70.Bit.F3_tempUnbalance3=Error[3];
+//	CutChaCurt70.Bit.F3_tempUnbalance3=Error[3];
+//	CutDCChaCurt70.Bit.F2_tempUnbalance3=Error[3];
+//	CutACChaCurt70.Bit.F2_tempUnbalance3=Error[3];
+
+	//2级故障处理
+	Can554Byte1.Bit.F3_tempUnbalance2		= Error[2];//to PC
+	CutDisCurt50.Bit.F4_tempUnbalance2		= Error[2];
+	CutChaCurt50.Bit.F3_tempUnbalance2		= Error[2];
+	CutDCChaCurt50.Bit.F1_tempUnbalance2	= Error[2];
+	CutACChaCurt50.Bit.F1_tempUnbalance2	= Error[2];
 }
+
 //******************************************************************************
 //* Function name:   errorCellTemperatureUT
 //* Description:     单体温度过低故障 
@@ -492,38 +500,41 @@ void errorTemUnbalance(void)//
 //******************************************************************************
 void errorCellTemperatureUT(void)//
 {
-    unsigned char i;
-    unsigned char Error[4]={0}; 
-    unsigned char Level=0;
-    float t;
-    //t= (float)g_lowestTemperature;
-    
-    //上报故障等级
-    Level=BatteryTemperatureLow_custom(g_lowestTemperature);
-    for(i=1;i<4;i++) 
-       if(i==Level) 
+	unsigned char i;
+	unsigned char Error[4]={0}; 
+	unsigned char Level=0;
+	float t;
+	//t= (float)g_lowestTemperature;
+
+	//上报故障等级
+	Level=BatteryTemperatureLow_custom(g_lowestTemperature);
+	for(i=1;i<4;i++){
+       if(i==Level){
            Error[i]=1;
-    
-    Error_Group5.Bit.F6_Cell_Under_T=Level;//整车CAN赋值
-    //1级故障处理
-    Can554Byte2.Bit.F6_cellUT1=Error[1];
-    
-    //2级故障处理
-    Can554Byte0.Bit.F6_cellUT2=Error[2];
-    
-     //3级故障处理
-    if(Error[3]) 
-    {
-        g_caution_Flag_1 |= 0x40;//to PC
-        if(g_BmsModeFlag == DISCHARGING)
-            status_group1.Bit.St_BMS =2;//BMS状态高压断开
+       }
     }
-    CutDisCurt0.Bit.F6_Under_Temp1=Error[3];
-    CutChaCurt0.Bit.F6_Under_Temp1=Error[3];
-    CutDCChaCurt0.Bit.F7_Under_Temp1=Error[3];
-    CutACChaCurt0.Bit.F7_Under_Temp1=Error[3];
-     
-} 
+    
+	Error_Group5.Bit.F6_Cell_Under_T=Level;//整车CAN赋值
+	//1级故障处理
+	Can554Byte2.Bit.F6_cellUT1=Error[1];
+
+	//2级故障处理
+	Can554Byte0.Bit.F6_cellUT2=Error[2];
+    
+	 //3级故障处理
+	if(Error[3]) 
+	{
+		g_caution_Flag_1 |= 0x40;//to PC
+		if(g_BmsModeFlag == DISCHARGING){
+			status_group1.Bit.St_BMS =2;//BMS状态高压断开
+		}
+	}
+	CutDisCurt0.Bit.F6_Under_Temp1		= Error[3];
+	CutChaCurt0.Bit.F6_Under_Temp1		= Error[3];
+	CutDCChaCurt0.Bit.F7_Under_Temp1	= Error[3];
+	CutACChaCurt0.Bit.F7_Under_Temp1	= Error[3];
+}
+
 //******************************************************************************
 //* Function name:    errorCellTemperatureOT
 //* Description:      单体温度过高故障  一级
@@ -532,34 +543,36 @@ void errorCellTemperatureUT(void)//
 //******************************************************************************
 void errorCellTemperatureOT(void)//
 {
-    unsigned char i;
-    unsigned char Error[4]={0}; 
-    unsigned char Level=0; 
-    float t;
-    //t= (float)g_highestTemperature;
+	unsigned char i;
+	unsigned char Error[4]={0}; 
+	unsigned char Level=0; 
+	float t;
+	//t= (float)g_highestTemperature;
+
+	//上报故障等级
+	Level=BatteryTemperatureHigh_custom(g_highestTemperature);
+
+	for(i=1;i<4;i++){
+       if(i==Level){
+           Error[i]=1;
+       }
+    }
     
-    //上报故障等级
-    Level=BatteryTemperatureHigh_custom(g_highestTemperature);
-    
-    for(i=1;i<4;i++) 
-       if(i==Level) 
-           Error[i]=1;    
-    
-    Error_Group2.Bit.F4_Temp_Over=Level;//整车CAN赋值
-    //1级故障处理
-    Can554Byte2.Bit.F5_cellOT1=Error[1];
-    //CutDisCurt70.Bit.F4_Over_Temp3=Error[1];
-    //CutChaCurt70.Bit.F4_Over_Temp3=Error[1];
-    //CutDCChaCurt70.Bit.F3_Over_Temp3=Error[1];
-    //CutACChaCurt70.Bit.F3_Over_Temp3=Error[1];
-    
-    
-    //2级故障处理
-    Can554Byte0.Bit.F5_cellOT2=Error[2];//to PC
-    CutDisCurt50.Bit.F5_Over_Temp2=Error[2];
-    CutChaCurt50.Bit.F4_Over_Temp2=Error[2];
-    CutDCChaCurt50.Bit.F2_Over_Temp2=Error[2];
-    CutACChaCurt50.Bit.F2_Over_Temp2=Error[2];
+	Error_Group2.Bit.F4_Temp_Over = Level;//整车CAN赋值
+
+	//1级故障处理
+	Can554Byte2.Bit.F5_cellOT1=Error[1];
+//	CutDisCurt70.Bit.F4_Over_Temp3=Error[1];
+//	CutChaCurt70.Bit.F4_Over_Temp3=Error[1];
+//	CutDCChaCurt70.Bit.F3_Over_Temp3=Error[1];
+//	CutACChaCurt70.Bit.F3_Over_Temp3=Error[1];
+	
+	//2级故障处理
+	Can554Byte0.Bit.F5_cellOT2=Error[2];//to PC
+	CutDisCurt50.Bit.F5_Over_Temp2=Error[2];
+	CutChaCurt50.Bit.F4_Over_Temp2=Error[2];
+	CutDCChaCurt50.Bit.F2_Over_Temp2=Error[2];
+	CutACChaCurt50.Bit.F2_Over_Temp2=Error[2];
     
     //3级故障处理
     if(Error[3])
@@ -572,7 +585,6 @@ void errorCellTemperatureOT(void)//
     CutChaCurt0.Bit.F5_Over_Temp1=Error[3];
     CutDCChaCurt0.Bit.F6_Over_Temp1=Error[3];
     CutACChaCurt0.Bit.F6_Over_Temp1=Error[3];
-    
 }
 
 //******************************************************************************
@@ -581,28 +593,27 @@ void errorCellTemperatureOT(void)//
 //* EntryParameter : None
 //* ReturnValue    : None
 //******************************************************************************
-void errorSOCLow(void)//
+void errorSOCLow(void)
 {
-    unsigned char i;
-    unsigned char Error[4]={0}; 
-    unsigned char Level=0;
-    float t;
-   
-    //上报故障等级
-    Level=socLow_custom(Can_g_socValue);
-    for(i=1;i<4;i++) 
+	unsigned char i;
+	unsigned char Error[4]={0}; 
+	unsigned char Level=0;
+	float t;
+
+	//上报故障等级
+	Level=socLow_custom(Can_g_socValue);
+	for(i=1;i<4;i++) 
        if(i==Level) 
            Error[i]=1;
        
-    Error_Group4.Bit.F0_SOC_Low=Level;//整车CAN赋值 
-    //1级故障处理
-    Can554Byte3.Bit.F1_SOCLow1=Error[1];
-    
-    //2级故障处理
-    Can554Byte1.Bit.F1_SOCLow2=Error[2];
-    
-     
+	Error_Group4.Bit.F0_SOC_Low=Level;//整车CAN赋值 
+	//1级故障处理
+	Can554Byte3.Bit.F1_SOCLow1=Error[1];
+
+	//2级故障处理
+	Can554Byte1.Bit.F1_SOCLow2=Error[2];
 }
+
 //******************************************************************************
 //* Function name:    errorLowIsolation
 //* Description:      绝缘电阻过低故障 
@@ -611,43 +622,43 @@ void errorSOCLow(void)//
 //******************************************************************************
 void errorLowIsolation(void) 
 {
-    unsigned char i;
-    unsigned char Error[4]={0};
-    unsigned char Level=0; 
-    float LowInsolation;
-    if(Rn_Vpn_Value<=Rp_Vpn_Value)
+	unsigned char i;
+	unsigned char Error[4]={0};
+	unsigned char Level=0; 
+	float LowInsolation;
+	
+	if(Rn_Vpn_Value <= Rp_Vpn_Value)
         LowInsolation = Rn_Vpn_Value;
     else
         LowInsolation = Rp_Vpn_Value;
     
-    Level=IsolationLow_custom(LowInsolation);
-    for(i=1;i<4;i++)
+	Level=IsolationLow_custom(LowInsolation);
+	for(i=1;i<4;i++)
       if(i==Level)
         Error[i]=1;
       
     Error_Group1.Bit.F6_Ins_Err=Level;//整车CAN赋值
     if(Level>=1)
-        Error_Group6.Bit.F7_Chg_Ins_Low=1;//充电绝缘过低报警
-            
+        Error_Group6.Bit.F7_Chg_Ins_Low = 1;//充电绝缘过低报警
+	
     //1级故障处理
     Can554Byte2.Bit.F4_insulationLow1=Error[1];//to PC
-    //CutDCChaCurt70.Bit.F4_Low_Isolation3=Error[1]; //没有70降了，只上报不处理 
-    //CutACChaCurt70.Bit.F4_Low_Isolation3=Error[1];
-
-//    CutACChaCurt0.Bit.F8_Low_Isolation1=Error[2];//慢充不检测
+//	CutDCChaCurt70.Bit.F4_Low_Isolation3=Error[1]; //没有70降了，只上报不处理 
+//	CutACChaCurt70.Bit.F4_Low_Isolation3=Error[1];
+	
+//	CutACChaCurt0.Bit.F8_Low_Isolation1=Error[2];//慢充不检测
     
     //2级故障处理
     Can554Byte0.Bit.F4_insulationLow2=Error[2];//to PC
     CutDCChaCurt50.Bit.F3_Low_Isolation2=Error[2];
-//    CutACChaCurt50.Bit.F3_Low_Isolation2=Error[2];
-   
+//	CutACChaCurt50.Bit.F3_Low_Isolation2=Error[2];
+	
     //3级故障处理
     if(Error[3])
         g_caution_Flag_1 |= 0x10;//to PC
-     CutDCChaCurt0.Bit.F8_Low_Isolation1=Error[3];
-
-     
+	CutDCChaCurt0.Bit.F8_Low_Isolation1=Error[3];
 }
+
 //******************************************************************************
 //* Function name:    DCChangerComError
 //* Description:      与直流充电机通信故障（包括超时故障）
@@ -656,12 +667,12 @@ void errorLowIsolation(void)
 //******************************************************************************
 void DCChangerComError(void)
 {
-    if(OverTimeState==1)
-    {
-        CutDCChaCurt0.Bit.F1_Communication_With_Charger=1;//故障动作
-        g_caution_Flag_2 |=0x80; //for 内部CAN
-        Error_Group3.Bit.F1_V_CAN_Err =1; //整车CAN
-    }
+	if(OverTimeState==1)
+	{
+		CutDCChaCurt0.Bit.F1_Communication_With_Charger=1;//故障动作
+		g_caution_Flag_2 |=0x80; //for 内部CAN
+		Error_Group3.Bit.F1_V_CAN_Err =1; //整车CAN
+	}
 }
 //******************************************************************************
 //* Function name:    ACChangerComError
@@ -672,13 +683,12 @@ void DCChangerComError(void)
 void ACChangerComError(void)
 {
     ACCOverTime++;
-    if(ACCOverTime>=30)//30s没有接收到充电机报文
+    if(ACCOverTime >= 30)//30s没有接收到充电机报文
     {
         CutACChaCurt0.Bit.F1_Communication_With_Charger=1;
         g_caution_Flag_2 |=0x10; //for 内部CAN
         Error_Group3.Bit.F1_V_CAN_Err =1; //整车CAN
     }
-    
 }
 //******************************************************************************
 //* Function name:    VCUComError
@@ -688,15 +698,15 @@ void ACChangerComError(void)
 //******************************************************************************
 void VCUComError(void)
 {
-    VCUOverTime++;
-    if(VCUOverTime>=30)//30s没有接收到充电机报文
-    {
-        CutDisCurt0.Bit.F7_VCU_Communiction=1;
-        CutChaCurt0.Bit.F7_VCU_Communiction=1;
-        //g_caution_Flag_2 |=0x10; //for 内部CAN
-        Error_Group3.Bit.F1_V_CAN_Err =1; //整车CAN
-            status_group1.Bit.St_BMS =2;//BMS状态高压断开
-    }
+	VCUOverTime++;
+	if(VCUOverTime>=30)//30s没有接收到充电机报文
+	{
+		CutDisCurt0.Bit.F7_VCU_Communiction=1;
+		CutChaCurt0.Bit.F7_VCU_Communiction=1;
+		//g_caution_Flag_2 |=0x10; //for 内部CAN
+		Error_Group3.Bit.F1_V_CAN_Err =1; //整车CAN
+		status_group1.Bit.St_BMS =2;//BMS状态高压断开
+	}
 }
 //******************************************************************************
 //* Function name:    innerCommOT3
@@ -727,21 +737,23 @@ void innerCommOT3(void)
 //******************************************************************************
 void Charge_Check(void) 
 {
-    static unsigned char Check_Num=0;
-    if(((g_BmsModeFlag == FASTRECHARGING)||(g_BmsModeFlag == RECHARGING))&&(g_systemCurrent > 10)) 
-    {
-        Check_Num++;
-        if(Check_Num>=100) 
-        {
-            ACCha_Flag_BST=1;
-            CutDCChaCurt0.Bit.F9_Charge_Count1=1;
-            CutACChaCurt0.Bit.F9_Charge_Count1=1;
-            Can554Byte3.Bit.F4_ChargeCurDirError = 1;
-            if(Check_Num>=250) //如果发生了100次，该算法要求必须下电。
-                Check_Num=101;
+	static unsigned char Check_Num=0;
+	
+	if(((g_BmsModeFlag == FASTRECHARGING)||(g_BmsModeFlag == RECHARGING))&&(g_systemCurrent > 10)) 
+	{
+		Check_Num++;
+		if(Check_Num>=100) 
+		{
+			ACCha_Flag_BST=1;
+			CutDCChaCurt0.Bit.F9_Charge_Count1=1;
+			CutACChaCurt0.Bit.F9_Charge_Count1=1;
+			Can554Byte3.Bit.F4_ChargeCurDirError = 1;
+			if(Check_Num>=250) //如果发生了100次，该算法要求必须下电。
+				Check_Num=101;
         }
     }
 }
+
 //******************************************************************************
 //* Function name:    CHG_SocketOT
 //* Description:      充电插座过温 
@@ -754,30 +766,31 @@ void CHG_SocketOT(void)
     unsigned char Error[4]={0}; 
     unsigned char Level=0;
     float tmax;
-    if(DCTem1>=DCTem2)
-        tmax=DCTem1;
+    if(DCTem1 >= DCTem2)
+        tmax = DCTem1;
     else
-        tmax=DCTem2;
+        tmax = DCTem2;
     
    
     //上报故障等级
-    if(tmax>=0) //必须大于0
-        Level=ChargeSocketOverTemp_custom((unsigned char)tmax);
-    else 
-        Level=0;
+    if(tmax >= 0){ //必须大于0
+        Level = ChargeSocketOverTemp_custom((unsigned char)tmax);
+    }
+	else{ 
+        Level = 0;
+	}
+	
     for(i=1;i<4;i++) 
-       if(i==Level) 
-           Error[i]=1;
+       if(i == Level) 
+           Error[i] = 1;
        
-    Error_Group0.Bit.F2_Ele_Relay_Con=Level;//整车CAN赋值     
+    Error_Group0.Bit.F2_Ele_Relay_Con = Level;//整车CAN赋值     
 
     ///////2级故障处理
-    
-    CutDCChaCurt50.Bit.F5_CHG_Socket2=Error[2];
+    CutDCChaCurt50.Bit.F5_CHG_Socket2 = Error[2];
     
     /////3级故障处理 
-    CutDCChaCurt0.Bit.F12_CHG_Socket1=Error[3];
-    
+    CutDCChaCurt0.Bit.F12_CHG_Socket1 = Error[3];
 }
 //******************************************************************************
 //* Function name:    Fire_Warning
