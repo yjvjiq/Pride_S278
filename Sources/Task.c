@@ -106,57 +106,57 @@ void TaskSocProcess(void)
     static float ahCharge1A=0;
     static float ahDischarge1A=0;
     static unsigned char DCfinish=0;
-   
-	  unsigned char i=0;
-	  float ft=0;
+
+    unsigned char i=0;
+    float ft=0;
 	  	  	  
-		I2CReadDate();  //读取系统时间
-			         	
-		if(CurrentTime[0]!=g_oldTime[0])   //每秒钟计算一次SOC的值
-		{
-				g_oldTime[0] = CurrentTime[0];//秒
-			  SocIntegral();//计算积分得到的SOC值	   
-			  g_energyOfUsed = 0;	    		
-		    StoreSocRealvalue();//每秒保存SOC值
-		    //if(g_errorRecordRead_flag==0)
-		        //StoreSysVariable();//for test
-		         		    
+    I2CReadDate();  //读取系统时间
+
+    if(CurrentTime[0]!=g_oldTime[0])   //每秒钟计算一次SOC的值
+    {
+        g_oldTime[0] = CurrentTime[0];//秒
+        SocIntegral();//计算积分得到的SOC值	   
+        g_energyOfUsed = 0;	    		
+        StoreSocRealvalue();//每秒保存SOC值
+        //if(g_errorRecordRead_flag==0)
+            //StoreSysVariable();//for test
+
     } //end of 每秒钟
 				
-		if(CurrentTime[1]!=g_oldTime[1])// 每分钟SOC值赋给系统参数，作为保存或通信
-	  {
-			  g_oldTime[1] = CurrentTime[1];//分
+    if(CurrentTime[1]!=g_oldTime[1])// 每分钟SOC值赋给系统参数，作为保存或通信
+    {
+        g_oldTime[1] = CurrentTime[1];//分
+
+        g_sysPara[PARA_SOC_VALUE] = g_socValue;
+
+        if((g_BmsModeFlag == DISCHARGING)&&(StoreAHState==1))
+        {
+            ft=(StoreAHSOC-g_socValue)*SetCap;//计算累积充放电AH容量
+            if(ft>1)
+            {			        
+                dischargeAH += (unsigned int)ft;
+                StoreAHSOC=First_g_socValue;
+            }
+        } 
+        else if((g_BmsModeFlag == FASTRECHARGING)&&((StoreAHState==1)))
+        {
+            ft=(g_socValue-StoreAHSOC)*SetCap;//计算累积充放电AH容量
+            if(ft>1)
+            {			        
+                chargeAH += (unsigned int)ft;
+                StoreAHSOC=First_g_socValue;
+            }
+        }
 			  
-			  g_sysPara[PARA_SOC_VALUE] = g_socValue;
-			  
-			  if((g_BmsModeFlag == DISCHARGING)&&(StoreAHState==1))
-			  {
-			      ft=(StoreAHSOC-g_socValue)*SetCap;//计算累积充放电AH容量
-			      if(ft>1)
-			      {			        
-			          dischargeAH += (unsigned int)ft;
-			          StoreAHSOC=First_g_socValue;
-			      }
-			  } 
-			  else if((g_BmsModeFlag == FASTRECHARGING)&&((StoreAHState==1)))
-			  {
-			      ft=(g_socValue-StoreAHSOC)*SetCap;//计算累积充放电AH容量
-			      if(ft>1)
-			      {			        
-			          chargeAH += (unsigned int)ft;
-			          StoreAHSOC=First_g_socValue;
-			      }
-			  }
-			  
-			  //First_g_socValue=StoreAHSOC;      
-			   
-			  //保存状态数据
-			  if(g_errorRecordRead_flag==0)
-		        StoreSysVariable();//每分钟保存故障记录信息
-		    if(StoreAHState==1)    	
-		        StoreChargeDischargeAH();//保存累积充放电总容量	  
-		    sendBMSIDtoBMU(); //发送BMS版本ID号给BMU
-			  sendRealtimeToBMU(); //发送BMS系统时间给BMU
+        //First_g_socValue=StoreAHSOC;      
+
+        //保存状态数据
+        if(g_errorRecordRead_flag==0)
+            StoreSysVariable();//每分钟保存故障记录信息
+        if(StoreAHState==1)    	
+            StoreChargeDischargeAH();//保存累积充放电总容量	  
+        sendBMSIDtoBMU(); //发送BMS版本ID号给BMU
+        sendRealtimeToBMU(); //发送BMS系统时间给BMU
     }
 }
 //**********************************************************************

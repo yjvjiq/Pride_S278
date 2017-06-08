@@ -816,7 +816,8 @@ void Fire_Warning(void)
         if(g_BmsModeFlag == DISCHARGING)
             status_group1.Bit.St_BMS =2;//BMS状态高压断开
     }
-} 
+}
+
 //******************************************************************************
 //* Function name:    PowerSupplyError
 //* Description:      供电电源异常

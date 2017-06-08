@@ -110,7 +110,6 @@ void BMU_initial(void)
         }  
         _FEED_COP();   //2s内不喂内狗，则系统复位 
     }
-
 }
 //******************************************************************************
 //* Function name:   BMU_Processure
@@ -123,15 +122,17 @@ void BMU_Processure(void)
     U32 framID;
     U16 i,boxNumber=0;
 	   
-    if((Int_Flag&0x08)==0x08) //if received a frame message, then deal with it.
+    if((Int_Flag & 0x08) == 0x08) //if received a frame message, then deal with it.
     {
         Int_Flag &= 0xf7;//clear the interrupt flag.
           			  		
         g_group = 0;  		
 
         framID = g_mboxID;      
-        g_group = framID&0x000000ff;
-        g_group--;
+        g_group = framID & 0x000000ff;
+        if(g_group != 0){
+            g_group--;
+        }
 		
         /*
         framID = framID>>4;
@@ -148,7 +149,7 @@ void BMU_Processure(void)
                 //else
                 recogBMStoBMUflag = 1; //recognise ok.
                 break;	  
-            case 0x018FF13://battery config msg1:the number of 6802, the number of cell and temperature channals;CC2
+            case 0x018FF13://cell config msg1(CC1):the number of 6802, the number of cell_v and cell_T channals;
                 switch(g_group) 
                 {
                     case 0:
@@ -450,10 +451,10 @@ unsigned char bmuProcess2(void)//
     static U8   TemLossTime=0;
 	
     U8          cnt = 0;
-    U8			pack_cnt = 0;
-    U8			cell_cnt = 0;
+    U8          pack_cnt = 0;
+    U8          cell_cnt = 0;
     
-    if((g_circleFlag==G_BMU_CIRCLE_FLAG)&&(g_configFlag==G_BMU_CIRCLE_FLAG))//如果收到所有的报文，则处理    
+    //if((g_circleFlag==G_BMU_CIRCLE_FLAG)&&(g_configFlag==G_BMU_CIRCLE_FLAG))//如果收到所有的报文，则处理    
     {    
         g_circleFlag=0; //配置信息1分钟才发一次，所以不能在这里把它的标志位清掉。 		  
 

@@ -215,9 +215,8 @@ void bmsToPcInfo554(void)
     mg.data[0]= Can554Byte0.byte; 
     mg.data[1]= Can554Byte1.byte; 
     mg.data[2]= Can554Byte2.byte;
-	  mg.data[3]= Can554Byte3.byte;
-	  
-
+    mg.data[3]= Can554Byte3.byte;
+    
     mg.data[4]= (DCTem1+48);
     mg.data[5]= (DCTem2+48);
     

@@ -182,7 +182,7 @@ void SendMes(void)
     //if(1 == VCU_CellRequest.Bit.CellVolReq )     //0x1c15D0D2
     
         PIT_70ms_Counter0++; //500ms
-        if(PIT_70ms_Counter0>10)  //100ms发一帧
+        if(PIT_70ms_Counter0 > 10)  //100ms发一帧
         {
             BMS_To_VCU_BatCellVolData();
             /*
@@ -254,14 +254,14 @@ interrupt void RTI_ISR(void)      //1ms中断一次
     if(tmr_p4<600)        
         if((stateCode ==13)||(stateCode==83)||(stateCode==143))  
             tmr_p4++;
-    /*if(tmr_p5<600)
-        if((stateCode ==46)||(stateCode==126)||(stateCode==186))  
-            tmr_p5++;
-    if(tmr_p6<600)        
-        if((stateCode ==40)||(stateCode==120)||(stateCode==180))
-            tmr_p6++;
-            */
-    if(Error10S<15000) 
+//	if(tmr_p5<600)
+//		if((stateCode ==46)||(stateCode==126)||(stateCode==186))  
+//			tmr_p5++;
+//	if(tmr_p6<600)        
+//		if((stateCode ==40)||(stateCode==120)||(stateCode==180))
+//			tmr_p6++;
+    
+    if(Error10S < 15000){
         if((HighVolPowerOff==1)&&(stateCode ==30)//行车下高压故障
         ||((PantographOff==1)&&(stateCode ==110)))//受电弓充电下高压故障
         {
@@ -274,19 +274,29 @@ interrupt void RTI_ISR(void)      //1ms中断一次
             Error10S=0;
             E10SOverFlag=0;
         }
+    }
+	
     if((E10SOverFlag)&&(Error20S<21000))//10s延时后的20S再延时
+    {
         Error20S++;            
-    if(Error5S<10000) 
-        if((OffState==1)&&(stateCode ==170))//快充下高压故障
-            Error5S++;
-         
+    }
+	
+	if(Error5S<10000){
+		if((OffState==1)&&(stateCode ==170)){	//快充下高压故障
+			Error5S++;
+		}
+		
         //if(HighVolPowerOff==1)
          //   if(||(stateCode ==170))
          //       Error5S++;
+	}
         
-    if((g_systemCurrent>-500)&&(g_systemCurrent<500))  //防止负数溢出
-        g_energyOfUsed =g_energyOfUsed+ g_systemCurrent*0.0011+0.0000042;// // 1m秒积分一次
-    //turnOffLED0(); 	     // for debug 
+    if((g_systemCurrent > -500)&&(g_systemCurrent < 500))  //防止负数溢出
+    {
+		g_energyOfUsed =g_energyOfUsed+ g_systemCurrent*0.0011+0.0000042;// // 1m秒积分一次
+    }
+	
+	//turnOffLED0(); 	     // for debug 
     // clear RTIF bit 
     CRGFLG = 0x80; 
 }
@@ -343,18 +353,20 @@ interrupt void CAN0_RECEIVE_ISR(void)   //车载 /外部CAN / 500Hz
         return ;
    //msgCan0RxID = (unsigned int)(CAN0RXIDR0<<3) |       //standard
    //         (unsigned char)(CAN0RXIDR1>>5); 
+   
    pp = (unsigned long)CAN0RXIDR0<<15;  
    pp1 = (unsigned long)((CAN0RXIDR1>>5)&0x07)<<15;                              
+
    msgCan0RxID = ((unsigned long)pp<<6) | //expanded
               (pp1<<3) |
               ((unsigned long)(CAN0RXIDR1&0x07)<<15)|
               ((unsigned long)CAN0RXIDR2<<7) | 
               ((unsigned long)CAN0RXIDR3>>1);
    
-    for(i=0;i<8;i++) 
+    for(i=0;i<8;i++){ 
         msgData[i] = *((&CAN0RXDSR0)+i);
-     
-                     
+    }
+	
     switch(msgCan0RxID) 
     {   
         case 0x1801D2D0://
@@ -384,13 +396,9 @@ interrupt void CAN0_RECEIVE_ISR(void)   //车载 /外部CAN / 500Hz
             VCUSpeed = buffer+msgData[1];
             VehicleSpeed = VCUSpeed*0.00390625;
             break;    
-        
-            
-            
           
-           ///////////// 整车CAN接收受电弓报文 ///////////////
-
-            case 0x1826f456:
+		    ///////////// 整车CAN接收受电弓报文 ///////////////
+		case 0x1826f456:
         //if((fChg2bmsbyte[0]==0x01)&&(fChg2bmsbyte[1]==0x01)&&(fChg2bmsbyte[2]==0))
         //{                    
             DCStartState=2;//新国标开始的标志 
@@ -399,6 +407,7 @@ interrupt void CAN0_RECEIVE_ISR(void)   //车载 /外部CAN / 500Hz
                 CHMStep=0x01;
         //}
             break;
+			
         case 0x1801f456:
             CRMOverTimeBefore60s = 0;
             if( msgData[0]==0x00)
@@ -794,6 +803,7 @@ interrupt void CAN2_RECEIVE_ISR(void)   //内部  BMU   250Hz
     // Checks for received messages
     static unsigned char FireSave=0;
     static unsigned char saveCounter=0; 
+    
     if(!(CAN2RFLG&0x01))
     {
         CAN2RFLG = 0x01;     
@@ -809,15 +819,12 @@ interrupt void CAN2_RECEIVE_ISR(void)   //内部  BMU   250Hz
                ((unsigned long)CAN2RXIDR2<<7) | 
                ((unsigned long)CAN2RXIDR3>>1);
    
-    for(i=0;i<8;i++)
+    for(i=0;i<8;i++){
         g_mboxData[0][i]= *((&CAN2RXDSR0)+i);
-  
+    }
+	
     switch(g_mboxID)//
     {
-        ///////
-        
-       
-            
         case 0x000c0123://SBMS信息1
         
             SBMSOverTime=0;//超时计时标志位清0
@@ -843,13 +850,13 @@ interrupt void CAN2_RECEIVE_ISR(void)   //内部  BMU   250Hz
                     Error_Group0.Bit.F0_Fire_Warning=g_mboxData[0][0];//火灾预警信息
                 }
             } 
-            else
+            else{
                 saveCounter=0;
-            
-            InsRelayState=g_mboxData[0][1];   //绝缘控制继电器状态
+            }
+			
+            InsRelayState = g_mboxData[0][1];   //绝缘控制继电器状态
             
             break;
-     
         case 0xC01EE3F:
             if((g_mboxData[0][0]==0x55)&&(g_mboxData[0][1]==0xAA))
             {
@@ -861,73 +868,60 @@ interrupt void CAN2_RECEIVE_ISR(void)   //内部  BMU   250Hz
         case 0xC01EE27: //上下电调试
             if(g_mboxData[0][2]==0x55)//正极继电器闭合
             {
-                //闭合总正    
-        	      TurnOn_INZK();//吸合正极接触器
-        	 //     state_group1.Bit.St_P_Relay=1;//to vcu
-        	      
+				//闭合总正    
+				TurnOn_INZK();//吸合正极接触器
+//				state_group1.Bit.St_P_Relay=1;//to vcu
             }              
             if(g_mboxData[0][2]==0xaa)  
             { 
                 TurnOff_INZK();//断开正极接触器
-          //      state_group1.Bit.St_P_Relay=1;//to vcu  
-                                          
+//				state_group1.Bit.St_P_Relay=1;//to vcu  
             }
             bmsToPcInfo552(); //发送继电器状态，完成，BMS保持当前状态  
             break;
-
         case 0xC01EE3a: //预充
             if(g_mboxData[0][2]==0X55) 
             {
-                   
-        	      TurnOn_INBK();//吸合预充接触器
+				TurnOn_INBK();//吸合预充接触器
             }
             if(g_mboxData[0][2]==0xAA)  
             { 
                 TurnOff_INBK();//断开预充接触器
-                
             }        
             break;
         case 0xC01EE3b://加热
             if(g_mboxData[0][2]==0x55) 
             {   
-        	      TurnOn_INHK();//吸合加热接触器        	      
-        	      
+        	      TurnOn_INHK();//吸合加热接触器 
             }
             if(g_mboxData[0][2]==0xAA)  
             { 
                 TurnOff_INHK();//断开加热接触器
-                
             } 
             break;
         case 0xC01EE3d: //充电
             if(g_mboxData[0][2]==0x55) 
             {   
-        	      TurnOn_INA2K();//吸合充电接触器
-        	      
-        	      
+				TurnOn_INA2K();//吸合充电接触器
             }
             if(g_mboxData[0][2]==0xAA)  
             { 
                 TurnOff_INA2K();//断开充电接触器
-                
             } 
-            break;        
+            break;
         case 0xC01EE3e: //负极继电器控制0xC01EE3a         
             if(g_mboxData[0][2]==0x55) 
             {
                 //闭合总负    
-        	      TurnOn_INFK();//吸合负极接触器
-        	 //     state_group1.Bit.St_N_Relay=1;//to vcu 
-        	      
+				TurnOn_INFK();//吸合负极接触器
+//				state_group1.Bit.St_N_Relay=1;//to vcu 
             }
             if(g_mboxData[0][2]==0xaa)  
             { 
                 TurnOff_INFK();//断开负极接触器
-         //       state_group1.Bit.St_N_Relay=0;//to vcu
-                
+//				state_group1.Bit.St_N_Relay=0;//to vcu
             }
             break;
-        
         case 0xC0777: //清除充放电容量
             DBuffer[0]=0;
             DBuffer1[0]=0;
@@ -938,13 +932,10 @@ interrupt void CAN2_RECEIVE_ISR(void)   //内部  BMU   250Hz
             DisableInterrupts;
             break;
        case 0xC0888:
-       
             ReadChargeDischargeAH();//读取数据
             //StoreChargeTime();
             ReadAHRecord();//发送数据0xC0AAA
-                       
             break;
-            
         case 0xC0999:
             //StoreChargeTime();
             break;
@@ -955,7 +946,7 @@ interrupt void CAN2_RECEIVE_ISR(void)   //内部  BMU   250Hz
                 g_mboxData[0][0]=0;
                 BMNVPNflag.Bit.flag4=1;
             }
-            if(g_mboxData[0][0]==35) 
+            if(g_mboxData[0][0]==35)
             { 
                 g_mboxData[0][0]=0;
                 BMNVPNflag.Bit.flag6=1;
@@ -998,17 +989,17 @@ interrupt void CAN2_RECEIVE_ISR(void)   //内部  BMU   250Hz
             ARMCOP = 0x00;        //feed 0 to watch dog for reset 
             BootState = 1;
             break;
-        case 0x0c14ee00:      //读取时钟
-        case 0xc01ee14:       //设置时钟
-        case 0xC01ee15:       //SOC设置
-        case 0xC01ef15:       //设置显示SOC
-        case 0xC01ee16:       //剩余容量
-        case 0xC01ee17:        //BMU个数
-        case 0xC01ee18:        //软件版本号
-        case 0xC01EE28:         //接收系统参数修正信息from 上位机
-        case 0xC01EE29:         //接收系统参数修正信息from 上位机
-        case 0xC01EE2a:         //接收系统参数修正信息from 上位机
-        case 0xC01EE2b:         //接收系统参数修正信息from 上位机
+        case 0x0c14ee00:    //读取时钟
+        case 0xc01ee14:     //设置时钟
+        case 0xC01ee15:     //SOC设置
+        case 0xC01ef15:     //设置显示SOC
+        case 0xC01ee16:     //剩余容量
+        case 0xC01ee17:     //BMU个数
+        case 0xC01ee18:     //软件版本号
+        case 0xC01EE28:     //接收系统参数修正信息from 上位机
+        case 0xC01EE29:     //接收系统参数修正信息from 上位机
+        case 0xC01EE2a:     //接收系统参数修正信息from 上位机
+        case 0xC01EE2b:     //接收系统参数修正信息from 上位机
         case 0xC01EE26:
             ParameterSetting();
             break;
@@ -1019,7 +1010,6 @@ interrupt void CAN2_RECEIVE_ISR(void)   //内部  BMU   250Hz
     }//end of switch      	 		
     // Clear RXF flag (buffer ready to be read)
     CAN2RFLG = 0x01;       
-  
 }
 #pragma CODE_SEG DEFAULT
 

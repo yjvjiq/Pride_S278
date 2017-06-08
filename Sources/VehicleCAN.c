@@ -80,29 +80,28 @@ STATUS_GROUP4 status_group4;
 //*************************************************************************************
 void BMS_To_VCU_BasicMsg0(void)
 {
-    
     struct can_msg mg;
     unsigned char tt=100;
     unsigned int buff;
-    
+
     mg.RTR= FALSE;  
     mg.len = 8;
     mg.prty = 0;
-	  
-	  buff = (unsigned int)(SYS_KWH*10); //电池组系统总能量138.2kwh=240*3.2*180
-	  mg.data[0] = buff;   //低字节 
-	  mg.data[1] = buff>>8;//高字节    
-	  
-	  buff = CELL_NUM;	//电池节数
-	  mg.data[2] = buff;   //低字节 
-	  mg.data[3] = buff>>8;//高字节 
-	  	  
-	  mg.data[4] = 0x00;  //    
-	  mg.data[5] = 0x00;  //    
-	 
+
+    buff = (unsigned int)(SYS_KWH*10); //电池组系统总能量138.2kwh=240*3.2*180
+    mg.data[0] = buff;   //低字节 
+    mg.data[1] = buff>>8;//高字节    
+
+    buff = CELL_NUM;	//电池节数
+    mg.data[2] = buff;   //低字节 
+    mg.data[3] = buff>>8;//高字节 
+
+    mg.data[4] = 0x00;  //    
+    mg.data[5] = 0x00;  //    
+
     mg.data[6] = 0x00;  //
     mg.data[7] = 0x00;  //
-     
+
     mg.id= 0x1825D0D2;
     while((!MSCAN0SendMsg(mg))&&(tt>0))
         tt--; 
@@ -116,32 +115,31 @@ void BMS_To_VCU_BasicMsg0(void)
 //*************************************************************************************
 void BMS_To_VCU_BasicMsg1(void)
 {
-    
     struct can_msg mg;
     unsigned char tt=100;
     unsigned int buff;
-    
+
     mg.RTR= FALSE;  
     mg.len = 8;
     mg.prty = 0;
-	  
-	  buff = (unsigned int)(HIGHEST_ALLOWED_CHARGE_V*10); //最高允许充电总电压
-	  mg.data[0] = buff;   //低字节 
-	  mg.data[1] = buff>>8;//高字节    
-	  
-	  buff = (unsigned int)(SYS_NOMINAL_V*10);	//电池组标称电压平台
-	  mg.data[2] = buff;   //低字节 
-	  mg.data[3] = buff>>8;//高字节 
-	  	  
-	  buff = (unsigned int)(HIGHEST_ALLOWED_CHARGE_T+40); //最高允许工作温度  
-	  mg.data[4] = buff;   //低字节    
-	  
-	  buff = (unsigned int)(LOWEST_ALLOWED_WORK_T+40); //最低允许工作温度
-	  mg.data[5] = buff;   //低字节    
-	 
+
+    buff = (unsigned int)(HIGHEST_ALLOWED_CHARGE_V*10); //最高允许充电总电压
+    mg.data[0] = buff;   //低字节 
+    mg.data[1] = buff>>8;//高字节    
+
+    buff = (unsigned int)(SYS_NOMINAL_V*10);	//电池组标称电压平台
+    mg.data[2] = buff;   //低字节 
+    mg.data[3] = buff>>8;//高字节 
+
+    buff = (unsigned int)(HIGHEST_ALLOWED_CHARGE_T+40); //最高允许工作温度  
+    mg.data[4] = buff;   //低字节    
+
+    buff = (unsigned int)(LOWEST_ALLOWED_WORK_T+40); //最低允许工作温度
+    mg.data[5] = buff;   //低字节    
+
     mg.data[6] = 0x00;                  //预留
     mg.data[7] = BMU_NUMBER;                  //LECU个数 位BMU个数
-     
+
     mg.id= 0x1826D0D2;
     while((!MSCAN0SendMsg(mg))&&(tt>0))
         tt--; 
@@ -155,30 +153,29 @@ void BMS_To_VCU_BasicMsg1(void)
 //*************************************************************************************
 void BMS_To_VCU_BasicMsg2(void)
 {
-    
     struct can_msg mg;
     unsigned char tt=100;
     unsigned int buff;
-    
+
     mg.RTR= FALSE;  
     mg.len = 8;
     mg.prty = 0;
-	  
-	  buff = (unsigned int)(HIGHEST_CELL_VOL*1000); // 单体电池最高保护电压
-	  mg.data[0] = buff;   //低字节 
-	  mg.data[1] = buff>>8;//高字节    
-	  
-	  buff = (unsigned int)(LOWEST_CELL_VOL*1000);	//单体电池最低保护电压
-	  mg.data[2] = buff;   //低字节 
-	  mg.data[3] = buff>>8;//高字节 
-	  	  
-	  buff = (unsigned int)(SYS_NOMINAL_AH*10); //电池组标称安时数
-	  mg.data[4] = buff;   //低字节 
-	  mg.data[5] = buff>>8;   //低字节     
-	  
+
+    buff = (unsigned int)(HIGHEST_CELL_VOL*1000); // 单体电池最高保护电压
+    mg.data[0] = buff;   //低字节 
+    mg.data[1] = buff>>8;//高字节    
+
+    buff = (unsigned int)(LOWEST_CELL_VOL*1000);	//单体电池最低保护电压
+    mg.data[2] = buff;   //低字节 
+    mg.data[3] = buff>>8;//高字节 
+      
+    buff = (unsigned int)(SYS_NOMINAL_AH*10); //电池组标称安时数
+    mg.data[4] = buff;   //低字节 
+    mg.data[5] = buff>>8;   //低字节     
+
     mg.data[6] = g_SOH*100; //SOH值   
     mg.data[7] = CELL_TYPE|(COOL_TYPE<<4);                  //电池类型磷酸铁锂 3 自然冷却
-     
+
     mg.id= 0x1827D0D2;
     while((!MSCAN0SendMsg(mg))&&(tt>0))
         tt--; 
@@ -192,31 +189,30 @@ void BMS_To_VCU_BasicMsg2(void)
 //*************************************************************************************
 void BMS_To_VCU_CHGMsg1(void)
 {
-    
     struct can_msg mg;
     unsigned char tt=100;
     unsigned int buff;
-    
+
     mg.RTR= FALSE;  
     mg.len = 8;
     mg.prty = 0;
-	  
-	  buff = (unsigned int)(g_systemVoltage*10);
-	  mg.data[0]= (unsigned char)buff;         // 充电电压低字节
+
+    buff = (unsigned int)(g_systemVoltage*10);
+    mg.data[0]= (unsigned char)buff;         // 充电电压低字节
     mg.data[1]= buff>>8;                     // 充电电压高字节
-    
-	  buff = (unsigned int)((g_systemCurrent+400)*10);
-  	mg.data[2]= (unsigned char)buff;//充电电流低字节 
+
+    buff = (unsigned int)((g_systemCurrent+400)*10);
+    mg.data[2]= (unsigned char)buff;//充电电流低字节 
     mg.data[3]= buff>>8;            //充电电流高字节 
-	                                       
-	  buff = (unsigned int)(DC_ChargeTime);
-	  mg.data[4] = buff;   //累计充电时间低字节  
-	  mg.data[5] = buff>>8;  
-	 
+                                       
+    buff = (unsigned int)(DC_ChargeTime);
+    mg.data[4] = buff;   //累计充电时间低字节  
+    mg.data[5] = buff>>8;  
+
     buff = (unsigned int)(DC_ChargePower*10);
     mg.data[6] = buff;    //充电电量 
     mg.data[7] = buff>>8;                  
-     
+
     mg.id= 0x1828D0D2;
     while((!MSCAN0SendMsg(mg))&&(tt>0))
         tt--; 
@@ -270,19 +266,19 @@ void BMS_To_VCU_BatteryMsg2(void)
     struct can_msg mg;
     unsigned char tt=100;
     unsigned int buff;
-    
+
     mg.RTR= FALSE;  
     mg.len = 8;
     mg.prty = 0;
-	  
-	  buff = (unsigned int)(g_systemVoltage*10);	      //动力电池总电压
-	  mg.data[0] = buff;   //低字节 
-	  mg.data[1] = buff>>8;//高字节    
-	  
-	  buff = (unsigned int)((g_systemCurrent+1000)*10);	//动力电池总电流
-	  mg.data[2] = buff;   //低字节 
-	  mg.data[3] = buff>>8;//高字节     
-    
+
+    buff = (unsigned int)(g_systemVoltage*10);	      //动力电池总电压
+    mg.data[0] = buff;   //低字节 
+    mg.data[1] = buff>>8;//高字节    
+
+    buff = (unsigned int)((g_systemCurrent+1000)*10);	//动力电池总电流
+    mg.data[2] = buff;   //低字节 
+    mg.data[3] = buff>>8;//高字节     
+
     if(Can_g_socValue>=0.995) 
         buff = 100*2;
     else 
@@ -310,27 +306,27 @@ void BMS_To_VCU_BatteryMsg3(void)
     struct can_msg mg;
     unsigned char tt=100;
     unsigned int buff;
-    
+
     mg.RTR= FALSE;  
     mg.len = 8;
     mg.prty = 0;
-	  
-	  buff = (unsigned int)(g_highestCellVoltage*1000); // 当前最高单体电池电压 0.001V
-	  mg.data[0] = buff;   //低字节 
-	  mg.data[1] = buff>>8;//高字节    
-	  
-	  buff = (unsigned int)(g_lowestCellVoltage*1000);	//当前最低单体电池电压 0.001V
-	  mg.data[2] = buff;   //低字节 
-	  mg.data[3] = buff>>8;//高字节     
-    
+
+    buff = (unsigned int)(g_highestCellVoltage*1000); // 当前最高单体电池电压 0.001V
+    mg.data[0] = buff;   //低字节 
+    mg.data[1] = buff>>8;//高字节    
+
+    buff = (unsigned int)(g_lowestCellVoltage*1000);	//当前最低单体电池电压 0.001V
+    mg.data[2] = buff;   //低字节 
+    mg.data[3] = buff>>8;//高字节     
+
     buff = (unsigned int)(Rp_Vpn_Value);   //正绝缘电阻单位1k
     mg.data[4] = buff;
     mg.data[5] = buff>>8;
-    
+
     buff = (unsigned int)(Rn_Vpn_Value);   //负绝缘电阻单位1k
     mg.data[6] = buff;
     mg.data[7] = buff>>8;
-     
+
     mg.id= 0x1424D0D2;
     while((!MSCAN0SendMsg(mg))&&(tt>0))
         tt--; 
@@ -347,27 +343,27 @@ void BMS_To_VCU_BatteryMsg4(void)    //
     struct can_msg mg;
     unsigned char tt=100;
     unsigned int buff;
-    
+
     mg.RTR= FALSE;  
     mg.len = 8;
     mg.prty = 0;
-	  
-	  buff = (unsigned int)(g_highestCellVoltage*1000); // 当前最高单体电池电压 0.001V
-	  mg.data[0] = buff;   //低字节 
-	  mg.data[1] = buff>>8;//高字节   
-	   
-	  buff = (unsigned int)(g_lowestCellVoltage*1000);	//当前最低单体电池电压 0.001V
-	  mg.data[2] = buff;   //低字节 
-	  mg.data[3] = buff>>8;//高字节   
-	  
-	  //mg.data[4] = highestCellVolNum;   //最高单体动力蓄电池电压所在总成号
-	  mg.data[4] = 0x01;   //假设整个系统为一个总成
-	  mg.data[5] = HighVolNum+1;   //+1是因为从0开始   最高单体动力蓄电池电压所在总成号内编号
-	  
-   // mg.data[6] = lowestCellVolNum;   //最低单体动力蓄电池电压所在总成号
+
+    buff = (unsigned int)(g_highestCellVoltage*1000); // 当前最高单体电池电压 0.001V
+    mg.data[0] = buff;   //低字节 
+    mg.data[1] = buff>>8;//高字节   
+
+    buff = (unsigned int)(g_lowestCellVoltage*1000);	//当前最低单体电池电压 0.001V
+    mg.data[2] = buff;   //低字节 
+    mg.data[3] = buff>>8;//高字节   
+
+    //mg.data[4] = highestCellVolNum;   //最高单体动力蓄电池电压所在总成号
+    mg.data[4] = 0x01;   //假设整个系统为一个总成
+    mg.data[5] = HighVolNum+1;   //+1是因为从0开始   最高单体动力蓄电池电压所在总成号内编号
+
+    // mg.data[6] = lowestCellVolNum;   //最低单体动力蓄电池电压所在总成号
     mg.data[6] = 0x01;// //假设整个系统为一个总成
     mg.data[7] = LowVolNum+1;   //最低单体动力蓄电池电压所在总成号内编号
-     
+
     mg.id= 0x1813D0D2;
     while((!MSCAN0SendMsg(mg))&&(tt>0))
         tt--; 
@@ -384,27 +380,27 @@ void BMS_To_VCU_BatteryMsg5(void)
     struct can_msg mg;
     unsigned char tt=100;
     unsigned int buff;
-    
+
     mg.RTR= FALSE;  
     mg.len = 8;
     mg.prty = 0;
-	  
-  	   
-	  mg.data[0] = g_highestTemperature-40+50;   //最高动力蓄电池温度
-	  mg.data[1] = g_lowestTemperature-40+50;    //最低动力蓄电池温度 
-	 
+
+
+    mg.data[0] = g_highestTemperature-40+50;   //最高动力蓄电池温度
+    mg.data[1] = g_lowestTemperature-40+50;    //最低动力蓄电池温度 
+
     //mg.data[2] = highestCellTempNum;   //最高动力蓄电池温度所在总成号
     mg.data[2] = 0x01;   //假设一个系统算为总成号1
-	  mg.data[3] = HighTemNum+1;   //最高动力蓄电池温度所在总成号内编号
-	  
+    mg.data[3] = HighTemNum+1;   //最高动力蓄电池温度所在总成号内编号
+
     //mg.data[4] = lowestCellTempNum;   //最低动力蓄电池温度所在总成号
     mg.data[4] = 0x01;   //假设一个系统算为总成号1
     mg.data[5] = LowTemNum+1;   //最低动力蓄电池温度所在总成号内编号
-    
+
     buff = (unsigned int)(CELL_TEMP_NUM);	//电池系统温度探针总数
-	  mg.data[6] = buff;   //低字节 
-	  mg.data[7] = buff>>8;//高字节    
-    
+    mg.data[6] = buff;   //低字节 
+    mg.data[7] = buff>>8;//高字节    
+
     mg.id= 0x1814D0D2;
     while((!MSCAN0SendMsg(mg))&&(tt>0))
         tt--; 
@@ -422,27 +418,29 @@ void BMS_To_VCU_BatteryMsg6(void)
     unsigned char tt=100;
     unsigned int buff;
     static unsigned char life=14;
-    
+
     mg.RTR= FALSE;  
     mg.len = 8;
     mg.prty = 0;
-	  life--;
-	  if(life < 0)
-	      life = 14;
-    status_group1.Bit.BMS_Life = life;
-    	   
-	  mg.data[0] = mg.data[1]^mg.data[2]^mg.data[3]^mg.data[4]^mg.data[5]^mg.data[6]^mg.data[7]; //chucksum
-	  mg.data[1] = status_group1.byte;   
-    mg.data[2] = status_group2.byte;   
-	  mg.data[3] = status_group3.byte;  
-	 
-    mg.data[4] = plug_DC_Connect;   //预留
-    mg.data[5] = CC2VOL;   //预留
-    mg.data[6] = 0x00;   //预留
-    mg.data[7] = 0x00;   //预留
-     
-    mg.id= 0x1881D0D2;
-    while((!MSCAN0SendMsg(mg))&&(tt>0))
+    life--;
+    if(life < 0){
+        life = 14;
+    }
+	
+	status_group1.Bit.BMS_Life = life;
+	   
+	mg.data[0] = mg.data[1]^mg.data[2]^mg.data[3]^mg.data[4]^mg.data[5]^mg.data[6]^mg.data[7]; //chucksum
+	mg.data[1] = status_group1.byte;   
+	mg.data[2] = status_group2.byte;   
+	mg.data[3] = status_group3.byte;  
+
+	mg.data[4] = plug_DC_Connect;   //预留
+	mg.data[5] = CC2VOL;   //预留
+	mg.data[6] = 0x00;   //预留
+	mg.data[7] = 0x00;   //预留
+
+	mg.id= 0x1881D0D2;
+	while((!MSCAN0SendMsg(mg))&&(tt>0))
         tt--; 
 }
 //*************************************************************************************
@@ -454,27 +452,27 @@ void BMS_To_VCU_BatteryMsg6(void)
 //*************************************************************************************
 void BMS_To_VCU_BatteryMsg7(void)   
 {
-    struct can_msg mg;
-    unsigned char tt=100;
-    unsigned int buff;
-    
-    mg.RTR= FALSE;  
-    mg.len = 8;
-    mg.prty = 0;
-	  
-  	   
-	  mg.data[0] = Error_Group0.byte;//充电插座过温，火灾预警
-	  mg.data[1] = Error_Group6.byte; 
-    mg.data[2] = status_group4.byte;   
-	  mg.data[3] = Error_Group1.byte;  
-	 
-    mg.data[4] = Error_Group2.byte;   
-    mg.data[5] = Error_Group3.byte;   
-    mg.data[6] = Error_Group4.byte;   
-    mg.data[7] = Error_Group5.byte;   
-     
-    mg.id= 0x0C1FD0D2;
-    while((!MSCAN0SendMsg(mg))&&(tt>0))
+	struct can_msg mg;
+	unsigned char tt=100;
+	unsigned int buff;
+
+	mg.RTR= FALSE;  
+	mg.len = 8;
+	mg.prty = 0;
+
+
+	mg.data[0] = Error_Group0.byte;//充电插座过温，火灾预警
+	mg.data[1] = Error_Group6.byte; 
+	mg.data[2] = status_group4.byte;   
+	mg.data[3] = Error_Group1.byte;  
+
+	mg.data[4] = Error_Group2.byte;   
+	mg.data[5] = Error_Group3.byte;   
+	mg.data[6] = Error_Group4.byte;   
+	mg.data[7] = Error_Group5.byte;   
+
+	mg.id= 0x0C1FD0D2;
+	while((!MSCAN0SendMsg(mg))&&(tt>0))
         tt--; 
 }
 
@@ -487,27 +485,27 @@ void BMS_To_VCU_BatteryMsg7(void)
 //*************************************************************************************
 void BMS_To_VCU_BatteryMsg8(void)   
 {
-    struct can_msg mg;
-    unsigned char tt=100;
-    unsigned int buff;
-    
-    mg.RTR= FALSE;  
-    mg.len = 8;
-    mg.prty = 0;
-	  
-  	   
-	  mg.data[0] = Error_Group7.byte;//
-	  mg.data[1] = 0x00; 
-    mg.data[2] = 0x00;   
-	  mg.data[3] = 0x00;  
-	 
-    mg.data[4] = 0x00;   
-    mg.data[5] = 0x00;   
-    mg.data[6] = 0x00;   
-    mg.data[7] = 0x00;   
-     
-    mg.id= 0x0C1ED0D2;
-    while((!MSCAN0SendMsg(mg))&&(tt>0))
+	struct can_msg mg;
+	unsigned char tt=100;
+	unsigned int buff;
+
+	mg.RTR= FALSE;  
+	mg.len = 8;
+	mg.prty = 0;
+
+
+	mg.data[0] = Error_Group7.byte;//
+	mg.data[1] = 0x00; 
+	mg.data[2] = 0x00;   
+	mg.data[3] = 0x00;  
+
+	mg.data[4] = 0x00;   
+	mg.data[5] = 0x00;   
+	mg.data[6] = 0x00;   
+	mg.data[7] = 0x00;   
+
+	mg.id= 0x0C1ED0D2;
+	while((!MSCAN0SendMsg(mg))&&(tt>0))
         tt--; 
 }
 
