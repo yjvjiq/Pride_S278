@@ -78,7 +78,7 @@ void StoreParameter(void)
 void StoreSocRealvalue(void)//
 {
     unsigned int DBuffer[1],DBuffer2[1]; 
-    unsigned int DBuffer1;
+    //unsigned int DBuffer1;
     unsigned int checksoc0,checksoc1;
     
     DBuffer[0]= (unsigned int)(g_socValue*1000);

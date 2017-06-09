@@ -1,4 +1,3 @@
-
 //----------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------
 //---------------------- Pride Power------------------------------------------------------------------
@@ -40,10 +39,8 @@ extern unsigned char g_cell_number_v[BMU_NUMBER][5];
 extern unsigned char g_bmu2_number_t[BMU_NUMBER];
 extern unsigned char g_cell_number_t[BMU_NUMBER][5];
 
-extern unsigned char g_cellVol[CELL_VOL_GROUP][6];
-extern unsigned char g_cellTemperature[CELL_TEMP_GROUP][6];
-//extern unsigned int  g_cell_volt_array[CELL_VOL_GROUP*6];
-//extern unsigned char g_cell_temp_array[CELL_TEMP_GROUP*6];
+//extern unsigned char g_cellVol[CELL_VOL_GROUP][6];
+//extern unsigned char g_cellTemperature[CELL_TEMP_GROUP][6];
 
 extern unsigned long g_circleFlag; //一个循环完成的标志
 extern unsigned long g_configFlag;//收到配置信息标志，用于判断BMU个数，6805组数和单体个数

@@ -106,6 +106,7 @@ extern real32_T BiggestDischargeCurt_Model;/* '<S1>/Gain'
 extern void YoungMan_LT_initialize(void);
 extern void YoungMan_LT_step(void);
 extern void YoungMan_LT_terminate(void);
+extern void YoungMa_BigDischargePowerAdjust();
 
 /* Exported data declaration */
 

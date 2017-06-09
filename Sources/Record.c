@@ -157,7 +157,7 @@ void storeErrorIndex(unsigned int index)
 void StoreSysVariable(void)  //存储故障信息和SOC值，地址从at45db161 的 0x3ff 开始
 {
     unsigned char i=0,j=0; 
-    unsigned int buffer1[STORE_NUMBER],buffer2_1[128],buffer2_2[72],test_1[128],test_2[72],test1[32];
+    unsigned int buffer1[STORE_NUMBER],buffer2_1[128];//buffer2_2[72],test_1[128],test_2[72],test1[32]
     unsigned int check=0;   //校验和
     
     g_errorCounter++;
@@ -267,7 +267,7 @@ unsigned char ReadOutErrorRecord(unsigned int counter) //   1:校验不通过
     unsigned int check=0;
     unsigned int verification=0;
     unsigned int buffer1[STORE_NUMBER],buffer2_1[128],buffer2_2[72];
-    uchar *buff;
+//    uchar *buff;
   
 
     DisableInterrupts; //
@@ -386,7 +386,7 @@ void TaskRecordProcess(void)
 //******************************************************************************
 void parametersClean(void)
 {
-    unsigned int i,j,k;
+    unsigned int i,k;//,j
   
 	  for(i=0;i<BMU_NUMBER;i++)
 		    //for(j=0;j<SIX802_NUMBER;j++)

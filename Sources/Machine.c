@@ -161,7 +161,7 @@ void GetTavgProcess(void)
             timer1=0;
         }
     } 
-    else if(g_highestTemperature<=45+40)//若是最高温度小于45度持续2S，那么平均温度为最低温度
+    else// if(g_highestTemperature<=45+40)//若是最高温度小于45度持续2S，那么平均温度为最低温度
     {     
         timer1=0;
         timer2++;

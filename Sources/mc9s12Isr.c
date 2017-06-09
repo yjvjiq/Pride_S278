@@ -429,22 +429,21 @@ interrupt void CAN0_RECEIVE_ISR(void)   //车载 /外部CAN / 500Hz
             break;
             
         case 0x1cecf456:
-           if((msgData[0]==0x11)&&(msgData[5]==0x00)&&(msgData[6]==0x02)&&((msgData[7]==0x00)))
-               FlagBRMSend = 1; //标志位置1,开始发送多帧保证,并且不发送BRM
-                //if((fChg2bmsbyte[0]==0x13)&&(fChg2bmsbyte[5]==0x00)&&(fChg2bmsbyte[6]==0x02)&&((fChg2bmsbyte[7]==0x00)))
-                     //BRMStep = 0;//将标志位清零,可以从新发生BRM
+			if((msgData[0]==0x11)&&(msgData[5]==0x00)&&(msgData[6]==0x02)&&((msgData[7]==0x00)))
+				FlagBRMSend = 1; //标志位置1,开始发送多帧保证,并且不发送BRM
+//			if((fChg2bmsbyte[0]==0x13)&&(fChg2bmsbyte[5]==0x00)&&(fChg2bmsbyte[6]==0x02)&&((fChg2bmsbyte[7]==0x00)))
+//				BRMStep = 0;//将标志位清零,可以从新发生BRM
                      
             if((msgData[0]==0x11)&&(msgData[5]==0x00)&&(msgData[6]==0x06)&&((msgData[7]==0x00)))
                  FlagBCPSend = 1;
-            //if((fChg2bmsbyte[0]==0x13)&&(fChg2bmsbyte[5]==0x00)&&(fChg2bmsbyte[6]==0x06)&&((fChg2bmsbyte[7]==0x00)))
-                 //BCPStep = 0;//将标志位清零,可以从新发生BRM
+//			if((fChg2bmsbyte[0]==0x13)&&(fChg2bmsbyte[5]==0x00)&&(fChg2bmsbyte[6]==0x06)&&((fChg2bmsbyte[7]==0x00)))
+//				BCPStep = 0;//将标志位清零,可以从新发生BRM
             
             if((msgData[0]==0x11)&&(msgData[5]==0x00)&&(msgData[6]==0x11)&&((msgData[7]==0x00)))
                  FlagBCSSend = 1;
             
             //if((fChg2bmsbyte[0]==0x13)&&(fChg2bmsbyte[5]==0x00)&&(fChg2bmsbyte[6]==0x11)&&((fChg2bmsbyte[7]==0x00)))
                  //BCSStep = 0;//将标志位清零,可以从新发生BRM
-            
             break;
                 
         case 0x1807f456:    
@@ -489,7 +488,6 @@ interrupt void CAN0_RECEIVE_ISR(void)   //车载 /外部CAN / 500Hz
                 CHMStep=0x05;
             break;
         case 0x101af456:
-            
             m_askcurrent=0;//请求电流为0 
             if(((msgData[0])&(0x40)) == 0)
             {
@@ -499,10 +497,10 @@ interrupt void CAN0_RECEIVE_ISR(void)   //车载 /外部CAN / 500Hz
             if(CHMStep<=0x06)    
                 CHMStep=0x06;
             break; 
-                  
+			
         case 0x181df456:
             CSDOverTime=0;
-                         
+			
             if(CHMStep<=0x07)     
                 CHMStep=0x07;
             break;
@@ -511,8 +509,6 @@ interrupt void CAN0_RECEIVE_ISR(void)   //车载 /外部CAN / 500Hz
             if(CHMStep<=0x07)     
                 CHMStep=0x07;
             break;
-            
-            
             ///////////// 整车CAN接收受电弓报文 ///////////////
         default:
             break;
@@ -536,7 +532,7 @@ interrupt void CAN1_RECEIVE_ISR(void)  //充电
     unsigned long pp1=0;
     unsigned int VolLow=0;
     unsigned int VolHigh=0;
-  
+	
     if(!(CAN1RFLG&0x01))
     {
         CAN1RFLG = 0x01;     
@@ -569,14 +565,14 @@ interrupt void CAN1_RECEIVE_ISR(void)  //充电
             break;
         case 0x1801f456:
             CRMOverTimeBefore60s = 0;
-            if( fChg2bmsbyte[0]==0x00)
-            {              
-                DCStartState=1;//老国标开始的标志                 
+            if(fChg2bmsbyte[0]==0x00)
+            {
+                DCStartState=1;//老国标开始的标志 
                 CRMOverTimeBefore = 0;
-                if(CHMStep<=0x01)                
+                if(CHMStep<=0x01)
                     CHMStep=0x01;
-            }
-            else if( fChg2bmsbyte[0]==0xaa)
+			}
+            else if(fChg2bmsbyte[0]==0xaa)
             {
                 CRMOverTime=0;
                 DC_Start = 1;
@@ -584,17 +580,16 @@ interrupt void CAN1_RECEIVE_ISR(void)  //充电
                     CHMStep=0x02;
                 //TurnOn_INA2K();
                 //SelfState2=1;
-                            
-            }            
+            }
             break;
-        case 0x1807f456:    
+        case 0x1807f456:
             //CHMStep=0x03;
             break;  
         case 0x1808f456:
             VolHigh = fChg2bmsbyte[1];
             VolHigh = VolHigh<<8;
             VolHigh = (VolHigh+fChg2bmsbyte[0]);
-
+			
             VolLow = fChg2bmsbyte[3];
             VolLow = VolLow<<8;
             VolLow = (VolLow+fChg2bmsbyte[2]);
@@ -799,8 +794,8 @@ interrupt void CAN2_RECEIVE_ISR(void)   //内部  BMU   250Hz
     unsigned int V5 = 0;
     unsigned int V6 = 0;
     unsigned int HeatCurrent = 0; 
-    //unsigned long int DBuffer[1];
-    // Checks for received messages
+//	unsigned long int DBuffer[1];
+//	Checks for received messages
     static unsigned char FireSave=0;
     static unsigned char saveCounter=0; 
     
@@ -1004,9 +999,9 @@ interrupt void CAN2_RECEIVE_ISR(void)   //内部  BMU   250Hz
             ParameterSetting();
             break;
         default:
-            Int_Flag |= 0x08;
-            BMU_Processure();
-            break;  
+			Int_Flag |= 0x08;
+			BMU_Processure();
+			break;  
     }//end of switch      	 		
     // Clear RXF flag (buffer ready to be read)
     CAN2RFLG = 0x01;       

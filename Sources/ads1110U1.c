@@ -307,7 +307,7 @@ void rdfromIIC_U1(void)       //从ADS1100中读出数据
 //**********************************************************************          
 unsigned int GetU1adValue(void)
 {   
-    unsigned char i;
+    //unsigned char i;
     unsigned long buffer=0;
     unsigned int ad=0;
       

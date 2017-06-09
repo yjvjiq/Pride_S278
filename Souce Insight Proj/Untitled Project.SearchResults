@@ -1,0 +1,4 @@
+---- BMS_To_VCU_BatCellVolData Matches (3 in 3 files) ----
+SendMes in mc9s12Isr.c (E:\004_青年客车6123快充项目（S278）\000_Pride_S278\Sources) :             BMS_To_VCU_BatCellVolData(CellNum);
+VehicleCAN.c (E:\004_青年客车6123快充项目（S278）\000_Pride_S278\Sources) line 515 : void BMS_To_VCU_BatCellVolData(unsigned char group)
+VehicleCAN.h (E:\004_青年客车6123快充项目（S278）\000_Pride_S278\Sources) line 314 : extern void BMS_To_VCU_BatCellVolData(unsigned char group);

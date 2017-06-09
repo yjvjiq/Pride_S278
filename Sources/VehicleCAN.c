@@ -416,7 +416,7 @@ void BMS_To_VCU_BatteryMsg6(void)
 {
     struct can_msg mg;
     unsigned char tt=100;
-    unsigned int buff;
+    //unsigned int buff;
     static unsigned char life=14;
 
     mg.RTR= FALSE;  
@@ -454,7 +454,7 @@ void BMS_To_VCU_BatteryMsg7(void)
 {
 	struct can_msg mg;
 	unsigned char tt=100;
-	unsigned int buff;
+	//unsigned int buff;
 
 	mg.RTR= FALSE;  
 	mg.len = 8;
@@ -487,7 +487,7 @@ void BMS_To_VCU_BatteryMsg8(void)
 {
 	struct can_msg mg;
 	unsigned char tt=100;
-	unsigned int buff;
+	//unsigned int buff;
 
 	mg.RTR= FALSE;  
 	mg.len = 8;
@@ -513,8 +513,8 @@ void BMS_To_VCU_BatteryMsg8(void)
 void BMS_To_VCU_BatCellVolData(void)
 {
 	struct can_msg mg;
-	unsigned int buff;
-	unsigned char i;
+	//unsigned int buff;
+	//unsigned char i;
 	unsigned char tt=100;
 	static U8 v_pack_cnt = 0;
 	static U8 v_cell_cnt = 0;
@@ -569,8 +569,8 @@ void BMS_To_VCU_BatCellVolData(void)
 void BMS_To_VCU_BatCellTempData(void)
 {
     struct can_msg mg;
-    U16 buff;
-    U8 i;
+    //U16 buff;
+    //U8 i;
     U8 tt=100;
     static U8 T_pack_cnt = 0;
     
@@ -614,8 +614,8 @@ void BMS_To_VCU_BatCellTempData(void)
 void BMS_VCU_WIFE(void)
 {
   struct can_msg mg;
-	unsigned int buff;
-	unsigned char i;
+	//unsigned int buff;
+	//unsigned char i;
 	unsigned char tt=100;
 
   mg.RTR= FALSE;  

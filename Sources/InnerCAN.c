@@ -205,7 +205,7 @@ void bmsToPcInfo553(void)
 void bmsToPcInfo554(void)
 {
     struct can_msg mg;
-    unsigned int buff;
+    //unsigned int buff;
     char tt=100;
     
     mg.RTR= FALSE;  
@@ -238,7 +238,7 @@ void bmsToPcInfo554(void)
 void bmsToSBMSMessage1(void)
 {
     struct can_msg mg;
-    unsigned int buff;
+    //unsigned int buff;
     char tt=100;
     mg.RTR= FALSE;  
     mg.len = 8;

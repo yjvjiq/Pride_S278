@@ -69,7 +69,7 @@ unsigned char PantNormalEndFlag=0;//受电弓正常下电标志位
 //******************************************************************************
 float GetRequestCurrentDC(void) 
 {
-    float DCAmp;
+    //float DCAmp;
     static unsigned char ChanceHappen1 = 0;//电压高于3.78后不恢复
     static unsigned char ChanceHappen2 = 0;//电压高于3.92后不恢复
     

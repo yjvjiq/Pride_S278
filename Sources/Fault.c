@@ -503,7 +503,7 @@ void errorCellTemperatureUT(void)//
 	unsigned char i;
 	unsigned char Error[4]={0}; 
 	unsigned char Level=0;
-	float t;
+	//float t;
 	//t= (float)g_lowestTemperature;
 
 	//上报故障等级
@@ -546,7 +546,7 @@ void errorCellTemperatureOT(void)//
 	unsigned char i;
 	unsigned char Error[4]={0}; 
 	unsigned char Level=0; 
-	float t;
+	//float t;
 	//t= (float)g_highestTemperature;
 
 	//上报故障等级
@@ -598,7 +598,7 @@ void errorSOCLow(void)
 	unsigned char i;
 	unsigned char Error[4]={0}; 
 	unsigned char Level=0;
-	float t;
+	//float t;
 
 	//上报故障等级
 	Level=socLow_custom(Can_g_socValue);
@@ -1073,7 +1073,7 @@ void FaultLevel(void)
 unsigned char TaskFaultProcess(void) 
 {
     unsigned char lever = 0;
-    unsigned char i,j,k=0;
+    //unsigned char i,j,k=0;
     static unsigned char caution1=0;
     static unsigned char caution2=0;
     static unsigned char caution3=0;

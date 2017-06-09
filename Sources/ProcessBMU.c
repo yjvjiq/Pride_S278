@@ -16,26 +16,24 @@
 #include "derivative.h" /* include peripheral declarations */
 #include "BMS20.h" 
 
-
 #pragma DATA_SEG __GPAGE_SEG PAGED_RAM  
 U8 g_group;  //BMU1 组号， 从0~18
 U16 g_CellVoltage[BMU_NUMBER][CELL_NUMBER];  //BMU1号, 6802（组）号, 单体电池号
 U8 g_CellTemperature[BMU_NUMBER][Tem_NUMBER];//BMU1号, 6802（组）号, 单体电池号
 #pragma DATA_SEG DEFAULT 
 
-
 float g_highestCellVoltage=0; //单体最高电压
 float g_lowestCellVoltage=0;  //单体最低电压
 U8 g_highestCellVoltage_Num=0; //单体最高电压编号
 U8 g_lowestCellVoltage_Num=0;  //单体最低电压编号
 
-float g_averageVoltage;       //平均单体电压
-float g_systemVoltage;      //系统电压=单体电压累加总电压
-
 U8 g_highestTemperature=0; //单体最高温度
 U8 g_lowestTemperature=0;  //单体最低温度
 U8 g_highestTemperature_Num=0; //单体最高温度编号
 U8 g_lowestTemperature_Num=0;  //单体最低温度编号
+
+float g_averageVoltage;       //平均单体电压
+float g_systemVoltage;      //系统电压=单体电压累加总电压
 
 U8 g_averageTemperature; //单体平均温度
 U8 Tavg; //电芯平均温度
@@ -53,14 +51,16 @@ U8 lowestCellTempNum=0;
 U16 g_singleCellVmax[BMU_NUMBER];
 U16 g_singleCellVmin[BMU_NUMBER];
 U8 g_singleCellVmax_Num[BMU_NUMBER];
-U8 g_singleCellVmin_Num[BMU_NUMBER];           
+U8 g_singleCellVmin_Num[BMU_NUMBER];
+
 U8 g_singleCellTmax[BMU_NUMBER];
 U8 g_singleCellTmin[BMU_NUMBER];
 U8 g_singleCellTmax_Num[BMU_NUMBER];
 U8 g_singleCellTmin_Num[BMU_NUMBER]; 
- 
+
 U8 g_bmu2_number_v[BMU_NUMBER];
 U8 g_cell_number_v[BMU_NUMBER][5];
+
 U8 g_bmu2_number_t[BMU_NUMBER];
 U8 g_cell_number_t[BMU_NUMBER][5];
 
@@ -68,9 +68,6 @@ U8 g_cell_number_t[BMU_NUMBER][5];
 U8 recogBMStoBMUflag = 0;//BMS与BMU辨识成功标志
 U8 g_cellVol[CELL_VOL_GROUP][6];//
 U8 g_cellTemperature[CELL_TEMP_GROUP][6];
-//U16 g_cell_volt_array[CELL_VOL_GROUP*6];
-//U8 g_cell_temp_array[CELL_TEMP_GROUP*6];
-
 
 //U8 g_cellVol[BMU_NUMBER][72]; // re-group all the cell voltage. 18 BMU and 36 cells in each BMU, 2 bytes for each cell voltage.
 //U8 g_cellTemperature[BMU_NUMBER][3]; // re-group all the cell temperature. 18 BMU and 3 temperatures in each BMU.
@@ -96,13 +93,12 @@ void BMU_initial(void)
     while((!bmuProcess2())&&(t<65000))    	        
     {        
         t++;      
-        if(t>=60000) //超时故障报告
+        if(t >= 60000) //超时故障报告
         {
-            //t= 60000;
-            //Can08f0Byte5.Bit.F3_innerComm=1;  //t0 vcu
-            g_caution_Flag_3 |=0x01;    //to pc
-                     
-        }/////end of BMU通信判断  
+			//t= 60000;
+			//Can08f0Byte5.Bit.F3_innerComm=1;  //t0 vcu
+			g_caution_Flag_3 |=0x01;    //to pc
+        }//end of BMU通信判断  
         else 
         {            
             //Can08f0Byte5.Bit.F3_innerComm=0; //to vcu 
@@ -125,21 +121,13 @@ void BMU_Processure(void)
     if((Int_Flag & 0x08) == 0x08) //if received a frame message, then deal with it.
     {
         Int_Flag &= 0xf7;//clear the interrupt flag.
-          			  		
         g_group = 0;  		
-
-        framID = g_mboxID;      
-        g_group = framID & 0x000000ff;
-        if(g_group != 0){
-            g_group--;
-        }
 		
-        /*
-        framID = framID>>4;
-        framID = framID & 0x03ffffff;
-        */
-        framID = framID>>8;
-        framID = framID & 0x003fffff;
+        framID = g_mboxID;
+        g_group = framID & 0x000000ff; //use the lower 8 bits as the group number.
+		g_group--;
+		
+        framID = ((framID >> 8) & 0x003fffff);//use the last high 15 bits as the judge parameter.
 
 		switch(framID)  //interpreting data.
 		{
@@ -148,7 +136,7 @@ void BMU_Processure(void)
                 //	recogBMStoBMUflag = 0; //recognise error.
                 //else
                 recogBMStoBMUflag = 1; //recognise ok.
-                break;	  
+                break;
             case 0x018FF13://cell config msg1(CC1):the number of 6802, the number of cell_v and cell_T channals;
                 switch(g_group) 
                 {
@@ -205,7 +193,9 @@ void BMU_Processure(void)
                       break;
                     case 17:
                       g_configFlag |= 0x00020000;
-                      break;      				                				          
+                      break;
+					default:
+						break;
                 }
 			      
 			    g_bmu2_number_v[g_group] = g_mboxData[boxNumber][0]&0x07;		//the number of 6802 in BMU1.
@@ -232,60 +222,62 @@ void BMU_Processure(void)
 		    case 0x018FF16:	//judge the life cycle, whether has received all datas.
                 switch(g_group) 
                 {
-                    case 0:
-                      g_circleFlag |= 0x00000001;
-                      break;
+					case 0:
+						g_circleFlag |= 0x00000001;
+						break;
                     case 1:
-                      g_circleFlag |= 0x00000002;
-                      break;
+						g_circleFlag |= 0x00000002;
+						break;
                     case 2:
-                      g_circleFlag |= 0x00000004;
-                      break;
+						g_circleFlag |= 0x00000004;
+						break;
                     case 3:
-                      g_circleFlag |= 0x00000008;
-                      break;
+						g_circleFlag |= 0x00000008;
+						break;
                     case 4:
-                      g_circleFlag |= 0x00000010;
-                      break;
+						g_circleFlag |= 0x00000010;
+						break;
                     case 5:
-                      g_circleFlag |= 0x00000020;
-                      break;
+						g_circleFlag |= 0x00000020;
+						break;
                     case 6:
-                      g_circleFlag |= 0x00000040;
-                      break;
+						g_circleFlag |= 0x00000040;
+						break;
                     case 7:
-                      g_circleFlag |= 0x00000080;
-                      break;
+						g_circleFlag |= 0x00000080;
+						break;
                     case 8:
-                      g_circleFlag |= 0x00000100;
-                      break;
+						g_circleFlag |= 0x00000100;
+						break;
                     case 9:
-                      g_circleFlag |= 0x00000200;
-                      break;
+						g_circleFlag |= 0x00000200;
+						break;
                     case 10:
-                      g_circleFlag |= 0x00000400;
-                      break;
+						g_circleFlag |= 0x00000400;
+						break;
                     case 11:
-                      g_circleFlag |= 0x00000800;
-                      break;
+						g_circleFlag |= 0x00000800;
+						break;
                     case 12:
-                      g_circleFlag |= 0x00001000;
-                      break;
+						g_circleFlag |= 0x00001000;
+						break;
                     case 13:
-                      g_circleFlag |= 0x00002000;
-                      break;
+						g_circleFlag |= 0x00002000;
+						break;
                     case 14:
-                      g_circleFlag |= 0x00004000;
-                      break;
+						g_circleFlag |= 0x00004000;
+						break;
                     case 15:
-                      g_circleFlag |= 0x00008000;
-                      break;
+						g_circleFlag |= 0x00008000;
+						break;
                     case 16:
-                      g_circleFlag |= 0x00010000;
-                      break;
+						g_circleFlag |= 0x00010000;
+						break;
                     case 17:
-                      g_circleFlag |= 0x00020000;
-                      break;      				                				          
+						g_circleFlag |= 0x00020000;
+						break;
+					default:
+						break;
                 }
                 //State_Box_Online=g_circleFlag;
                 break;
@@ -438,9 +430,9 @@ unsigned char bmuProcess2(void)//
     U8          Cell_T_Max_Num=0,Cell_T_Min_Num=0;  
     U8          Cell_T_Max_Pack_Num=0,Cell_T_Min_Pack_Num=0;
      
-    U16         i,j,k,h,t,boxNumber=0,count=0;
+    U16         i,j,boxNumber=0,count=0;
     U32         sum=0;
-	U8			temperature[54];
+//	U8			temperature[54];
     U8          ti=0,ci=0;
     U8          HighBMUAddr=0,HighBMUGroupNum=0,HighBMUNum=0;
     U8          LowBMUAddr=0,LowBMUGroupNum=0,LowBMUNum=0;
@@ -603,7 +595,7 @@ unsigned char bmuProcess2(void)//
             return 1;	//all data processing is complete.
         }
   	} // end of circleflag	
-    return 0;
+//    return 0;
 }
 
 //**********************************************************************
