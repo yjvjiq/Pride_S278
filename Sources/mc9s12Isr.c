@@ -77,7 +77,6 @@ void SendMes(void)
     //static unsigned char CellOver=0;//电压数据发送完标志位
     //static unsigned char TempOver=1;//温度数据发送完标志位 
          
-        
     PIT_1000ms_Counter0++;//1000ms
     PIT_100ms_Counter0++;//100ms 
     PIT_100ms_Counter1++;//100ms 
@@ -185,15 +184,13 @@ void SendMes(void)
         if(PIT_70ms_Counter0 > 10)  //100ms发一帧
         {
             BMS_To_VCU_BatCellVolData();
-            /*
-            CellNum++;
-            if(CellNum>=CELL_VOL_GROUP) 
-            {
-                CellNum=0;
-            }
-            */
+//            CellNum++;
+//            if(CellNum>=CELL_VOL_GROUP) 
+//            {
+//                CellNum=0;
+//            }
             
-            PIT_70ms_Counter0=0;
+            PIT_70ms_Counter0 = 0;
         } 
     //if(1 == VCU_CellRequest.Bit.CellTempReq )  //0x1c64D0D2
     
@@ -201,14 +198,13 @@ void SendMes(void)
         if(PIT_300ms_Counter1>=20)//200ms发一个
         {
             BMS_To_VCU_BatCellTempData();
-            /*
-            TemNum++;
-            if(TemNum>=CELL_TEMP_GROUP) //-1是因为从0开始
-            {
-                TemNum=0;
-            }
-            */
-            PIT_300ms_Counter1=0;
+//            TemNum++;
+//            if(TemNum>=CELL_TEMP_GROUP) //-1是因为从0开始
+//            {
+//                TemNum=0;
+//            }
+
+            PIT_300ms_Counter1 = 0;
         } 
 }
 //******************************************************************************

@@ -52,7 +52,7 @@ unsigned int g_storageSysVariableOut[STORE_NUMBER]=
     4000,
     0   //校验
 };
-unsigned char g_storageSysVariableT[50];
+unsigned char g_storageSysVariableT[36];
 /*unsigned int g_storageSysVariableCell[200]= //存储200个单体电压用
 {  
     0,0,0,0,0,0,0,0,0,0,

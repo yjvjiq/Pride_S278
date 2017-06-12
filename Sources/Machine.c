@@ -204,7 +204,6 @@ void HighVoltDetectPart1(void)
             tt++;   
             if(tt>=12)//60ms才能判断出来
             {
-
                 //to vcu
                 RelayErrorPowerOff = 1;//继电器下电故障
                 MSDError = 1;
@@ -312,14 +311,13 @@ void HighVoltDetectPart2(void)//预充继电器已经闭合
     static unsigned char CCHGConnect_tt=0;
     static unsigned char DCCHGConnect_tt=0;
     static unsigned char CHGDisConnect_tt=0;
-
-    
+	
     if((tmr_p2<=60)||(tmr_p2>=600)) //延时20ms或者大于600ms,不在运行
         return;                                              
     
     if(g_BmsModeFlag == DISCHARGING)//行车
     {
-         /////负极断路/////// 
+		/////负极断路/////// 
         if(g_highVoltageV2<200) 
         {
             NDisConnect_tt++;

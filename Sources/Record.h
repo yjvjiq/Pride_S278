@@ -17,7 +17,7 @@
 
 extern unsigned int g_storageSysVariable[120]; //故障记录中的单体电压值，共120个
 extern unsigned int g_storageSysVariableCell[36];
-extern unsigned char g_storageSysVariableT[50];
+extern unsigned char g_storageSysVariableT[36];
 extern unsigned int g_storageSysVariableOut[STORE_NUMBER]; 
 extern unsigned int g_storageSysVariableCellOut[36];
  

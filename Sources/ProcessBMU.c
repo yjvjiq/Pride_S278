@@ -321,7 +321,7 @@ void BMU_Processure(void)
 				}
 				break;						
 			case 0x0018FF27://BMU number = group; #7 frame, 4 cells each frame.
-				if(g_group == 2 || g_group == 8 || g_group == 14){
+				if(g_group == 1 || g_group == 7 || g_group == 13){
     				for(i=0;i<4;i++)
     				{
     					g_CellVoltage[g_group][24+i] = 0;
@@ -335,7 +335,7 @@ void BMU_Processure(void)
 				}
 				break;
 			case 0x0018FF28://BMU number = group; #8 frame, 4 cells each frame.
-				if(g_group == 2 || g_group == 8 || g_group == 14){
+				if(g_group == 1 || g_group == 7 || g_group == 13){
     				for(i=0;i<4;i++)
     				{
     					g_CellVoltage[g_group][28+i] = 0;
@@ -349,7 +349,7 @@ void BMU_Processure(void)
 				}
 				break;
 			case 0x0018FF29://BMU number = group; #9 frame, 4 cells each frame.
-				if(g_group == 2 || g_group == 8 || g_group == 14){
+				if(g_group == 1 || g_group == 7 || g_group == 13){
     				for(i=0;i<4;i++)
     				{
     					g_CellVoltage[g_group][32+i] = 0;
@@ -368,18 +368,18 @@ void BMU_Processure(void)
 				break;	
 			case 0x0018FF42://BMU number = group; #2 frame, 1 temperature each frame.	 
 				for(i=0;i<1;i++){
-					g_CellTemperature[g_group][i]= g_mboxData[boxNumber][i];
+					g_CellTemperature[g_group][i+1]= g_mboxData[boxNumber][i];
 				}
 				break;
              case 0x0018FF43://BMU number = group; #3 frame, 1 temperature each frame.
-             	if(g_group == 2 || g_group == 8 || g_group == 14){
+             	if(g_group == 1 || g_group == 7 || g_group == 13){
 	                for(i=0;i<1;i++){
-	                    g_CellTemperature[g_group][i]= 0;
+	                    g_CellTemperature[g_group][i+2]= 0;
 	                }
              	}
 				else{
 	                for(i=0;i<1;i++){
-	                    g_CellTemperature[g_group][i]= g_mboxData[boxNumber][i];
+	                    g_CellTemperature[g_group][i+2]= g_mboxData[boxNumber][i];
 	                }
 				}
                 break;  	
@@ -447,8 +447,15 @@ unsigned char bmuProcess2(void)//
     U8          cell_cnt = 0;
     
     //if((g_circleFlag==G_BMU_CIRCLE_FLAG)&&(g_configFlag==G_BMU_CIRCLE_FLAG))//如果收到所有的报文，则处理    
-    {    
+    {
         g_circleFlag=0; //配置信息1分钟才发一次，所以不能在这里把它的标志位清掉。 		  
+        //for test
+        for(cnt=0;cnt<8;cnt++){
+            g_singleCellVmax[cnt] = g_singleCellVmax[8];
+            g_singleCellVmin[cnt] = g_singleCellVmin[8];
+            g_singleCellTmax[cnt] = g_singleCellTmax[8];
+            g_singleCellTmin[cnt] = g_singleCellTmin[8];
+        }//end of "for test"
 
         //计算电池单体最高和最低电压,温度                                          
         //***单体电压极值处理***********************************************************************************		      			
@@ -458,7 +465,7 @@ unsigned char bmuProcess2(void)//
         Cell_V_Min_Num = g_singleCellVmin_Num[0];
         
         for(cnt=0;cnt<BMU_NUMBER;cnt++)
-        {    						      						     						    
+        {
             if(g_singleCellVmax[cnt] >= Cell_V_Max)
             {
                 Cell_V_Max = g_singleCellVmax[cnt];
@@ -516,8 +523,7 @@ unsigned char bmuProcess2(void)//
         g_highestTemperature_Num = Cell_T_Max_Num;	//the temperature offset is 48 here.
         
         sum = sum - g_highestTemperature - g_lowestTemperature;
-        Tavg = (U8)(sum / ((U32)BMU_NUMBER*2 - 2));
-        g_averageTemperature = Tavg;
+        g_averageTemperature = (U8)(sum / ((U32)BMU_NUMBER*2 - 2));
 
 		/********************************************************************/
 		/********************************************************************/
