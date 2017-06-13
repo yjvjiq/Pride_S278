@@ -44,7 +44,6 @@ void stateCodeTransfer(void)
     static unsigned int Delay126=0;
     static unsigned int Delay186=0;
     static unsigned int Delay30_81=0;
-
     
     //if((OffState == 1)&&(g_BmsModeFlag == DISCHARGING)&&(VehicleSpeed<=8))
     //    PowerOffError = 1;//行车模式需要下电的故障，车速降到8km/h    
@@ -152,7 +151,7 @@ void stateCodeTransfer(void)
         } 
         else if((stateCode==46))
         {
-             /////////////////////46 start/////////////////////////
+            /////////////////////46 start/////////////////////////
             if((HighVolPowerOff)||(acc_Connect==0)||(RelayErrorPowerOff))
             {
                 if(bmsSelfcheckCounter==1)//无故障

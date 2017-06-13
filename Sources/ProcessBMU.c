@@ -449,13 +449,13 @@ unsigned char bmuProcess2(void)//
     //if((g_circleFlag==G_BMU_CIRCLE_FLAG)&&(g_configFlag==G_BMU_CIRCLE_FLAG))//如果收到所有的报文，则处理    
     {
         g_circleFlag=0; //配置信息1分钟才发一次，所以不能在这里把它的标志位清掉。 		  
-        //for test
-        for(cnt=0;cnt<8;cnt++){
-            g_singleCellVmax[cnt] = g_singleCellVmax[8];
-            g_singleCellVmin[cnt] = g_singleCellVmin[8];
-            g_singleCellTmax[cnt] = g_singleCellTmax[8];
-            g_singleCellTmin[cnt] = g_singleCellTmin[8];
-        }//end of "for test"
+//        //for test
+//        for(cnt=0;cnt<8;cnt++){
+//            g_singleCellVmax[cnt] = g_singleCellVmax[8];
+//            g_singleCellVmin[cnt] = g_singleCellVmin[8];
+//            g_singleCellTmax[cnt] = g_singleCellTmax[8];
+//            g_singleCellTmin[cnt] = g_singleCellTmin[8];
+//        }//end of "for test"
 
         //计算电池单体最高和最低电压,温度                                          
         //***单体电压极值处理***********************************************************************************		      			

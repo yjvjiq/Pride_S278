@@ -326,7 +326,7 @@ void TaskStatusMachine(void)//5msµ÷ÓÃÒ»´Î
         case 81:
         case 141:
             status_group1.Bit.St_BMS =3;//
-            state46=0;
+            state46 = 0;
             if((stateCode==141)&&((DCTem1>=85)||(DCTem2>=85))) //ÔÚ´ËÅĞ¶Ï·ÀÖ¹¹ÊÕÏÉÏ±¨µÄÂı
             {
                 fastendflag=1;
@@ -358,7 +358,7 @@ void TaskStatusMachine(void)//5msµ÷ÓÃÒ»´Î
                 delay(25000);                  //19ms
                 delay(25000);                  //19ms
             }
-            if(Delay14>=4) 
+            if(Delay14 >= 4) 
             {
                 if(stateCode == 14)
                     status_group3.Bit.St_N_Relay=1;//
@@ -410,14 +410,14 @@ void TaskStatusMachine(void)//5msµ÷ÓÃÒ»´Î
             }
     
             //YoungMan_LT_step();
-            if(plug_AC_CP_Connect==0) 
+            if(plug_AC_CP_Connect == 0) 
             {
                 BiggestDischargeCurt = BigDischargePowerAdjust((Tavg-40),Can_g_socValue);//SOF//30s
                 BiggestDisCurtContinuous = BigDischargePowerContinuous((Tavg-40),Can_g_socValue);//SOF//5min
                 BiggestFeedbackCurt = PulseRechargePowerAdjust1(Can_g_socValue,(Tavg-40)); //ÖÆ¶¯ÄÜÁ¿»ØÊÕ30s 
                 BiggestFeedbackCurtContinuous = ContinueRechargeCurt(Can_g_socValue,(Tavg-40)); //ÖÆ¶¯ÄÜÁ¿»ØÊÕ5min         
             }
-            else if((plug_AC_CP_Connect==1)||(HighVolPowerOff==1))//¼ì²âµ½ÊÜµç¹­
+            else if((plug_AC_CP_Connect == 1)||(HighVolPowerOff == 1))//¼ì²âµ½ÊÜµç¹­
             {
                 BiggestDischargeCurt =0;//SOF//30s
                 BiggestDisCurtContinuous = 0;//SOF//5min
@@ -431,7 +431,7 @@ void TaskStatusMachine(void)//5msµ÷ÓÃÒ»´Î
             SocEndDischargeAdjust(); //·ÅµçÄ©¶ËSOCĞŞÕı
             CarFaultDone();//¹ı³Ì¹ÊÕÏ´¦Àí,¹¦ÂÊÎªÑ­»·ÉÏ±¨,·ÀÖ¹ÓÉÓÚÊ±ĞòÎó±¨
             break;
-
+			
         case 110:  //*********************Âı³ä³äµç***********//////////////
             turnOnSW_Power();//´ò¿ªÈí¼ş¿ª¹Ø ·ÀÖ¹×´Ì¬»úÔÚÖ®Ç°¾ÍËÀµô¶Ï²»ÁËµç
             BiggestDischargeCurt =0;//SOF//30s
@@ -491,14 +491,14 @@ void TaskStatusMachine(void)//5msµ÷ÓÃÒ»´Î
         case 40:   //*****************¶Ï¿ªÖ÷Õı¼ÌµçÆ÷***********////////
         case 120:
             status_group1.Bit.St_BMS =2;//¸ßÑ¹¶Ï¿ª
-
+			
             if(stateCode == 40) 
-            { 
+            {
                 openPosRelay(); //¶Ï¿ªÕı¼«¼ÌµçÆ÷
                 //PRelayConnectTest();//Õı¼«Õ³Á¬ÔÚ´Ë´¦¼ì²â Õ³Á¬²»ÔÙ¼ì²âÁË 
             }
             else if(stateCode == 120)
-            { 
+            {
                 TurnOff_INA1K();//¶ÏÊÜµç¹­¼ÌµçÆ÷
                 //ChgRelayConnectTest();//ÊÜµç¹­¼ÌµçÆ÷Õ³Á¬
                 status_group3.Bit.St_Charge = 2; //³äµç½áÊø
@@ -506,10 +506,9 @@ void TaskStatusMachine(void)//5msµ÷ÓÃÒ»´Î
             delay(25000); //19ms
             delay(25000); //19ms
             bmsSelfcheckCounter=2;//Ã»ÓĞ¹ÊÕÏ£¬×Ô¼ì¼ÆÊıÆ÷
-
+			
             break;
         case 180:
-        
             InsRelayControl=0;//¹Ø±Õ¾øÔµ¼ì²â¿ª¹Ø
             TurnOffInsulation();//¹Ø±Õ¾øÔµ¼ì²âµÄ¿ª¹Ø
             status_group3.Bit.St_Charge = 2; //³äµç½áÊø
@@ -541,11 +540,12 @@ void TaskStatusMachine(void)//5msµ÷ÓÃÒ»´Î
         case 46:   //*****************¸ßÑ¹µôµç¼ì²â************//////////////
         case 126:
         case 186:
-            /*if(stateCode == 46)
+            /*
+            if(stateCode == 46)
                 NRelayConnectTest();//Ö÷¸ºÕ³Á¬    //ÏÂµç²»¼ì²âÕ³Á¬ÁË ËùÒÔ×¢ÊÍµô
             else 
                 ChgNRelayConnectTest();//³äµç¸ºÕ³Á¬
-                */
+			*/
             if(state46==0)
             {
                 delay(25000); //20ms
@@ -553,15 +553,17 @@ void TaskStatusMachine(void)//5msµ÷ÓÃÒ»´Î
                
                 TurnOff_INHK();//¹Ø±Õ¼ÓÈÈ¼ÌµçÆ÷ 
                 preChargeON=0;
-                /*tmr_p1=0;           
+                /*
+                tmr_p1=0;
                 tmr_p2=0;
-                tmr_p3=0; 
+                tmr_p3=0;
                 tmr_p4=0;
-                tmr_p6=0;*/
+                tmr_p6=0;
+                */
 
                 TurnOffNRelay=0;
                 //TurnOff_INBK();//¶Ï¿ªÔ¤³ä,·ÀÖ¹×´Ì¬»úÓÉ12Ìø×ªµ½46Ê±Ô¤³ä¼ÌµçÆ÷Ã»ÓĞ¶Ï¿ª
-                StoreSysVariable();//                
+                StoreSysVariable();
                 StoreSocRealvalue();
                 state46=1;
                 SelfCheck = 0;//×Ô¼ìÇåÁã,·ÀÖ¹²»¶ÏµçÔÚ×Ô¼ìÊ±³ÌĞò²»Æğ×÷ÓÃ
@@ -576,7 +578,7 @@ void TaskStatusMachine(void)//5msµ÷ÓÃÒ»´Î
         case 127:
         case 187:
             openPosRelay();//ÔÙ¶Ï¿ªÕı¼«¼ÌµçÆ÷£¬È·±£Õı¼«¼ÌµçÆ÷¶Ï¿ª¡£ 
-            openNegRelay();//ÔÙ¶Ï¿ª¸º¼«¼ÌµçÆ÷£¬È·±£Õı¼«¼ÌµçÆ÷¶Ï¿ª¡
+            openNegRelay();//ÔÙ¶Ï¿ª¸º¼«¼ÌµçÆ÷£¬È·±£Õı¼«¼ÌµçÆ÷¶Ï¿ª¡£
             bmsSelfcheckCounter=0;
             delay(25000); //20ms
             delay(25000); //20ms 
@@ -585,7 +587,6 @@ void TaskStatusMachine(void)//5msµ÷ÓÃÒ»´Î
             turnOffSW_Power();//close×ÜµçÔ´¿ª¹Ø  
             break;
         case 177://µ÷ÊÔ½×¶Î
-
             openNegRelay();//¶Ï¿ª¸º¼«¼ÌµçÆ÷
             delay(25000); //20ms
             
