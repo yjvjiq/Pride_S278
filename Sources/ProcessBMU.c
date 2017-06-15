@@ -17,46 +17,27 @@
 #include "BMS20.h" 
 
 #pragma DATA_SEG __GPAGE_SEG PAGED_RAM  
-U8 g_group;  //BMU1 组号， 从0~18
-U16 g_CellVoltage[BMU_NUMBER][CELL_NUMBER];  //BMU1号, 6802（组）号, 单体电池号
-U8 g_CellTemperature[BMU_NUMBER][Tem_NUMBER];//BMU1号, 6802（组）号, 单体电池号
+	BMU_CELL_MSG g_bmu_msg;
+	BMS_CELL_MSG g_bms_msg;
 #pragma DATA_SEG DEFAULT 
 
-float g_highestCellVoltage=0; //单体最高电压
-float g_lowestCellVoltage=0;  //单体最低电压
-U8 g_highestCellVoltage_Num=0; //单体最高电压编号
-U8 g_lowestCellVoltage_Num=0;  //单体最低电压编号
+U8 g_group;  //BMU1 组号， 从0~18
 
-U8 g_highestTemperature=0; //单体最高温度
-U8 g_lowestTemperature=0;  //单体最低温度
-U8 g_highestTemperature_Num=0; //单体最高温度编号
-U8 g_lowestTemperature_Num=0;  //单体最低温度编号
+//float g_highestCellVoltage=0; //单体最高电压
+//float g_lowestCellVoltage=0;  //单体最低电压
+//U8 g_highestCellVoltage_Num=0; //单体最高电压编号
+//U8 g_lowestCellVoltage_Num=0;  //单体最低电压编号
+
+//U8 g_highestTemperature=0; //单体最高温度
+//U8 g_lowestTemperature=0;  //单体最低温度
+//U8 g_highestTemperature_Num=0; //单体最高温度编号
+//U8 g_lowestTemperature_Num=0;  //单体最低温度编号
 
 float g_averageVoltage;       //平均单体电压
 float g_systemVoltage;      //系统电压=单体电压累加总电压
 
 U8 g_averageTemperature; //单体平均温度
-U8 Tavg; //电芯平均温度
-
-U8 LowVolNum=0;
-U8 HighVolNum=0;
-U8 HighTemNum=0;
-U8 LowTemNum=0;
-
-U8 highestCellVolNum=0;
-U8 lowestCellVolNum=0;
-U8 highestCellTempNum=0;
-U8 lowestCellTempNum=0;
-
-U16 g_singleCellVmax[BMU_NUMBER];
-U16 g_singleCellVmin[BMU_NUMBER];
-U8 g_singleCellVmax_Num[BMU_NUMBER];
-U8 g_singleCellVmin_Num[BMU_NUMBER];
-
-U8 g_singleCellTmax[BMU_NUMBER];
-U8 g_singleCellTmin[BMU_NUMBER];
-U8 g_singleCellTmax_Num[BMU_NUMBER];
-U8 g_singleCellTmin_Num[BMU_NUMBER]; 
+//U8 Tavg; //电芯平均温度
 
 U8 g_bmu2_number_v[BMU_NUMBER];
 U8 g_cell_number_v[BMU_NUMBER][5];
@@ -64,13 +45,7 @@ U8 g_cell_number_v[BMU_NUMBER][5];
 U8 g_bmu2_number_t[BMU_NUMBER];
 U8 g_cell_number_t[BMU_NUMBER][5];
 
-//unsigned long recogBMUtoBMSmessage;//BMS BMU通信辨识信息
 U8 recogBMStoBMUflag = 0;//BMS与BMU辨识成功标志
-U8 g_cellVol[CELL_VOL_GROUP][6];//
-U8 g_cellTemperature[CELL_TEMP_GROUP][6];
-
-//U8 g_cellVol[BMU_NUMBER][72]; // re-group all the cell voltage. 18 BMU and 36 cells in each BMU, 2 bytes for each cell voltage.
-//U8 g_cellTemperature[BMU_NUMBER][3]; // re-group all the cell temperature. 18 BMU and 3 temperatures in each BMU.
 	
 //************************************************************************
 //************************************************************************
@@ -287,50 +262,50 @@ void BMU_Processure(void)
             case 0x0018FF21://BMU number = group; #1 frame, 4 cells each frame.
                 for(i=0;i<4;i++)
                 {
-                    g_CellVoltage[g_group][i] = (U16)g_mboxData[boxNumber][2*i+1]|(U16)g_mboxData[boxNumber][2*i]<<8;
+					g_bmu_msg.cell_V[g_group][i] =  (U16)g_mboxData[boxNumber][2*i+1]|(U16)g_mboxData[boxNumber][2*i]<<8;
                 }
                 break;
             case 0x0018FF22://BMU number = group; #2 frame, 4 cells each frame.
                 for(i=0;i<4;i++)
                 {
-                    g_CellVoltage[g_group][4+i] = (U16)g_mboxData[boxNumber][2*i+1]|(U16)g_mboxData[boxNumber][2*i]<<8;
+                    g_bmu_msg.cell_V[g_group][4+i] = (U16)g_mboxData[boxNumber][2*i+1]|(U16)g_mboxData[boxNumber][2*i]<<8;
                 }
                 break;
             case 0x0018FF23://BMU number = group; #3 frame, 4 cells each frame.		  
                 for(i=0;i<4;i++)
                 {
-                    g_CellVoltage[g_group][8+i] = (U16)g_mboxData[boxNumber][2*i+1]|(U16)g_mboxData[boxNumber][2*i]<<8;
+                    g_bmu_msg.cell_V[g_group][8+i] = (U16)g_mboxData[boxNumber][2*i+1]|(U16)g_mboxData[boxNumber][2*i]<<8;
                 }
                 break;
 			case 0x0018FF24://BMU number = group; #4 frame, 4 cells each frame.
 				for(i=0;i<4;i++)
 				{
-					g_CellVoltage[g_group][12+i] = (U16)g_mboxData[boxNumber][2*i+1]|(U16)g_mboxData[boxNumber][2*i]<<8;
+					g_bmu_msg.cell_V[g_group][12+i] = (U16)g_mboxData[boxNumber][2*i+1]|(U16)g_mboxData[boxNumber][2*i]<<8;
 				}
 				break;
 			case 0x0018FF25://BMU number = group; #5 frame, 4 cells each frame.
 				for(i=0;i<4;i++)
 				{
-					g_CellVoltage[g_group][16+i] = (U16)g_mboxData[boxNumber][2*i+1]|(U16)g_mboxData[boxNumber][2*i]<<8;
+					g_bmu_msg.cell_V[g_group][16+i] = (U16)g_mboxData[boxNumber][2*i+1]|(U16)g_mboxData[boxNumber][2*i]<<8;
 				}
 				break;
 			case 0x0018FF26://BMU number = group; #6 frame, 4 cells each frame.
 				for(i=0;i<4;i++)
 				{
-					g_CellVoltage[g_group][20+i] = (U16)g_mboxData[boxNumber][2*i+1]|(U16)g_mboxData[boxNumber][2*i]<<8;
+					g_bmu_msg.cell_V[g_group][20+i] = (U16)g_mboxData[boxNumber][2*i+1]|(U16)g_mboxData[boxNumber][2*i]<<8;
 				}
 				break;						
 			case 0x0018FF27://BMU number = group; #7 frame, 4 cells each frame.
 				if(g_group == 1 || g_group == 7 || g_group == 13){
     				for(i=0;i<4;i++)
     				{
-    					g_CellVoltage[g_group][24+i] = 0;
+    					g_bmu_msg.cell_V[g_group][24+i] = 0;
     				}
 				}
 				else{
     				for(i=0;i<4;i++)
     				{
-    					g_CellVoltage[g_group][24+i] = (U16)g_mboxData[boxNumber][2*i+1]|(U16)g_mboxData[boxNumber][2*i]<<8;
+    					g_bmu_msg.cell_V[g_group][24+i] = (U16)g_mboxData[boxNumber][2*i+1]|(U16)g_mboxData[boxNumber][2*i]<<8;
     				}
 				}
 				break;
@@ -338,13 +313,13 @@ void BMU_Processure(void)
 				if(g_group == 1 || g_group == 7 || g_group == 13){
     				for(i=0;i<4;i++)
     				{
-    					g_CellVoltage[g_group][28+i] = 0;
+    					g_bmu_msg.cell_V[g_group][28+i] = 0;
     				}
 				}
 				else{
     				for(i=0;i<4;i++)
     				{
-    					g_CellVoltage[g_group][28+i] = (U16)g_mboxData[boxNumber][2*i+1]|(U16)g_mboxData[boxNumber][2*i]<<8;
+    					g_bmu_msg.cell_V[g_group][28+i] = (U16)g_mboxData[boxNumber][2*i+1]|(U16)g_mboxData[boxNumber][2*i]<<8;
     				}
 				}
 				break;
@@ -352,49 +327,54 @@ void BMU_Processure(void)
 				if(g_group == 1 || g_group == 7 || g_group == 13){
     				for(i=0;i<4;i++)
     				{
-    					g_CellVoltage[g_group][32+i] = 0;
+    					g_bmu_msg.cell_V[g_group][32+i] = 0;
     				}
 				}
 				else{
     				for(i=0;i<4;i++)
     				{
-    					g_CellVoltage[g_group][32+i] = (U16)g_mboxData[boxNumber][2*i+1]|(U16)g_mboxData[boxNumber][2*i]<<8;
+    					g_bmu_msg.cell_V[g_group][32+i] = (U16)g_mboxData[boxNumber][2*i+1]|(U16)g_mboxData[boxNumber][2*i]<<8;
     				}
 				}
 				break;
 			case 0x0018FF41://BMU number = group; #1 frame, 1 temperature each frame.
-				for(i=0;i<1;i++)
-					g_CellTemperature[g_group][i]= g_mboxData[boxNumber][i];
+				for(i=0;i<1;i++){
+					g_bmu_msg.cell_T[g_group][i]= g_mboxData[boxNumber][i];
+				}
 				break;	
 			case 0x0018FF42://BMU number = group; #2 frame, 1 temperature each frame.	 
 				for(i=0;i<1;i++){
-					g_CellTemperature[g_group][i+1]= g_mboxData[boxNumber][i];
+					g_bmu_msg.cell_T[g_group][i+1]= g_mboxData[boxNumber][i];
 				}
 				break;
              case 0x0018FF43://BMU number = group; #3 frame, 1 temperature each frame.
              	if(g_group == 1 || g_group == 7 || g_group == 13){
 	                for(i=0;i<1;i++){
-	                    g_CellTemperature[g_group][i+2]= 0;
+	                    g_bmu_msg.cell_T[g_group][i+2]= 0;
 	                }
              	}
 				else{
 	                for(i=0;i<1;i++){
-	                    g_CellTemperature[g_group][i+2]= g_mboxData[boxNumber][i];
+	                    g_bmu_msg.cell_T[g_group][i+2]= g_mboxData[boxNumber][i];
 	                }
 				}
                 break;  	
 			/* new add, the max and min voltage/temperature in erery pack */
 		    case 0x0018FF36://组号＃1，电压最值   3601 表示BMU1的所有口的电压最值
-                g_singleCellVmax[g_group]= g_mboxData[boxNumber][3]|(unsigned int)g_mboxData[boxNumber][2]<<8;
-                g_singleCellVmin[g_group]= g_mboxData[boxNumber][5]|(unsigned int)g_mboxData[boxNumber][4]<<8;
-                g_singleCellVmax_Num[g_group]= g_mboxData[boxNumber][6];
-                g_singleCellVmin_Num[g_group]= g_mboxData[boxNumber][7];
+				g_bmu_msg.cell_V_max[g_group]= g_mboxData[boxNumber][3]|(unsigned int)g_mboxData[boxNumber][2]<<8;
+				g_bmu_msg.cell_V_min[g_group]= g_mboxData[boxNumber][5]|(unsigned int)g_mboxData[boxNumber][4]<<8;
+				g_bmu_msg.cell_V_max_group_num[g_group] = (g_mboxData[boxNumber][6] & 0xF0) >> 4;
+				g_bmu_msg.cell_V_max_num[g_group]= g_mboxData[boxNumber][6] & 0x0F;
+				g_bmu_msg.cell_V_min_group_num[g_group] = (g_mboxData[boxNumber][7] & 0xF0) >> 4;
+				g_bmu_msg.cell_V_min_num[g_group]= g_mboxData[boxNumber][7] & 0x0F;
                 break;       	
             case 0x0018FF4B://组号＃1，温度最值       
-                g_singleCellTmax[g_group]= g_mboxData[boxNumber][0];
-                g_singleCellTmin[g_group]= g_mboxData[boxNumber][1];
-                g_singleCellTmax_Num[g_group]= g_mboxData[boxNumber][2];
-                g_singleCellTmin_Num[g_group]= g_mboxData[boxNumber][3];
+				g_bmu_msg.cell_T_max[g_group]= g_mboxData[boxNumber][0];
+				g_bmu_msg.cell_T_min[g_group]= g_mboxData[boxNumber][1];
+				g_bmu_msg.cell_T_max_group_num[g_group]= (g_mboxData[boxNumber][2] & 0xF0) >> 4;
+				g_bmu_msg.cell_T_max_num[g_group]= g_mboxData[boxNumber][2] & 0x0F;
+				g_bmu_msg.cell_T_min_group_num[g_group]= (g_mboxData[boxNumber][3] & 0xF0) >> 4;
+				g_bmu_msg.cell_T_min_num[g_group]= g_mboxData[boxNumber][3] & 0x0F;
                 break;
             default:
                 break;
@@ -424,23 +404,23 @@ unsigned char bmuProcess2(void)//
 {
     U16         buf=0,Cell_V_Max=0,Cell_V_Min=0;
     U8          Cell_V_Max_Num=0,Cell_V_Min_Num=0;
-    U8          Cell_V_Max_Pack_Num=0,Cell_V_Min_Pack_Num=0;
-    
+    U8			Cell_V_Max_Pack_Num, Cell_V_Min_Pack_Num;
+	
     U8          Cell_T_Max=0,Cell_T_Min=0;
     U8          Cell_T_Max_Num=0,Cell_T_Min_Num=0;  
-    U8          Cell_T_Max_Pack_Num=0,Cell_T_Min_Pack_Num=0;
+    U8			Cell_T_Max_Pack_Num, Cell_T_Min_Pack_Num;
      
-    U16         i,j,boxNumber=0,count=0;
+    U16         i,j;
     U32         sum=0;
-//	U8			temperature[54];
-    U8          ti=0,ci=0;
-    U8          HighBMUAddr=0,HighBMUGroupNum=0,HighBMUNum=0;
-    U8          LowBMUAddr=0,LowBMUGroupNum=0,LowBMUNum=0;
-    static U8   ErrorBMUAddr=0;
-    static U8   ErrorBMUGroup=0;
-    static U8   ErrorBMULocation=0;
-    static U8   TemLossState=0;
-    static U8   TemLossTime=0;
+//	U16			j,boxNumber=0,count=0;
+//	U8          ti=0,ci=0;
+//	U8          HighBMUAddr=0,HighBMUGroupNum=0,HighBMUNum=0;
+//	U8          LowBMUAddr=0,LowBMUGroupNum=0,LowBMUNum=0;
+//	static U8   ErrorBMUAddr=0;
+//	static U8   ErrorBMUGroup=0;
+//	static U8   ErrorBMULocation=0;
+//	static U8	TemLossTime=0;
+	static U8   TemLossState=0;
 	
     U8          cnt = 0;
     U8          pack_cnt = 0;
@@ -449,141 +429,91 @@ unsigned char bmuProcess2(void)//
     //if((g_circleFlag==G_BMU_CIRCLE_FLAG)&&(g_configFlag==G_BMU_CIRCLE_FLAG))//如果收到所有的报文，则处理    
     {
         g_circleFlag=0; //配置信息1分钟才发一次，所以不能在这里把它的标志位清掉。 		  
-//        //for test
-//        for(cnt=0;cnt<8;cnt++){
-//            g_singleCellVmax[cnt] = g_singleCellVmax[8];
-//            g_singleCellVmin[cnt] = g_singleCellVmin[8];
-//            g_singleCellTmax[cnt] = g_singleCellTmax[8];
-//            g_singleCellTmin[cnt] = g_singleCellTmin[8];
-//        }//end of "for test"
-
+		
         //计算电池单体最高和最低电压,温度                                          
         //***单体电压极值处理***********************************************************************************		      			
-        Cell_V_Max = g_singleCellVmax[0];
-        Cell_V_Min = g_singleCellVmin[0];
-        Cell_V_Max_Num = g_singleCellVmax_Num[0];
-        Cell_V_Min_Num = g_singleCellVmin_Num[0];
+        Cell_V_Max = g_bmu_msg.cell_V_max[0];
+        Cell_V_Min = g_bmu_msg.cell_V_min[0];
+        Cell_V_Max_Num = g_bmu_msg.cell_V_max_group_num[0] * 12 + g_bmu_msg.cell_V_max_num[0];
+        Cell_V_Min_Num = g_bmu_msg.cell_V_min_group_num[0] * 12 + g_bmu_msg.cell_V_min_num[0];
         
         for(cnt=0;cnt<BMU_NUMBER;cnt++)
         {
-            if(g_singleCellVmax[cnt] >= Cell_V_Max)
+            if(g_bmu_msg.cell_V_max[cnt] >= Cell_V_Max)
             {
-                Cell_V_Max = g_singleCellVmax[cnt];
-                Cell_V_Max_Num = g_singleCellVmax_Num[cnt];
-                Cell_V_Max_Pack_Num = cnt;
+                Cell_V_Max = g_bmu_msg.cell_V_max[cnt];
+                Cell_V_Max_Num = g_bmu_msg.cell_V_max_group_num[cnt] * 12
+								 + g_bmu_msg.cell_V_max_num[cnt];
+				Cell_V_Max_Pack_Num = cnt;
             }
-            if(g_singleCellVmin[cnt] <= Cell_V_Min)
+            if(g_bmu_msg.cell_V_min[cnt] <= Cell_V_Min)
             {
-                Cell_V_Min = g_singleCellVmin[cnt];
-                Cell_V_Min_Num = g_singleCellVmin_Num[cnt];
-                Cell_V_Min_Pack_Num = cnt;
+                Cell_V_Min = g_bmu_msg.cell_V_min[cnt];
+                Cell_V_Min_Num = g_bmu_msg.cell_V_min_group_num[cnt] * 12
+								 + g_bmu_msg.cell_V_min_num[cnt];
+				Cell_V_Min_Pack_Num = cnt;
             }
             
             /* the max and min cell voltage store array */
-            g_storageSysVariableCell[cnt*2]       = g_singleCellVmax[cnt];
-            g_storageSysVariableCell[cnt*2 + 1]   = g_singleCellVmin[cnt];
+            g_storageSysVariableCell[cnt*2]       = g_bmu_msg.cell_V_max[cnt];
+            g_storageSysVariableCell[cnt*2 + 1]   = g_bmu_msg.cell_V_min[cnt];
         }
 
-        g_highestCellVoltage        = (float)Cell_V_Max / 10000;
-        g_lowestCellVoltage         = (float)Cell_V_Min / 10000; 
-        g_highestCellVoltage_Num    = Cell_V_Max_Num;
-        g_lowestCellVoltage_Num     = Cell_V_Min_Num;     
-               
+//        g_highestCellVoltage        = (float)Cell_V_Max / 10000;
+//        g_lowestCellVoltage         = (float)Cell_V_Min / 10000; 
+//        g_highestCellVoltage_Num    = Cell_V_Max_Num;
+//        g_lowestCellVoltage_Num     = Cell_V_Min_Num;     
+
+		g_bms_msg.CellVoltageMax = Cell_V_Max;
+		g_bms_msg.CellVoltageMin = Cell_V_Min;
+		g_bms_msg.CellVoltageMaxNum = Cell_V_Max_Num;
+		g_bms_msg.CellVoltageMinNum = Cell_V_Min_Num;
+		g_bms_msg.CellVoltageMaxPackNum = Cell_V_Max_Pack_Num;
+		g_bms_msg.CellVoltageMinPackNum = Cell_V_Min_Pack_Num;
+		
         //***单体温度极值处理***********************************************************************************		      			
-        Cell_T_Max = g_singleCellTmax[0];
-        Cell_T_Min = g_singleCellTmin[0];
-        Cell_T_Max_Num = g_singleCellTmax_Num[0];
-        Cell_T_Min_Num = g_singleCellTmin_Num[0];
+        Cell_T_Max = g_bmu_msg.cell_T_max[0];
+        Cell_T_Min = g_bmu_msg.cell_T_min[0];
+        Cell_T_Max_Num = g_bmu_msg.cell_T_max_group_num[0] + g_bmu_msg.cell_T_max_num[0];
+        Cell_T_Min_Num = g_bmu_msg.cell_T_min_group_num[0] + g_bmu_msg.cell_T_min_num[0];
 
         for(cnt=0;cnt<BMU_NUMBER;cnt++)
         {    						
-            if(g_singleCellTmax[cnt] >= Cell_T_Max)
+            if(g_bmu_msg.cell_T_max[cnt] >= Cell_T_Max)
             {
-                Cell_T_Max = g_singleCellTmax[cnt];
-                Cell_T_Max_Num = g_singleCellTmax_Num[cnt];
-                Cell_T_Max_Pack_Num = cnt;
+                Cell_T_Max = g_bmu_msg.cell_T_max[cnt];
+                Cell_T_Max_Num = g_bmu_msg.cell_T_max_group_num[cnt] * 1 + g_bmu_msg.cell_T_max_num[cnt];
+				Cell_T_Max_Pack_Num = cnt;
             }
-            if(g_singleCellTmin[cnt] <= Cell_T_Min)
+            if(g_bmu_msg.cell_T_min[cnt] <= Cell_T_Min)
             {
-                Cell_T_Min = g_singleCellTmin[cnt];
-                Cell_T_Min_Num = g_singleCellTmin_Num[cnt];
-                Cell_T_Min_Pack_Num = cnt;
+                Cell_T_Min = g_bmu_msg.cell_T_min[cnt];
+                Cell_T_Min_Num = g_bmu_msg.cell_T_min_group_num[cnt] * 1 + g_bmu_msg.cell_T_min_num[cnt];
+				Cell_T_Min_Pack_Num = cnt;
             }
             
-            sum += (U32)(g_singleCellTmax[cnt] + g_singleCellTmin[cnt]);
+            sum += (U32)(g_bmu_msg.cell_T_max[cnt] + g_bmu_msg.cell_T_min[cnt]);
             
             /* the max and min cell temperature store array */
-            g_storageSysVariableT[cnt*2]     = g_singleCellTmax[cnt] & 0x00ff;
-            g_storageSysVariableT[cnt*2 + 1] = g_singleCellTmin[cnt] & 0x00ff;
+            g_storageSysVariableT[cnt*2]     = g_bmu_msg.cell_T_max[cnt];
+            g_storageSysVariableT[cnt*2 + 1] = g_bmu_msg.cell_T_min[cnt];
         } 			
 
-        g_lowestTemperature = Cell_T_Min;
-        g_highestTemperature = Cell_T_Max;			//the temperature offset is 48 here.
-        g_lowestTemperature_Num = Cell_T_Min_Num;
-        g_highestTemperature_Num = Cell_T_Max_Num;	//the temperature offset is 48 here.
-        
-        sum = sum - g_highestTemperature - g_lowestTemperature;
+//        g_lowestTemperature = Cell_T_Min;
+//        g_highestTemperature = Cell_T_Max;			//the temperature offset is 40 here.
+//        g_lowestTemperature_Num = Cell_T_Min_Num;
+//        g_highestTemperature_Num = Cell_T_Max_Num;	//the temperature offset is 40 here.
+
+		g_bms_msg.CellTempMax = Cell_T_Min;
+		g_bms_msg.CellTempMin = Cell_T_Max;
+		g_bms_msg.CellTempMaxNum = Cell_T_Max_Num;
+		g_bms_msg.CellTempMinNum = Cell_T_Min_Num;
+		g_bms_msg.CellTempMaxPackNum = Cell_T_Max_Pack_Num;
+		g_bms_msg.CellTempMinPackNum = Cell_T_Min_Pack_Num;
+
+//		sum = sum - g_highestTemperature - g_lowestTemperature;
+        sum = sum - g_bms_msg.CellTempMax - g_bms_msg.CellTempMin;
         g_averageTemperature = (U8)(sum / ((U32)BMU_NUMBER*2 - 2));
-
-		/********************************************************************/
-		/********************************************************************/
-        //re group the temperature arrays to a new group, and the format is U8.
-//		count = 0;
-//		for(i=0;i<BMU_NUMBER;i++){						// the number of BMU.
-//			for(j=0;j<g_bmu2_number_t[i];j++){			// the number of 6802 in each BMU.
-//				for(k=0;k<g_cell_number_t[i][j];k++){	// the number of channal in each 6802.
-//					g_cell_temp_array[count] = (g_CellTemperature[i][k] & 0x00ff);
-//					count++;
-//				}
-//			}
-//		}
-//		
-//        ti = 0;
-//        for(i=0;i<CELL_TEMP_GROUP;i++)
-//        {
-//            for(j=0;j<6;j++)
-//            {
-//            	if(ti < count){
-//            	    g_cellTemperature[i][j] = g_cell_temp_array[ti];
-//            	}
-//            	else{
-//            	    g_cellTemperature[i][j] = 0;
-//            	}
-//            	ti++;
-//            }
-//        }
-//        	
-//		/********************************************************************/
-//		/********************************************************************/
-//        //re group the cell voltage: g_cellVol[pack_number][cell_number], and change to char format.
-//		h = 0;
-//		for(i=0;i<BMU_NUMBER;i++){
-//			for(j=0;j<g_bmu2_number_v[i];j++){
-//				for(k=0;k<g_cell_number_v[i][j];k++){
-//					g_cell_volt_array[h] = g_CellVoltage[i][j][k];
-//					h++;
-//				}
-//			}
-//		}
-
-//        ci = 0;
-//        for(i=0;i<CELL_VOL_GROUP;i++)//
-//        {
-//        	for(j=0;j<3;j++)
-//        	{
-//        		if(ci<h)
-//        		{   
-//        		    g_cellVol[i][2*j] = (U8)(g_cell_volt_array[ci]); 
-//        		    g_cellVol[i][2*j+1] = (g_cell_volt_array[ci]) >> 8;
-//        		}
-//        		else
-//        		{    					  
-//        		    g_cellVol[i][2*j] = 0;
-//        		    g_cellVol[i][2*j+1] = 0;
-//        		}
-//        		ci++;
-//        	}
-//        }
 
         //************************************************************************************************
         for(i=0;i<1;i++)  //clear the receive buff.
@@ -601,7 +531,6 @@ unsigned char bmuProcess2(void)//
             return 1;	//all data processing is complete.
         }
   	} // end of circleflag	
-//    return 0;
 }
 
 //**********************************************************************

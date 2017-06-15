@@ -156,34 +156,44 @@ void storeErrorIndex(unsigned int index)
 //******************************************************************************
 void StoreSysVariable(void)  //´æ´¢¹ÊÕÏÐÅÏ¢ºÍSOCÖµ£¬µØÖ·´Óat45db161 µÄ 0x3ff ¿ªÊ¼
 {
-    unsigned char i=0,j=0; 
-    unsigned int buffer1[STORE_NUMBER],buffer2_1[128];//buffer2_2[72],test_1[128],test_2[72],test1[32]
-    unsigned int check=0;   //Ð£ÑéºÍ
-    
-    g_errorCounter++;
-    if(g_errorCounter>=500)  //±£´æ500Ìõºó£¬Ñ­»·´æ´¢
-      g_errorCounter = 0;  
-    storeErrorIndex(g_errorCounter);//¸üÐÂ¹ÊÕÏ¼ÆÊýÆ÷ 
+	unsigned char i=0,j=0; 
+	unsigned int buffer1[STORE_NUMBER],buffer2_1[128];//buffer2_2[72],test_1[128],test_2[72],test1[32]
+	unsigned int check=0;   //Ð£ÑéºÍ
 
-    
+	g_errorCounter++;
+	if(g_errorCounter>=500){  //±£´æ500Ìõºó£¬Ñ­»·´æ´¢
+		g_errorCounter = 0;
+	}
+	
+    storeErrorIndex(g_errorCounter);//¸üÐÂ¹ÊÕÏ¼ÆÊýÆ÷ 
+	
     g_storageSysVariable[INDEX]= g_errorCounter;
     g_storageSysVariable[TOTAL_VOLTAGE]= (unsigned int)g_highVoltageV1;   
     g_storageSysVariable[TOTAL_CURRENT]= (unsigned int)((g_systemCurrent+400)*50);
     g_storageSysVariable[PARA_SOC_DISPLAY]= (unsigned int)(g_socValue*100*2.5);
     g_storageSysVariable[SYS_CONTACTORS_STATE]= BmsCtlStat0 & 0xff;//BMS¿ØÖÆ×´Ì¬ 
+    
     //¹ÊÕÏÐÅÏ¢ÔÚ¹ÊÕÏ´¦Àí³ÌÐòÀï
     //ÊµÊ±Ê±¼ä
-    for(j=SYS_REALTIME_SECOND;j<SYS_REALTIME_YEAR+1;j++)
+    for(j=SYS_REALTIME_SECOND;j<SYS_REALTIME_YEAR+1;j++){
         g_storageSysVariable[j]= CurrentTime[j-10];
-    g_storageSysVariable[CELL_MAX_TEM] =(unsigned int)((g_highestTemperature-40)+48);
-    g_storageSysVariable[CELL_MIN_TEM] = (unsigned int)((g_lowestTemperature-40)+48);
-    g_storageSysVariable[CELL_AVERAGE_TEM] = (unsigned int)((g_averageTemperature-40)+48);
-    g_storageSysVariable[CELL_MAX_VOLTAGE] = (unsigned int)(g_highestCellVoltage*10000);
-    g_storageSysVariable[CELL_MIN_VOLTAGE] = (unsigned int)(g_lowestCellVoltage*10000);
-    g_storageSysVariable[CELL_AVERAGE_VOLTAGE] = (unsigned int)(g_averageVoltage*10000); 
-    g_storageSysVariable[SYS_INSULATION_P] = Rp_Vpn_Value;
-    g_storageSysVariable[SYS_INSULATION_N] = Rn_Vpn_Value;
-    //
+    }
+	
+//	g_storageSysVariable[CELL_MAX_TEM] =(unsigned int)((g_highestTemperature-40)+48);
+//	g_storageSysVariable[CELL_MIN_TEM] = (unsigned int)((g_lowestTemperature-40)+48);
+//	g_storageSysVariable[CELL_MAX_VOLTAGE] = (unsigned int)(g_highestCellVoltage*10000);
+//	g_storageSysVariable[CELL_MIN_VOLTAGE] = (unsigned int)(g_lowestCellVoltage*10000);
+
+	g_storageSysVariable[CELL_MAX_TEM] =(unsigned int)((g_bms_msg.CellTempMax-40)+48);
+	g_storageSysVariable[CELL_MIN_TEM] = (unsigned int)((g_bms_msg.CellTempMin-40)+48);
+	g_storageSysVariable[CELL_MAX_VOLTAGE] = (unsigned int)(g_bms_msg.CellVoltageMax);
+	g_storageSysVariable[CELL_MIN_VOLTAGE] = (unsigned int)(g_bms_msg.CellVoltageMin);
+	
+	g_storageSysVariable[CELL_AVERAGE_TEM] = (unsigned int)((g_averageTemperature-40)+48);
+	g_storageSysVariable[CELL_AVERAGE_VOLTAGE] = (unsigned int)(g_averageVoltage*10000); 
+	g_storageSysVariable[SYS_INSULATION_P] = Rp_Vpn_Value;
+	g_storageSysVariable[SYS_INSULATION_N] = Rn_Vpn_Value;
+	
     //µ¥ÌåµçÑ¹ÖµÔÚBMUÊý¾Ý´¦ÀíÀï
     //´æÈëAD45DB161
     //ÒÔÏÂ´æ´¢Êý¾ÝÒòÎª³¬¹ý256¸ö£¬ËùÒÔ·Ö³ÉÁ½²¿·ÖÀ´±£´æ¡£ Wrt_Flashº¯ÊýµÄÈë¿Ú²ÎÊýÊÇunsigned charÐÍµÄ¡£¸Ä³Éunsigned intÐÍµÄÓÐÊ±ºò¶Á²»¶Ô
@@ -229,18 +239,23 @@ void StoreSysVariable(void)  //´æ´¢¹ÊÕÏÐÅÏ¢ºÍSOCÖµ£¬µØÖ·´Óat45db161 µÄ 0x3ff ¿ªÊ
     }
     //***Ôö¼Ó±£´æV1£¬V2£¬V3µÄK,BÖµ¡£¡£¡£ÒòÎªBÖµÐ©ÖµÊÇintÀàÐÍ£¬ËùÒÔÒªÓÃ²¹Âë½øÐÐ±£´æ
    
-    buffer1[VOLT_K1] =Vpn_K1;
-        check += buffer1[VOLT_K1];        
-    buffer1[VOLT_B1] =(unsigned int)(32767-Vpn_B1);
-        check += buffer1[VOLT_B1];
-    buffer1[VOLT_K2] =Vpn_K2;
-        check += buffer1[VOLT_K2];        
-    buffer1[VOLT_B2] =(unsigned int)(32767-Vpn_B2);
-        check += buffer1[VOLT_B2];    
-    buffer1[VOLT_K3] =Vpn_K3;
-        check += buffer1[VOLT_K3];        
-    buffer1[VOLT_B3] =(unsigned int)(32767-Vpn_B3);
-        check += buffer1[VOLT_B3];
+	buffer1[VOLT_K1] =Vpn_K1;
+	check += buffer1[VOLT_K1];
+	
+	buffer1[VOLT_B1] =(unsigned int)(32767-Vpn_B1);
+	check += buffer1[VOLT_B1];
+	
+	buffer1[VOLT_K2] =Vpn_K2;
+	check += buffer1[VOLT_K2];
+	
+	buffer1[VOLT_B2] =(unsigned int)(32767-Vpn_B2);
+	check += buffer1[VOLT_B2];
+	
+	buffer1[VOLT_K3] =Vpn_K3;
+	check += buffer1[VOLT_K3];
+	
+	buffer1[VOLT_B3] =(unsigned int)(32767-Vpn_B3);
+	check += buffer1[VOLT_B3];
            
     buffer1[VERIFICATION] = check;
     
@@ -267,14 +282,13 @@ unsigned char ReadOutErrorRecord(unsigned int counter) //   1:Ð£Ñé²»Í¨¹ý
 	unsigned int check=0;
 	unsigned int verification=0;
 	unsigned int buffer1[STORE_NUMBER],buffer2_1[128],buffer2_2[72];
-//	uchar *buff;
-	
-    DisableInterrupts; //
+
+	DisableInterrupts; //
         M95_Read_Memory(256*(unsigned long)2*counter,(unsigned char* )buffer2_1,256);//´ÓµÚ1Ò³¿ªÊ¼£¨µØÖ·´Ó0¿ªÊ¼,0~255,´æ128¸öµ¥ÌåµçÑ¹  
-    EnableInterrupts; //¿ªÖÐ¶Ï
-    
-    for(i=0;i<128;i++) 
-    {      
+	EnableInterrupts; //¿ªÖÐ¶Ï
+
+	for(i=0;i<128;i++) 
+	{      
          check += buffer2_1[i];
     }
 
@@ -307,12 +321,13 @@ unsigned char ReadOutErrorRecord(unsigned int counter) //   1:Ð£Ñé²»Í¨¹ý
 //		for(i=128;i<200;i++)
 //		    g_storageSysVariableCellOut[i]= buffer2_2[i-128];  //µ¥ÌåµçÑ¹     
 
+//		for(i=128;i<200;i++){
+//			g_storageSysVariableCellOut[i]= buffer2_2[i-128];  //µ¥ÌåµçÑ¹	  
+//		}
+
 		for(i=0;i<36;i++){
 			g_storageSysVariableCellOut[i]= buffer2_1[i];  //µ¥ÌåµçÑ¹ 
 		}
-//		for(i=128;i<200;i++){
-//			g_storageSysVariableCellOut[i]= buffer2_2[i-128];  //µ¥ÌåµçÑ¹     
-//		}
 		return 0;
     } 
     else if(counter > g_errorCounter) 
@@ -335,53 +350,58 @@ unsigned char ReadOutErrorRecord(unsigned int counter) //   1:Ð£Ñé²»Í¨¹ý
 //******************************************************************************
 void TaskRecordProcess(void)
 {
-	  int i,j;
+	int i,j;
+
+	if(!g_errorRecordRead_flag){ 
+		return;
+	}
 	  
-	  if(!g_errorRecordRead_flag) 
-	      return;
-	  
-	  DisableInterrupts; //ÊÇ·ñ¶ÁÈ¡¹ÊÕÏÐÅÏ¢£¬µ±¶ÁÈ¡¹ÊÕÏÐÅÏ¢Ê±£¬ËùÓÐÖÐ¶ÏÍ£Ö¹
-	  for(i=499;i>=0;i--) 
-	  {	    
-	      _FEED_COP();   //2sÄÚ²»Î¹ÄÚ¹·£¬ÔòÏµÍ³¸´Î»
-	      //PORTB_PB4 ^=1; //feed the hardware dog
-	      if(1==ReadOutErrorRecord(i))//Èç¹ûÐ£Ñé²»Í¨¹ý£¬ÔòÖØÐÂ¶ÁÈ¡	 
-	          ReadOutErrorRecord(i);
-	      delay(1000);
-        delay(1000);      
-	      RecordSystem();
-	      delay(1000);
-	      delay(1000);
-	      RecordFaultTemperture();
-	      delay(1000);
-        delay(1000);
-	      RecordRealtime();
-	      delay(1000);
-	      delay(1000);
-	      RecordExtremCellVoltage();
-	      delay(1000);
-        delay(1000);
-        RecordInsulation();
-        delay(1000);
-        delay(1000);
-        RecordVoltKB();
-        delay(1000);
-        delay(1000);	      		       
-	      for(j=0;j<50;j++) 
-	      {	        
-            RecordCellVoltage(j);//0~4*49+3=199
-            delay(1000);
-            delay(1000);   //´Ë´¦±ØÐëÑÓÊ±×ã¹»
-            delay(1000);
-            delay(1000);
-	      }
+	DisableInterrupts; //ÊÇ·ñ¶ÁÈ¡¹ÊÕÏÐÅÏ¢£¬µ±¶ÁÈ¡¹ÊÕÏÐÅÏ¢Ê±£¬ËùÓÐÖÐ¶ÏÍ£Ö¹
+	for(i=499;i>=0;i--) 
+	{	    
+		_FEED_COP();   //2sÄÚ²»Î¹ÄÚ¹·£¬ÔòÏµÍ³¸´Î»
+		//PORTB_PB4 ^=1; //feed the hardware dog
+		if(1==ReadOutErrorRecord(i))//Èç¹ûÐ£Ñé²»Í¨¹ý£¬ÔòÖØÐÂ¶ÁÈ¡	 
+		{
+			ReadOutErrorRecord(i);
+		}
+		
+		delay(1000);
+		delay(1000);      
+		RecordSystem();
+		delay(1000);
+		delay(1000);
+		RecordFaultTemperture();
+		delay(1000);
+		delay(1000);
+		RecordRealtime();
+		delay(1000);
+		delay(1000);
+		RecordExtremCellVoltage();
+		delay(1000);
+		delay(1000);
+		RecordInsulation();
+		delay(1000);
+		delay(1000);
+		RecordVoltKB();
+		delay(1000);
+		delay(1000);	      		       
+		for(j=0;j<50;j++) 
+		{	        
+			RecordCellVoltage(j);//0~4*49+3=199
+			delay(1000);
+			delay(1000);   //´Ë´¦±ØÐëÑÓÊ±×ã¹»
+			delay(1000);
+			delay(1000);
+		}
     }
-	  delay(1000);
-    delay(1000);
-	  RecordEndFlag();//end	 
-	  
-	  g_errorRecordRead_flag=0;	
-	  EnableInterrupts;	
+	
+	delay(1000);
+	delay(1000);
+	RecordEndFlag();//end	 
+
+	g_errorRecordRead_flag=0;	
+	EnableInterrupts;	
 }
 //******************************************************************************
 //* Function name:   parametersClean
@@ -391,24 +411,26 @@ void TaskRecordProcess(void)
 //******************************************************************************
 void parametersClean(void)
 {
-    unsigned int i,k;//,j
-  
-	  for(i=0;i<BMU_NUMBER;i++)
-		    //for(j=0;j<SIX802_NUMBER;j++)
-			      for(k=0;k<CELL_NUMBER;k++)
-			      {				
-				        //g_singleCellVoltage[i][j][k]=0;
-				        g_CellVoltage[i][k]=0;
-				        if(k<Tem_NUMBER)//k<2;
-				            //g_singleCellTemperature[i][j][k]=0;
-				            g_CellTemperature[i][k]=0;
-			      }	
-    g_highestCellVoltage = 0;
-	  g_lowestCellVoltage = 0;
-    g_averageVoltage=0; 
-    
-    for(i=0;i<STORE_NUMBER;i++)
-        g_storageSysVariableOut[i]=0;   
+	unsigned int i,k;//,j
+
+	for(i=0;i<BMU_NUMBER;i++){
+		for(k=0;k<CELL_NUMBER;k++){
+			g_bmu_msg.cell_V[i][k] = 0;
+		}
+		for(k=0;k<Tem_NUMBER;k++){
+			g_bmu_msg.cell_T[i][k] = 0;
+		}
+	}
+	
+//	g_highestCellVoltage = 0;
+//	g_lowestCellVoltage = 0;
+	g_bms_msg.CellVoltageMax = 0;
+	g_bms_msg.CellVoltageMin = 0;
+	g_averageVoltage = 0; 
+
+	for(i=0;i<STORE_NUMBER;i++){
+        g_storageSysVariableOut[i] = 0;
+	}
 
 
 }

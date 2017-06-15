@@ -1,3 +1,5 @@
+#ifndef _BMS20_H_
+#define _BMS20_H_
 //----------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------
 //---------------------- Pride Power------------------------------------------------------------------
@@ -276,8 +278,8 @@ enum storage_list
     VOLT_K2,
     VOLT_B2,
     VOLT_K3,
-    
     VOLT_B3,
+    
     VERIFICATION  //校验
 };
 
@@ -325,7 +327,49 @@ enum storage_cell_vol_list
     CELL_VOLTAGE_36
     
 };
-//                                           
+
+typedef struct {
+	U16	cell_V[BMU_NUMBER][CELL_NUMBER];	// all BMU's cell voltage
+	U8	cell_T[BMU_NUMBER][Tem_NUMBER];		// all BMU's cell temperature
+	
+	U16	cell_V_max[BMU_NUMBER];				// each BMU's cell max voltage
+	U16	cell_V_min[BMU_NUMBER];				// each BMU's cell min voltage
+	
+	U8	cell_T_max[BMU_NUMBER];				// each BMU's cell max temperature
+	U8	cell_T_min[BMU_NUMBER];				// each BMU's cell min temperature
+
+	U8	cell_V_max_group_num[BMU_NUMBER];				// the max voltage in the BMU's LTC6802 number
+	U8	cell_V_min_group_num[BMU_NUMBER];				// the min voltage in the BMU's LTC6802 number
+	U8	cell_V_max_num[BMU_NUMBER];			// the max voltage in the BMU's LTC6802's cell number
+	U8	cell_V_min_num[BMU_NUMBER];			// the min voltage in the BMU's LTC6802's cell number
+
+	U8	cell_T_max_group_num[BMU_NUMBER];	// the max temperature in the BMU's LTC6802 number
+	U8	cell_T_min_group_num[BMU_NUMBER];	// the min temperature in the BMU's LTC6802 number
+	U8	cell_T_max_num[BMU_NUMBER];			// the max temperature in the BMU's LTC6802's cell number
+	U8	cell_T_min_num[BMU_NUMBER];			// the min temperature in the BMU's LTC6802's cell number
+} BMU_CELL_MSG;
+
+typedef struct{
+	U16 CellVoltageMax;
+	U16 CellVoltageMin;
+	
+	U8	CellVoltageMaxPackNum;
+	U8	CellVoltageMinPackNum;
+	
+	U8	CellVoltageMaxNum;
+	U8	CellVoltageMinNum;
+	
+	U8	CellTempMax;
+	U8	CellTempMin;
+
+	U8	CellTempMaxPackNum;
+	U8	CellTempMinPackNum;
+
+	U8	CellTempMaxNum;
+	U8	CellTempMinNum;
+}BMS_CELL_MSG;
+
+
 #define DEVICE_SERIAL_NUMBER 0x11    //	部件序列号 1byte
 #define HARDWARE_VERSION 0x01    //	硬件版本 低4位有效   
 #define SOFTWARE_VERSION 0x01   // 	软件版本 低4位有效
@@ -344,10 +388,12 @@ extern unsigned char BMS_SW_Version[8];
 extern unsigned char BMUOK;
 extern unsigned char HeatFlag; //上电前温度标志位
 
+extern BMU_CELL_MSG g_bmu_msg;
+extern BMS_CELL_MSG g_bms_msg;
  //***********************************************************************************
 //*******************************the end**********************************************
 //************************************************************************************
 ///////////////////////////////////////////////////////////////////////////////////
  /////////////////////////////////////////////////////////////////////////////////////
 
-
+#endif

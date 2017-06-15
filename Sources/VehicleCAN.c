@@ -57,8 +57,6 @@ VCU_CONTROL VCU_Control;
 VCU_CHGCONTROL VCU_ChgControl;
 VCU_PARKINGBRAKE VCU_ParkBrake;
 
-
-
 STATUS_GROUP1 status_group1;
 STATUS_GROUP2 status_group2;
 STATUS_GROUP3 status_group3;
@@ -340,32 +338,31 @@ void BMS_To_VCU_BatteryMsg3(void)
 //*************************************************************************************
 void BMS_To_VCU_BatteryMsg4(void)    // 
 {
-    struct can_msg mg;
-    unsigned char tt=100;
-    unsigned int buff;
+	struct can_msg mg;
+	unsigned char tt=100;
+	unsigned int buff;
 
-    mg.RTR= FALSE;  
-    mg.len = 8;
-    mg.prty = 0;
+	mg.RTR= FALSE;  
+	mg.len = 8;
+	mg.prty = 0;
 
-    buff = (unsigned int)(g_highestCellVoltage*1000); // 当前最高单体电池电压 0.001V
-    mg.data[0] = buff;   //低字节 
-    mg.data[1] = buff>>8;//高字节   
+//	buff = (unsigned int)(g_highestCellVoltage*1000); // 当前最高单体电池电压 0.001V
+	buff = g_bms_msg.CellVoltageMax / 10;
+	mg.data[0] = buff;   //低字节 
+	mg.data[1] = buff>>8;//高字节   
 
-    buff = (unsigned int)(g_lowestCellVoltage*1000);	//当前最低单体电池电压 0.001V
-    mg.data[2] = buff;   //低字节 
-    mg.data[3] = buff>>8;//高字节   
+	//buff = (unsigned int)(g_lowestCellVoltage*1000);	//当前最低单体电池电压 0.001V
+	buff = g_bms_msg.CellVoltageMin / 10;
+	mg.data[2] = buff;   //低字节 
+	mg.data[3] = buff>>8;//高字节   
 
-    //mg.data[4] = highestCellVolNum;   //最高单体动力蓄电池电压所在总成号
-    mg.data[4] = 0x01;   //假设整个系统为一个总成
-    mg.data[5] = HighVolNum+1;   //+1是因为从0开始   最高单体动力蓄电池电压所在总成号内编号
+	mg.data[4] = g_bms_msg.CellVoltageMaxPackNum + 1;   //假设整个系统为一个总成
+	mg.data[5] = g_bms_msg.CellVoltageMaxNum + 1;   //+1是因为从0开始   最高单体动力蓄电池电压所在总成号内编号
+	mg.data[6] = g_bms_msg.CellVoltageMinPackNum + 1;// //假设整个系统为一个总成
+	mg.data[7] = g_bms_msg.CellVoltageMinNum + 1;   //最低单体动力蓄电池电压所在总成号内编号
 
-    // mg.data[6] = lowestCellVolNum;   //最低单体动力蓄电池电压所在总成号
-    mg.data[6] = 0x01;// //假设整个系统为一个总成
-    mg.data[7] = LowVolNum+1;   //最低单体动力蓄电池电压所在总成号内编号
-
-    mg.id= 0x1813D0D2;
-    while((!MSCAN0SendMsg(mg))&&(tt>0))
+	mg.id= 0x1813D0D2;
+	while((!MSCAN0SendMsg(mg))&&(tt>0))
         tt--; 
 }
 //*************************************************************************************
@@ -386,16 +383,14 @@ void BMS_To_VCU_BatteryMsg5(void)
     mg.prty = 0;
 
 
-    mg.data[0] = g_highestTemperature-40+50;   //最高动力蓄电池温度
-    mg.data[1] = g_lowestTemperature-40+50;    //最低动力蓄电池温度 
+    mg.data[0] = g_bms_msg.CellTempMax - 40 + 50;   //最高动力蓄电池温度
+    mg.data[1] = g_bms_msg.CellTempMin - 40 + 50;    //最低动力蓄电池温度 
 
-    //mg.data[2] = highestCellTempNum;   //最高动力蓄电池温度所在总成号
-    mg.data[2] = 0x01;   //假设一个系统算为总成号1
-    mg.data[3] = HighTemNum+1;   //最高动力蓄电池温度所在总成号内编号
+    mg.data[2] = g_bms_msg.CellTempMaxPackNum + 1;   //假设一个系统算为总成号1
+    mg.data[3] = g_bms_msg.CellTempMaxNum+1;   //最高动力蓄电池温度所在总成号内编号
 
-    //mg.data[4] = lowestCellTempNum;   //最低动力蓄电池温度所在总成号
-    mg.data[4] = 0x01;   //假设一个系统算为总成号1
-    mg.data[5] = LowTemNum+1;   //最低动力蓄电池温度所在总成号内编号
+    mg.data[4] = g_bms_msg.CellTempMinPackNum + 1;   //假设一个系统算为总成号1
+    mg.data[5] = g_bms_msg.CellTempMinNum+1;   //最低动力蓄电池温度所在总成号内编号
 
     buff = (unsigned int)(CELL_TEMP_NUM);	//电池系统温度探针总数
     mg.data[6] = buff;   //低字节 
@@ -527,14 +522,14 @@ void BMS_To_VCU_BatCellVolData(void)
 	mg.data[0] = v_cell_cnt;		//start at 0, 0~255, serial number
 	mg.data[1] = v_pack_cnt + 1;	//start at 1, 1~255, group number 
 	
-	mg.data[2] = (U8)((g_CellVoltage[v_pack_cnt][v_cell_cnt]/10) & 0x00ff);
-	mg.data[3] = (U8)(((g_CellVoltage[v_pack_cnt][v_cell_cnt]/10) >> 8) & 0x00ff);
+	mg.data[2] = (U8)((g_bmu_msg.cell_V[v_pack_cnt][v_cell_cnt]/10) & 0x00ff);
+	mg.data[3] = (U8)(((g_bmu_msg.cell_V[v_pack_cnt][v_cell_cnt]/10) >> 8) & 0x00ff);
 	
-	mg.data[4] = (U8)((g_CellVoltage[v_pack_cnt][v_cell_cnt+1]/10) & 0x00ff);
-	mg.data[5] = (U8)(((g_CellVoltage[v_pack_cnt][v_cell_cnt+1]/10) >> 8) & 0x00ff);
+	mg.data[4] = (U8)((g_bmu_msg.cell_V[v_pack_cnt][v_cell_cnt+1]/10) & 0x00ff);
+	mg.data[5] = (U8)(((g_bmu_msg.cell_V[v_pack_cnt][v_cell_cnt+1]/10) >> 8) & 0x00ff);
 	
-	mg.data[6] = (U8)((g_CellVoltage[v_pack_cnt][v_cell_cnt+2]/10) & 0x00ff);
-	mg.data[7] = (U8)(((g_CellVoltage[v_pack_cnt][v_cell_cnt+2]/10) >> 8) & 0x00ff);
+	mg.data[6] = (U8)((g_bmu_msg.cell_V[v_pack_cnt][v_cell_cnt+2]/10) & 0x00ff);
+	mg.data[7] = (U8)(((g_bmu_msg.cell_V[v_pack_cnt][v_cell_cnt+2]/10) >> 8) & 0x00ff);
 
 	v_cell_cnt += 3;
     /* pack2, pack8, pack14, just have 24 cells in the pack, so re-fill the content here */
@@ -583,19 +578,19 @@ void BMS_To_VCU_BatCellTempData(void)
     mg.data[1] = T_pack_cnt + 1;    //group number, start at 1, 1~255
 
 	//vehicle offset is -50 degree, inner CAN offset if -40 degree, so it need +10 here.
-	mg.data[2] = g_CellTemperature[T_pack_cnt][0] + 10;
-	mg.data[3] = g_CellTemperature[T_pack_cnt][1] + 10;
+	mg.data[2] = g_bmu_msg.cell_T[T_pack_cnt][0] + 10;
+	mg.data[3] = g_bmu_msg.cell_T[T_pack_cnt][1] + 10;
 	
 	if(T_pack_cnt == 1 || T_pack_cnt == 7 || T_pack_cnt == 13){
-	    mg.data[4] = g_CellTemperature[T_pack_cnt][0] + 10;
+	    mg.data[4] = g_bmu_msg.cell_T[T_pack_cnt][0] + 10;
 	}
 	else{
-	    mg.data[4] = g_CellTemperature[T_pack_cnt][2] + 10;
+	    mg.data[4] = g_bmu_msg.cell_T[T_pack_cnt][2] + 10;
 	}
 	
-	mg.data[5] = g_CellTemperature[T_pack_cnt][0] + 10;
-    mg.data[6] = g_CellTemperature[T_pack_cnt][0] + 10;
-    mg.data[7] = g_CellTemperature[T_pack_cnt][0] + 10;
+	mg.data[5] = g_bmu_msg.cell_T[T_pack_cnt][0] + 10;
+    mg.data[6] = g_bmu_msg.cell_T[T_pack_cnt][0] + 10;
+    mg.data[7] = g_bmu_msg.cell_T[T_pack_cnt][0] + 10;
     
     T_pack_cnt++;
 	if(T_pack_cnt >= BMU_NUMBER){
