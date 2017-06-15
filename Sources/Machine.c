@@ -50,7 +50,6 @@ unsigned char PreCha_Error=0;             //预充电失败
 unsigned char SelfCheck = 0;              //BMS自检结果: 2,未通过;1通过(预充继电器是否成功断开)
 unsigned char RelayErrorPowerOff = 0;     //继电器下电故障
 
-         
 
 //******************************************************************************
 //* Function name:   VehiclePowerOffLogic

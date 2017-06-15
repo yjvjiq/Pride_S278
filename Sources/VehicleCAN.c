@@ -581,20 +581,21 @@ void BMS_To_VCU_BatCellTempData(void)
 	
     mg.data[0] = 0;                 //T_temp_cnt;        //serial number, start at 0, 0~255
     mg.data[1] = T_pack_cnt + 1;    //group number, start at 1, 1~255
-	
-	mg.data[2] = g_CellTemperature[T_pack_cnt][0];
-	mg.data[3] = g_CellTemperature[T_pack_cnt][1];
+
+	//vehicle offset is -50 degree, inner CAN offset if -40 degree, so it need +10 here.
+	mg.data[2] = g_CellTemperature[T_pack_cnt][0] + 10;
+	mg.data[3] = g_CellTemperature[T_pack_cnt][1] + 10;
 	
 	if(T_pack_cnt == 1 || T_pack_cnt == 7 || T_pack_cnt == 13){
-	    mg.data[4] = g_CellTemperature[T_pack_cnt][0];
+	    mg.data[4] = g_CellTemperature[T_pack_cnt][0] + 10;
 	}
 	else{
-	    mg.data[4] = g_CellTemperature[T_pack_cnt][2];
+	    mg.data[4] = g_CellTemperature[T_pack_cnt][2] + 10;
 	}
 	
-	mg.data[5] = g_CellTemperature[T_pack_cnt][0];
-    mg.data[6] = g_CellTemperature[T_pack_cnt][0];
-    mg.data[7] = g_CellTemperature[T_pack_cnt][0];
+	mg.data[5] = g_CellTemperature[T_pack_cnt][0] + 10;
+    mg.data[6] = g_CellTemperature[T_pack_cnt][0] + 10;
+    mg.data[7] = g_CellTemperature[T_pack_cnt][0] + 10;
     
     T_pack_cnt++;
 	if(T_pack_cnt >= BMU_NUMBER){

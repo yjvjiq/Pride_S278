@@ -21,8 +21,6 @@ extern unsigned int tmr_p6;
 extern unsigned char bmsSelfcheckCounter;
 extern unsigned char  prechargeFinished;    //预充电完成标志位
 
-
-
 extern unsigned char  acc_Connect;
 extern unsigned char preChargeON;
 

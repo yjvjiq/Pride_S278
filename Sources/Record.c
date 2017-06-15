@@ -262,14 +262,13 @@ void StoreSysVariable(void)  //´æ´¢¹ÊÕÏÐÅÏ¢ºÍSOCÖµ£¬µØÖ·´Óat45db161 µÄ 0x3ff ¿ªÊ
 //******************************************************************************
  
 unsigned char ReadOutErrorRecord(unsigned int counter) //   1:Ð£Ñé²»Í¨¹ý
-{  
-    unsigned int i=0;
-    unsigned int check=0;
-    unsigned int verification=0;
-    unsigned int buffer1[STORE_NUMBER],buffer2_1[128],buffer2_2[72];
-//    uchar *buff;
-  
-
+{
+	unsigned int i=0;
+	unsigned int check=0;
+	unsigned int verification=0;
+	unsigned int buffer1[STORE_NUMBER],buffer2_1[128],buffer2_2[72];
+//	uchar *buff;
+	
     DisableInterrupts; //
         M95_Read_Memory(256*(unsigned long)2*counter,(unsigned char* )buffer2_1,256);//´ÓµÚ1Ò³¿ªÊ¼£¨µØÖ·´Ó0¿ªÊ¼,0~255,´æ128¸öµ¥ÌåµçÑ¹  
     EnableInterrupts; //¿ªÖÐ¶Ï
@@ -298,25 +297,31 @@ unsigned char ReadOutErrorRecord(unsigned int counter) //   1:Ð£Ñé²»Í¨¹ý
         check += buffer1[i];
     }
     verification =  buffer1[VERIFICATION];
-   
-
 
     if(verification == check)
     {
-        for(i=0;i<STORE_NUMBER;i++) 
-            g_storageSysVariableOut[i] = buffer1[i]; //²ÎÊý¸öÊý 32
-        for(i=0;i<128;i++) 
-            g_storageSysVariableCellOut[i]= buffer2_1[i];  //µ¥ÌåµçÑ¹ 
-        for(i=128;i<200;i++)
-            g_storageSysVariableCellOut[i]= buffer2_2[i-128];  //µ¥ÌåµçÑ¹     
-        return 0;
-         
+		for(i=0;i<STORE_NUMBER;i++) 
+		    g_storageSysVariableOut[i] = buffer1[i]; //²ÎÊý¸öÊý 32
+//		for(i=0;i<128;i++) 
+//		    g_storageSysVariableCellOut[i]= buffer2_1[i];  //µ¥ÌåµçÑ¹ 
+//		for(i=128;i<200;i++)
+//		    g_storageSysVariableCellOut[i]= buffer2_2[i-128];  //µ¥ÌåµçÑ¹     
+
+		for(i=0;i<36;i++){
+			g_storageSysVariableCellOut[i]= buffer2_1[i];  //µ¥ÌåµçÑ¹ 
+		}
+//		for(i=128;i<200;i++){
+//			g_storageSysVariableCellOut[i]= buffer2_2[i-128];  //µ¥ÌåµçÑ¹     
+//		}
+		return 0;
     } 
     else if(counter > g_errorCounter) 
     {
         for(i=0;i<STORE_NUMBER;i++) 
             g_storageSysVariableOut[i] = 0;
-        for(i=0;i<200;i++)
+//        for(i=0;i<200;i++)
+//            g_storageSysVariableCellOut[i]=0;   
+        for(i=0;i<36;i++)
             g_storageSysVariableCellOut[i]=0;   
         return 0; 
     }

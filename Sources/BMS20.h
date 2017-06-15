@@ -330,18 +330,14 @@ enum storage_cell_vol_list
 #define HARDWARE_VERSION 0x01    //	硬件版本 低4位有效   
 #define SOFTWARE_VERSION 0x01   // 	软件版本 低4位有效
 #define COMMUNICATION_VERSION 0x01  // 通讯协议版本 低4位有效
-//
-//
+
 //#define ParamNUMBER 38
 #define ENDFLAG 96
 
-//
-//
 #define DISCHARGING 0 //放电
 #define RECHARGING 2  //充电
 #define FASTRECHARGING 1  //快充
 #define TESTSTATE 4  //调试模式
-
 
 //************ main.c ****************************************
 extern unsigned char BMS_SW_Version[8];

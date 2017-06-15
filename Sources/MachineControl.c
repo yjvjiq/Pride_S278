@@ -156,7 +156,8 @@ void stateCodeTransfer(void)
             {
                 if(bmsSelfcheckCounter==1)//无故障
                     stateCode=47;
-                /*else 
+                /*
+                else 
                 {
                     DisChangerDelay++;
                     if(DisChangerDelay>=300) //延时判断,防止bmsSelfcheckCounter变化慢导致的误判
@@ -164,7 +165,8 @@ void stateCodeTransfer(void)
                         DisChangerDelay=0;//自检计数器没有置1,有粘连情况,不放电
                         stateCode=47;
                     }
-                }*/////不能加吧？加的话可能就报不出来粘连故障了
+                }
+                */////不能加吧？加的话可能就报不出来粘连故障了
             } 
             else if((plug_DC_Connect==1)&&(bmsSelfcheckCounter==1)) //直流充电枪,无粘连故障
             {
