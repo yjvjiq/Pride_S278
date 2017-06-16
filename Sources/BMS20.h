@@ -60,8 +60,15 @@
 #define HIGHEST_VOL                 7344    //CML充电机规格:最大输出能力  3.6*204*10
 #define LOWEST_VOL                  6528    //CML充电机规格:最小输出能力   3.2*204*10
 
+#define POWER_SUPPLY 12	// when it's 24 means the BMS power supply is 24V.	
+// below is the 24V power supply
+#if(POWER_SUPPLY == 24)
 #define CC2VOLHIGH                  7.5     //CC2测量范围高
 #define CC2VOLLOW                   4.2     //CC2测量范围低
+#else
+#define CC2VOLHIGH                  7.5     //CC2测量范围高
+#define CC2VOLLOW                   2.0     //CC2测量范围低
+#endif
 
 ////////////////////////加热参数配置//////////////////////////////////////////////
 #define HIGHEST_ALLOWED_HEAT_CHARGE_V       673.2   //最大允许加热充电总电压 V   3.3*204=673.2

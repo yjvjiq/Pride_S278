@@ -25,7 +25,7 @@ void bmsModeAwake(void)
     {
         while(input6_state())
             _FEED_COP(); //无charge_in信号，则等            
-        if((CC2VOL<=CC2VOLHIGH)&&(CC2VOL>=CC2VOLLOW))
+        if((CC2VOL <= CC2VOLHIGH) && (CC2VOL >= CC2VOLLOW))
         {
             g_BmsModeFlag = FASTRECHARGING; //快充模式   
             plug_DC_Connect=1;
@@ -112,8 +112,6 @@ void SignalOnOffJudge(void)
         else //CC2无信号
         {
          ////////////////////直流充电枪CC2拔枪检测/////////////////////   
-            
-
             DC_Connect=0;
             DC_DisConnect++;//直流拔枪延时检测,必须连续检测到200*5ms时间才可以
             if(DC_DisConnect>=100)

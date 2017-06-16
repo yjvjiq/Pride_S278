@@ -180,8 +180,8 @@ void SendMes(void)
     ///////////////////////采用单帧发送ms///////////////////////////
     //if(1 == VCU_CellRequest.Bit.CellVolReq )     //0x1c15D0D2
     
-        PIT_70ms_Counter0++; //500ms
-        if(PIT_70ms_Counter0 > 10)  //100ms发一帧
+        PIT_70ms_Counter0++; //200ms
+        if(PIT_70ms_Counter0 > 20)  //200ms发一帧
         {
             BMS_To_VCU_BatCellVolData();
 //            CellNum++;

@@ -208,23 +208,33 @@ void TaskBmuProcess(void)
 void TaskReport2PC(void) 
 {
     static unsigned char ct=0;
+	
     ct++;
-    if(ct==1)
-        bmsToPcInfo450();
-    if(ct==2)
-			  bmsToPcInfo451();
-    if(ct==3)
-			  bmsToPcInfo552();
-    if(ct==4)
-        bmsToPcInfo553();
-    if(ct==5)
-        bmsToPcInfo554();
-    if(ct==6)
-    {   
-        if(g_BmsModeFlag == FASTRECHARGING)
-            bmsToSBMSMessage1();   
-        ct=0;
-    }
+	switch(ct){
+		case 1:
+			bmsToPcInfo450();
+			break;
+		case 2:
+			bmsToPcInfo451();
+			break;
+		case 3:
+			bmsToPcInfo552();
+			break;
+		case 4:
+			bmsToPcInfo553();
+			break;
+		case 5:
+			bmsToPcInfo554();
+			break;
+		case 6:
+			if(g_BmsModeFlag == FASTRECHARGING){
+				bmsToSBMSMessage1(); //0x000c0125
+			}
+			ct = 0;
+			break;
+		default:
+			break;
+	}
 }
 //***********************************************************************
 //* Function name:   TaskGpioTest

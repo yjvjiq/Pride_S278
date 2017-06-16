@@ -903,11 +903,11 @@ void GetDCTem (void)
     GetADVol1 = readADC_SingleEnded(1);//Vol of CC2
     GetADVol2 = readADC_SingleEnded(2); //Vol of 电源
     //EnableInterrupts; //开中断，接收状态机编码 
-    VolValue1=4.096*getAD1/2048.0;     //(2048-0)/(4.096-0)=(AD1-0)/(ADX-0)
-    VolValue2=4.096*getAD2/2048.0;
+    VolValue1=4.096*(float)getAD1/2048.0;     //(2048-0)/(4.096-0)=(AD1-0)/(ADX-0)
+    VolValue2=4.096*(float)getAD2/2048.0;
     
-    VolValue3=4.096*GetADVol1/2048.0; //cc2
-    VolValue4=4.096*GetADVol2/2048.0; //电源电压
+    VolValue3=4.096*(float)GetADVol1/2048.0; //cc2
+    VolValue4=4.096*(float)GetADVol2/2048.0; //电源电压
     
     CC2VOL = (75.0+12.0)*VolValue3/12.0; //CC2电压
     PowerVOL = (75.0+12.0)*VolValue4/12.0; //电源电压

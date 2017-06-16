@@ -77,7 +77,7 @@ void bmsToPcInfo450(void)
   
     mg.id= 0x000c0450;
     while((!MSCAN2SendMsg(mg))&&(tt>0))
-        tt--; 
+        tt--;
     //MSCAN2SendMsg(mg);
 }
 //******************************************************************************
@@ -223,8 +223,6 @@ void bmsToPcInfo554(void)
     mg.data[6]= 0;
     mg.data[7]= 0;
     
-    
-    
     mg.id= 0x000c0554; 
 	  while((!MSCAN2SendMsg(mg))&&(tt>0))
         tt--;
@@ -237,27 +235,25 @@ void bmsToPcInfo554(void)
 //******************************************************************************
 void bmsToSBMSMessage1(void)
 {
-    struct can_msg mg;
-    //unsigned int buff;
-    char tt=100;
-    mg.RTR= FALSE;  
-    mg.len = 8;
-    mg.prty = 0;
-    
-    mg.data[0]= InsRelayControl;//绝缘控制继电器的控制 
-    mg.data[1]= 0; 
-    mg.data[2]= 0;
-	  mg.data[3]= 0;
-	  
-    mg.data[4]= 0; 
-    mg.data[5]= 0; 
-    mg.data[6]= 0;
-	  mg.data[7]= 0;
- 
-    mg.id= 0x000c0125;
-    while((!MSCAN2SendMsg(mg))&&(tt>0))
-	      tt--; 
-	  //MSCAN2SendMsg(mg);
+	struct can_msg mg;
+	char tt=100;
+
+	mg.id= 0x000c0125;
+	mg.RTR= FALSE;  
+	mg.len = 8;
+	mg.prty = 0;
+
+	mg.data[0]= InsRelayControl;//绝缘控制继电器的控制 
+	mg.data[1]= 0; 
+	mg.data[2]= 0;
+	mg.data[3]= 0;
+
+	mg.data[4]= 0; 
+	mg.data[5]= 0; 
+	mg.data[6]= 0;
+	mg.data[7]= 0;
+	while((!MSCAN2SendMsg(mg))&&(tt>0))
+		tt--;
 }
 //******************************************************************************
 //* Function name:   bmsToPcInfo750

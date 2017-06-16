@@ -66,7 +66,7 @@ void stateCodeTransfer(void)
             stateCode=12;
         }
         else if(stateCode==12)
-        {  
+        {
             if((MSDError)||(N_RelayConnetError)||(HighVolPowerOff)||(acc_Connect == 0)
             ||(VCU_Request.Bit.Finish_PreChg)||(plug_DC_Connect == 1))//CC2
                 stateCode=46;//MSD断路||负极粘连||需要下电的故障||ON=0||整车预充已完成
@@ -380,8 +380,17 @@ void stateCodeTransfer(void)
         } 
         else if((stateCode==186))
         {
-            if(bmsSelfcheckCounter==1)//无故障
+			if(bmsSelfcheckCounter == 1 &&
+				acc_Connect == 1 &&
+				g_highVoltageV3 >= 200){
+				stateCode = 30;
+			}
+			else if((bmsSelfcheckCounter == 1) &&
+				(g_highVoltageV3 < 200) &&
+				(OffState == 1) &&	//no fault
+				(acc_Connect==0)){
                 stateCode=187;
+			}
         } 
     } 
 }
