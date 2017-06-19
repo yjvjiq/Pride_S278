@@ -172,68 +172,62 @@ typedef union{
 
 typedef union{
 	unsigned char byte;
-	struct {
 	
-	  byte F0_Cell_Over_V:2;  //bit0~1 单体电池过压
-	  byte F2_Cell_Under_V:2;  //bit2~3 单体电池欠压
-		byte F4_Temp_Over:2;  //bit4~5     单体温度过温
-	  byte flag:2;  //bit6~7	    电池组差异（系统不匹配）预留
+	struct {
+	byte F0_Cell_Over_V:2;  //bit0~1 单体电池过压
+	byte F2_Cell_Under_V:2;  //bit2~3 单体电池欠压
+	byte F4_Temp_Over:2;  //bit4~5     单体温度过温
+	byte flag:2;  //bit6~7	    电池组差异（系统不匹配）预留
 	  	 
 	}Bit;
 }ERROR_GROUP2; 
 
 typedef union{
 	unsigned char byte;
-	struct {
 	
-	  byte F0_Sub_Com_Err:1; //bit0     内部通讯故障
-	  byte F1_V_CAN_Err:1;      //bit1  外网CAN通信故障
-	  byte F2_P_Con_Err:1;  //bit2    主正继电器粘连
-	  byte F3_PreCha_Failure:1;  //bit3 预充电失败、、、、、、、、、、、、、、、
-		byte F4_N_Con_Err:1;  //bit4     主负继电器粘连
-	  byte F5_DC_Con_Err:1;  //bit5	    外接充电正接触器粘连
-	  byte F6_DisChg_Over_I:2;  //bit6~7	    放电电流过大
+	struct {
+		byte F0_Sub_Com_Err		:1; //bit0  内部通讯故障
+		byte F1_V_CAN_Err		:1; //bit1  外网CAN通信故障
+		byte F2_P_Con_Err		:1; //bit2  主正继电器粘连
+		byte F3_PreCha_Failure	:1; //bit3  预充电失败
+		byte F4_N_Con_Err		:1; //bit4  主负继电器粘连
+		byte F5_DC_Con_Err		:1; //bit5  外接充电正接触器粘连
+		byte F6_DisChg_Over_I	:2; //bit6~7    放电电流过大
 	  	 
 	}Bit;
 }ERROR_GROUP3; 
 
 typedef union{
 	unsigned char byte;
-	struct {
 	
-	  byte F0_SOC_Low:2;  //bit6~7	    SOC低
-	  byte F2_SOC_Over:2;  //bit4~5     SOC高
-	  byte F4_Bat_Under_V:2;  //bit2~3 电池欠压
-	  byte F6_Bat_Over_V:2;  //bit0~1   电池过压
-
-	  	 
+	struct {
+		byte F0_SOC_Low		:2;  //bit6~7   SOC低
+		byte F2_SOC_Over	:2;  //bit4~5   SOC高
+		byte F4_Bat_Under_V	:2;  //bit2~3   电池欠压
+		byte F6_Bat_Over_V	:2;  //bit0~1   电池过压
 	}Bit;
 }ERROR_GROUP4; 
 
 typedef union{
 	unsigned char byte;
 	struct {
-	
-	 
-	  byte F0_FeedB_Over_I:2;  //bit0~1   回馈过流
-		byte F2_Cell_Dif_T:2;  //bit2~3     单体温差过大
-	  byte F4_Cell_Dif_V:2;  //bit4~5	    电池单体压差大
-	  byte F6_Cell_Under_T:2;  //bit6~7 单体温度低
+		byte F0_FeedB_Over_I	:2;  //bit0~1   回馈过流
+		byte F2_Cell_Dif_T		:2;  //bit2~3   单体温差过大
+		byte F4_Cell_Dif_V		:2;  //bit4~5   电池单体压差大
+		byte F6_Cell_Under_T	:2;  //bit6~7   单体温度低
 	  	 
 	}Bit;
 }ERROR_GROUP5;
 
 typedef union{
 	unsigned char byte;
-	struct {
 	
-	 
-	  byte flag:4;  //bit0~3   预留
-		byte F4_HC_Rel_Error:1;  //bit4     热管理机组接触器故障（只针对水冷系统）
-	  byte F5_HC_Error:1;  //bit5	    热管理机组接触器故障（只针对热管理系统）
-	  byte F6_H_Neg_Rel:1;  //bit6 电池组加热负极接触器故障
-	  byte F7_H_Pos_Rel:1;  //bit7 电池组加热正极接触器故障
-	  	 
+	struct {
+		byte flag				:4;  //bit0~3   预留
+		byte F4_HC_Rel_Error	:1;  //bit4     热管理机组接触器故障（只针对水冷系统）
+		byte F5_HC_Error		:1;  //bit5	    热管理机组接触器故障（只针对热管理系统）
+		byte F6_H_Neg_Rel		:1;  //bit6     电池组加热负极接触器故障
+		byte F7_H_Pos_Rel		:1;  //bit7     电池组加热正极接触器故障
 	}Bit;
 }ERROR_GROUP7;
 

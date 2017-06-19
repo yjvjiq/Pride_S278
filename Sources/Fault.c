@@ -14,21 +14,36 @@
 //----------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------
 #include "BMS20.h"
-//#include "Fault.h" 
+//#include "Fault.h"
+#include "TotalVoltageOverVoltage.h"
+#include "TotalVoltageUnderVoltage.h"
+#include "DisChargeOverCurrent.h"
+#include "ChargeOverCurrent.h"
+#include "CellOverVoltage.h"
+#include "CellUnderVoltage.h"
+#include "CurrentSensorFault.h"
+#include "CellVolUnbalance.h"
+#include "BatteryTemperatureLow.h"
+#include "BatteryTemperatureHigh.h"
+#include "socLow.h"
+#include "IsolationLow.h"
+#include "ChargeSocketOverTemp.h"
+#include "Supply24V.h"
+
 ///////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////// 
 
 //***********************************************************************************
 //***********************************************************************************
-unsigned char  g_caution_Flag_1 =0;//BMS故障状态 FOR 上位机
-unsigned char  g_caution_Flag_2 =0;
-unsigned char  g_caution_Flag_3 =0;
-unsigned char  g_caution_Flag_4 =0;
-unsigned int g_errorCounter;
-unsigned char ACCha_Flag_BST=0;
-unsigned char ACCOverTime=0;//交流充电机通信故障
-unsigned char VCUOverTime=0;//与VCU通讯故障
-unsigned char SBMSOverTime=0;//与另一主板SBMS通讯故障
+unsigned char	g_caution_Flag_1 = 0;//BMS故障状态 FOR 上位机
+unsigned char	g_caution_Flag_2 = 0;
+unsigned char	g_caution_Flag_3 = 0;
+unsigned char	g_caution_Flag_4 = 0;
+unsigned int	g_errorCounter;
+unsigned char	ACCha_Flag_BST = 0;
+unsigned char	ACCOverTime = 0;//交流充电机通信故障
+unsigned char	VCUOverTime = 0;//与VCU通讯故障
+unsigned char	SBMSOverTime = 0;//与另一主板SBMS通讯故障
 //unsigned char CarErrorLevel = 0;
 
 CUTDISCURT0  CutDisCurt0;
@@ -47,7 +62,10 @@ CUTACCHACURT0 CutACChaCurt0;
 CUTACCHACURT50 CutACChaCurt50;
 //CUTACCHACURT70 CutACChaCurt70;
 
-unsigned char test1=0;//
+unsigned char test1=0;
+
+//declaration for the function in fault.c below
+int TurnOffAllRelay(void);
 
 
 //******************************************************************************
@@ -103,16 +121,17 @@ void errorSystemVoltageOV(void)
     unsigned char Error[4]={0};
     unsigned char i;
     unsigned char Level=0; 
+	
     //因为输入不一样，所以调用的模型在不同模式下输入不同        
-   
     if(stateCode == 30)//行车
-        Level=TotalVoltageOverVoltage_custom(g_systemVoltage,DISCHARGING,g_highVoltageV3);
+        Level=TotalVoltageOverVoltage_custom(g_systemVoltage,g_highVoltageV3,DISCHARGING);
            
     else if(stateCode == 170)//快充模式
-        Level=TotalVoltageOverVoltage_custom(g_systemVoltage,FASTRECHARGING,g_highVoltageV5);
+        Level=TotalVoltageOverVoltage_custom(g_systemVoltage,g_highVoltageV5,FASTRECHARGING);
     
     else if(stateCode == 110) //慢充
-        Level=TotalVoltageOverVoltage_custom(g_systemVoltage,RECHARGING,g_highVoltageV6);
+        Level=TotalVoltageOverVoltage_custom(g_systemVoltage,g_highVoltageV6,RECHARGING);
+	
     ///////////////////上报故障等级数/////////////////////////   
     for(i=1;i<4;i++) 
        if(i==Level) 
@@ -766,6 +785,7 @@ void CHG_SocketOT(void)
     unsigned char Error[4]={0}; 
     unsigned char Level=0;
     float tmax;
+    
     if(DCTem1 >= DCTem2)
         tmax = DCTem1;
     else

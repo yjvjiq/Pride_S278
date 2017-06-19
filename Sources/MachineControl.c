@@ -380,15 +380,7 @@ void stateCodeTransfer(void)
         } 
         else if((stateCode==186))
         {
-			if(bmsSelfcheckCounter == 1 &&
-				acc_Connect == 1 &&
-				g_highVoltageV3 >= 200){
-				stateCode = 30;
-			}
-			else if((bmsSelfcheckCounter == 1) &&
-				(g_highVoltageV3 < 200) &&
-				(OffState == 1) &&	//no fault
-				(acc_Connect==0)){
+			if(bmsSelfcheckCounter == 1){
                 stateCode=187;
 			}
         } 
