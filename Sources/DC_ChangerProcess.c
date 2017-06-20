@@ -122,7 +122,7 @@ unsigned char DCFaultDone(void)
         OffState=1;//请求下电
         ReturnValue = 1;
     } 
-    else if(((g_caution_Flag_2 &0x80)!=0)//、充电机通信故障
+    else if(((g_caution_Flag_2 &0x80)!=0)//充电机通信故障
     ||(Error_Group3.Bit.F0_Sub_Com_Err)//内网通讯故障
     ||(ACCha_Flag_BST)//充电时电流方向异常
     ||(Error_Group0.Bit.F0_Fire_Warning==3))//火灾预警3级 

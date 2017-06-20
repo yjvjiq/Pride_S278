@@ -49,7 +49,7 @@ unsigned int chargeRemainderTime = 0;          //剩余充电时间
 
 
 float VehicleSpeed = 0;                         //车速信号快充                           
-unsigned char WifeLife=0;  //wife信号生命信号 如果受电弓充电在快充CAN上，需要转发到整车CAN
+unsigned char WiFiLife=0;  //WiFi信号生命信号 如果受电弓充电在快充CAN上，需要转发到整车CAN
                                                 
 VCU_REQUEST VCU_Request;
 VCU_CELLREQUEST VCU_CellRequest;
@@ -277,11 +277,13 @@ void BMS_To_VCU_BatteryMsg2(void)
     mg.data[2] = buff;   //低字节 
     mg.data[3] = buff>>8;//高字节     
 
-    if(Can_g_socValue>=0.995) 
+    if(Can_g_socValue>=0.995){ 
         buff = 100*2;
-    else 
+    }
+    else{ 
         buff = (unsigned int)(Can_g_socValue*100*2);    //系统SOC
-       
+    }
+	
     mg.data[4] = buff;      //SOC低字节      
     mg.data[5] = buff>>8;      //SOC高字节
      
@@ -455,7 +457,6 @@ void BMS_To_VCU_BatteryMsg7(void)
 	mg.len = 8;
 	mg.prty = 0;
 
-
 	mg.data[0] = Error_Group0.byte;//充电插座过温，火灾预警
 	mg.data[1] = Error_Group6.byte; 
 	mg.data[2] = status_group4.byte;   
@@ -606,7 +607,7 @@ void BMS_To_VCU_BatCellTempData(void)
 //* EntryParameter : None
 //* ReturnValue    : None
 //******************************************************************************
-void BMS_VCU_WIFE(void)
+void BMS_VCU_WIFI(void)
 {
 	struct can_msg mg;
 	unsigned char tt=100;
@@ -623,7 +624,7 @@ void BMS_VCU_WIFE(void)
 	mg.data[4] = 0x00;
 	mg.data[5] = 0x00;//
 	mg.data[6] = 0x00;
-	mg.data[7] = WifeLife;//Life
+	mg.data[7] = WiFiLife;//Life
 
 	while((!MSCAN0SendMsg(mg))&&(tt>0))
 		tt--; 

@@ -432,11 +432,6 @@ unsigned char bmuProcess2(void)//
 		
         //计算电池单体最高和最低电压,温度                                          
         //***单体电压极值处理***********************************************************************************		      			
-//		Cell_V_Max = g_bmu_msg.cell_V_max[0];
-//		Cell_V_Min = g_bmu_msg.cell_V_min[0];
-//		Cell_V_Max_Num = (g_bmu_msg.cell_V_max_group_num[0] - 1) * 12 + g_bmu_msg.cell_V_max_num[0];
-//		Cell_V_Min_Num = (g_bmu_msg.cell_V_min_group_num[0] - 1) * 12 + g_bmu_msg.cell_V_min_num[0];
-		
 		//the init value for the local variables.
 		pack_cnt = 0;
 		for(cnt=0;cnt<BMU_NUMBER;cnt++){
@@ -603,6 +598,14 @@ unsigned char bmuProcess2(void)//
         Tavg = (U8)(sum / ((U32)BMU_NUMBER*2 - 2));
 		g_averageTemperature = Tavg;
 
+		sum = 0;
+		for(pack_cnt = 0; pack_cnt < BMU_NUMBER; pack_cnt++){
+			for(cell_cnt = 0; cell_cnt < CELL_NUMBER; cell_cnt++){
+				sum += g_bmu_msg.cell_V[pack_cnt][cell_cnt];
+			}
+		}
+		g_systemVoltage = (float)sum/30000;
+		
         //************************************************************************************************
         for(i=0;i<1;i++)  //clear the receive buff.
         {

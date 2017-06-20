@@ -45,39 +45,39 @@ unsigned char InsRelayControl = 0;//绝缘控制继电器控制
 //******************************************************************************
 void bmsToPcInfo450(void)
 {
-    struct can_msg mg;
-    unsigned int buff;
-    float rc = 0;
-    static unsigned char life=0;
-    float g_socValueSet=0;  //实际发送给整车
-    char tt=100;
-    mg.RTR= FALSE;  
-    mg.len = 8;
-    mg.prty = 0;
-    
-    life++;
-    mg.data[0] = life;   //生命信号
-           
-	  buff = (unsigned int)(g_socValue*100*2.5);
-    mg.data[1] =(unsigned char)buff;// 电池荷电状态SOC 分辨率0.4,单位%
-    
-    rc = -BiggestFeedbackPower;
-	  buff = (unsigned int)(rc*100);	//最大允许回馈功率
-	  mg.data[2]= buff>>8;//高字节 
-	  mg.data[3]= (unsigned char)buff;//低字节 
-	  
-	  rc = BiggestDischargePower;
-	  buff = (unsigned int)(rc*100);	//最大放电功率
-	  mg.data[4]= buff>>8;//高字节 
-	  mg.data[5]= (unsigned char)buff;//低字节 
-	 
-    mg.data[6] = g_highestTemperature - g_lowestTemperature;//单体电池 温度差
-    buff = (unsigned int)(PowerVOL*5);
-    mg.data[7] =buff; ;//由电池系统编码：0~3电芯厂编码 4~7 BMS编码改为电源电压
-  
-    mg.id= 0x000c0450;
-    while((!MSCAN2SendMsg(mg))&&(tt>0))
-        tt--;
+	struct can_msg mg;
+	unsigned int buff;
+	float rc = 0;
+	static unsigned char life=0;
+	float g_socValueSet=0;  //实际发送给整车
+	char tt=100;
+	mg.RTR= FALSE;  
+	mg.len = 8;
+	mg.prty = 0;
+
+	life++;
+	mg.data[0] = life;   //生命信号
+
+	buff = (unsigned int)(g_socValue*100*2.5);
+	mg.data[1] =(unsigned char)buff;// 电池荷电状态SOC 分辨率0.4,单位%
+
+	rc = -BiggestFeedbackPower;
+	buff = (unsigned int)(rc*100);	//最大允许回馈功率
+	mg.data[2]= buff>>8;//高字节 
+	mg.data[3]= (unsigned char)buff;//低字节 
+
+	rc = BiggestDischargePower;
+	buff = (unsigned int)(rc*100);	//最大放电功率
+	mg.data[4]= buff>>8;//高字节 
+	mg.data[5]= (unsigned char)buff;//低字节 
+
+	mg.data[6] = g_highestTemperature - g_lowestTemperature;//单体电池 温度差
+	buff = (unsigned int)(PowerVOL*5);
+	mg.data[7] =buff; ;//由电池系统编码：0~3电芯厂编码 4~7 BMS编码改为电源电压
+
+	mg.id= 0x000c0450;
+	while((!MSCAN2SendMsg(mg))&&(tt>0))
+		tt--;
     //MSCAN2SendMsg(mg);
 }
 //******************************************************************************
@@ -205,7 +205,6 @@ void bmsToPcInfo553(void)
 void bmsToPcInfo554(void)
 {
     struct can_msg mg;
-    //unsigned int buff;
     char tt=100;
     
     mg.RTR= FALSE;  

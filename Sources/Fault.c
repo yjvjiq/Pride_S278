@@ -35,6 +35,20 @@
 
 //***********************************************************************************
 //***********************************************************************************
+//typedef struct{
+	/* g_caution_Flag_1 */
+//	U8 Pack_UV_Flt_lv3		:1; //bit0
+//	U8 CellUV_Flt_lv3		:1;	//bit1
+//	U8 SystemVoltageOV		:1;
+//	U8 CellVoltageOV		:1;
+//	U8 LowIsolation			:1;
+//	U8 CellTemperatureOT	:1;
+//	U8 CellTemperatureUT	:1;
+//	U8 ChargeOC				:1;	//bit7
+
+//	
+//}CAUTION_FLAG_TYPE;
+
 unsigned char	g_caution_Flag_1 = 0;//BMS故障状态 FOR 上位机
 unsigned char	g_caution_Flag_2 = 0;
 unsigned char	g_caution_Flag_3 = 0;
@@ -122,45 +136,44 @@ void errorSystemVoltageOV(void)
     unsigned char i;
     unsigned char Level=0; 
 	
-    //因为输入不一样，所以调用的模型在不同模式下输入不同        
-    if(stateCode == 30)//行车
+    //judge by different BMS work mode, as the input is different.
+    if(stateCode == 30)//discharge mode.
         Level=TotalVoltageOverVoltage_custom(g_systemVoltage,g_highVoltageV3,DISCHARGING);
            
-    else if(stateCode == 170)//快充模式
+    else if(stateCode == 170)//fast charge mode.
         Level=TotalVoltageOverVoltage_custom(g_systemVoltage,g_highVoltageV5,FASTRECHARGING);
     
-    else if(stateCode == 110) //慢充
+    else if(stateCode == 110) // ACC charge mode.(re-charging mode)
         Level=TotalVoltageOverVoltage_custom(g_systemVoltage,g_highVoltageV6,RECHARGING);
 	
-    ///////////////////上报故障等级数/////////////////////////   
+    ///////////////////The fault level process and send out/////////////////////////   
     for(i=1;i<4;i++) 
        if(i==Level) 
            Error[i]=1;
        
-    Error_Group4.Bit.F6_Bat_Over_V = Level;//整车CAN赋值   
-    //1级处理
-    Can554Byte2.Bit.F2_systemOV1=Error[1];//内部CAN赋值
-    //CutChaCurt70.Bit.F0_Battery_Over_Voltage3=Error[1];
-    //CutDCChaCurt70.Bit.F0_Battery_Over_Voltage3=Error[1];
-    //CutACChaCurt70.Bit.F0_Battery_Over_Voltage3=Error[1]; 
+    Error_Group4.Bit.F6_Bat_Over_V = Level;//send to vehicle CAN.
+    
+	//level 1 process
+	Can554Byte2.Bit.F2_systemOV1 				= Error[1]; // send to PC software.
     
     //level 2 process
-    Can554Byte0.Bit.F2_systemOV2=Error[2] ;
-    CutChaCurt50.Bit.F0_Battery_Over_Voltage2=Error[2] ;
-    CutDCChaCurt0.Bit.F0_Battery_Over_Voltage21=Error[2] ;  
-    CutACChaCurt0.Bit.F0_Battery_Over_Voltage21=Error[2];
+    Can554Byte0.Bit.F2_systemOV2				= Error[2]; // send to PC software.
+    CutChaCurt50.Bit.F0_Battery_Over_Voltage2	= Error[2];
+    CutDCChaCurt0.Bit.F0_Battery_Over_Voltage21	= Error[2];
+    CutACChaCurt0.Bit.F0_Battery_Over_Voltage21	= Error[2];
     
-    //3级处理
-    if(Error[3]==1)
-        g_caution_Flag_1 |= 0x04;
-    else 
+    //level 3 process
+    if(Error[3] == 1)
+        g_caution_Flag_1 |= 0x04;// 0000 0100
+    else
     {
-        if(stateCode == 30)
-            g_caution_Flag_1 &= 0xfb;    
+        if(stateCode == 30){
+            g_caution_Flag_1 &= 0xfb;//ffff 1011
+        }
     }
-    CutChaCurt0.Bit.F0_Battery_Over_Voltage1=Error[3] ;
-    CutDCChaCurt0.Bit.F0_Battery_Over_Voltage21=Error[3] ;
-    CutACChaCurt0.Bit.F0_Battery_Over_Voltage21=Error[3]; 
+    CutChaCurt0.Bit.F0_Battery_Over_Voltage1	= Error[3];
+    CutDCChaCurt0.Bit.F0_Battery_Over_Voltage21	= Error[3];
+    CutACChaCurt0.Bit.F0_Battery_Over_Voltage21	= Error[3];
 }
 //******************************************************************************
 //* Function name:    errorSystemVoltageUV
@@ -169,7 +182,7 @@ void errorSystemVoltageOV(void)
 //* ReturnValue    : None
 //******************************************************************************
 void errorSystemVoltageUV(void) //恢复,上报
-{   
+{
     unsigned char i;
     unsigned char Error[4]={0};
     unsigned char Level=0; 
@@ -185,8 +198,6 @@ void errorSystemVoltageUV(void) //恢复,上报
     
     //1级故障处理
     Can554Byte2.Bit.F0_systemUV1=Error[1]; //to PC
-    //CutDisCurt70.Bit.F0_Battery_Under_Voltage3=Error[1];
-    
     
     //2级处理
     Can554Byte0.Bit.F0_systemUV2=Error[2];//to PC
@@ -195,12 +206,10 @@ void errorSystemVoltageUV(void) //恢复,上报
     //3级处理 
     if(Error[3] == 1) 
     {
-        g_caution_Flag_1 |=0x01;
-        status_group1.Bit.St_BMS =2;//BMS状态高压断开
-
+        g_caution_Flag_1 |= 0x01;
+        status_group1.Bit.St_BMS = 2;//BMS状态高压断开
     }
     CutDisCurt0.Bit.F0_Battery_Under_Voltage1 = Error[3];
-    
 }
 
 //******************************************************************************

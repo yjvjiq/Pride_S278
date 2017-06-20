@@ -43,7 +43,7 @@ void bmsModeAwake(void)
     } 
     else //如果IN5！=0，说明快充枪没插
     {
-        //收到车载WIFE发送降弓开关，降弓到位信号
+        //收到车载WiFi发送降弓开关，降弓到位信号
         //if((VCU_ChgControl.Bit.downC_Switch)&&(VCU_ChgControl.Bit.downC_OK))  //////////需要确认||(VCU_ParkBrake.Bit.Parking_Brake)
         if((VCU_ChgControl.Bit.downC_Switch)||(VCU_ChgControl.Bit.downC_OK))
         {

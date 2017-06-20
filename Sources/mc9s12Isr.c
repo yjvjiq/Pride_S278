@@ -133,7 +133,7 @@ void SendMes(void)
         PIT_10ms_Counter4++;
         if(PIT_10ms_Counter4>=21) 
         {
-            BMS_VCU_WIFE();       //转发车载WIFE的信息从快充CAN到整车CAN
+            BMS_VCU_WIFI();       //转发车载WiFi的信息从快充CAN到整车CAN
             PIT_10ms_Counter4=11;//0x0c0217A7
         }
     }
@@ -380,7 +380,7 @@ interrupt void CAN0_RECEIVE_ISR(void)   //车载 /外部CAN / 500Hz
             VCU_Request.byte = msgData[2];
             break;
             
-        case 0x0C0217A7://受电弓车载wife      /////////如果受电弓充电走整车CAN在此接收报文
+        case 0x0C0217A7://受电弓车载WiFi      /////////如果受电弓充电走整车CAN在此接收报文
             VCU_ChgControl.byte = msgData[3];
             ACCOverTime = 0;//清零
             break;
@@ -642,9 +642,9 @@ interrupt void CAN1_RECEIVE_ISR(void)  //充电
     /*switch(can1ReceiveID)
     {
         
-        case 0x0C0217A7://受电弓车载wife      /////////如果受电弓充电走快充CAN在此接收报文
+        case 0x0C0217A7://受电弓车载WiFi      /////////如果受电弓充电走快充CAN在此接收报文
             VCU_ChgControl.byte = fChg2bmsbyte[3];
-            WifeLife=fChg2bmsbyte[7];
+            WiFiLife=fChg2bmsbyte[7];
             ACCOverTime = 0;//清零
             break;
         
