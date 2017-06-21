@@ -887,8 +887,6 @@ void PowerSupplyError(void)//
 //**********************************************************************
 void CarFaultDone()
 {
-	static U8 delay_cnt = 0;
-	
     //////////////////////////////ĞĞ³µ·¢ËÍ¸ßÑ¹ÏÂµçÇëÇó/////////////////////
     
     if(g_BmsModeFlag == DISCHARGING) //ĞĞ³µ·¢ËÍ¸ßÑ¹ÏÂµçÇëÇó
@@ -906,48 +904,51 @@ void CarFaultDone()
 //		||(Error_Group6.Bit.F0_Power_Vol)			//Õû³µCANÉÏ±¨
         ){
 			HighVolPowerOff=1;
-			Error_Group1.Bit.St_DisCHG_Allow=1;//·ÅµçÔÊĞí×´Ì¬Î»²»ÔÊĞí
-       }   
+			Error_Group1.Bit.St_DisCHG_Allow = 1;//·ÅµçÔÊĞí×´Ì¬Î»²»ÔÊĞí
+			g_bms_fault_msg.fault.DisChg_Allow_State = 1;
+       }
     }
     //////////////////////////////¿ì³ä·¢ËÍ¸ßÑ¹ÏÂµçÇëÇó////////////////////
     else if(g_BmsModeFlag == FASTRECHARGING)      
     {      
-        if((Error_Group4.Bit.F6_Bat_Over_V>=2)//×ÜµçÑ¹¹ıÑ¹2¼¶¡¢3¼¶
-//		||(Error_Group1.Bit.F4_Ch_Over_I == 3)      //³äµç¹ıÁ÷3¼¶
-		||(Error_Group2.Bit.F0_Cell_Over_V>=1)      //µ¥ÌåµçÑ¹¹ıÑ¹1,2,3¼¶
-		||(Error_Group5.Bit.F6_Cell_Under_T == 3)  //µ¥ÌåÎÂ¶È¹ıµÍ3¼¶
-		||(Error_Group2.Bit.F4_Temp_Over == 3)     //µ¥ÌåÎÂ¶È¹ı¸ß3¼¶
-		||(Error_Group1.Bit.F6_Ins_Err == 3)       //¾øÔµµÍ
-		||(Error_Group3.Bit.F1_V_CAN_Err)         //ÍâÍøÍ¨Ñ¶¹ÊÕÏ£¨ÓëÖ±Á÷³äµç»úÍ¨Ñ¶¹ÊÕÏ¡
-		||(Error_Group3.Bit.F0_Sub_Com_Err)//ÄÚÍøÍ¨Ñ¶¹ÊÕÏ
-		||(ACCha_Flag_BST)//µçÁ÷·½ÏòÒì³£¹ÊÕÏ
-		||(Error_Group0.Bit.F0_Fire_Warning==3)       //»ğÔÖÔ¤¾¯3¼¶
-//		||(Error_Group6.Bit.F0_Power_Vol)//Õû³µCANÉÏ±¨
-		||(Error_Group0.Bit.F2_Ele_Relay_Con ==3)//³äµç²å×ù¹ıÎÂ
+        if((Error_Group4.Bit.F6_Bat_Over_V>=2)		//×ÜµçÑ¹¹ıÑ¹2¼¶¡¢3¼¶
+//		||(Error_Group1.Bit.F4_Ch_Over_I == 3)		//³äµç¹ıÁ÷3¼¶
+		||(Error_Group2.Bit.F0_Cell_Over_V>=1)		//µ¥ÌåµçÑ¹¹ıÑ¹1,2,3¼¶
+		||(Error_Group5.Bit.F6_Cell_Under_T == 3)	//µ¥ÌåÎÂ¶È¹ıµÍ3¼¶
+		||(Error_Group2.Bit.F4_Temp_Over == 3)		//µ¥ÌåÎÂ¶È¹ı¸ß3¼¶
+		||(Error_Group1.Bit.F6_Ins_Err == 3)		//¾øÔµµÍ
+		||(Error_Group3.Bit.F1_V_CAN_Err)			//ÍâÍøÍ¨Ñ¶¹ÊÕÏ£¨ÓëÖ±Á÷³äµç»úÍ¨Ñ¶¹ÊÕÏ¡
+		||(Error_Group3.Bit.F0_Sub_Com_Err)			//ÄÚÍøÍ¨Ñ¶¹ÊÕÏ
+		||(ACCha_Flag_BST == 1)						//µçÁ÷·½ÏòÒì³£¹ÊÕÏ
+		||(Error_Group0.Bit.F0_Fire_Warning==3)		//»ğÔÖÔ¤¾¯3¼¶
+//		||(Error_Group6.Bit.F0_Power_Vol)			//Õû³µCANÉÏ±¨
+		||(Error_Group0.Bit.F2_Ele_Relay_Con ==3)	//³äµç²å×ù¹ıÎÂ
         )
         {
             OffState=1;//¿ì³äÇëÇóÏÂµç
-            Error_Group1.Bit.St_CHG_Allow=1; //³äµçÔÊĞí×´Ì¬Î»²»ÔÊĞí
+            Error_Group1.Bit.St_CHG_Allow = 1; //³äµçÔÊĞí×´Ì¬Î»²»ÔÊĞí
+            g_bms_fault_msg.fault.Chg_Allow_State = 1;
         }
     }
     //////////////////////////////ÊÜµç¹­³äµç·¢ËÍ¸ßÑ¹ÏÂµçÇëÇó///////////////
     else if(g_BmsModeFlag == RECHARGING)      
     {      
-        if((Error_Group4.Bit.F6_Bat_Over_V>=2)//×ÜµçÑ¹¹ıÑ¹2¼¶¡¢3¼¶
-        //||(Error_Group1.Bit.F4_Ch_Over_I == 3)      //³äµç¹ıÁ÷3¼¶
-        ||(Error_Group2.Bit.F0_Cell_Over_V>=1)      //µ¥ÌåµçÑ¹¹ıÑ¹1,2,3¼¶
-        ||(Error_Group5.Bit.F6_Cell_Under_T == 3)  //µ¥ÌåÎÂ¶È¹ıµÍ3¼¶
-        ||(Error_Group2.Bit.F4_Temp_Over == 3)     //µ¥ÌåÎÂ¶È¹ı¸ß3¼¶
-        ||(Error_Group3.Bit.F1_V_CAN_Err)         //ÍâÍøÍ¨Ñ¶¹ÊÕÏ£¨ÓëÊÜµç¹­Í¨Ñ¶¹ÊÕÏ¡
-        ||(Error_Group3.Bit.F0_Sub_Com_Err)//ÄÚÍøÍ¨Ñ¶¹ÊÕÏ
-        ||(ACCha_Flag_BST)//µçÁ÷·½ÏòÒì³£¹ÊÕÏ
-        ||(Error_Group0.Bit.F0_Fire_Warning==3)       //»ğÔÖÔ¤¾¯3¼¶
-//        ||(Error_Group6.Bit.F0_Power_Vol)//Õû³µCANÉÏ±¨
+        if((Error_Group4.Bit.F6_Bat_Over_V>=2)		//×ÜµçÑ¹¹ıÑ¹2¼¶¡¢3¼¶
+//		||(Error_Group1.Bit.F4_Ch_Over_I == 3)		//³äµç¹ıÁ÷3¼¶
+		||(Error_Group2.Bit.F0_Cell_Over_V>=1)		//µ¥ÌåµçÑ¹¹ıÑ¹1,2,3¼¶
+		||(Error_Group5.Bit.F6_Cell_Under_T == 3)	//µ¥ÌåÎÂ¶È¹ıµÍ3¼¶
+		||(Error_Group2.Bit.F4_Temp_Over == 3)		//µ¥ÌåÎÂ¶È¹ı¸ß3¼¶
+		||(Error_Group3.Bit.F1_V_CAN_Err)			//ÍâÍøÍ¨Ñ¶¹ÊÕÏ£¨ÓëÊÜµç¹­Í¨Ñ¶¹ÊÕÏ¡
+		||(Error_Group3.Bit.F0_Sub_Com_Err)			//ÄÚÍøÍ¨Ñ¶¹ÊÕÏ
+		||(ACCha_Flag_BST == 1)						//µçÁ÷·½ÏòÒì³£¹ÊÕÏ
+		||(Error_Group0.Bit.F0_Fire_Warning==3)		//»ğÔÖÔ¤¾¯3¼¶
+//		||(Error_Group6.Bit.F0_Power_Vol)			//Õû³µCANÉÏ±¨
 
         )
         {
             PantographOff=1;//ÊÜµç¹­ÇëÇóÏÂµç
-            Error_Group1.Bit.St_CHG_Allow=1; //³äµçÔÊĞí×´Ì¬Î»²»ÔÊĞí
+            Error_Group1.Bit.St_CHG_Allow = 1; //³äµçÔÊĞí×´Ì¬Î»²»ÔÊĞí
+            g_bms_fault_msg.fault.Chg_Allow_State = 1;
         }
     }
 }

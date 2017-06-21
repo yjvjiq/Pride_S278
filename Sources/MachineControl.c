@@ -75,7 +75,7 @@ void stateCodeTransfer(void)
         }
         else if(stateCode==14)
         {
-            if((acc_Connect == 0)||(PowerOffError == 1)||(VCU_Request.Bit.Finish_PreChg))
+            if((acc_Connect == 0)||(PowerOffError == 1)||(VCU_Request.Bit.Finish_PreChg == 1))
                 stateCode=44;//||整车预充已完成
             else if(status_group3.Bit.St_N_Relay == 1)
                 stateCode=17;
