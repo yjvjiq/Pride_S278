@@ -15,7 +15,6 @@
 //----------------------------------------------------------------------------------------------------
 #include "BMS20.h"
 
-
 ERROR_GROUP0 Error_Group0;
 ERROR_GROUP1 Error_Group1;
 ERROR_GROUP2 Error_Group2;
@@ -29,6 +28,9 @@ unsigned int Charge_Times;     //充电次数
 unsigned long int chargeAH ;   //实际充电总安时
 unsigned long int dischargeAH ;//实际放电总安时
 float DC_ChargePower=0;//充电电量（输出电量）
+
+U_BMS_STATUS_TYPE g_bms_status;
+U_BMS_FAULT_TYPE  g_bms_fault_msg;
 
 
 /*futon Logistics use*/

@@ -57,7 +57,7 @@ unsigned char RelayErrorPowerOff = 0;     //¼ÌµçÆ÷ÏÂµç¹ÊÕÏ
 //* EntryParameter : None
 //* ReturnValue    : None
 //******************************************************************************
-void VehiclePowerOffLogic(void) 
+void VehiclePowerOffLogic(void)
 {
     static unsigned char OffFlag=0;
     static unsigned char count=0;

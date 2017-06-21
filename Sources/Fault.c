@@ -137,13 +137,13 @@ void errorSystemVoltageOV(void)
     unsigned char Level=0; 
 	
     //judge by different BMS work mode, as the input is different.
-    if(stateCode == 30)//discharge mode.
+	if(g_BmsModeFlag == DISCHARGING) //discharge mode.
         Level=TotalVoltageOverVoltage_custom(g_systemVoltage,g_highVoltageV3,DISCHARGING);
            
-    else if(stateCode == 170)//fast charge mode.
+	else if(g_BmsModeFlag == FASTRECHARGING)//fast charge mode.
         Level=TotalVoltageOverVoltage_custom(g_systemVoltage,g_highVoltageV5,FASTRECHARGING);
     
-    else if(stateCode == 110) // ACC charge mode.(re-charging mode)
+	else if(g_BmsModeFlag == RECHARGING) // ACC charge mode.(re-charging mode)
         Level=TotalVoltageOverVoltage_custom(g_systemVoltage,g_highVoltageV6,RECHARGING);
 	
     ///////////////////The fault level process and send out/////////////////////////   
@@ -167,7 +167,8 @@ void errorSystemVoltageOV(void)
         g_caution_Flag_1 |= 0x04;// 0000 0100
     else
     {
-        if(stateCode == 30){
+//		if(stateCode == 30){
+		if(g_BmsModeFlag == DISCHARGING){
             g_caution_Flag_1 &= 0xfb;//ffff 1011
         }
     }
@@ -233,7 +234,7 @@ void errorDischargeOC(void) //»Ö¸´;ÉÏ±¨²»´¦Àí
         if(i==Level) 
             Error[i]=1;
      
-    Error_Group3.Bit.F6_DisChg_Over_I=Level;//Õû³µCAN¸³Öµ 
+    Error_Group3.Bit.F6_DisChg_Over_I = Level;//Õû³µCAN¸³Öµ 
     
 //	//1¼¶¹ÊÕÏ´¦Àí
 	Can554Byte3.Bit.F0_DisChaOCurt1=Error[1];
@@ -272,20 +273,21 @@ void errorChargeOC(void)
     else if((g_BmsModeFlag == FASTRECHARGING)||(g_BmsModeFlag == RECHARGING)) //¿ì³äÄ£Ê½
     {
         curtValue = m_askcurrent;
-    } 
+    }
     ///////////////////ÉÏ±¨¹ÊÕÏµÈ¼¶Êý/////////////////////////    
-    Level=ChargeOverCurrent_custom((-g_systemCurrent),curtValue);    
+    Level=ChargeOverCurrent_custom((-g_systemCurrent),curtValue);
     for(i=1;i<4;i++) 
         if(i==Level) 
-            Error[i]=1;         
+            Error[i]=1;
     
-    if(g_BmsModeFlag == DISCHARGING)
+    if(g_BmsModeFlag == DISCHARGING){
         Error_Group5.Bit.F0_FeedB_Over_I = Level;//Õû³µCAN¸³Öµ,Ë²Ê±¹¦ÂÊ
+    }
     else
     {
         Error_Group1.Bit.F4_Ch_Over_I = Level;//Õû³µCAN¸³Öµ,³äµç¹¦ÂÊ
-        
-    }    
+    }
+	
     if(Level>=1){
         Error_Group6.Bit.F5_Chg_C_Over = 1;//Õû³µCAN¸³Öµ,³äµçµçÁ÷³¬ÏÞ±¨¾¯
     }
@@ -339,7 +341,7 @@ void errorCellVoltageOV(void)
        }
     }
     
-    Error_Group2.Bit.F0_Cell_Over_V = Level;//will be send to vehicle CAN    
+    Error_Group2.Bit.F0_Cell_Over_V = Level;//will be send to vehicle CAN
     
     //level 1 process
     Can554Byte2.Bit.F3_cellOV1					= Error[1];
@@ -396,7 +398,7 @@ void errorCellVoltageUV(void)//ÉÏ±¨²»´¦Àí,³äµç²»ÉÏ±¨,»Ö¸´
 	CutDisCurt50.Bit.F2_Cell_Under_Voltage2=Error[2];
 	 
 	//3¼¶¹ÊÕÏ´¦Àí
-	if(Error[3])
+	if(Error[3] == 1)
 	{
 		g_caution_Flag_1 |= 0x02;//to PC
 		status_group1.Bit.St_BMS =2;//BMS×´Ì¬¸ßÑ¹¶Ï¿ª
@@ -422,7 +424,7 @@ Bool errorCurrSensorIniatial(void) //ÉÏµçÇ°¼ì²â2´Î
         if(i==Level)
             Error[i]=1;
         
-    if(Error[1]){
+    if(Error[1] == 1){
         g_caution_Flag_3 |=0x02; //to PC      //µçÁ÷´«¸ÐÆ÷¹ÊÕÏ
 	}
 	
@@ -550,7 +552,7 @@ void errorCellTemperatureUT(void)//
 	Can554Byte0.Bit.F6_cellUT2=Error[2];
     
 	 //3¼¶¹ÊÕÏ´¦Àí
-	if(Error[3]) 
+	if(Error[3] == 1) 
 	{
 		g_caution_Flag_1 |= 0x40;//to PC
 		if(g_BmsModeFlag == DISCHARGING){
@@ -885,42 +887,43 @@ void PowerSupplyError(void)//
 //**********************************************************************
 void CarFaultDone()
 {
+	static U8 delay_cnt = 0;
+	
     //////////////////////////////ÐÐ³µ·¢ËÍ¸ßÑ¹ÏÂµçÇëÇó/////////////////////
     
     if(g_BmsModeFlag == DISCHARGING) //ÐÐ³µ·¢ËÍ¸ßÑ¹ÏÂµçÇëÇó
     {
-        if((Error_Group4.Bit.F4_Bat_Under_V ==3)//×ÜµçÑ¹¹ýÑ¹3¼¶
-        //||(Error_Group3.Bit.F6_DisChg_Over_I == 3) //·Åµç¹ýÁ÷3¼¶
-        //||(Error_Group5.Bit.F0_FeedB_Over_I == 3)  //»ØÀ¡¹ýÁ÷3¼¶
-        ||(Error_Group2.Bit.F0_Cell_Over_V==3)      //µ¥ÌåµçÑ¹¹ýÑ¹3¼¶
-        ||(Error_Group2.Bit.F2_Cell_Under_V == 3)   //µ¥ÌåµçÑ¹Ç·Ñ¹3¼¶
-        ||(Error_Group5.Bit.F6_Cell_Under_T == 3)  //µ¥ÌåÎÂ¶È¹ýµÍ3¼¶
-        ||(Error_Group2.Bit.F4_Temp_Over == 3)     //µ¥ÌåÎÂ¶È¹ý¸ß3¼¶
-        ||(Error_Group3.Bit.F1_V_CAN_Err)         //ÍâÍøÍ¨Ñ¶¹ÊÕÏ£¨ÓëVCU
-        ||(Error_Group3.Bit.F0_Sub_Com_Err)//ÄÚÍøÍ¨Ñ¶¹ÊÕÏ
-        ||(Error_Group0.Bit.F0_Fire_Warning==3)       //»ðÔÖÔ¤¾¯3¼¶
-//        ||(Error_Group6.Bit.F0_Power_Vol)//Õû³µCANÉÏ±¨
-        )
-        {
-            HighVolPowerOff=1;//
-            Error_Group1.Bit.St_DisCHG_Allow=1;//·ÅµçÔÊÐí×´Ì¬Î»²»ÔÊÐí
-        }   
+        if((Error_Group4.Bit.F4_Bat_Under_V ==3)	//×ÜµçÑ¹¹ýÑ¹3¼¶
+//		||(Error_Group3.Bit.F6_DisChg_Over_I == 3)	//·Åµç¹ýÁ÷3¼¶
+//		||(Error_Group5.Bit.F0_FeedB_Over_I == 3)	//»ØÀ¡¹ýÁ÷3¼¶
+		||(Error_Group2.Bit.F0_Cell_Over_V==3)		//µ¥ÌåµçÑ¹¹ýÑ¹3¼¶
+		||(Error_Group2.Bit.F2_Cell_Under_V == 3)	//µ¥ÌåµçÑ¹Ç·Ñ¹3¼¶
+		||(Error_Group5.Bit.F6_Cell_Under_T == 3)	//µ¥ÌåÎÂ¶È¹ýµÍ3¼¶
+		||(Error_Group2.Bit.F4_Temp_Over == 3)		//µ¥ÌåÎÂ¶È¹ý¸ß3¼¶
+		||(Error_Group3.Bit.F1_V_CAN_Err)			//ÍâÍøÍ¨Ñ¶¹ÊÕÏ£¨ÓëVCU
+		||(Error_Group3.Bit.F0_Sub_Com_Err)			//ÄÚÍøÍ¨Ñ¶¹ÊÕÏ
+		||(Error_Group0.Bit.F0_Fire_Warning==3)		//»ðÔÖÔ¤¾¯3¼¶
+//		||(Error_Group6.Bit.F0_Power_Vol)			//Õû³µCANÉÏ±¨
+        ){
+			HighVolPowerOff=1;
+			Error_Group1.Bit.St_DisCHG_Allow=1;//·ÅµçÔÊÐí×´Ì¬Î»²»ÔÊÐí
+       }   
     }
     //////////////////////////////¿ì³ä·¢ËÍ¸ßÑ¹ÏÂµçÇëÇó////////////////////
     else if(g_BmsModeFlag == FASTRECHARGING)      
     {      
         if((Error_Group4.Bit.F6_Bat_Over_V>=2)//×ÜµçÑ¹¹ýÑ¹2¼¶¡¢3¼¶
-        //||(Error_Group1.Bit.F4_Ch_Over_I == 3)      //³äµç¹ýÁ÷3¼¶
-        ||(Error_Group2.Bit.F0_Cell_Over_V>=1)      //µ¥ÌåµçÑ¹¹ýÑ¹1,2,3¼¶
-        ||(Error_Group5.Bit.F6_Cell_Under_T == 3)  //µ¥ÌåÎÂ¶È¹ýµÍ3¼¶
-        ||(Error_Group2.Bit.F4_Temp_Over == 3)     //µ¥ÌåÎÂ¶È¹ý¸ß3¼¶
-        ||(Error_Group1.Bit.F6_Ins_Err == 3)       //¾øÔµµÍ
-        ||(Error_Group3.Bit.F1_V_CAN_Err)         //ÍâÍøÍ¨Ñ¶¹ÊÕÏ£¨ÓëÖ±Á÷³äµç»úÍ¨Ñ¶¹ÊÕÏ¡
-        ||(Error_Group3.Bit.F0_Sub_Com_Err)//ÄÚÍøÍ¨Ñ¶¹ÊÕÏ
-        ||(ACCha_Flag_BST)//µçÁ÷·½ÏòÒì³£¹ÊÕÏ
-        ||(Error_Group0.Bit.F0_Fire_Warning==3)       //»ðÔÖÔ¤¾¯3¼¶
- //       ||(Error_Group6.Bit.F0_Power_Vol)//Õû³µCANÉÏ±¨
-        ||(Error_Group0.Bit.F2_Ele_Relay_Con ==3)//³äµç²å×ù¹ýÎÂ
+//		||(Error_Group1.Bit.F4_Ch_Over_I == 3)      //³äµç¹ýÁ÷3¼¶
+		||(Error_Group2.Bit.F0_Cell_Over_V>=1)      //µ¥ÌåµçÑ¹¹ýÑ¹1,2,3¼¶
+		||(Error_Group5.Bit.F6_Cell_Under_T == 3)  //µ¥ÌåÎÂ¶È¹ýµÍ3¼¶
+		||(Error_Group2.Bit.F4_Temp_Over == 3)     //µ¥ÌåÎÂ¶È¹ý¸ß3¼¶
+		||(Error_Group1.Bit.F6_Ins_Err == 3)       //¾øÔµµÍ
+		||(Error_Group3.Bit.F1_V_CAN_Err)         //ÍâÍøÍ¨Ñ¶¹ÊÕÏ£¨ÓëÖ±Á÷³äµç»úÍ¨Ñ¶¹ÊÕÏ¡
+		||(Error_Group3.Bit.F0_Sub_Com_Err)//ÄÚÍøÍ¨Ñ¶¹ÊÕÏ
+		||(ACCha_Flag_BST)//µçÁ÷·½ÏòÒì³£¹ÊÕÏ
+		||(Error_Group0.Bit.F0_Fire_Warning==3)       //»ðÔÖÔ¤¾¯3¼¶
+//		||(Error_Group6.Bit.F0_Power_Vol)//Õû³µCANÉÏ±¨
+		||(Error_Group0.Bit.F2_Ele_Relay_Con ==3)//³äµç²å×ù¹ýÎÂ
         )
         {
             OffState=1;//¿ì³äÇëÇóÏÂµç
@@ -1101,28 +1104,27 @@ void FaultLevel(void)
 //******************************************************************************
 unsigned char TaskFaultProcess(void) 
 {
-    unsigned char lever = 0;
-    //unsigned char i,j,k=0;
-    static unsigned char caution1=0;
-    static unsigned char caution2=0;
-    static unsigned char caution3=0;
-    static unsigned char caution4=0;
-   
-    if((stateCode==30)||(stateCode==110)||(stateCode==170))//
-    {
-        errorSystemVoltageOV();//×ÜµçÑ¹¹ýÑ¹
-        errorChargeOC();   //³äµç¹ýÁ÷ 
-        if(stateCode==30) 
-        {
-            errorSystemVoltageUV();//×ÜµçÑ¹Ç·Ñ¹
-            errorDischargeOC();//·Åµç¹ýÁ÷
-        }
-        if(stateCode==170)
-        {
-            errorLowIsolation();//¾øÔµ¹ýµÍ
-            CHG_SocketOT(); //³äµç²å×ù¹ýÎÂ 
-        }
-    }
+	unsigned char lever = 0;
+	//unsigned char i,j,k=0;
+	static unsigned char caution1=0;
+	static unsigned char caution2=0;
+	static unsigned char caution3=0;
+	static unsigned char caution4=0;
+	
+	errorSystemVoltageOV();//×ÜµçÑ¹¹ýÑ¹
+	errorChargeOC();   //³äµç¹ýÁ÷ 
+	if(g_BmsModeFlag == DISCHARGING) 
+	{
+		errorSystemVoltageUV();//×ÜµçÑ¹Ç·Ñ¹
+		errorDischargeOC();//·Åµç¹ýÁ÷
+	}
+	if(g_BmsModeFlag == FASTRECHARGING)
+	{
+		errorLowIsolation();//¾øÔµ¹ýµÍ
+		CHG_SocketOT(); //³äµç²å×ù¹ýÎÂ 
+	}
+
+	
     if((g_BmsModeFlag == FASTRECHARGING)||(g_BmsModeFlag == RECHARGING))
     {
         DCChangerComError();//Ö±Á÷³äµçÍ¨ÐÅ¹ÊÕÏ
@@ -1158,21 +1160,24 @@ unsigned char TaskFaultProcess(void)
     //******************************************************************************************
     ////////////µ±¹ÊÕÏÓëÖ®Ç°Ïà±È£¬Ã»ÓÐ±ä»¯Ê±£¬²»½øÐÐ´æ´¢£¬Ö»ÓÐ1·ÖÖÓ²Å´æ´¢£»Èç¹ûÓÐ¸üÐÂ£¬²Å½øÐÐ´æ´¢
     if((caution1^g_caution_Flag_1)||(caution2^g_caution_Flag_2)||(caution3^g_caution_Flag_3)||(caution4^g_caution_Flag_4))
+    {
         StoreSysVariable();//±£´æSOCÖµºÍ¹ÊÕÏÐÅÏ¢
-    caution1 =  g_caution_Flag_1;
-    caution2 =  g_caution_Flag_2;
-    caution3 =  g_caution_Flag_3;
-    caution4 =  g_caution_Flag_4;
-    //////////////////////////////////////////////////////////////////
-    ////Caution_Flag_4£ºBit 0£º¸ßÑ¹Ä¸ÏßÁ¬½Ó¹ÊÕÏ£»Bit 1£ºÑÌÎí¼ì²â¹ÊÕÏ£»    
-    ///////////////////  
-    g_storageSysVariable[PARA_ERROR_LEVER] = lever;
-    g_storageSysVariable[CAUTION_FLAG_1] = g_caution_Flag_1;	
-    g_storageSysVariable[CAUTION_FLAG_2] = g_caution_Flag_2;	
-    g_storageSysVariable[CAUTION_FLAG_3] = g_caution_Flag_3;	
-    g_storageSysVariable[CAUTION_FLAG_4] = g_caution_Flag_4;	
-  
-	  return g_storageSysVariable[PARA_ERROR_LEVER];   
+    }
+	
+	caution1 =  g_caution_Flag_1;
+	caution2 =  g_caution_Flag_2;
+	caution3 =  g_caution_Flag_3;
+	caution4 =  g_caution_Flag_4;
+	//////////////////////////////////////////////////////////////////
+	////Caution_Flag_4£ºBit 0£º¸ßÑ¹Ä¸ÏßÁ¬½Ó¹ÊÕÏ£»Bit 1£ºÑÌÎí¼ì²â¹ÊÕÏ£»    
+	///////////////////  
+	g_storageSysVariable[PARA_ERROR_LEVER] = lever;
+	g_storageSysVariable[CAUTION_FLAG_1] = g_caution_Flag_1;	
+	g_storageSysVariable[CAUTION_FLAG_2] = g_caution_Flag_2;	
+	g_storageSysVariable[CAUTION_FLAG_3] = g_caution_Flag_3;	
+	g_storageSysVariable[CAUTION_FLAG_4] = g_caution_Flag_4;	
+
+	return g_storageSysVariable[PARA_ERROR_LEVER];   
 }
 //******************************************************************************
 //* Function name:   TurnOffAllRelay

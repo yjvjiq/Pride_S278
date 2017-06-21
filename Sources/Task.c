@@ -324,18 +324,15 @@ void TaskStatusMachine(void)//5ms调用一次
     
     SignalOnOffJudge(); 
     HeatManage();  
-
-    switch(stateCode) //状态机判断
+	CarFaultDone();
+	
+    switch(stateCode)
     {
-        //////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////
         //////////////////****************上电过程********************///////////////// 
-        //////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////// 
         case 11:
         case 81:
         case 141:
-            status_group1.Bit.St_BMS =3;//
+            status_group1.Bit.St_BMS =3;
             state46 = 0;
             if((stateCode==141)&&((DCTem1>=85)||(DCTem2>=85))) //在此判断防止故障上报的慢
             {
@@ -361,18 +358,18 @@ void TaskStatusMachine(void)//5ms调用一次
         case 144:
             Delay14++;
             if(stateCode == 14)
-                closeNegRelay();
+				Kn_Switch(ON);
             else
             {
-                TurnOn_INBK();//闭合充电负
-                delay(25000);                  //19ms
-                delay(25000);                  //19ms
+                KChg_N_Switch(ON);	//闭合充电负
+                delay(25000);       //19ms
+                delay(25000);       //19ms
             }
             if(Delay14 >= 4) 
             {
                 if(stateCode == 14)
-                    status_group3.Bit.St_N_Relay=1;//
-                else     
+                    status_group3.Bit.St_N_Relay=1;
+                else
                     BmsCtlStat0 |=0x08;//预充继电器状态闭合
                 Delay14=0;
             }
@@ -397,7 +394,7 @@ void TaskStatusMachine(void)//5ms调用一次
                 TurnOn_INA2K();
                 delay(25000); //20ms
             }
-            HighVoltDetectPart3();               
+            HighVoltDetectPart3();
             break;
         //////////////////////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////////////////////
@@ -405,7 +402,6 @@ void TaskStatusMachine(void)//5ms调用一次
         //////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////      
         case 30:    //*********************行车状态***********/////////////
-            
             turnOnSW_Power();//打开软件开关
             if(state30==0) 
             {
@@ -438,9 +434,9 @@ void TaskStatusMachine(void)//5ms调用一次
             {
                 //state_group4.Bit.Request_Power_Off = 1;//BMS高压下电请求
             } 
-            SocEndDischargeAdjust(); //放电末端SOC修正
-            CarFaultDone();//过程故障处理,功率为循环上报,防止由于时序误报
-            break;
+			SocEndDischargeAdjust(); //放电末端SOC修正
+//			CarFaultDone();//过程故障处理,功率为循环上报,防止由于时序误报
+			break;
 			
         case 110:  //*********************慢充充电***********//////////////
             turnOnSW_Power();//打开软件开关 防止状态机在之前就死掉断不了电
@@ -464,7 +460,7 @@ void TaskStatusMachine(void)//5ms调用一次
    
             }
             
-            CarFaultDone();//过程故障处理,功率为循环上报,防止由于时序误报
+//			CarFaultDone();//过程故障处理,功率为循环上报,防止由于时序误报
     
             break;
             
@@ -489,7 +485,7 @@ void TaskStatusMachine(void)//5ms调用一次
                 Error_Group1.Bit.St_DisCHG_Allow=1;//放电允许状态位不允许
             }
             
-            CarFaultDone();//过程故障处理,功率为循环上报,防止由于时序误报
+//			CarFaultDone();//过程故障处理,功率为循环上报,防止由于时序误报
 
             break;
  

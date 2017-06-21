@@ -99,8 +99,8 @@ void stateCodeTransfer(void)
         } 
         else if(stateCode==30)
         {   
-            
             if((VCU_Control.Bit.PowerOnOffReq == 2)
+            //((VCU_Control.Bit.PowerOnOffReq != 2)&&(HighVolPowerOff == 1)&&(Error10S>=40000))
             ||((VCU_Control.Bit.PowerOnOffReq == 2)&&(Error10S>=10000))//故障延时10S后收到高压下电指令                              
             ||((HighVolPowerOff == 1)&&(Error10S>=10000)&&(g_systemCurrent<5))//故障延时10S后电流小于5A
             ||((E10SOverFlag)&&(Error20S>=20000))//故障延时10S&&电流大于5A，再持续20S
@@ -110,7 +110,7 @@ void stateCodeTransfer(void)
             { 
                  stateCode=40;
                  Delay30 = 0; 
-            }  
+            }
             else if(acc_Connect==0)//ACC无或者收到高压下电指令 5ms*300=1.5S
             {                
                 Delay30++; 
@@ -137,7 +137,8 @@ void stateCodeTransfer(void)
                 {
                     Delay30_81=0; //此处清0
                 }
-            }   
+            } 
+              
         } 
         else if(stateCode==40)//断开正极继电器
         {
@@ -148,7 +149,7 @@ void stateCodeTransfer(void)
         { 
             if(TurnOffNRelay)
                 stateCode=46;
-        } 
+        }
         else if((stateCode==46))
         {
             /////////////////////46 start/////////////////////////

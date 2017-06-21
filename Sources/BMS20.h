@@ -148,12 +148,19 @@
 #define  uchar unsigned char
 #define  uint  unsigned int
 #define  ulong unsigned long
-#define  HIGH 0
-#define  LOW 1
 
 #define U8  uchar
 #define U16 uint
 #define U32 ulong
+
+#define  HIGH 0
+#define  LOW 1
+
+#define ON	1
+#define OFF	0
+
+#define on	1
+#define off	0
 
 // 任务结构
 typedef struct _TASK_COMPONENTS
@@ -397,6 +404,9 @@ extern unsigned char HeatFlag; //上电前温度标志位
 
 extern BMU_CELL_MSG g_bmu_msg;
 extern BMS_CELL_MSG g_bms_msg;
+extern U_BMS_STATUS_TYPE g_bms_status;
+extern U_BMS_FAULT_TYPE  g_bms_fault_msg;
+
  //***********************************************************************************
 //*******************************the end**********************************************
 //************************************************************************************

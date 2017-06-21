@@ -291,5 +291,99 @@ void TurnOff_INZK(void)
     BmsCtlStat0 &=0xfd;//正极继电器状态断开
 
 }
+
+
+//******************************************************
+//* Function name:   Key Switch CC2
+//* Description:     
+//* EntryParameter : None
+//* ReturnValue    : None
+//******************************************************
+void K_CC2_Switch(U8 status){
+	if(status == ON){
+		TurnOn_CC2();
+	}
+	else{
+		TurnOff_CC2();
+	}
+}
+
+//******************************************************
+//* Function name:   positive relay
+//* Description:     
+//* EntryParameter : None
+//* ReturnValue    : None
+//******************************************************
+void Kp_Switch(byte status){
+	if(status == ON){
+		TurnOn_INZK();
+	
+		delay(25000); //20ms
+		delay(25000); //20ms
+		status_group3.Bit.St_P_Relay = 1;//to vcu
+		g_bms_status.status.Relay_P_Sts = 1;
+	}
+	else{
+		TurnOff_INZK();
+		
+		delay(25000); //20ms
+		status_group3.Bit.St_P_Relay = 0;//to vcu
+		g_bms_status.status.Relay_P_Sts = 0;
+	}
+}
+
+void Kn_Switch(byte status){
+	if(status == ON){
+		TurnOn_INFK();
+		
+	    delay(25000);	//20ms
+	    delay(25000);	//20ms
+	    g_bms_status.status.Relay_N_Sts = 1;
+	}
+	else{
+		TurnOff_INFK();
+		
+		delay(25000);	//20ms
+		delay(25000);	//20ms
+		status_group3.Bit.St_N_Relay = 0;
+		g_bms_status.status.Relay_N_Sts = 0;
+	}
+}
+
+void KChg_N_Switch(byte status){
+	if(status == ON){
+		TurnOn_INBK();
+	}
+	else{
+		TurnOff_INBK();
+	}
+}
+
+void KEleBand_P_Switch(byte status){
+	if(status == ON){
+		TurnOn_INA1K();
+	}
+	else{
+		TurnOff_INA1K();
+	}
+}
+
+void KFastChg_P_Switch(byte status){
+	if(status == ON){
+		TurnOn_INA2K();
+	}
+	else{
+		TurnOff_INA2K();
+	}
+}
+
+void KHeat_Switch(byte status){
+	if(status == ON){
+		TurnOn_INHK();
+	}
+	else{
+		TurnOff_INHK();
+	}
+}
 /************LCD******************************************
 ***********************************************************/

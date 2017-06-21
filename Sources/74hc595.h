@@ -36,6 +36,14 @@ extern void TurnOn_INFK(void);
 extern void TurnOff_INFK(void);
 extern void TurnOn_INZK(void);
 extern void TurnOff_INZK(void);
+
+extern void K_CC2_Switch(byte status);
+extern void Kp_Switch(byte status);
+extern void Kn_Switch(byte status);
+extern void KChg_N_Switch(byte status);
+extern void KEleBand_P_Switch(byte status);
+extern void KFastChg_P_Switch(byte status);
+extern void KHeat_Switch(byte status);
 //***********************************************************************************
 //************************************************************************************
 //*************************the end***************************************************

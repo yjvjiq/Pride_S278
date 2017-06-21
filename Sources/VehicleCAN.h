@@ -231,18 +231,78 @@ typedef struct{
 	byte Fault_Level			:2; //bit4~bit5 
 	byte Relay_N_Sts			:1;	//bit6 		self added, not in the vehicle CAN protocal.
 	byte Relay_P_Sts 			:1; //bit7		self added, not in the vehicle CAN protocal.
+}S_BMS_STATUS_TYPE;
+
+typedef union{
+	S_BMS_STATUS_TYPE status;
+	byte data[3];
+}U_BMS_STATUS_TYPE;
+
+typedef struct{
+	byte Fire_Warning_Flt		:2; //bit0~1	火灾预警
+	byte ChgSocket_Adhesion_Flt	:2; //bit2~3	充电插座过温
+	byte rsvd_0					:4; //bit4~7	预留
 	
-	byte BMS_Sys_Sts		  	:1; //bit0
-	byte BMU_Sys_Sts		  	:1; //bit1
+	byte Bms_Power_Supply_Flt	:1; //bit0	整车供电24V异常报警
+	byte HLVol_Lock_Flt			:1; //bit1	high and low voltage interlock
+	byte SOC_Hop_Flt			:1; //bit2	SOC跳变
+	byte BMS_Self_Protect 		:1; //bit3	BMS极限故障自我保护
+	byte rsvd_1_4				:1; //bit4	预留
+	byte Chg_OverCurrent_State	:1; //bit5	充电电流超限
+	byte rsvd_1_6				:1; //bit6	预留
+	byte Chg_Ins_Low_Flt 		:1; //bit7	充电绝缘低报警
+	
+	byte BMS_Sys_Flt_Sts	  	:1; //bit0
+	byte BMU_Sys_Flt_Sts	  	:1; //bit1
 	byte LECU_Sys_Sts			:2; //bit2~bit3
 	byte Pack_Flt_Sts	  		:2; //bit4~bit5
 	byte Bat_ChgDischg_Mode  	:2; //bit6~bit7 
-}S_BMS_Status_Type;
+	
+	byte Chg_Allow_State		:1;  //bit0 	充电允许状态位
+	byte DisChg_Allow_State		:1;  //bit1 	放电允许状态位
+	byte KChg_N_Adhesion_Flt	:1;  //bit2 	直流充电负接触器粘连故障
+	byte KEleBand_P_Adhesion_Flt:1;  //bit3 	受电带充电正接触器粘连
+	byte Chg_OverCurrent_Flt	:2;  //bit4~5	充电过流
+	byte Ins_Low_flt 			:2;  //bit6~7	绝缘电阻低
+	
+	byte Cell_V_High_Flt 		:2;  //bit0~1	单体电池过压
+	byte Cell_V_Low_Flt			:2;  //bit2~3	单体电池欠压
+	byte Cell_T_High_Flt		:2;  //bit4~5	单体温度过温
+	byte Pack_V_Diff_Flt		:2;  //bit6~7	电池组差异（系统不匹配）预留
+	
+	byte InnerCAN_Com_Flt 		:1; //bit0		内部通讯故障
+	byte ExternalCAN_Com_Flt	:1; //bit1		外网CAN通信故障
+	byte Kp_Adhesion_Flt		:1; //bit2		主正继电器粘连
+	byte PreChg_Fail_Flt		:1; //bit3		预充电失败
+	byte Kn_Adhesion_Flt		:1; //bit4		主负继电器粘连
+	byte KFastChg_P_Adhesion_Flt:1; //bit5		外接充电正接触器粘连
+	byte DisChg_OverCurrent_Flt	:2; //bit6~7	放电电流过大
+	
+	byte SOC_Low_Flt 			:2;  //bit6~7	SOC低
+	byte SOC_High_Flt			:2;  //bit4~5	SOC高
+	byte Pack_V_Low_Flt 		:2;  //bit2~3	电池欠压
+	byte Pack_V_High_Flt		:2;  //bit0~1	电池过压
+	
+	byte FeedBack_OverCurrentFlt:2;  //bit0~1	回馈过流
+	byte Cell_T_Diff_Flt		:2;  //bit2~3	单体温差过大
+	byte Cell_V_Diff_Flt		:2;  //bit4~5	电池单体压差大
+	byte Cell_T_Low_Flt			:2;  //bit6~7	单体温度低
+	
+	byte rsvd_8_03				:4;  //bit0~3	预留
+	byte Heat_Machine_Flt		:1;  //bit4 	热管理机组接触器故障（只针对水冷系统）
+	byte Heat_Sys_Flt			:1;  //bit5 	热管理机组接触器故障（只针对热管理系统）
+	byte KHeat_N_Flt			:1;  //bit6 	电池组加热负极接触器故障
+	byte KHeat_P_Flt			:1;  //bit7 	电池组加热正极接触器故障
+
+	byte rsvd_9_03				:4;
+	byte HVBranch_CircuitOff_Flt:2;
+	byte HVBranch_V_Diff_Flt	:2;
+}S_BMS_FAULT_TYPE;
 
 typedef union{
-	S_BMS_Status_Type status;
-	byte data[4];
-}U_BMS_Status_Type;
+	S_BMS_FAULT_TYPE fault;
+	byte data[10];
+}U_BMS_FAULT_TYPE;
 
 //////////////////////BMS发送的故障信息//////////////////////////
 
