@@ -191,18 +191,24 @@ void TaskRechargeDC(void)
     curr =m_askcurrent_Model;
     ErrorState = DCFaultDone();
       
-    if(g_BmsModeFlag == FASTRECHARGING) 
-    {
-        
-        ////////////请求电压//////////
-        if(((Tavg-40)<=54)&&((Tavg-40)>0)&&(heatingStart==0))//
+	if(g_BmsModeFlag == FASTRECHARGING) 
+	{
+		////////////请求电压//////////
+		if(((Tavg-40)<=54)&&((Tavg-40)>0)&&(heatingStart==0))
+		{
             m_askvoltage = HIGHEST_ALLOWED_CHARGE_V;//请求充电电压3.6*165 =602
+        }
         else if(((Tavg-40)<=0)||(((Tavg-40)<=5)&&(heatingStart)))//温度<0或者上电前温度小于0当前温度小于5
+        {
             m_askvoltage = LOWEST_ALLOWED_CHARGE_V;//3.3*165 =544.5
+        }
         else if((Tavg-40)>54)
+        {
             m_askvoltage = 0;
-         ////////////请求电流//////////
-        if(((Tavg-40)<=5)&&(BeforeTempFlag1))//当前温度等于4度，上电前温度<0
+        }
+		
+		////////////请求电流//////////
+		if(((Tavg-40)<=5)&&(BeforeTempFlag1))//当前温度等于4度，上电前温度<0
             curr1=HeatCurt;
         else if(((Tavg-40)<=15)&&((BeforeTempFlag2)||(BeforeTempFlag1))) //当前温度等于15 上电前温度<10
             curr1=curr+HeatCurt;

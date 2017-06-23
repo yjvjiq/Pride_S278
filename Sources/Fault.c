@@ -148,7 +148,7 @@ void errorSystemVoltageOV(void)
 	
     Error_Group4.Bit.F6_Bat_Over_V = Level;//send to vehicle CAN.
     g_bms_fault_msg.fault.Pack_V_High_Flt = Level; //the same as above.
-	
+
     ///////////////////The fault level process and send out/////////////////////////   
     for(i=1;i<4;i++) 
        if(i==Level) 
@@ -918,7 +918,7 @@ void CarFaultDone()
 		||(Error_Group5.Bit.F6_Cell_Under_T == 3)	//µ¥ÌåÎÂ¶È¹ıµÍ3¼¶
 		||(Error_Group2.Bit.F4_Temp_Over == 3)		//µ¥ÌåÎÂ¶È¹ı¸ß3¼¶
 		||(Error_Group1.Bit.F6_Ins_Err == 3)		//¾øÔµµÍ
-		||(Error_Group3.Bit.F1_V_CAN_Err)			//ÍâÍøÍ¨Ñ¶¹ÊÕÏ£¨ÓëÖ±Á÷³äµç»úÍ¨Ñ¶¹ÊÕÏ¡
+		||(Error_Group3.Bit.F1_V_CAN_Err)			//ÍâÍøÍ¨Ñ¶¹ÊÕÏ£¨ÓëÖ±Á÷³äµç»úÍ¨Ñ¶¹ÊÕÏ?
 		||(Error_Group3.Bit.F0_Sub_Com_Err)			//ÄÚÍøÍ¨Ñ¶¹ÊÕÏ
 		||(ACCha_Flag_BST == 1)						//µçÁ÷·½ÏòÒì³£¹ÊÕÏ
 		||(Error_Group0.Bit.F0_Fire_Warning==3)		//»ğÔÖÔ¤¾¯3¼¶
@@ -939,7 +939,7 @@ void CarFaultDone()
 		||(Error_Group2.Bit.F0_Cell_Over_V>=1)		//µ¥ÌåµçÑ¹¹ıÑ¹1,2,3¼¶
 		||(Error_Group5.Bit.F6_Cell_Under_T == 3)	//µ¥ÌåÎÂ¶È¹ıµÍ3¼¶
 		||(Error_Group2.Bit.F4_Temp_Over == 3)		//µ¥ÌåÎÂ¶È¹ı¸ß3¼¶
-		||(Error_Group3.Bit.F1_V_CAN_Err)			//ÍâÍøÍ¨Ñ¶¹ÊÕÏ£¨ÓëÊÜµç¹­Í¨Ñ¶¹ÊÕÏ¡
+		||(Error_Group3.Bit.F1_V_CAN_Err)			//ÍâÍøÍ¨Ñ¶¹ÊÕÏ£¨ÓëÊÜµç¹­Í¨Ñ¶¹ÊÕÏ?
 		||(Error_Group3.Bit.F0_Sub_Com_Err)			//ÄÚÍøÍ¨Ñ¶¹ÊÕÏ
 		||(ACCha_Flag_BST == 1)						//µçÁ÷·½ÏòÒì³£¹ÊÕÏ
 		||(Error_Group0.Bit.F0_Fire_Warning==3)		//»ğÔÖÔ¤¾¯3¼¶

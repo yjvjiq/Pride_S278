@@ -262,8 +262,9 @@ interrupt void RTI_ISR(void)      //1ms中断一次
         ||((PantographOff==1)&&(stateCode ==110)))//受电弓充电下高压故障
         {
             Error10S++;
-            if(Error10S>=10000)
+            if(Error10S>=10000){
                 E10SOverFlag=1;//10S延时后的标志位    
+            }
         }
         else 
         {
@@ -279,7 +280,7 @@ interrupt void RTI_ISR(void)      //1ms中断一次
 		}
 	}
 	
-    if((E10SOverFlag)&&(Error20S<21000))//10s延时后的20S再延时
+    if((E10SOverFlag == 1)&&(Error20S<21000))//10s延时后的20S再延时
     {
         Error20S++;            
     }
