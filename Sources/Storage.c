@@ -281,7 +281,7 @@ void ReadChargeDischargeAH(void)
 void KB_DATA_RECALL(void)
 {
     
-    int buffer[7];
+    int buffer[7] = {0};
     int ch=0,t=3;
     unsigned char i;
   

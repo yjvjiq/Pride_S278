@@ -24,7 +24,7 @@ unsigned int Error10S=0; //行车和受电弓故障下电10S延时
 unsigned int Error5S=0;  //快充下电5S延时
 unsigned char E10SOverFlag=0; //10S延时完成标志位
 unsigned int Error20S=0; //行车和受电弓故障下电10S延时后的20S延时
-
+unsigned int Error_30s_delay_cnt = 0;
 unsigned char TurnOffNRelay=0;//断负继电器完成标志位
 
 //******************************************************************************
@@ -98,16 +98,16 @@ void stateCodeTransfer(void)
                 stateCode=30;//自检计数器=3&&正极继电器闭合&&整车预充电完成
         } 
         else if(stateCode==30)
-        {   
-            if((VCU_Control.Bit.PowerOnOffReq == 2)
-            //((VCU_Control.Bit.PowerOnOffReq != 2)&&(HighVolPowerOff == 1)&&(Error10S>=40000))
-            ||((VCU_Control.Bit.PowerOnOffReq == 2)&&(Error10S>=10000))//故障延时10S后收到高压下电指令                              
-            ||((HighVolPowerOff == 1)&&(Error10S>=10000)&&(g_systemCurrent<5))//故障延时10S后电流小于5A
-            ||((E10SOverFlag)&&(Error20S>=20000))//故障延时10S&&电流大于5A，再持续20S
-            ||(plug_DC_Connect == 1)//CC2
-            ||(Delay30>=400)
+        {
+            if(//(VCU_Control.Bit.PowerOnOffReq == 2)
+				((VCU_Control.Bit.PowerOnOffReq != 2)&&(HighVolPowerOff == 1)&&(E10SOverFlag == 1)&&(Error_30s_delay_cnt >= 30000))
+				||((VCU_Control.Bit.PowerOnOffReq == 2)&&(E10SOverFlag == 1)&&(Error10S>=10000))//故障延时10S后收到高压下电指令                              
+//				||((HighVolPowerOff == 1)&&(Error10S>=10000)&&(g_systemCurrent<5))//故障延时10S后电流小于5A
+				||((E10SOverFlag)&&(Error20S>=20000) && (g_systemCurrent > 5))//故障延时10S&&电流大于5A，再持续20S
+				||(plug_DC_Connect == 1)//CC2
+				||(Delay30>=400)
             )
-            { 
+            {
                  stateCode=40;
                  Delay30 = 0; 
             }

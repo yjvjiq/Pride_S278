@@ -271,6 +271,13 @@ interrupt void RTI_ISR(void)      //1ms中断一次
             E10SOverFlag=0;
         }
     }
+
+	if((HighVolPowerOff==1) && (E10SOverFlag == 1)){
+		Error_30s_delay_cnt++;
+		if(Error_30s_delay_cnt >= 30000){
+			Error_30s_delay_cnt = 30000;
+		}
+	}
 	
     if((E10SOverFlag)&&(Error20S<21000))//10s延时后的20S再延时
     {

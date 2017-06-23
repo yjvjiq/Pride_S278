@@ -329,7 +329,7 @@ unsigned char ReadOutErrorRecord(unsigned int counter) //   1:校验不通过
 			g_storageSysVariableCellOut[i]= buffer2_1[i];  //单体电压 
 		}
 		return 0;
-    } 
+    }
     else if(counter > g_errorCounter) 
     {
         for(i=0;i<STORE_NUMBER;i++) 

@@ -146,13 +146,14 @@ void errorSystemVoltageOV(void)
 	else if(g_BmsModeFlag == RECHARGING) // ACC charge mode.(re-charging mode)
         Level=TotalVoltageOverVoltage_custom(g_systemVoltage,g_highVoltageV6,RECHARGING);
 	
+    Error_Group4.Bit.F6_Bat_Over_V = Level;//send to vehicle CAN.
+    g_bms_fault_msg.fault.Pack_V_High_Flt = Level; //the same as above.
+	
     ///////////////////The fault level process and send out/////////////////////////   
     for(i=1;i<4;i++) 
        if(i==Level) 
            Error[i]=1;
        
-    Error_Group4.Bit.F6_Bat_Over_V = Level;//send to vehicle CAN.
-    
 	//level 1 process
 	Can554Byte2.Bit.F2_systemOV1 				= Error[1]; // send to PC software.
     
@@ -1114,6 +1115,7 @@ unsigned char TaskFaultProcess(void)
 	
 	errorSystemVoltageOV();//总电压过压
 	errorChargeOC();   //充电过流 
+	
 	if(g_BmsModeFlag == DISCHARGING) 
 	{
 		errorSystemVoltageUV();//总电压欠压

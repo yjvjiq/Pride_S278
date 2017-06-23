@@ -24,7 +24,7 @@ extern unsigned int Error5S;  //快充下电5S延时
 
 extern unsigned char E10SOverFlag; //10S延时完成标志位
 extern unsigned int Error20S; //行车和受电弓故障下电10S延时后的20S延时
-
+extern unsigned int Error_30s_delay_cnt;
 extern unsigned char TurnOffNRelay;
 
 //********************************************************************************
