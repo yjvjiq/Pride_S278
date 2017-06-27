@@ -161,39 +161,37 @@ void bmsToPcInfo553(void)
     unsigned char AH=0;
     char tt=100;
     
-    mg.RTR= FALSE;  
-    mg.len = 8;
-    mg.prty = 0;
-    
-    //AH = unsigned char(Q2)
-    
-    AH = (unsigned char) g_realNominalCap;
-    mg.data[0] = AH; // gpio
-    
-    AH = (unsigned char) Q2;
-    mg.data[1]= AH;//
-    
-    buff = (unsigned int)(Can_g_socValue*100*2.5);
-    mg.data[2] =(unsigned char)buff;// 电池荷电状态SOC 分辨率0.4,单位%
-	  
-	  buff = (unsigned int)(CC2VOL*5);
-    mg.data[3] =buff ;// 
-	  
-    //buff = (unsigned int)(g_highVoltageV2*100);
-    buff = (unsigned int)(g_highVoltageV2*50);
-	  mg.data[4]= buff>>8;//电池组当前电压高字节 
-	  mg.data[5]= (unsigned char)buff;//电池组当前电压低字节
-	  
-	  //buff = (unsigned int)(g_highVoltageV3*100);
-	  buff = (unsigned int)(g_highVoltageV3*50);
-	  mg.data[6]= buff>>8;//电池组当前电压高字节 
-	  mg.data[7]= (unsigned char)buff;//电池组当前电压低字节
-	  
-    
-	  mg.id= 0x000c0553; 
-	  //while(!MSCAN2SendMsg(mg));
-	  while((!MSCAN2SendMsg(mg))&&(tt>0))
-        tt--;
+	mg.RTR= FALSE;  
+	mg.len = 8;
+	mg.prty = 0;
+
+	AH = (unsigned char) g_realNominalCap;
+	mg.data[0] = AH; // gpio
+
+	AH = (unsigned char) Q2;
+	mg.data[1]= AH;//
+
+	buff = (unsigned int)(Can_g_socValue*100*2.5);
+	mg.data[2] =(unsigned char)buff;// 电池荷电状态SOC 分辨率0.4,单位%
+
+	buff = (unsigned int)(CC2VOL*5);
+	mg.data[3] =buff ;// 
+
+	//buff = (unsigned int)(g_highVoltageV2*100);
+	buff = (unsigned int)(g_highVoltageV2*50);
+	mg.data[4]= buff>>8;//电池组当前电压高字节 
+	mg.data[5]= (unsigned char)buff;//电池组当前电压低字节
+
+	//buff = (unsigned int)(g_highVoltageV3*100);
+	buff = (unsigned int)(g_highVoltageV3*50);
+	mg.data[6]= buff>>8;//电池组当前电压高字节 
+	mg.data[7]= (unsigned char)buff;//电池组当前电压低字节
+
+
+	mg.id= 0x000c0553; 
+	//while(!MSCAN2SendMsg(mg));
+	while((!MSCAN2SendMsg(mg))&&(tt>0))
+		tt--;
 	 
 }
 //******************************************************************************
@@ -243,7 +241,7 @@ void bmsToSBMSMessage1(void)
 	mg.prty = 0;
 
 	mg.data[0]= InsRelayControl;//绝缘控制继电器的控制 
-	mg.data[1]= 0; 
+	mg.data[1]= St_heatManage; 
 	mg.data[2]= 0;
 	mg.data[3]= 0;
 

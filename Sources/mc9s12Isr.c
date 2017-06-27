@@ -51,7 +51,9 @@ unsigned char BCPStep = 0;    //BCP中的步骤0:发送BCP的头;1:发送BCP的数据段
 unsigned char FlagBCSSend = 0;//发送BCS后,收到充电机返回的消息,开始发送数据段
 unsigned char BCSStep = 0;    //BCS中的步骤0:发送BCS的头;1:发送BCP的数据段
 
-float m_heatCurrent = 0;    //SBMS板采集到的加热电流
+float g_SBMS_current1 = 0;	//the channal 1 HV current received from SBMS.
+float g_SBMS_current2 = 0;	//the channal 2 HV current received from SBMS.
+
 unsigned char InsRelayState = 0;    //SBMS板绝缘控制继电器状态
 
 //******************************************************************************
@@ -828,7 +830,7 @@ interrupt void CAN2_RECEIVE_ISR(void)   //内部  BMU   250Hz
         
             SBMSOverTime=0;//超时计时标志位清0
             Current = (((unsigned int)g_mboxData[0][0]&0x00ff)<<8) | g_mboxData[0][1];
-            m_heatCurrent = Current*0.02;//加热电流
+            g_SBMS_current1 = Current*0.02;//加热电流
             V4 = (((unsigned int)g_mboxData[0][2]&0x00ff)<<8) | g_mboxData[0][3];
             g_highVoltageV4 = V4*0.02;
             V5 = (((unsigned int)g_mboxData[0][4]&0x00ff)<<8) | g_mboxData[0][5];
@@ -854,7 +856,7 @@ interrupt void CAN2_RECEIVE_ISR(void)   //内部  BMU   250Hz
             }
 			
             InsRelayState = g_mboxData[0][1];   //绝缘控制继电器状态
-            
+            g_SBMS_current2 = (((U16)g_mboxData[0][2] << 8) + ((U16)g_mboxData[0][3])) * 0.02;
             break;
         case 0xC01EE3F:
             if((g_mboxData[0][0]==0x55)&&(g_mboxData[0][1]==0xAA))

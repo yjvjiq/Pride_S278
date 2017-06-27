@@ -52,7 +52,9 @@ extern unsigned char BCPStep;
 extern unsigned char FlagBCSSend;
 extern unsigned char BCSStep;
 
-extern float m_heatCurrent;    //SBMS板采集到的加热电流
+extern float g_SBMS_current1;	//the channal 1 HV current received from SBMS.
+extern float g_SBMS_current2;	//the channal 2 HV current received from SBMS.
+
 extern unsigned char InsRelayState;    //SBMS板绝缘控制继电器状态
 
 //**********************************************************
