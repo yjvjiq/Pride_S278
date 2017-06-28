@@ -225,7 +225,6 @@ void TaskRechargeDC(void)
     if((ErrorState==1)||(CutDCChaCurt0.word!=0)||(CutACChaCurt0.word!=0))//直流充电有下电故障处理
     {
         curr1 = 0;
-        //curr1=0;     
     } 
     else 
     {
@@ -254,25 +253,27 @@ void TaskRechargeDC(void)
     {
         timer2S=0;
     }
-	  if(g_highestCellVoltage>=HIGHEST_ALLOWED_CHARGE_CV)  //3.65V停止充电
-    {
+	
+	if(g_highestCellVoltage>=HIGHEST_ALLOWED_CHARGE_CV)  //3.65V停止充电
+	{
         timer1S++;
         if(timer1S>=100)//10ms*100=1000ms
         {          
             if(DCFinish==0)
             {
-                ChangerStopState = 1;
-                SocRechargeAdjust(); //修SOC及Q1
-        	      StoreParameter();
+				ChangerStopState = 1;
+				SocRechargeAdjust(); //修SOC及Q1
+				StoreParameter();
 
-        	      DCFinish=1;
-            }   
-            fastendflag=1;
-            fastend1|=0x10;//单体电压达到目标值，请求中止充电
-            timer1S=103; 
-            
-            curr1=0; //请求电流降为0
-        	  m_askvoltage=0;//请求电压降为0
+				DCFinish=1;
+            }
+			
+			fastendflag=1;
+			fastend1|=0x10;//单体电压达到目标值，请求中止充电
+			timer1S=103; 
+
+			curr1=0; //请求电流降为0
+			m_askvoltage=0;//请求电压降为0
         }
     } 
     else 

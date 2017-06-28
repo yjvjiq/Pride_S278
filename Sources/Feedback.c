@@ -83,7 +83,8 @@ float ChagerCurtCutDone(unsigned char ErrorLever,float CurrentValue,unsigned cha
     /*else if(ErrorLever==3)
     {      
         ChargeCurrentOn=0.7*CurrentValue;
-    }*/     
+    }*/ 
+        
     if(CurrentChaCurrent<=ChargeCurrentOn)//不经过查表的值小于当前降低功率后的值
     {
         
@@ -110,7 +111,7 @@ float ChagerCurtCutDone(unsigned char ErrorLever,float CurrentValue,unsigned cha
 //* EntryParameter : tem, soc 平均温度，SOC值
 //* ReturnValue    : fc 返回的回馈电流值  
 //******************************************************************************
-float PulseRechargePowerAdjust1(float soc,char tem) 
+float PulseRechargePowerAdjust1(void) 
 {   
     static float current1=0; //回馈电流暂存值1
     static float current2=0; //回馈电流暂存值2;
@@ -123,8 +124,6 @@ float PulseRechargePowerAdjust1(float soc,char tem)
     float BigChaPowerCutDown;//降电流到多少,用于故障恢复后线性变化 
     float ReturnValue=0;
     
-    //BigCharCurrent = feedback_20161129_qingnian_custom(soc,tem);
-     
     YoungM_PulseRechargePowerAdjust();//调用
     BigCharCurrent = BiggestFeedbackCurt_Model;
      
@@ -138,17 +137,16 @@ float PulseRechargePowerAdjust1(float soc,char tem)
         if((BigCharCurrent*g_highVoltageV1/1000)>=20)
             BigCharCurrent=20000/g_highVoltageV1; 
     }*/
+    
     fc=BigCharCurrent;//for test
     
-    ReduceCurt=ChagerCurtCutOff();//判断是否有降功率的故障
+    ReduceCurt=ChagerCurtCutOff();//get the fault level of reduce power fault.
     if(ReduceCurt!=0)//有故障
     {
         if(ReduceCurt==3)
             BigChaPowerCutDown=0;
         else if(ReduceCurt==2)
             BigChaPowerCutDown=0.5*BigCharCurrent;
-        //else if(ReduceCurt==3)
-        //    BigChaPowerCutDown=0.7*BigCharCurrent;
         
         fc = BigChaPowerCutDown; 
         current1 = BigChaPowerCutDown; 
@@ -156,6 +154,7 @@ float PulseRechargePowerAdjust1(float soc,char tem)
         ReturnValue=ChagerCurtCutDone(ReduceCurt,BigCharCurrent,DISCURT30s);
         return ReturnValue;   
     }
+	
     if(FirstTime==0) //第一次进入,只进入一次
     {
         fc=BigCharCurrent; 
@@ -208,21 +207,21 @@ float PulseRechargePowerAdjust1(float soc,char tem)
 //* EntryParameter : tem, soc 平均温度，SOC值
 //* ReturnValue    : fc 返回的回馈电流值  
 //******************************************************************************
-float ContinueRechargeCurt(float soc,char tem) 
+float ContinueRechargeCurt(void) 
 {   
-    static float current1=0; //回馈电流暂存值1
-    static float current2=0; //回馈电流暂存值2;
- //   static unsigned int leftTime=0;
-    static float fc=0;//返回的回馈电流值
-    float BigCharCurrent = 0;
-     
-    static unsigned char FirstTime=0;
-    static unsigned char changeFlag=0;
-    //static unsigned int ii=0;
-    //static unsigned int jj=0;
-    //static unsigned char TimeoutFlag1=0;
-    //static unsigned char TimeoutFlag2=0;
-    //static unsigned char CloseFlag=0;
+	static float current1=0; //回馈电流暂存值1
+	static float current2=0; //回馈电流暂存值2;
+//	static unsigned int leftTime=0;
+	static float fc=0;//返回的回馈电流值
+	float BigCharCurrent = 0;
+
+	static unsigned char FirstTime=0;
+	static unsigned char changeFlag=0;
+//	static unsigned int ii=0;
+//	static unsigned int jj=0;
+//	static unsigned char TimeoutFlag1=0;
+//	static unsigned char TimeoutFlag2=0;
+//	static unsigned char CloseFlag=0;
     
     unsigned char ReduceCurt=0;//降电流的等级
     float BigChaPowerCutDown;//降电流到多少,用于故障恢复后线性变化    
@@ -243,12 +242,10 @@ float ContinueRechargeCurt(float soc,char tem)
             BigChaPowerCutDown=0;
         else if(ReduceCurt==2)
             BigChaPowerCutDown=0.5*BigCharCurrent;
-        //else if(ReduceCurt==3)
-        //    BigChaPowerCutDown=0.7*BigCharCurrent;
         
         fc = BigChaPowerCutDown; 
         current1 = BigChaPowerCutDown; 
-        FirstTime=1; 
+        FirstTime=1;
         BiggestFeedbackCurtContinuous=ChagerCurtCutDone(ReduceCurt,BigCharCurrent,DISCURT5min);
         return BiggestFeedbackCurtContinuous;   
     }
@@ -270,13 +267,12 @@ float ContinueRechargeCurt(float soc,char tem)
         if(current1!=current2) //如果两者不等，说明第一与第二次不等
         {
             changeFlag=1;//设置变化标志位
-            if(current1>current2) 
+            if(current1>current2)
             {
                 fc=current1-POWERSPEED;// 每20ms变化0.5kw,7ms调用一次，21ms降低0.51KW
                 current1=fc;
                 if(current1<=current2)
                 {
-                    
                     fc=current2;
                     changeFlag=0; 
                 }

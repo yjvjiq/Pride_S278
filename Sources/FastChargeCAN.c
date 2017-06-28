@@ -459,23 +459,24 @@ void cpuToCHMBCP(void)
 //******************************************************************************
 void cpuToCHMBRO(void)
 {
-    struct can_msg mg;
-    char tt=100;
-    
-    mg.RTR= FALSE;  
-    mg.len = 1;
-    mg.prty = 0;
+	struct can_msg mg;
+	char tt=100;
+
+	mg.RTR= FALSE;  
+	mg.len = 1;
+	mg.prty = 0;
     
     if(BROErrorAA==0)
     {
         mg.data[0] = 0xaa;
     }
-    else if(BROErrorAA==1)
+    else if(BROErrorAA==1){
         mg.data[0] = 0x00;
+    }
     
-	  mg.id= 0x100956f4;
-	  
-	  if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
+	mg.id= 0x100956f4;
+
+	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
 	      while((!MSCAN1SendMsg(mg))&&(tt>0))
             tt--;
     else if(g_BmsModeFlag == RECHARGING) 
@@ -490,33 +491,36 @@ void cpuToCHMBRO(void)
 //******************************************************************************
 void cpuToCHMBCL(void)
 {
-    struct can_msg mg;
-    unsigned int buff;
-    char tt=100;
-    
-    mg.RTR= FALSE;  
-    mg.len = 5;
-    mg.prty = 0;
-    
-    
-    buff = (unsigned int)(m_askvoltage*10);
-	  mg.data[0]= (unsigned char)buff;//电压需求
-	  mg.data[1]= buff>>8;
-	  
-    buff = (unsigned int)((400-m_askcurrent)*10);
-	  mg.data[2]= (unsigned char)buff;//电流需求
-	  mg.data[3]=  buff>>8;
-    mg.data[4] = m_chmmode;//恒流控制
-	  
-	  mg.id= 0x181056f4;
-	  
-	  if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
-	      while((!MSCAN1SendMsg(mg))&&(tt>0))
-            tt--;
-    else if(g_BmsModeFlag == RECHARGING) 
-	      while((!MSCAN0SendMsg(mg))&&(tt>0))
-            tt--;   
+	struct can_msg mg;
+	unsigned int buff;
+	char tt=100;
 
+	mg.RTR= FALSE;  
+	mg.len = 5;
+	mg.prty = 0;
+
+
+	buff = (unsigned int)(m_askvoltage*10);
+	mg.data[0]= (unsigned char)buff;//电压需求
+	mg.data[1]= buff>>8;
+
+	buff = (unsigned int)((400-m_askcurrent)*10);
+	mg.data[2]= (unsigned char)buff;//电流需求
+	mg.data[3]=  buff>>8;
+	mg.data[4] = m_chmmode;//恒流控制
+
+	mg.id= 0x181056f4;
+
+	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)){ 
+		while((!MSCAN1SendMsg(mg))&&(tt>0)){
+			tt--;
+		}
+	}
+	else if(g_BmsModeFlag == RECHARGING){ 
+		while((!MSCAN0SendMsg(mg))&&(tt>0)){
+			tt--;   
+		}
+	}
 }
 //******************************************************************************
 //* Function name:   cpuToCHMBCS

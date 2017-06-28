@@ -15,6 +15,6 @@
 //----------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------
 
-extern float PulseRechargePowerAdjust1(float soc,char tem);
+extern float PulseRechargePowerAdjust1(void);
  
-extern float ContinueRechargeCurt(float soc,char tem) ; 
+extern float ContinueRechargeCurt(void);

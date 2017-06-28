@@ -81,10 +81,10 @@
 #define COOL_TYPE                           1       //1 自然冷却 2：风扇冷却 3：水冷
 
 ///////////////////////BMS最后保护的阀值///////////////////////
-#define LOWEST_CELL_VOL     2.0     //放电最小单体电压
-#define HIGHEST_CELL_VOL    3.85    //充电单体最大单体电压
-#define HIGHEST_BATT_VOL    775.2   //最大总电压3.8*204 = 775.2
-#define HIGHEST_TEM         60      //最高温度60
+#define LOWEST_CELL_VOL     2.0		//放电最小单体电压
+#define HIGHEST_CELL_VOL    3.85	//充电单体最大单体电压
+#define HIGHEST_BATT_VOL    775		//最大总电压3.8*204 = 775.2
+#define HIGHEST_TEM         62		//最高温度62
 
 //////////////////////BMS功率变化速度//////////////////////////
 #define POWERSPEED  0.5       //功率的变化速度
@@ -393,8 +393,8 @@ typedef struct{
 #define ENDFLAG 96
 
 #define DISCHARGING 0 //放电
-#define RECHARGING 2  //充电
 #define FASTRECHARGING 1  //快充
+#define RECHARGING 2  //充电
 #define TESTSTATE 4  //调试模式
 
 //************ main.c ****************************************

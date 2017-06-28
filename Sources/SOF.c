@@ -89,7 +89,6 @@ float DischagerCurtCutDone(unsigned char ErrorLever,float CurrentValue,unsigned 
         }
         return CurrentDisCurrent;
     }
-        //return CurrentDisCurrent;
     else 
     {
         CurrentDisCurrent=CurrentDisCurrent-POWERSPEED;
@@ -106,7 +105,7 @@ float DischagerCurtCutDone(unsigned char ErrorLever,float CurrentValue,unsigned 
 //* EntryParameter : 温度，SOC，当前最大允许功率或电流值
 //* ReturnValue    : bigPowerCurrent当前最大允许放电功率或电流
 //******************************************************************************
-float BigDischargePowerAdjust(char tem,float soc)
+float BigDischargePowerAdjust()
 {
     static float power1=0; //放电功率暂存值1
     static float power2=0; //放电功率暂存值2
@@ -120,12 +119,6 @@ float BigDischargePowerAdjust(char tem,float soc)
     static float pc=0;//最大允许放电功率/电流 返回值
     
     BigDisPower=BiggestDischargeCurt;
-    
-    //BigDisPower =SOF_20161129_qingnian_custom(soc,tem);
-    
-    //if((BigDisPower*g_highVoltageV1/1000)>=100)
-    //    BigDisPower=100000/g_highVoltageV1; 
-    
     
     YoungMa_BigDischargePowerAdjust();
     BigDisPower=BiggestDischargeCurt_Model;
@@ -143,7 +136,6 @@ float BigDischargePowerAdjust(char tem,float soc)
         FirstOn=1; 
         ReturnValue=DischagerCurtCutDone(ReduceCurt,BigDisPower,DISCURT30s);
         return ReturnValue; 
-    
     }
     if(FirstOn==0) //第一次进入
     {
@@ -198,7 +190,7 @@ float BigDischargePowerAdjust(char tem,float soc)
 //* EntryParameter : 温度，SOC，当前最大允许功率或电流值
 //* ReturnValue    : bigPowerCurrent当前最大允许放电功率或电流
 //******************************************************************************
-float BigDischargePowerContinuous(char tem,float soc)
+float BigDischargePowerContinuous()
 {
     static float power1=0; //放电功率暂存值1
     static float power2=0; //放电功率暂存值2
@@ -216,7 +208,7 @@ float BigDischargePowerContinuous(char tem,float soc)
     {
         BigDisPower=SetCap;
     }
-    ReduceCurt=DischagerCurtCutOff();
+    ReduceCurt = DischagerCurtCutOff();
     if(ReduceCurt!=0)//有故障
     {
         if(ReduceCurt==3)
@@ -230,7 +222,6 @@ float BigDischargePowerContinuous(char tem,float soc)
         FirstOn=1; 
         BiggestDisCurtContinuous=DischagerCurtCutDone(ReduceCurt,BigDisPower,DISCURT5min);
         return BiggestDisCurtContinuous; 
-    
     }
     if(FirstOn==0) //第一次进入
     {

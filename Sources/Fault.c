@@ -962,66 +962,122 @@ void CarFaultDone()
 void BMSProtect(void)//有风险，如果OffState判断失败,最好用实际电压比较********** 
 {
     static unsigned char LCDelaytime=0;
-    static unsigned char HCDelaytime=0;
+    static unsigned char FastChgHCDelaytime=0;
+	static unsigned char EleBandChgHCDelaytime=0;
     static unsigned char HTDelaytime=0;
     static unsigned char HBaDelaytime=0;
+	static U16 DisChg_cnt_t = 0;
+	static U16 FastChg_cnt_t = 0;
+	static U16 EleBandChg_cnt_t = 0;
+	static U16 HT_cnt_t = 0;
+	
     if(g_BmsModeFlag == DISCHARGING)
-    {      
+    {
         if((g_lowestCellVoltage<=LOWEST_CELL_VOL)&&(g_lowestCellVoltage!=0))
         {
             LCDelaytime++;
-            if(LCDelaytime>20)
+            if(LCDelaytime>10)
             {
-                LCDelaytime=27;
-                TurnOffAllRelay();
+                LCDelaytime = 10;
+				Error_Group6.Bit.F3_BMS_Protect = 1;
+				g_bms_fault_msg.fault.BMS_Self_Protect = 1;
+				DisChg_cnt_t++;
+				if(DisChg_cnt_t >= 30){
+					DisChg_cnt_t = 30;
+					Kp_Switch(OFF);
+					Kn_Switch(OFF);
+//					TurnOffAllRelay();
+				}
             }
         } 
         else
         {
             LCDelaytime=0;
+			DisChg_cnt_t = 0;
         }
     }
-    if((g_BmsModeFlag == RECHARGING)||(g_BmsModeFlag == FASTRECHARGING))
-    {      
-        if(g_highestCellVoltage>=HIGHEST_CELL_VOL )//10s
-        {
-            HCDelaytime++;
-            if(HCDelaytime>30)
-            {
-                HCDelaytime=37;
-                TurnOffAllRelay();
-            }
-        } 
-        else
-        {
-            HCDelaytime=0;
-        }
-        if(g_systemVoltage>=HIGHEST_BATT_VOL )//
-        {
-            HBaDelaytime++;
-            if(HBaDelaytime>30)
-            {
-                HBaDelaytime=37;
-                TurnOffAllRelay();
-            }
-        } 
-        else
-        {
-            HBaDelaytime=0;
-        }
-    }
-    if(g_highestTemperature>(HIGHEST_TEM+40) )//10s
+	else
+	{
+		LCDelaytime=0;
+		DisChg_cnt_t = 0;
+	}
+	
+	if(g_BmsModeFlag == FASTRECHARGING){
+		if((g_highestCellVoltage >= HIGHEST_CELL_VOL)
+			|| (g_systemVoltage >= HIGHEST_BATT_VOL)
+			|| (g_highVoltageV5 >= HIGHEST_BATT_VOL)){
+			FastChgHCDelaytime++;
+			if(FastChgHCDelaytime >= 10){
+				FastChgHCDelaytime = 10;
+				Error_Group6.Bit.F3_BMS_Protect = 1;
+				g_bms_fault_msg.fault.BMS_Self_Protect = 1; // the same as above.
+				FastChg_cnt_t++;
+				if(FastChg_cnt_t >= 30){
+					FastChg_cnt_t = 30;
+//					TurnOffAllRelay();
+					KChg_N_Switch(OFF);
+					KFastChg_P_Switch(OFF);
+				}
+			}
+		}
+		else{
+			FastChg_cnt_t = 0;
+			FastChgHCDelaytime = 0;
+		}
+	}
+	else{
+		FastChg_cnt_t = 0;
+		FastChgHCDelaytime = 0;
+	}
+
+	if(g_BmsModeFlag == RECHARGING){
+		if(g_highestCellVoltage >= HIGHEST_CELL_VOL
+			|| (g_systemVoltage >= HIGHEST_BATT_VOL)
+			|| (g_highVoltageV6 >= HIGHEST_BATT_VOL)){
+			EleBandChgHCDelaytime++;
+			if(EleBandChgHCDelaytime >= 10){
+				EleBandChgHCDelaytime = 10;
+				Error_Group6.Bit.F3_BMS_Protect = 1;
+				g_bms_fault_msg.fault.BMS_Self_Protect = 1; // the same as above.
+				EleBandChg_cnt_t++;
+				if(EleBandChg_cnt_t >= 30){
+					EleBandChg_cnt_t = 30;
+//					TurnOffAllRelay();
+					KChg_N_Switch(OFF);
+					KEleBand_P_Switch(OFF);
+				}
+			}
+		}
+		else{
+			EleBandChg_cnt_t = 0;
+			EleBandChgHCDelaytime = 0;
+		}
+	}
+	else{
+		EleBandChg_cnt_t = 0;
+		EleBandChgHCDelaytime = 0;
+	}
+	
+    if(g_highestTemperature >= (HIGHEST_TEM + 40) )//10s
     {
         HTDelaytime++;
-        if(HTDelaytime>30)
+        if(HTDelaytime>=10)
         {
-            HTDelaytime=37;
-            TurnOffAllRelay();
+            HTDelaytime=10;
+			Error_Group6.Bit.F3_BMS_Protect = 1;
+			g_bms_fault_msg.fault.BMS_Self_Protect = 1; // the same as above.
+			
+			HT_cnt_t++;
+			if(HT_cnt_t >= 30){
+				HT_cnt_t = 30;
+				TurnOffAllRelay();
+			}
         }
-    } 
+    }
     else
     {
         HTDelaytime=0;
+		HT_cnt_t = 0;
     }
 }
 //******************************************************************************
@@ -1194,13 +1250,13 @@ int TurnOffAllRelay(void)//
     delay(25000); //19ms
     openPosRelay();
     delay(25000); //19ms
-    TurnOff_INA2K();//快充继电器
+    TurnOff_INA2K();//fast charge positive relay.
     delay(25000); //19ms
-    TurnOff_INA1K();//快充继电器
+    TurnOff_INA1K();//EleBand positive relay.
     delay(25000); //19ms
-    TurnOff_INBK();//快充继电器
+    TurnOff_INBK();//pre-charge relay.
     delay(25000); //19ms
-    TurnOff_INHK();//快充继电器
+    TurnOff_INHK();//heat relay.
     delay(25000); //19ms
     Error_Group6.Bit.F3_BMS_Protect = 1;//整车CAN赋值 BMS极限故障自我保护
 }

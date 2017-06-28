@@ -418,10 +418,10 @@ void TaskStatusMachine(void)//5msµ÷ÓÃÒ»´Î
             //YoungMan_LT_step();
             if(plug_AC_CP_Connect == 0) 
             {
-                BiggestDischargeCurt = BigDischargePowerAdjust((Tavg-40),Can_g_socValue);//SOF//30s
-                BiggestDisCurtContinuous = BigDischargePowerContinuous((Tavg-40),Can_g_socValue);//SOF//5min
-                BiggestFeedbackCurt = PulseRechargePowerAdjust1(Can_g_socValue,(Tavg-40)); //ÖÆ¶¯ÄÜÁ¿»ØÊÕ30s 
-                BiggestFeedbackCurtContinuous = ContinueRechargeCurt(Can_g_socValue,(Tavg-40)); //ÖÆ¶¯ÄÜÁ¿»ØÊÕ5min         
+                BiggestDischargeCurt = BigDischargePowerAdjust();//SOF//30s
+                BiggestDisCurtContinuous = BigDischargePowerContinuous();//SOF//5min
+                BiggestFeedbackCurt = PulseRechargePowerAdjust1(); //ÖÆ¶¯ÄÜÁ¿»ØÊÕ30s 
+                BiggestFeedbackCurtContinuous = ContinueRechargeCurt(); //ÖÆ¶¯ÄÜÁ¿»ØÊÕ5min         
             }
             else if((plug_AC_CP_Connect == 1)||(HighVolPowerOff == 1))//¼ì²âµ½ÊÜµç¹­
             {
@@ -498,12 +498,12 @@ void TaskStatusMachine(void)//5msµ÷ÓÃÒ»´Î
         case 120:
             status_group1.Bit.St_BMS =2;//¸ßÑ¹¶Ï¿ª
 			
-            if(stateCode == 40) 
+            if(stateCode == 40 && Error_Group6.Bit.F3_BMS_Protect != 1) 
             {
                 openPosRelay(); //¶Ï¿ªÕı¼«¼ÌµçÆ÷
                 //PRelayConnectTest();//Õı¼«Õ³Á¬ÔÚ´Ë´¦¼ì²â Õ³Á¬²»ÔÙ¼ì²âÁË 
             }
-            else if(stateCode == 120)
+            else if(stateCode == 120 && Error_Group6.Bit.F3_BMS_Protect != 1)
             {
                 TurnOff_INA1K();//¶ÏÊÜµç¹­¼ÌµçÆ÷
                 //ChgRelayConnectTest();//ÊÜµç¹­¼ÌµçÆ÷Õ³Á¬
@@ -530,13 +530,18 @@ void TaskStatusMachine(void)//5msµ÷ÓÃÒ»´Î
         case 124:
         case 184:
             if((stateCode==44)||(stateCode==184)) //ÊÜµç¹­³äµçÏÂµçÊ±²»¶Ï¿ªÕı¼«£¬·ÀÖ¹ÔÙ´ÎÉÏµçÉÕ¹­
+            {
                 openPosRelay();//ÔÙ¶Ï¿ªÕı¼«¼ÌµçÆ÷£¬È·±£Õı¼«¼ÌµçÆ÷¶Ï¿ª¡
-            TurnOff_INA1K();//ÔÙ¶Ï¿ªÊÜµç¹­¼ÌµçÆ÷£¬È·±£¼ÌµçÆ÷¶Ï¿ª¡
+			}
+			
+			TurnOff_INA1K();//ÔÙ¶Ï¿ªÊÜµç¹­¼ÌµçÆ÷£¬È·±£¼ÌµçÆ÷¶Ï¿ª¡
 
-            if(stateCode == 44)
+            if(stateCode == 44){
                 openNegRelay();//¶Ï¿ªÖ÷¸º¼ÌµçÆ÷
-            else 
+            }
+            else{
                 TurnOff_INBK();//¶Ï¿ª³äµç¸º¼ÌµçÆ÷
+            }
             
             delay(25000); //19ms
             delay(25000); //19ms

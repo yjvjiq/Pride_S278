@@ -16,8 +16,8 @@
 //----------------------------------------------------------------------------------------------------
 #define DISCURT30s  1//定义放电30s模式
 #define DISCURT5min 2//定义放电5min模式
-extern float BigDischargePowerContinuous(char tem,float soc);
-extern float BigDischargePowerAdjust(char tem,float soc);
+extern float BigDischargePowerContinuous(void);
+extern float BigDischargePowerAdjust(void);
 //****************************************************************************************************
 //****************************************************************************************************
 //****************************the end********************************************************************
