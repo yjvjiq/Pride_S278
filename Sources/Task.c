@@ -456,7 +456,6 @@ void TaskStatusMachine(void)//5ms调用一次
             if(counter1_500ms>=70) //7*70=490ms
             {
                 counter1_500ms=0;
-                //HeatAndChargeControl(); //受电弓暂不确定需要不需要加热
                 Error_Group1.Bit.St_DisCHG_Allow=1;//放电允许状态位不允许
    
             }

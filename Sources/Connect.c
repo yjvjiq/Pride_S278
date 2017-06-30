@@ -34,7 +34,7 @@ void bmsModeAwake(void)
             status_group3.Bit.St_Charge = 1;//正在充电 
             InsRelayControl=1;//快充时采绝缘控制给SBMS
             stateCode=141;      
-        } 
+        }
         else
         {
             stateCode=187;

@@ -507,7 +507,7 @@ void cpuToCHMBCL(void)
 	mg.data[0]= (unsigned char)buff;//电压需求
 	mg.data[1]= buff>>8;
 
-	buff = (unsigned int)((400 - m_askcurrent)*10);
+	buff = (unsigned int)((500 - m_askcurrent)*10);
 	mg.data[2]= (unsigned char)buff;//电流需求
 	mg.data[3]=  buff>>8;
 	mg.data[4] = m_chmmode;//恒流控制
