@@ -184,7 +184,8 @@ void TaskBmuProcess(void)
         t=0;
         GetTavgProcess();
         //State_Box_Online=0x3f;        
-    }          
+    }
+	
     if(t>=100) //≥¨ ±π ’œ±®∏Ê300ms*100=30s
     {
         if(t<=105)//5*300=1500ms

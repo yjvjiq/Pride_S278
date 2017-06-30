@@ -37,27 +37,26 @@ unsigned char PGN[3] = 0;
 //******************************************************************************
 void cpuToCHMBHM(void)
 {
-    struct can_msg mg;
-    char tt=100;
-    unsigned int buff;
-    mg.RTR= FALSE;  
-    mg.len = 2;
-    mg.prty = 0;
-    
-    buff=HIGHEST_ALLOWED_CHARGE_V*10;
-    
-    mg.data[0] = buff;     //最高允许充电电压低字节
-    mg.data[1] = buff>>8;  //最高允许充电电压高字节
-	  
-	  mg.id= 0x182756f4;
-	  
-	  if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
-	      while((!MSCAN1SendMsg(mg))&&(tt>0))
-            tt--;
-    else if((g_BmsModeFlag == RECHARGING)) 
-	      while((!MSCAN0SendMsg(mg))&&(tt>0))
-            tt--;         
-	  //MSCAN1SendMsg(mg);
+	struct can_msg mg;
+	char tt=100;
+	unsigned int buff;
+	mg.RTR= FALSE;  
+	mg.len = 2;
+	mg.prty = 0;
+
+	buff=HIGHEST_ALLOWED_CHARGE_V*10;
+
+	mg.data[0] = buff;     //最高允许充电电压低字节
+	mg.data[1] = buff>>8;  //最高允许充电电压高字节
+
+	mg.id= 0x182756f4;
+
+	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
+		while((!MSCAN1SendMsg(mg))&&(tt>0))
+			tt--;
+	else if((g_BmsModeFlag == RECHARGING)) 
+		while((!MSCAN0SendMsg(mg))&&(tt>0))
+			tt--;         
 }
 //******************************************************************************
 //* Function name:   cpuToCHMBRM
@@ -214,24 +213,24 @@ void cpuToCHMBRMDATA3(void)
 //******************************************************************************
 void cpuToCHMBRMDATA4(void)
 {
-    struct can_msg mg;
-    char tt=100;
-    mg.RTR= FALSE;  
-    mg.len = 8;
-    mg.prty = 0;
-    
-    mg.data[0] = 0x04;
-    mg.data[1] = 0xff;
-    mg.data[2] = 0x01; 
-    mg.data[3] = 0xff; 
-    mg.data[4]= 0xff;
-	  mg.data[5]= 0xff;
-    mg.data[6]= 0xff;
-	  mg.data[7]= 0xff;
+	struct can_msg mg;
+	char tt=100;
+	mg.RTR= FALSE;  
+	mg.len = 8;
+	mg.prty = 0;
 
-	  mg.id= 0x1ceb56f4;
-	  
-	  if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
+	mg.data[0] = 0x04;
+	mg.data[1] = 0xff;
+	mg.data[2] = 0x01; 
+	mg.data[3] = 0xff; 
+	mg.data[4]= 0xff;
+	mg.data[5]= 0xff;
+	mg.data[6]= 0xff;
+	mg.data[7]= 0xff;
+
+	mg.id= 0x1ceb56f4;
+
+	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
 	      while((!MSCAN1SendMsg(mg))&&(tt>0))
             tt--;
     else if(g_BmsModeFlag == RECHARGING) 
@@ -246,25 +245,25 @@ void cpuToCHMBRMDATA4(void)
 //******************************************************************************
 void cpuToCHMBRMDATA5(void)
 {
-    struct can_msg mg;
-    char tt=100;
-    
-    mg.RTR= FALSE;  
-    mg.len = 8;
-    mg.prty = 0;
-    
-    mg.data[0] = 0x05;
-    mg.data[1] = 0xff;
-    mg.data[2] = 0xff; 
-    mg.data[3] = 0xff; 
-    mg.data[4]= 0xff;
-	  mg.data[5]= 0xff;
-    mg.data[6]= 0xff;
-	  mg.data[7]= 0xff;
+	struct can_msg mg;
+	char tt=100;
 
-	  mg.id= 0x1ceb56f4;
-	  
-	  if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
+	mg.RTR= FALSE;  
+	mg.len = 8;
+	mg.prty = 0;
+
+	mg.data[0] = 0x05;
+	mg.data[1] = 0xff;
+	mg.data[2] = 0xff; 
+	mg.data[3] = 0xff; 
+	mg.data[4]= 0xff;
+	mg.data[5]= 0xff;
+	mg.data[6]= 0xff;
+	mg.data[7]= 0xff;
+
+	mg.id= 0x1ceb56f4;
+
+	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
 	      while((!MSCAN1SendMsg(mg))&&(tt>0))
             tt--;
     else if(g_BmsModeFlag == RECHARGING) 
@@ -279,30 +278,34 @@ void cpuToCHMBRMDATA5(void)
 //******************************************************************************
 void cpuToCHMBRMDATA6(void)
 {
-    struct can_msg mg;
-    char tt=100;
-    
-    mg.RTR= FALSE;  
-    mg.len = 8;
-    mg.prty = 0;
-    
-    mg.data[0] = 0x06;
-    mg.data[1] = 0xff;
-    mg.data[2] = 0xff; 
-    mg.data[3] = 0xff; 
-    mg.data[4]= 0xff;
-	  mg.data[5]= 0xff;
-    mg.data[6]= 0xff;
-	  mg.data[7]= 0xff;
+	struct can_msg mg;
+	char tt=100;
 
-	  mg.id= 0x1ceb56f4;
-	  
-	  if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
-	      while((!MSCAN1SendMsg(mg))&&(tt>0))
-            tt--;
-    else if(g_BmsModeFlag == RECHARGING) 
-	      while((!MSCAN0SendMsg(mg))&&(tt>0))
-            tt--; 
+	mg.RTR= FALSE;  
+	mg.len = 8;
+	mg.prty = 0;
+
+	mg.data[0] = 0x06;
+	mg.data[1] = 0xff;
+	mg.data[2] = 0xff; 
+	mg.data[3] = 0xff; 
+	mg.data[4]= 0xff;
+	mg.data[5]= 0xff;
+	mg.data[6]= 0xff;
+	mg.data[7]= 0xff;
+
+	mg.id= 0x1ceb56f4;
+
+	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)){
+		while((!MSCAN1SendMsg(mg))&&(tt>0)){
+			tt--;
+		}
+	}
+	else if(g_BmsModeFlag == RECHARGING){
+		while((!MSCAN0SendMsg(mg))&&(tt>0)){
+			tt--;
+		}
+	}
 }
 //******************************************************************************
 //* Function name:   cpuToCHMBRMDATA7
@@ -419,34 +422,34 @@ void cpuToCHMBCP(void)
 //******************************************************************************
  void cpuToCHMBCPDATA2(void)
 {
-    struct can_msg mg;
-    unsigned int buff;
-    char tt=100;
-    
-    mg.RTR= FALSE;  
-    mg.len = 8;
-    mg.prty = 0;
-    
-    mg.data[0] = 0x02;
+	struct can_msg mg;
+	unsigned int buff;
+	char tt=100;
 
-    buff = (unsigned int)(HIGHEST_ALLOWED_CHARGE_V*10);
-	  mg.data[1]= buff>>8;//最高允许动力电池系统 总电压高字节
-	  mg.data[2] = 105;// the allowed highest temperature = 105-50=55 C
-	  
-	  buff = (unsigned int)(Can_g_socValue*1000); 
-	  mg.data[3]= (unsigned char)buff;//SOC
-	  mg.data[4]= buff>>8;
-	  
-	  buff = (unsigned int)(g_systemVoltage*10);
-	  mg.data[5]= (unsigned char)buff;//系统总电压低字节
-	  mg.data[6]= buff>>8; //系统总电压高字节
-	  mg.data[7]= 0xff;
-	  
-	  mg.id= 0x1ceb56f4;
-	  
-	  if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
-	      while((!MSCAN1SendMsg(mg))&&(tt>0))
-            tt--;
+	mg.RTR= FALSE;  
+	mg.len = 8;
+	mg.prty = 0;
+
+	mg.data[0] = 0x02;
+
+	buff = (unsigned int)(HIGHEST_ALLOWED_CHARGE_V*10);
+	mg.data[1]= buff>>8;//最高允许动力电池系统 总电压高字节
+	mg.data[2] = 105;// the allowed highest temperature = 105-50=55 C
+
+	buff = (unsigned int)(Can_g_socValue*1000); 
+	mg.data[3]= (unsigned char)buff;//SOC
+	mg.data[4]= buff>>8;
+
+	buff = (unsigned int)(g_systemVoltage*10);
+	mg.data[5]= (unsigned char)buff;//系统总电压低字节
+	mg.data[6]= buff>>8; //系统总电压高字节
+	mg.data[7]= 0xff;
+
+	mg.id= 0x1ceb56f4;
+
+	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
+		while((!MSCAN1SendMsg(mg))&&(tt>0))
+			tt--;
     else if(g_BmsModeFlag == RECHARGING) 
 	      while((!MSCAN0SendMsg(mg))&&(tt>0))
             tt--; 
@@ -504,7 +507,7 @@ void cpuToCHMBCL(void)
 	mg.data[0]= (unsigned char)buff;//电压需求
 	mg.data[1]= buff>>8;
 
-	buff = (unsigned int)((400-m_askcurrent)*10);
+	buff = (unsigned int)((400 - m_askcurrent)*10);
 	mg.data[2]= (unsigned char)buff;//电流需求
 	mg.data[3]=  buff>>8;
 	mg.data[4] = m_chmmode;//恒流控制
@@ -678,28 +681,26 @@ void cpuToCHMBSM(void)
 //void cpuToCHMBSP(void); //可选项，温度
 void cpuToCHMBST(void)  
 {    
-    struct can_msg mg;
-    char tt=100;
-    
-    mg.RTR= FALSE;  
-    mg.len = 4;
-    mg.prty = 0;
-    
-	  mg.data[0]= fastend1;
-	  mg.data[1]= fastend2;
-	  mg.data[2]= fastend3;
-	  mg.data[3]= fastend4;
-	  
-   
-    mg.id= 0x101956f4;
-    
-    if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
-	      while((!MSCAN1SendMsg(mg))&&(tt>0))
-            tt--;
+	struct can_msg mg;
+	char tt=100;
+
+	mg.RTR= FALSE;  
+	mg.len = 4;
+	mg.prty = 0;
+
+	mg.data[0]= fastend1;
+	mg.data[1]= fastend2;
+	mg.data[2]= fastend3;
+	mg.data[3]= fastend4;
+
+	mg.id= 0x101956f4;
+
+	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
+		while((!MSCAN1SendMsg(mg))&&(tt>0))
+			tt--;
     else if(g_BmsModeFlag == RECHARGING) 
-	      while((!MSCAN0SendMsg(mg))&&(tt>0))
-            tt--; 
-  
+		while((!MSCAN0SendMsg(mg))&&(tt>0))
+			tt--; 
 } 
 //******************************************************************************
 //* Function name:   cpuToCHMBSD

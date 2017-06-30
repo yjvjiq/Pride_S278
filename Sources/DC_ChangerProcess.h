@@ -59,7 +59,7 @@ extern unsigned char DC_Vesion;//DC充电版本1：老国标;2：新国标
 extern unsigned char DCStartState;
 extern unsigned char SelfState3;     //自检计数器变成3标志
 extern unsigned char BEMStop;
-extern unsigned char ChangerStopState;
+extern unsigned char ChargerStopState;
 extern unsigned char PantNormalEndFlag;//受电弓正常下电标志位
 
 ///////////////////////////////////////////////////////////////////

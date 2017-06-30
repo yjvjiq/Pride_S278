@@ -34,6 +34,9 @@
 #define CELL_TEMP_GROUP             17      //the number of cell temperature group, 51/3=17, 3 temps/group
 //#define C                         150     //充电倍率
 #define SetCap                      150     //充电倍率  为了区分C  C查找起来太多了  
+#define EleBand_Max_Current			400
+#define FastChg_Max_Current			300
+
 #define DubugMode                   1       //发送状态机报文
 
 //////////////////////////////////直流快充//////////////////////////////////

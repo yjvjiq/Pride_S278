@@ -112,8 +112,8 @@ void stateCodeTransfer(void)
                  Delay30 = 0; 
             }
             else if(acc_Connect==0)//ACC无或者收到高压下电指令 5ms*300=1.5S
-            {                
-                Delay30++; 
+            {
+                Delay30++;
             }
             else 
             {
@@ -247,10 +247,10 @@ void stateCodeTransfer(void)
 			||((PantographOff == 1)&&(E10SOverFlag)&&(Error20S>=20000)&&(g_systemCurrent<-5))//故障延时10S&&电流大于5A，再持续20S
 			||(CDelay30>=400))//CC2或者充电开关==0延时2S
 			//||(plug_DC_Connect == 1)
-            { 
+            {
                 stateCode=120;//充电已完成或者需下电的故障或者检测降弓开关==0||降弓到位==0||充电开关==0    
                 CDelay30 = 0; 
-            } 
+            }
             else if((VCU_ChgControl.Bit.downC_Switch == 0)
             ||(VCU_ChgControl.Bit.downC_OK == 0)
             ||(VCU_ParkBrake.Bit.Parking_Brake==0)
@@ -258,7 +258,7 @@ void stateCodeTransfer(void)
 //			||(PantNormalEndFlag)
 
             )//充电信号无     5ms*300=1.5S
-            {                
+            {
                 CDelay30++; 
             }  
         } 

@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'YoungMan_LT'.
  *
- * Model version                  : 1.1149
+ * Model version                  : 1.1160
  * Simulink Coder version         : 8.10 (R2016a) 10-Feb-2016
- * C/C++ source code generated on : Sat May 27 11:21:57 2017
+ * C/C++ source code generated on : Wed Jun 28 16:07:12 2017
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Freescale->HC(S)12
@@ -202,23 +202,23 @@ const ConstP_YoungMan_LT_T YoungMan_LT_ConstP = {
 /* Real-time model */
 RT_MODEL_YoungMan_LT_T YoungMan_LT_M_;
 RT_MODEL_YoungMan_LT_T *const YoungMan_LT_M = &YoungMan_LT_M_;
-real32_T look2_iflf_binlxpw(real32_T u0, real32_T u1, const real32_T bp0[],
+real32_T look2_iflf_binlcpw(real32_T u0, real32_T u1, const real32_T bp0[],
   const real32_T bp1[], const real32_T table[], const uint32_T maxIndex[],
   uint32_T stride);
 real32_T look2_ifs16bfflftu16n8_PYqzO3tA(real32_T u0, int16_T u1, const real32_T
   bp0[], const real32_T bp1[], const uint16_T table[], const uint32_T maxIndex[],
   uint32_T stride);
-real32_T look2_iflf_linlxpw(real32_T u0, real32_T u1, const real32_T bp0[],
+real32_T look2_iflf_linlcpw(real32_T u0, real32_T u1, const real32_T bp0[],
   const real32_T bp1[], const real32_T table[], const uint32_T maxIndex[],
   uint32_T stride);
-real32_T look1_iflf_binlxpw(real32_T u0, const real32_T bp0[], const real32_T
+real32_T look1_iflf_binlcpw(real32_T u0, const real32_T bp0[], const real32_T
   table[], uint32_T maxIndex);
 extern void YoungMa_BigDischargePowerAdjust(void);
 extern void YoungMan_LT_ChargeEndSOCAjust(void);
 extern void YoungMan_LT_FastChrgPowerAjust(void);
 extern void YoungMan_LT_PowerOnSOCAjust(void);
 extern void YoungM_PulseRechargePowerAdjust(void);
-real32_T look2_iflf_binlxpw(real32_T u0, real32_T u1, const real32_T bp0[],
+real32_T look2_iflf_binlcpw(real32_T u0, real32_T u1, const real32_T bp0[],
   const real32_T bp1[], const real32_T table[], const uint32_T maxIndex[],
   uint32_T stride)
 {
@@ -234,20 +234,20 @@ real32_T look2_iflf_binlxpw(real32_T u0, real32_T u1, const real32_T bp0[],
      Search method: 'binary'
      Use previous index: 'off'
      Interpolation method: 'Linear'
-     Extrapolation method: 'Linear'
+     Extrapolation method: 'Clip'
      Use last breakpoint for index at or above upper limit: 'off'
      Remove protection against out-of-range input in generated code: 'off'
    */
   /* Prelookup - Index and Fraction
      Index Search method: 'binary'
-     Extrapolation method: 'Linear'
+     Extrapolation method: 'Clip'
      Use previous index: 'off'
      Use last breakpoint for index at or above upper limit: 'off'
      Remove protection against out-of-range input in generated code: 'off'
    */
   if (u0 <= bp0[0UL]) {
     iLeft = 0UL;
-    frac = (u0 - bp0[0UL]) / (bp0[1UL] - bp0[0UL]);
+    frac = 0.0F;
   } else if (u0 < bp0[maxIndex[0UL]]) {
     /* Binary Search */
     bpIdx = maxIndex[0UL] >> 1UL;
@@ -266,8 +266,7 @@ real32_T look2_iflf_binlxpw(real32_T u0, real32_T u1, const real32_T bp0[],
     frac = (u0 - bp0[iLeft]) / (bp0[iLeft + 1UL] - bp0[iLeft]);
   } else {
     iLeft = maxIndex[0UL] - 1UL;
-    frac = (u0 - bp0[maxIndex[0UL] - 1UL]) / (bp0[maxIndex[0UL]] - bp0[maxIndex
-      [0UL] - 1UL]);
+    frac = 1.0F;
   }
 
   fractions[0UL] = frac;
@@ -275,14 +274,14 @@ real32_T look2_iflf_binlxpw(real32_T u0, real32_T u1, const real32_T bp0[],
 
   /* Prelookup - Index and Fraction
      Index Search method: 'binary'
-     Extrapolation method: 'Linear'
+     Extrapolation method: 'Clip'
      Use previous index: 'off'
      Use last breakpoint for index at or above upper limit: 'off'
      Remove protection against out-of-range input in generated code: 'off'
    */
   if (u1 <= bp1[0UL]) {
     iLeft = 0UL;
-    frac = (u1 - bp1[0UL]) / (bp1[1UL] - bp1[0UL]);
+    frac = 0.0F;
   } else if (u1 < bp1[maxIndex[1UL]]) {
     /* Binary Search */
     bpIdx = maxIndex[1UL] >> 1UL;
@@ -301,8 +300,7 @@ real32_T look2_iflf_binlxpw(real32_T u0, real32_T u1, const real32_T bp0[],
     frac = (u1 - bp1[iLeft]) / (bp1[iLeft + 1UL] - bp1[iLeft]);
   } else {
     iLeft = maxIndex[1UL] - 1UL;
-    frac = (u1 - bp1[maxIndex[1UL] - 1UL]) / (bp1[maxIndex[1UL]] - bp1[maxIndex
-      [1UL] - 1UL]);
+    frac = 1.0F;
   }
 
   /* Interpolation 2-D
@@ -405,7 +403,7 @@ real32_T look2_ifs16bfflftu16n8_PYqzO3tA(real32_T u0, int16_T u1, const real32_T
           - yL_1d) * frac + yL_1d;
 }
 
-real32_T look2_iflf_linlxpw(real32_T u0, real32_T u1, const real32_T bp0[],
+real32_T look2_iflf_linlcpw(real32_T u0, real32_T u1, const real32_T bp0[],
   const real32_T bp1[], const real32_T table[], const uint32_T maxIndex[],
   uint32_T stride)
 {
@@ -419,20 +417,20 @@ real32_T look2_iflf_linlxpw(real32_T u0, real32_T u1, const real32_T bp0[],
      Search method: 'linear'
      Use previous index: 'off'
      Interpolation method: 'Linear'
-     Extrapolation method: 'Linear'
+     Extrapolation method: 'Clip'
      Use last breakpoint for index at or above upper limit: 'off'
      Remove protection against out-of-range input in generated code: 'off'
    */
   /* Prelookup - Index and Fraction
      Index Search method: 'linear'
-     Extrapolation method: 'Linear'
+     Extrapolation method: 'Clip'
      Use previous index: 'off'
      Use last breakpoint for index at or above upper limit: 'off'
      Remove protection against out-of-range input in generated code: 'off'
    */
   if (u0 <= bp0[0UL]) {
     bpIdx = 0UL;
-    frac = (u0 - bp0[0UL]) / (bp0[1UL] - bp0[0UL]);
+    frac = 0.0F;
   } else if (u0 < bp0[maxIndex[0UL]]) {
     /* Linear Search */
     for (bpIdx = maxIndex[0UL] >> 1UL; u0 < bp0[bpIdx]; bpIdx--) {
@@ -445,8 +443,7 @@ real32_T look2_iflf_linlxpw(real32_T u0, real32_T u1, const real32_T bp0[],
     frac = (u0 - bp0[bpIdx]) / (bp0[bpIdx + 1UL] - bp0[bpIdx]);
   } else {
     bpIdx = maxIndex[0UL] - 1UL;
-    frac = (u0 - bp0[maxIndex[0UL] - 1UL]) / (bp0[maxIndex[0UL]] - bp0[maxIndex
-      [0UL] - 1UL]);
+    frac = 1.0F;
   }
 
   fractions[0UL] = frac;
@@ -454,14 +451,14 @@ real32_T look2_iflf_linlxpw(real32_T u0, real32_T u1, const real32_T bp0[],
 
   /* Prelookup - Index and Fraction
      Index Search method: 'linear'
-     Extrapolation method: 'Linear'
+     Extrapolation method: 'Clip'
      Use previous index: 'off'
      Use last breakpoint for index at or above upper limit: 'off'
      Remove protection against out-of-range input in generated code: 'off'
    */
   if (u1 <= bp1[0UL]) {
     bpIdx = 0UL;
-    frac = (u1 - bp1[0UL]) / (bp1[1UL] - bp1[0UL]);
+    frac = 0.0F;
   } else if (u1 < bp1[maxIndex[1UL]]) {
     /* Linear Search */
     for (bpIdx = maxIndex[1UL] >> 1UL; u1 < bp1[bpIdx]; bpIdx--) {
@@ -474,8 +471,7 @@ real32_T look2_iflf_linlxpw(real32_T u0, real32_T u1, const real32_T bp0[],
     frac = (u1 - bp1[bpIdx]) / (bp1[bpIdx + 1UL] - bp1[bpIdx]);
   } else {
     bpIdx = maxIndex[1UL] - 1UL;
-    frac = (u1 - bp1[maxIndex[1UL] - 1UL]) / (bp1[maxIndex[1UL]] - bp1[maxIndex
-      [1UL] - 1UL]);
+    frac = 1.0F;
   }
 
   /* Interpolation 2-D
@@ -490,7 +486,7 @@ real32_T look2_iflf_linlxpw(real32_T u0, real32_T u1, const real32_T bp0[],
           - yL_1d) * frac + yL_1d;
 }
 
-real32_T look1_iflf_binlxpw(real32_T u0, const real32_T bp0[], const real32_T
+real32_T look1_iflf_binlcpw(real32_T u0, const real32_T bp0[], const real32_T
   table[], uint32_T maxIndex)
 {
   real32_T frac;
@@ -502,20 +498,20 @@ real32_T look1_iflf_binlxpw(real32_T u0, const real32_T bp0[], const real32_T
      Search method: 'binary'
      Use previous index: 'off'
      Interpolation method: 'Linear'
-     Extrapolation method: 'Linear'
+     Extrapolation method: 'Clip'
      Use last breakpoint for index at or above upper limit: 'off'
      Remove protection against out-of-range input in generated code: 'off'
    */
   /* Prelookup - Index and Fraction
      Index Search method: 'binary'
-     Extrapolation method: 'Linear'
+     Extrapolation method: 'Clip'
      Use previous index: 'off'
      Use last breakpoint for index at or above upper limit: 'off'
      Remove protection against out-of-range input in generated code: 'off'
    */
   if (u0 <= bp0[0UL]) {
     iLeft = 0UL;
-    frac = (u0 - bp0[0UL]) / (bp0[1UL] - bp0[0UL]);
+    frac = 0.0F;
   } else if (u0 < bp0[maxIndex]) {
     /* Binary Search */
     bpIdx = maxIndex >> 1UL;
@@ -534,7 +530,7 @@ real32_T look1_iflf_binlxpw(real32_T u0, const real32_T bp0[], const real32_T
     frac = (u0 - bp0[iLeft]) / (bp0[iLeft + 1UL] - bp0[iLeft]);
   } else {
     iLeft = maxIndex - 1UL;
-    frac = (u0 - bp0[maxIndex - 1UL]) / (bp0[maxIndex] - bp0[maxIndex - 1UL]);
+    frac = 1.0F;
   }
 
   /* Interpolation 1-D
@@ -566,7 +562,7 @@ void YoungMa_BigDischargePowerAdjust(void)
     /* Lookup_n-D: '<S6>/linearizationSOF' incorporates:
      *  Inport: '<Root>/g_socValue'
      */
-    rtb_Add = look2_iflf_binlxpw(Can_g_socValue, (real32_T)Tavg - 40.0F,
+    rtb_Add = look2_iflf_binlcpw(Can_g_socValue, (real32_T)Tavg - 40.0F,
       (&(SOC_Discharge[0])), (&(T_Discharge[0])), (&(DisChargeCurrentTable[0])),
       YoungMan_LT_ConstP.linearizationSOF_maxIndex, 12UL);
   } else {
@@ -606,7 +602,7 @@ void YoungMan_LT_FastChrgPowerAjust(void)
    *  Inport: '<Root>/g_socValue'
    *  Sum: '<S3>/Add'
    */
-  rtb_uDLookupTable3 = look2_iflf_linlxpw((real32_T)Tavg - 40.0F, Can_g_socValue,
+  rtb_uDLookupTable3 = look2_iflf_linlcpw((real32_T)Tavg - 40.0F, Can_g_socValue,
     (&(T_FastCharge[0])), (&(SOC_FastCharge[0])), (&(FastChargeCurrentTable[0])),
     YoungMan_LT_ConstP.uDLookupTable3_maxIndex_g, 16UL);
 
@@ -622,7 +618,7 @@ void YoungMan_LT_PowerOnSOCAjust(void)
    *  Inport: '<Root>/g_lowestTemperature'
    *  Sum: '<S4>/Add'
    */
-  PowerOnSOCAjustFactor = look1_iflf_binlxpw((real32_T)g_lowestTemperature -
+  PowerOnSOCAjustFactor = look1_iflf_binlcpw((real32_T)g_lowestTemperature -
     40.0F, (&(T_PowerOnSOCAjust[0])), (&(Factor_PowerOnSOCAjust[0])), 7UL);
 }
 
@@ -643,11 +639,11 @@ void YoungM_PulseRechargePowerAdjust(void)
    *  RelationalOperator: '<S11>/Compare'
    *  Sum: '<S5>/Add'
    */
-  if (((real32_T)Tavg - 40.0F > 0.0F) && ((real32_T)Tavg - 40.0F < 57.0F)) {
+  if (((real32_T)Tavg - 40.0F > -15.0F) && ((real32_T)Tavg - 40.0F < 57.0F)) {
     /* Lookup_n-D: '<S9>/linearizationSOF' incorporates:
      *  Inport: '<Root>/g_socValue'
      */
-    rtb_Add = look2_iflf_binlxpw(Can_g_socValue, (real32_T)Tavg - 40.0F,
+    rtb_Add = look2_iflf_binlcpw(Can_g_socValue, (real32_T)Tavg - 40.0F,
       (&(SOC_Feedback[0])), (&(T_Facdback[0])), (&(FeedBackCurrentTable[0])),
       YoungMan_LT_ConstP.linearizationSOF_maxIndex_f, 13UL);
   } else {

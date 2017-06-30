@@ -81,6 +81,12 @@ unsigned char test1=0;
 //declaration for the function in fault.c below
 int TurnOffAllRelay(void);
 
+typedef enum{
+	HV_On_Status = 0,	// 0
+	PreChg_Status,		// 1
+	HV_Off_Status,		// 2
+	HV_On_Invalid_Status// 3
+} e_BMS_HV_STATUS;
 
 //******************************************************************************
 //* Function name:    ErrorToCarPC
@@ -197,7 +203,8 @@ void errorSystemVoltageUV(void) //恢复,上报
            Error[i]=1;
        
     Error_Group4.Bit.F4_Bat_Under_V = Level;//整车CAN赋值
-    
+    g_bms_fault_msg.fault.Pack_V_Low_Flt = Level;
+	
     //1级故障处理
     Can554Byte2.Bit.F0_systemUV1=Error[1]; //to PC
     
@@ -209,7 +216,8 @@ void errorSystemVoltageUV(void) //恢复,上报
     if(Error[3] == 1) 
     {
         g_caution_Flag_1 |= 0x01;
-        status_group1.Bit.St_BMS = 2;//BMS状态高压断开
+        status_group1.Bit.St_BMS = HV_Off_Status;		//BMS HV OFF
+        g_bms_status.status.BMS_HV_Sts = HV_Off_Status;	//BMS HV OFF
     }
     CutDisCurt0.Bit.F0_Battery_Under_Voltage1 = Error[3];
 }
@@ -236,10 +244,10 @@ void errorDischargeOC(void) //恢复;上报不处理
             Error[i]=1;
      
     Error_Group3.Bit.F6_DisChg_Over_I = Level;//整车CAN赋值 
-    
+    g_bms_fault_msg.fault.DisChg_OverCurrent_Flt = Level;
+	
 //	//1级故障处理
 	Can554Byte3.Bit.F0_DisChaOCurt1=Error[1];
-//	CutDisCurt70.Bit.F1_DisCharge_Over_Current3=Error[1];
 
 //	//2级故障处理
 	Can554Byte1.Bit.F0_DisChaOCurt2=Error[2];//to PC
@@ -283,30 +291,28 @@ void errorChargeOC(void)
     
     if(g_BmsModeFlag == DISCHARGING){
         Error_Group5.Bit.F0_FeedB_Over_I = Level;//整车CAN赋值,瞬时功率
+        g_bms_fault_msg.fault.FeedBack_OverCurrentFlt = Level;
     }
     else
     {
         Error_Group1.Bit.F4_Ch_Over_I = Level;//整车CAN赋值,充电功率
+        g_bms_fault_msg.fault.Chg_OverCurrent_Flt = Level;
     }
 	
     if(Level>=1){
         Error_Group6.Bit.F5_Chg_C_Over = 1;//整车CAN赋值,充电电流超限报警
+        g_bms_fault_msg.fault.Chg_OverCurrent_Alarm = 1;
     }
     else{
         Error_Group6.Bit.F5_Chg_C_Over = 0;//整车CAN赋值,充电电流超限报警
+        g_bms_fault_msg.fault.Chg_OverCurrent_Alarm = 0;
     }
 	
 //	//1级故障处理
 	Can554Byte2.Bit.F7_ChangerOCurt1=Error[1];//to PC
-//	CutChaCurt70.Bit.F1_Charge_Over_Current3=Error[1];
-//	CutDCChaCurt70.Bit.F1_Charge_Over_Current3=Error[1];
-//	CutACChaCurt70.Bit.F1_Charge_Over_Current3=Error[1];
     
 //	//2级故障处理
 	Can554Byte0.Bit.F7_ChangerOCurt2=Error[2];//to PC
-//	CutChaCurt50.Bit.F1_Charge_Over_Current2=Error[2];
-//	CutDCChaCurt50.Bit.F0_Charge_Over_Current2=Error[2];
-//	CutACChaCurt50.Bit.F0_Charge_Over_Current2=Error[2];
     
 //	//3级故障处理
 //	if(Error[3])
@@ -343,7 +349,8 @@ void errorCellVoltageOV(void)
     }
     
     Error_Group2.Bit.F0_Cell_Over_V = Level;//will be send to vehicle CAN
-    
+    g_bms_fault_msg.fault.Cell_V_High_Flt = Level;
+	
     //level 1 process
     Can554Byte2.Bit.F3_cellOV1					= Error[1];
 //	CutChaCurt70.Bit.F2_Cell_Over_Voltage3		= Error[1];
@@ -361,7 +368,8 @@ void errorCellVoltageOV(void)
 	{
 	    g_caution_Flag_1 |= 0x08;//to PC
 	    if(g_BmsModeFlag == DISCHARGING){
-	        status_group1.Bit.St_BMS = 2;//BMS staus is HV OFF
+	        status_group1.Bit.St_BMS = HV_Off_Status;//BMS staus is HV OFF
+	        g_bms_status.status.BMS_HV_Sts = HV_Off_Status;
 	    }
 	}
 	CutDisCurt0.Bit.F10_Cell_Over_Voltage1		= Error[3];
@@ -388,8 +396,9 @@ void errorCellVoltageUV(void)//上报不处理,充电不上报,恢复
         }
     }
 	
-    Error_Group2.Bit.F2_Cell_Under_V=Level;//整车CAN赋值
-    
+    Error_Group2.Bit.F2_Cell_Under_V = Level;//整车CAN赋值
+    g_bms_fault_msg.fault.Cell_V_Low_Flt = Level;
+	
     //1级故障处理
     Can554Byte2.Bit.F1_cellUV1=Error[1];//to PC
 //	CutDisCurt70.Bit.F2_Cell_Under_Voltage3=Error[1];
@@ -402,7 +411,8 @@ void errorCellVoltageUV(void)//上报不处理,充电不上报,恢复
 	if(Error[3] == 1)
 	{
 		g_caution_Flag_1 |= 0x02;//to PC
-		status_group1.Bit.St_BMS =2;//BMS状态高压断开
+		status_group1.Bit.St_BMS = HV_Off_Status;//BMS status is HV OFF
+		g_bms_status.status.BMS_HV_Sts = HV_Off_Status;
 	}
 	CutDisCurt0.Bit.F3_Cell_Under_Voltage1 = Error[3];
 	CutChaCurt0.Bit.F10_Cell_Under_Voltage1 = Error[3];
@@ -414,7 +424,7 @@ void errorCellVoltageUV(void)//上报不处理,充电不上报,恢复
 //* EntryParameter : None
 //* ReturnValue    : None
 //******************************************************************************
-Bool errorCurrSensorIniatial(void) //上电前检测2次
+void errorCurrSensorIniatial(void) //上电前检测2次
 {
     unsigned char i;
     unsigned char Error[4]={0};
@@ -442,7 +452,6 @@ Bool errorCurrSensorIniatial(void) //上电前检测2次
 //	    CutACChaCurt0.Bit.F5_I_Sener_Err =1;
 //	           
 //	}   
-    return 0;  
 }
 
 //******************************************************************************
@@ -473,6 +482,7 @@ void errorCellUnbalance(void)//
 	}
 	   
 	Error_Group5.Bit.F4_Cell_Dif_V = Level;//整车CAN赋值 
+	g_bms_fault_msg.fault.Cell_V_Diff_Flt = Level;
 	
 	//2级故障处理
 	Can554Byte1.Bit.F2_CellUnbalance2		= Error[2];//to PC
@@ -507,13 +517,10 @@ void errorTemUnbalance(void)//
     }
 	
     Error_Group5.Bit.F2_Cell_Dif_T = Level;//整车CAN赋值 
+	g_bms_fault_msg.fault.Cell_T_Diff_Flt = Level;
 	
 	//1级故障处理
 	Can554Byte3.Bit.F3_tempUnbalance1=Error[1];//to PC
-//	CutDisCurt70.Bit.F3_tempUnbalance3=Error[3];
-//	CutChaCurt70.Bit.F3_tempUnbalance3=Error[3];
-//	CutDCChaCurt70.Bit.F2_tempUnbalance3=Error[3];
-//	CutACChaCurt70.Bit.F2_tempUnbalance3=Error[3];
 
 	//2级故障处理
 	Can554Byte1.Bit.F3_tempUnbalance2		= Error[2];//to PC
@@ -546,6 +553,8 @@ void errorCellTemperatureUT(void)//
     }
     
 	Error_Group5.Bit.F6_Cell_Under_T=Level;//整车CAN赋值
+	g_bms_fault_msg.fault.Cell_T_Low_Flt = Level;
+	
 	//1级故障处理
 	Can554Byte2.Bit.F6_cellUT1=Error[1];
 
@@ -557,7 +566,8 @@ void errorCellTemperatureUT(void)//
 	{
 		g_caution_Flag_1 |= 0x40;//to PC
 		if(g_BmsModeFlag == DISCHARGING){
-			status_group1.Bit.St_BMS =2;//BMS状态高压断开
+			status_group1.Bit.St_BMS = HV_Off_Status;//BMS状态高压断开
+			g_bms_status.status.BMS_HV_Sts = HV_Off_Status; // HV OFF
 		}
 	}
 	CutDisCurt0.Bit.F6_Under_Temp1		= Error[3];
@@ -590,7 +600,8 @@ void errorCellTemperatureOT(void)//
     }
     
 	Error_Group2.Bit.F4_Temp_Over = Level;//整车CAN赋值
-
+	g_bms_fault_msg.fault.Cell_T_High_Flt = Level;
+	
 	//1级故障处理
 	Can554Byte2.Bit.F5_cellOT1=Error[1];
 //	CutDisCurt70.Bit.F4_Over_Temp3=Error[1];
@@ -610,7 +621,8 @@ void errorCellTemperatureOT(void)//
     {  
         g_caution_Flag_1 |= 0x20;//to PC
         if(g_BmsModeFlag == DISCHARGING)
-            status_group1.Bit.St_BMS =2;//BMS状态高压断开
+            status_group1.Bit.St_BMS = HV_Off_Status;
+            g_bms_status.status.BMS_HV_Sts = HV_Off_Status;
     }
     CutDisCurt0.Bit.F5_Over_Temp1=Error[3];
     CutChaCurt0.Bit.F5_Over_Temp1=Error[3];
@@ -638,6 +650,8 @@ void errorSOCLow(void)
            Error[i]=1;
        
 	Error_Group4.Bit.F0_SOC_Low=Level;//整车CAN赋值 
+	g_bms_fault_msg.fault.SOC_Low_Flt = Level;
+	
 	//1级故障处理
 	Can554Byte3.Bit.F1_SOCLow1=Error[1];
 
@@ -669,8 +683,12 @@ void errorLowIsolation(void)
         Error[i]=1;
       
     Error_Group1.Bit.F6_Ins_Err=Level;//整车CAN赋值
-    if(Level>=1)
+	g_bms_fault_msg.fault.Ins_Low_flt = Level;  
+	
+    if(Level>=1){
         Error_Group6.Bit.F7_Chg_Ins_Low = 1;//充电绝缘过低报警
+		g_bms_fault_msg.fault.Chg_Ins_Low_Alarm = 1;
+    }
 	
     //1级故障处理
     Can554Byte2.Bit.F4_insulationLow1=Error[1];//to PC
@@ -703,6 +721,7 @@ void DCChangerComError(void)
 		CutDCChaCurt0.Bit.F1_Communication_With_Charger=1;//故障动作
 		g_caution_Flag_2 |=0x80; //for 内部CAN
 		Error_Group3.Bit.F1_V_CAN_Err =1; //整车CAN
+		g_bms_fault_msg.fault.ExternalCAN_Com_Flt = 1;
 	}
 }
 //******************************************************************************
@@ -719,6 +738,7 @@ void ACChangerComError(void)
         CutACChaCurt0.Bit.F1_Communication_With_Charger=1;
         g_caution_Flag_2 |=0x10; //for 内部CAN
         Error_Group3.Bit.F1_V_CAN_Err =1; //整车CAN
+		g_bms_fault_msg.fault.ExternalCAN_Com_Flt = 1;
     }
 }
 //******************************************************************************
@@ -735,8 +755,11 @@ void VCUComError(void)
 		CutDisCurt0.Bit.F7_VCU_Communiction=1;
 		CutChaCurt0.Bit.F7_VCU_Communiction=1;
 		//g_caution_Flag_2 |=0x10; //for 内部CAN
-		Error_Group3.Bit.F1_V_CAN_Err =1; //整车CAN
-		status_group1.Bit.St_BMS =2;//BMS状态高压断开
+		Error_Group3.Bit.F1_V_CAN_Err = 1; //整车CAN
+		status_group1.Bit.St_BMS = HV_Off_Status;//BMS状态高压断开
+
+		g_bms_fault_msg.fault.ExternalCAN_Com_Flt = 1;
+		g_bms_status.status.BMS_HV_Sts = HV_Off_Status;
 	}
 }
 //******************************************************************************
@@ -756,7 +779,8 @@ void innerCommOT3(void)
         CutDCChaCurt0.Bit.F2_Inner_Communiction=1;
         CutACChaCurt0.Bit.F2_Inner_Communiction=1;
         
-        Error_Group3.Bit.F0_Sub_Com_Err=1;//整车CAN赋值 
+        Error_Group3.Bit.F0_Sub_Com_Err = 1;//整车CAN赋值 
+        g_bms_fault_msg.fault.InnerCAN_Com_Flt = 1;
     } 
 }
 
@@ -817,7 +841,8 @@ void CHG_SocketOT(void)
            Error[i] = 1;
        
     Error_Group0.Bit.F2_Ele_Relay_Con = Level;//整车CAN赋值     
-
+	g_bms_fault_msg.fault.KEleBand_P_Adhesion_Flt = Level;
+	
     ///////2级故障处理
     CutDCChaCurt50.Bit.F5_CHG_Socket2 = Error[2];
     
@@ -846,7 +871,8 @@ void Fire_Warning(void)
         CutDCChaCurt0.Bit.F10_Fire_Warning1=1;
         CutACChaCurt0.Bit.F10_Fire_Warning1=1;
         if(g_BmsModeFlag == DISCHARGING)
-            status_group1.Bit.St_BMS =2;//BMS状态高压断开
+            status_group1.Bit.St_BMS = HV_Off_Status;//BMS状态高压断开
+            g_bms_status.status.BMS_HV_Sts = HV_Off_Status;
     }
 }
 
@@ -865,6 +891,9 @@ void PowerSupplyError(void)//
     //上报故障等级
     
     Level=Supply24V_custom(PowerVOL);
+
+	g_bms_fault_msg.fault.Bms_Power_Supply_Alarm = 1;
+	
     for(i=1;i<4;i++) 
        if(i==Level) 
            Error[i]=1;

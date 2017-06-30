@@ -218,13 +218,15 @@ void SendMes(void)
 #pragma CODE_SEG NON_BANKED
 interrupt void PIT0_ISR(void)   //10ms中断一次
 {   
-    
-    while (PITTF&0x01) 
-        PITTF |= 0x01;        //写1 to clean timeout flag
+    while (PITTF&0x01){ 
+        PITTF |= 0x01;	//set 1 to clean timeout flag.
+    }
+	
     SendMes();
-    if(BMUOK==1)
-        TaskDC();//调用直流充电流程     
-   	
+    
+    if(BMUOK==1){
+        TaskDC();//call the DC charge process.
+    }
 }
 #pragma CODE_SEG DEFAULT
 //******************************************************************************

@@ -101,7 +101,7 @@ void CanSocIntegral(void)
         {
           
             CANSOC = (1.0-Can_g_socValue_Start)*(g_socValue-First_g_socValue)/(1.0-First_g_socValue)/FactorA+Can_g_socValue_Start;  
-            if(ChangerStopState==0)
+            if(ChargerStopState==0)
             {
                 if(CANSOC>=0.993)
                     CANSOC = 0.993;

@@ -243,14 +243,14 @@ typedef struct{
 	byte ChgSocket_Adhesion_Flt	:2; //bit2~3	充电插座过温
 	byte rsvd_0					:4; //bit4~7	预留
 	
-	byte Bms_Power_Supply_Flt	:1; //bit0	整车供电24V异常报警
-	byte HLVol_Lock_Flt			:1; //bit1	high and low voltage interlock
-	byte SOC_Hop_Flt			:1; //bit2	SOC跳变
+	byte Bms_Power_Supply_Alarm	:1; //bit0	整车供电24V异常报警
+	byte HLVol_Lock_Alram		:1; //bit1	high and low voltage interlock
+	byte SOC_Hop_Alarm			:1; //bit2	SOC跳变
 	byte BMS_Self_Protect 		:1; //bit3	BMS极限故障自我保护
 	byte rsvd_1_4				:1; //bit4	预留
-	byte Chg_OverCurrent_State	:1; //bit5	充电电流超限
+	byte Chg_OverCurrent_Alarm	:1; //bit5	充电电流超限
 	byte rsvd_1_6				:1; //bit6	预留
-	byte Chg_Ins_Low_Flt 		:1; //bit7	充电绝缘低报警
+	byte Chg_Ins_Low_Alarm 		:1; //bit7	充电绝缘低报警
 	
 	byte BMS_Sys_Flt_Sts	  	:1; //bit0
 	byte BMU_Sys_Flt_Sts	  	:1; //bit1

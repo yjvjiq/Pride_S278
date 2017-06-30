@@ -595,8 +595,7 @@ unsigned char bmuProcess2(void)//
 
 //		sum = sum - g_highestTemperature - g_lowestTemperature;
         sum = sum - g_bms_msg.CellTempMax - g_bms_msg.CellTempMin;
-        Tavg = (U8)(sum / ((U32)BMU_NUMBER*2 - 2));
-		g_averageTemperature = Tavg;
+        g_averageTemperature = (U8)(sum / ((U32)BMU_NUMBER*2 - 2));
 
 		sum = 0;
 		for(pack_cnt = 0; pack_cnt < BMU_NUMBER; pack_cnt++){
