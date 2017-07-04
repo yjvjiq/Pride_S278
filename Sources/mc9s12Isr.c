@@ -242,18 +242,42 @@ interrupt void RTI_ISR(void)      //1ms中断一次
     //turnOnLED0(); 	     // for debug 
     TaskRemarks();  //******
     
-    if(tmr_p1<=600)     //用于状态机计时        
-        if((stateCode==12)||(stateCode==82)||(stateCode==142))
-            tmr_p1++;   
-    if(tmr_p2<=600)
-        if((stateCode==17)||(stateCode==87)||(stateCode==147))
-            tmr_p2++; 
-    if(tmr_p3<=600)
-        if((stateCode ==20)||(stateCode==90)||(stateCode==150))  
+    if(tmr_p1<=600){     //用于状态机计时        
+        if((stateCode==12)||(stateCode==82)||(stateCode==142)){
+            tmr_p1++;
+        }
+//		else{
+//			tmr_p1 = 0;
+//		}
+    }
+	
+    if(tmr_p2<=600){
+        if((stateCode==17)||(stateCode==87)||(stateCode==147)){
+            tmr_p2++;
+        }
+//		else{
+//			tmr_p2 = 0;
+//		}
+    }
+	
+    if(tmr_p3 <= 600){
+        if((stateCode ==20)||(stateCode==90)||(stateCode==150)){
             tmr_p3++;
-    if(tmr_p4<600)        
-        if((stateCode ==13)||(stateCode==83)||(stateCode==143))  
+        }
+//		else{
+//			tmr_p3 = 0;
+//		}
+    }
+	
+    if(tmr_p4<600){
+        if((stateCode ==13)||(stateCode==83)||(stateCode==143)){
             tmr_p4++;
+        }
+		else{
+			tmr_p4 = 0;
+		}
+    }
+	
 //	if(tmr_p5<600)
 //		if((stateCode ==46)||(stateCode==126)||(stateCode==186))  
 //			tmr_p5++;

@@ -546,8 +546,8 @@ void TaskRechargeDC(void)
 				counter_250ms7 = 0;
 			}
 			counter_250ms7++;
-			OffState=1;//状态机由170跳转40的标志位 
-			Error_Group1.Bit.St_CHG_Allow=1; //充电允许状态位不允许
+			OffState = 1;//状态机由170跳转40的标志位 
+			Error_Group1.Bit.St_CHG_Allow = 1; //充电允许状态位不允许
 			PantNormalEndFlag=1;//受电弓正常下电              
 		}
 	}/////////END快充发送消息

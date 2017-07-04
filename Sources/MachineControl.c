@@ -44,6 +44,7 @@ void stateCodeTransfer(void)
     static unsigned int Delay126=0;
     static unsigned int Delay186=0;
     static unsigned int Delay30_81=0;
+	static U16 DelayfPowerOffCnt = 0;
     
     //if((OffState == 1)&&(g_BmsModeFlag == DISCHARGING)&&(VehicleSpeed<=8))
     //    PowerOffError = 1;//行车模式需要下电的故障，车速降到8km/h    
@@ -92,8 +93,19 @@ void stateCodeTransfer(void)
         else if(stateCode == 20)
         {
             if((P_RelayDisConError==1)||(HighVolPowerOff == 1)||(acc_Connect == 0)||(VCU_Control.Bit.PowerOnOffReq == 2))
-                stateCode =40;//正极断路||需要下电的故障||ON=0
-            
+            {
+				if(VCU_Control.Bit.PowerOnOffReq == 2){ // power off command exist 2s, then turn off the contactor.
+					DelayfPowerOffCnt++;
+					if(DelayfPowerOffCnt >= 50){ // delay 2s
+						stateCode =40;
+						DelayfPowerOffCnt = 0;
+					}
+				}
+				else{
+					stateCode =40;//正极断路||需要下电的故障||ON=0
+					DelayfPowerOffCnt = 0;
+				}
+            }
             else if((bmsSelfcheckCounter==3)&&(status_group3.Bit.St_P_Relay)&&(VCU_Request.Bit.Finish_PreChg))
                 stateCode=30;//自检计数器=3&&正极继电器闭合&&整车预充电完成
         } 
@@ -104,14 +116,14 @@ void stateCodeTransfer(void)
 				||((VCU_Control.Bit.PowerOnOffReq == 2)&&(E10SOverFlag == 1)&&(Error10S>=10000))//故障延时10S后收到高压下电指令                              
 //				||((HighVolPowerOff == 1)&&(Error10S>=10000)&&(g_systemCurrent<5))//故障延时10S后电流小于5A
 				||((E10SOverFlag)&&(Error20S>=20000) && (g_systemCurrent > 5))//故障延时10S&&电流大于5A，再持续20S
-				||(plug_DC_Connect == 1)//CC2
+//				||(plug_DC_Connect == 1)//CC2
 				||(Delay30>=400)
             )
             {
                  stateCode=40;
-                 Delay30 = 0; 
+                 Delay30 = 0;
             }
-            else if(acc_Connect==0)//ACC无或者收到高压下电指令 5ms*300=1.5S
+            else if(acc_Connect==0 || VCU_Control.Bit.PowerOnOffReq == 2)//ACC无或者收到高压下电指令 5ms*400=2S
             {
                 Delay30++;
             }
@@ -128,7 +140,7 @@ void stateCodeTransfer(void)
                         InitialSoc();
                         g_BmsModeFlag = RECHARGING;
                         status_group4.Bit.Mode_BMS_Work = 2;//充电状态
-                        status_group3.Bit.St_CHG_Mode=2;//充电模式等于AC充电
+                        status_group3.Bit.St_CHG_Mode = 2;//充电模式等于AC充电
                         stateCode = 81;
                         bmsSelfcheckCounter = 0; 
                     }
@@ -169,19 +181,19 @@ void stateCodeTransfer(void)
                 }
                 */////不能加吧？加的话可能就报不出来粘连故障了
             } 
-            else if((plug_DC_Connect==1)&&(bmsSelfcheckCounter==1)) //直流充电枪,无粘连故障
-            {
-                //InitialSoc();//SOC计算方式变化 ????
-                //First_g_socValue=g_socValue;
-                //StoreAHSOC=g_socValue;
-                //Can_g_socValue_Start=Can_g_socValue;
-                
-                g_BmsModeFlag = FASTRECHARGING;
-                status_group4.Bit.Mode_BMS_Work = 2;//充电状态
-                status_group3.Bit.St_CHG_Mode = 1;//充电模式等于DC充电
-                stateCode = 141;
-                bmsSelfcheckCounter = 0;
-            }
+//            else if((plug_DC_Connect==1)&&(bmsSelfcheckCounter==1)) //直流充电枪,无粘连故障
+//            {
+//                //InitialSoc();//SOC计算方式变化 ????
+//                //First_g_socValue=g_socValue;
+//                //StoreAHSOC=g_socValue;
+//                //Can_g_socValue_Start=Can_g_socValue;
+//                
+//                g_BmsModeFlag = FASTRECHARGING;
+//                status_group4.Bit.Mode_BMS_Work = 2;//充电状态
+//                status_group3.Bit.St_CHG_Mode = 1;//充电模式等于DC充电
+//                stateCode = 141;
+//                bmsSelfcheckCounter = 0;
+//            }
             
             else if((VCU_ChgControl.Bit.downC_Switch)&&(VCU_ChgControl.Bit.downC_OK)&&(bmsSelfcheckCounter==1))
             {
@@ -244,22 +256,22 @@ void stateCodeTransfer(void)
         else if(stateCode==110)
         {
             if((slowRechargeFinished == 1)||((PantographOff)&&(Error10S>=10000)&&(g_systemCurrent>-5))//延时10S下电
-			||((PantographOff == 1)&&(E10SOverFlag)&&(Error20S>=20000)&&(g_systemCurrent<-5))//故障延时10S&&电流大于5A，再持续20S
-			||(CDelay30>=400))//CC2或者充电开关==0延时2S
+			||((PantographOff == 1)&&(E10SOverFlag)&&(Error20S>=20000)&&(g_systemCurrent <= -5))//故障延时10S&&电流大于5A，再持续20S
 			//||(plug_DC_Connect == 1)
-            {
+            ){
                 stateCode=120;//充电已完成或者需下电的故障或者检测降弓开关==0||降弓到位==0||充电开关==0    
-                CDelay30 = 0; 
             }
             else if((VCU_ChgControl.Bit.downC_Switch == 0)
             ||(VCU_ChgControl.Bit.downC_OK == 0)
             ||(VCU_ParkBrake.Bit.Parking_Brake==0)
-//			||(OffState)
-//			||(PantNormalEndFlag)
-
-            )//充电信号无     5ms*300=1.5S
+			||((fastendflag == 1) && (PantographOff != 1)) // charge finished and no fault.
+            )//充电信号无     5ms * 400 = 2.0S
             {
-                CDelay30++; 
+                CDelay30++;
+				if(CDelay30 >= 400){
+					stateCode = 120;
+					CDelay30 = 0;
+				}
             }  
         } 
         else if(stateCode==120)//断开受电弓继电器

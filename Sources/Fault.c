@@ -965,7 +965,7 @@ void CarFaultDone()
     {      
         if((Error_Group4.Bit.F6_Bat_Over_V>=2)		//总电压过压2级、3级
 //		||(Error_Group1.Bit.F4_Ch_Over_I == 3)		//充电过流3级
-		||(Error_Group2.Bit.F0_Cell_Over_V>=1)		//单体电压过压1,2,3级
+		||(Error_Group2.Bit.F0_Cell_Over_V >= 1)		//单体电压过压1,2,3级
 		||(Error_Group5.Bit.F6_Cell_Under_T == 3)	//单体温度过低3级
 		||(Error_Group2.Bit.F4_Temp_Over == 3)		//单体温度过高3级
 		||(Error_Group3.Bit.F1_V_CAN_Err)			//外网通讯故障（与受电弓通讯故障?

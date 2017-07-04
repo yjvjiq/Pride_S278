@@ -183,7 +183,7 @@ void HighVoltDetectPart1(void)
     static unsigned char pp=0;
     static unsigned char pc=0;
 
-    if(tmr_p1<=400)//400ms内 该时间在1ms中断里计数，目的是让时间准确，如果放在这里计数，则可能因为其它程序影响了时间准确性
+    if(tmr_p1 <= 400)//400ms内 该时间在1ms中断里计数，目的是让时间准确，如果放在这里计数，则可能因为其它程序影响了时间准确性
     {
         /*
         //高压互锁检测；若为高电平，说明高压连接异常。高压互锁状态=1，表示闭合,互锁正常
@@ -198,7 +198,7 @@ void HighVoltDetectPart1(void)
         }
         */
         //**************检测MSD******************************//////////////////////// 
-        if(g_highVoltageV1<100) 
+        if(g_highVoltageV1 < 100) 
         {                       
             tt++;   
             if(tt>=12)//60ms才能判断出来
@@ -310,9 +310,9 @@ void HighVoltDetectPart2(void)//预充继电器已经闭合
     static unsigned char DCCHGConnect_tt=0;
     static unsigned char CHGDisConnect_tt=0;
 	
-    if((tmr_p2<=60)||(tmr_p2>=600)) //延时20ms或者大于600ms,不在运行
-        return;                                              
-    
+    if((tmr_p2 <= 60)) //延时20ms或者大于500ms,不在运行 	//||(tmr_p2 >= 600)
+        return;
+
     if(g_BmsModeFlag == DISCHARGING)//行车
     {
 		/////负极断路/////// 
@@ -412,7 +412,8 @@ void HighVoltDetectPart2(void)//预充继电器已经闭合
             }
         }
     }
-    if(tmr_p2>500)
+
+	if(tmr_p2 > 500)
     {
         if(((N_RelayDisConError==0)&&(P_RelayConError==0)&&(stateCode == 17))//负极断路&&正极粘连 
         ||((CHG_N_RelayDisConError==0)&&(CCHG_RelayConError==0)&&(stateCode == 87))//充电负断路&& 受电弓充电粘连
@@ -434,10 +435,10 @@ void HighVoltDetectPart3(void)
     static unsigned char CCHGDisConnect_tt=0;
     static unsigned char DCHGDisConnect_tt=0;
     
-    if(tmr_p3<=60)  //延时60ms
-       return;
+//    if(tmr_p3<=60)  //延时60ms
+//       return;
     
-    if(tmr_p3<=500) 
+    if(tmr_p3 <= 400)
     {
         ///////////////正极继电器断路///////
   

@@ -324,7 +324,7 @@ void TaskStatusMachine(void)//5ms调用一次
 
     
     SignalOnOffJudge(); 
-    HeatManage();  
+//    HeatManage();  
 	CarFaultDone();
 	
     switch(stateCode)
@@ -333,6 +333,9 @@ void TaskStatusMachine(void)//5ms调用一次
         case 11:
         case 81:
         case 141:
+			tmr_p1=0;
+			tmr_p2=0;
+			tmr_p3=0;
             status_group1.Bit.St_BMS =3;
             state46 = 0;
             if((stateCode==141)&&((DCTem1>=85)||(DCTem2>=85))) //在此判断防止故障上报的慢
@@ -342,18 +345,17 @@ void TaskStatusMachine(void)//5ms调用一次
                 OffState=1;//请求下电
                 Error_Group0.Bit.F2_Ele_Relay_Con=2;//整车CAN赋值     
             }
-            //TurnOff_INFK();//断开负极继电器
-            //TurnOff_INZK();//断开正极继电器
             break;
         case 12:  //********************低压自检*************//////////////
         case 82:
         case 142:
-            tmr_p5=0;//146无法清零
             Error10S=0;
-            
+            if(stateCode == 12){
+				turnOnSW_Power();
+			}
+			
             HighVoltDetectPart1();//行车：MSD与负极粘连 受电弓：MSD和充电负粘连
             break;
-       
         case 14:  //***********************闭合主负************/////////////
         case 84:
         case 144:
@@ -406,10 +408,9 @@ void TaskStatusMachine(void)//5ms调用一次
             turnOnSW_Power();//打开软件开关
             if(state30==0) 
             {
-                tmr_p1=0;           
-                tmr_p2=0;
-                tmr_p3=0; 
-                tmr_p4=0;
+//                tmr_p1=0;
+//                tmr_p2=0;
+//                tmr_p3=0;
                 state30=1;
                 pcMode=0; //防止进入状态机重复赋值充电状态，在30清0
                 dcMode=0; //防止进入状态机重复赋值充电状态，在30清0
@@ -480,9 +481,9 @@ void TaskStatusMachine(void)//5ms调用一次
             counter1_500ms++;
             if(counter1_500ms>=70)
             {
-                counter1_500ms=0;
-                HeatAndChargeControl();
-                Error_Group1.Bit.St_DisCHG_Allow=1;//放电允许状态位不允许
+				counter1_500ms=0;
+//				HeatAndChargeControl();
+				Error_Group1.Bit.St_DisCHG_Allow=1;//放电允许状态位不允许
             }
             
 //			CarFaultDone();//过程故障处理,功率为循环上报,防止由于时序误报
@@ -583,6 +584,14 @@ void TaskStatusMachine(void)//5ms调用一次
             delay(25000); //19ms
             delay(25000); //19ms
             bmsSelfcheckCounter=1;
+			
+			if(stateCode == 86 || stateCode == 126){
+				Error_Group1.Bit.St_CHG_Allow = 1;	// not allowed.
+				status_group3.Bit.St_Charge = 3;	// charge invalid.
+			}
+			if(stateCode == 46){
+				Error_Group1.Bit.St_DisCHG_Allow = 1; // discharge not allowed.
+			}
             break;
             
         case 47:  //******************BMS断电***************////////////////
