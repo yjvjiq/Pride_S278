@@ -21,10 +21,10 @@
 void bmsModeAwake(void) 
 {
     //long timedelay = 6500000;
-    if(input5_state()==0)//CC2状态检测,IN5==0,快充枪已插;IN5==1,快充枪没有插
+    if(input5_state()==0)//CC2 detect, ,IN5==0,means charger plugged in.
     {
         while(input6_state())
-            _FEED_COP(); //无charge_in信号，则等            
+            _FEED_COP(); // if charge_in signal exist, then wait here.
         if((CC2VOL <= CC2VOLHIGH) && (CC2VOL >= CC2VOLLOW))
         {
             g_BmsModeFlag = FASTRECHARGING; //快充模式   
@@ -41,10 +41,9 @@ void bmsModeAwake(void)
             plug_DC_Connect=0;//充电枪连接
         }
     } 
-    else //如果IN5！=0，说明快充枪没插
+    else //IN5==1,means charger not plugged in.
     {
-        //收到车载WiFi发送降弓开关，降弓到位信号
-        //if((VCU_ChgControl.Bit.downC_Switch)&&(VCU_ChgControl.Bit.downC_OK))  //////////需要确认||(VCU_ParkBrake.Bit.Parking_Brake)
+        //received car WIFI's downC_Switch or downC_OK signal.
         if((VCU_ChgControl.Bit.downC_Switch)||(VCU_ChgControl.Bit.downC_OK))
         {
             g_BmsModeFlag = RECHARGING;//进入受电弓充电模式
@@ -52,7 +51,6 @@ void bmsModeAwake(void)
             status_group3.Bit.St_CHG_Mode=2;//充电模式等于AC充电
             status_group3.Bit.St_Charge = 1;//正在充电 
             stateCode = 81;
-            //InsRelayControl = 0;//受电弓时不采绝缘，控制指令发给SBMS
         } 
         else if(input4_state()==0)
         {
@@ -60,7 +58,6 @@ void bmsModeAwake(void)
             acc_Connect=1;   //ON信号
             status_group4.Bit.Mode_BMS_Work = 1;//BMS当前工作状态=放电状态 
             stateCode=11;
-            //InsRelayControl = 0;//放电时不采绝缘，控制指令发给SBMS 
         }
     }
 }
@@ -90,36 +87,29 @@ void SignalOnOffJudge(void)
     } 
     else //非boot
     {
-      ////////////////////////////直流充电枪检测////////////////////////
-        if(input5_state()==0)//快充枪插上
-        {
-          ////////////////////直流充电枪CC2插枪检测/////////////////////
-            DC_Connect++; //直流插枪延时检测,必须连续检测到200*5ms时间才可以
-            DC_DisConnect = 0;
-            if(DC_Connect>=100)
-            {               
-                /*while((DC_CC2Count==0)&&(timedelay>0))
-                {
-                    timedelay--;   
-                    _FEED_COP(); //无charge_in信号，则等;
-                }*/   
-                
-                plug_DC_Connect = 1;
-                DC_Connect = 0;
-                 
+		////////////////////////////直流充电枪检测////////////////////////
+		if(input5_state()==0)// CC2 exist.
+		{
+			////////////////////直流充电枪CC2插枪检测/////////////////////
+			DC_Connect++; //直流插枪延时检测,必须连续检测到200*5ms时间才可以
+			DC_DisConnect = 0;
+			if(DC_Connect>=100)
+			{               
+				plug_DC_Connect = 1;
+				DC_Connect = 0;
             }
         }
-        else //CC2无信号
+        else //CC2 isn't exist.
         {
-         ////////////////////直流充电枪CC2拔枪检测/////////////////////   
-            DC_Connect=0;
-            DC_DisConnect++;//直流拔枪延时检测,必须连续检测到200*5ms时间才可以
-            if(DC_DisConnect>=100)
-            {
-                InsRelayControl=0;//快充时采绝缘控制给SBMS 
-                plug_DC_Connect=0;
-                if(g_BmsModeFlag == FASTRECHARGING)
-                {                  
+			////////////////////直流充电枪CC2拔枪检测/////////////////////   
+			DC_Connect=0;
+			DC_DisConnect++;//直流拔枪延时检测,必须连续检测到200*5ms时间才可以
+			if(DC_DisConnect>=100)
+			{
+				InsRelayControl=0;//快充时采绝缘控制给SBMS 
+				plug_DC_Connect=0;
+				if(g_BmsModeFlag == FASTRECHARGING)
+				{                  
                     fastendflag=1;
                     fastend2|=0x40;//充电连接器故障
                 }
@@ -129,34 +119,34 @@ void SignalOnOffJudge(void)
             //////////////////受电弓充电检测/////////////////////////////
             if((VCU_ChgControl.Bit.downC_Switch)&&(VCU_ChgControl.Bit.downC_OK))
             {
-                AC_Connect++; //交流插枪延时检测,必须连续检测到200*5ms时间才可以
                 AC_DisConnect = 0;
-                if(AC_Connect>=100)
+                AC_Connect++;
+                if(AC_Connect>=100) // 5ms * 100 = 500ms.
                 {              
                     plug_AC_CP_Connect = 1;
-                    status_group4.Bit.Mode_BMS_Work = 2;//BMS当前工作状态=充电
-                    status_group3.Bit.St_CHG_Mode=2;//充电模式等于AC充电
+                    status_group4.Bit.Mode_BMS_Work = 2;	//BMS mode is charge.
+                    status_group3.Bit.St_CHG_Mode=2;		//charge mode is AC charge.
                     AC_Connect = 0;
                 }
             } 
             else
             {              
                 AC_Connect = 0;
-                AC_DisConnect++;//交流插枪延时检测,必须连续检测到200*5ms时间才可以
-                if(AC_DisConnect>=100)
+                AC_DisConnect++;
+                if(AC_DisConnect>=100) // 5ms * 100 = 500ms.
                 {
                     plug_AC_CP_Connect = 0;
                     AC_DisConnect = 0;
-                } 
+                }
                 ////////////////////ACC钥匙开关ON检测/////////////////////  
-                if(input4_state()==0)//如果ACC有信号,则On信号有效
+                if(input4_state()==0)//if ACC signal exist means ON signal also exist.
                 {
-                    KEY_Connect++;
                     KEY_DisConnect = 0;
+                    KEY_Connect++;
                     if(KEY_Connect>=100)
                     {                  
-                        acc_Connect = 1;    //ON信
-                        status_group4.Bit.Mode_BMS_Work = 1;//BMS当前工作状态=放电状态 
+                        acc_Connect = 1;    //ON signal exist.
+                        status_group4.Bit.Mode_BMS_Work = 1;//BMS mode is discharge.
                         KEY_Connect = 0;
                     } 
                 }

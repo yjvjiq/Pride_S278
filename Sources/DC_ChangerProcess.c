@@ -206,15 +206,15 @@ void TaskRechargeDC(void)
 	if(g_BmsModeFlag == FASTRECHARGING) 
 	{
 		////////////请求电压//////////
-		if(((Tavg-40)<=54)&&((Tavg-40)>0)&&(heatingStart==0))
+		if(((Tavg-40) <= 54) && ((Tavg-40) >= 0))
 		{
 		    m_askvoltage = HIGHEST_ALLOWED_CHARGE_V;	//3.65*204 = 744.6
 		}
-		else if(((Tavg-40)<=0)||(((Tavg-40)<=5)&&(heatingStart == 1)))//温度<0或者上电前温度小于0当前温度小于5
-		{
-            m_askvoltage = LOWEST_ALLOWED_CHARGE_V;//3.3*204 =673.2
-        }
-        else if((Tavg-40)>54)
+//		else if(((Tavg-40)<=0)||(((Tavg-40)<=5)))//温度<0或者上电前温度小于0当前温度小于5
+//		{
+//            m_askvoltage = LOWEST_ALLOWED_CHARGE_V;//3.3*204 =673.2
+//        }
+        else	//if((Tavg-40) > 54)
         {
             m_askvoltage = 0;
         }
@@ -563,7 +563,10 @@ void TaskDC(void)
     if((FASTRECHARGING==g_BmsModeFlag)||(RECHARGING==g_BmsModeFlag)) ////快充或受电弓充电
     {
         if(DCStartState == 0)//当接收到之后，不再计时
-            CRMOverTimeBefore60s++;        
+        {
+			CRMOverTimeBefore60s++;
+        }
+		
         if(CRMOverTimeBefore60s>=6000)//10ms*6000
         {
             OverTimeState=1;//超时标志位置1                
@@ -571,8 +574,10 @@ void TaskDC(void)
             BEMError1|=0x01;//收不到CRM，30s后发送BEM
             CRMOverTimeBefore60s = 0;      
         }
-        if((stateCode==110)||(stateCode==170)||(OverTimeState==1))        
+		
+        if((stateCode==110)||(stateCode==170)||(OverTimeState==1)){        
             TaskRechargeDC();
+        }
     }
 }
 

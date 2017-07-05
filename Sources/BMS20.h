@@ -46,11 +46,11 @@
 
 #define HIGHEST_ALLOWED_CHARGE_T    57      //最大允许充电和工作温度   57
 #define LOWEST_ALLOWED_CHARGE_T     0       //最低允许充电温度   0
-#define LOWEST_ALLOWED_WORK_T       -20     //最低允许工作温度   -20
+#define LOWEST_ALLOWED_WORK_T       -30     //最低允许工作温度   -30
 
 #define CHARGE_CUTDOWN_CV1          3.55    //第一次降流电压
 #define CHARGE_CUTDOWN_CV2          3.55    //第二次降流电压
-#define HIGHEST_ALLOWED_CHARGE_A    150.0   //直流最大允许充电电流 A
+#define HIGHEST_ALLOWED_CHARGE_A    300.0   //直流最大允许充电电流 A
 #define SYS_NOMINAL_AH              150     //系统额定容量 AH
 #define SYS_NOMINAL_V               652.8   //系统额定电压 V//3.2*204= 652.8
 #define SYS_KWH                     97.9    //系统能量  //150*652.8=97920WH
@@ -81,7 +81,7 @@
 #define START_ALLOWED_HEAT_CHARGE_TEM       10      //开启加热阀值 上电如果小于此值 进入边充电边加热 
 #define STOP_ALLOWED_HEAT_CHARGE_TEM        15      //关闭加热阀值 
 #define BACK_HEAT_TEM                       -1      //关闭加热阀值 
-#define COOL_TYPE                           1       //1 自然冷却 2：风扇冷却 3：水冷
+#define COOL_TYPE                           3       //1 自然冷却 2：风扇冷却 3：水冷
 
 ///////////////////////BMS最后保护的阀值///////////////////////
 #define LOWEST_CELL_VOL     2.0		//放电最小单体电压

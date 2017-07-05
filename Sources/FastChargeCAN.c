@@ -348,25 +348,25 @@ void cpuToCHMBRMDATA7(void)
 //******************************************************************************
 void cpuToCHMBCP(void)
 {
-    struct can_msg mg;
-    char tt=100;
-    
-    mg.RTR= FALSE;  
-    mg.len = 8;
-    mg.prty = 0;
-    
-    mg.data[0] = 0x10;//CW
-    mg.data[1]=  0x0d;//ByteL
-	  mg.data[2]=  0x00;//ByteH
-    mg.data[3]=  0x02;//Pack
-	  mg.data[4]=  0xff;//Void
-    mg.data[5]=  0x00;//PGN 
-	  mg.data[6]=  0x06;//PGN
-    mg.data[7]=  0x00;//PGN 
+	struct can_msg mg;
+	char tt=100;
 
-    mg.id= 0x1cec56f4;
-    
-    if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
+	mg.RTR= FALSE;  
+	mg.len = 8;
+	mg.prty = 0;
+
+	mg.data[0] = 0x10;//CW
+	mg.data[1]=  0x0d;//ByteL
+	mg.data[2]=  0x00;//ByteH
+	mg.data[3]=  0x02;//Pack
+	mg.data[4]=  0xff;//Void
+	mg.data[5]=  0x00;//PGN 
+	mg.data[6]=  0x06;//PGN
+	mg.data[7]=  0x00;//PGN 
+
+	mg.id= 0x1cec56f4;
+
+	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
 	      while((!MSCAN1SendMsg(mg))&&(tt>0))
             tt--;
     else if(g_BmsModeFlag == RECHARGING) 
@@ -381,33 +381,39 @@ void cpuToCHMBCP(void)
 //******************************************************************************
  void cpuToCHMBCPDATA1(void)
 {
-    struct can_msg mg;
-    unsigned int buff;
-    char tt=100;
-    
-    mg.RTR= FALSE;  
-    mg.len = 8;
-    mg.prty = 0;
-    
-    mg.data[0] = 0x01;
-    buff = (unsigned int)(HIGHEST_ALLOWED_CHARGE_CV*100);
-    mg.data[1]= (unsigned char)buff;//单体最高允许充电电压
-	  mg.data[2]= buff>>8;//单体最高允许充电电压
-	  
-	  buff = (unsigned int)((400-HIGHEST_ALLOWED_CHARGE_A)*10);//已经乘以0.75了
-    mg.data[3]= (unsigned char)buff;//动力最大允许电流低字节
-	  mg.data[4]= buff>>8;//动力电池最大允许电流高字节
-	  
-    buff = SYS_KWH*10;
-    mg.data[5]= (unsigned char)buff;//动力电池系统额定能量 
-	  mg.data[6]= buff>>8;//动力电池系统额定能量
-	  
-	  buff = (unsigned int)(HIGHEST_ALLOWED_CHARGE_V*10);
-    mg.data[7]= (unsigned char)buff;//最高允许动力电池系统 总电压低字节
+	struct can_msg mg;
+	unsigned int buff;
+	char tt=100;
 
-    mg.id= 0x1ceb56f4;
-    
-    if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
+	mg.RTR= FALSE;  
+	mg.len = 8;
+	mg.prty = 0;
+
+	mg.data[0] = 0x01;
+	
+	buff = (unsigned int)(HIGHEST_ALLOWED_CHARGE_CV*100);
+	mg.data[1]= (unsigned char)buff;//单体最高允许充电电压
+	mg.data[2]= buff>>8;//单体最高允许充电电压
+
+	if(g_BmsModeFlag == FASTRECHARGING){
+		buff = (unsigned int)((400-HIGHEST_ALLOWED_CHARGE_A)*10);//已经乘以0.75了
+	}
+	else if(g_BmsModeFlag == RECHARGING){
+		buff = (unsigned int)((400-HIGHEST_ALLOWED_CHARGE_A)*10);//已经乘以0.75了
+	}
+	mg.data[3]= (unsigned char)buff;//动力最大允许电流低字节
+	mg.data[4]= buff>>8;//动力电池最大允许电流高字节
+
+	buff = SYS_KWH*10;
+	mg.data[5]= (unsigned char)buff;//动力电池系统额定能量 
+	mg.data[6]= buff>>8;//动力电池系统额定能量
+
+	buff = (unsigned int)(HIGHEST_ALLOWED_CHARGE_V*10);
+	mg.data[7]= (unsigned char)buff;//最高允许动力电池系统 总电压低字节
+
+	mg.id= 0x1ceb56f4;
+
+	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
 	      while((!MSCAN1SendMsg(mg))&&(tt>0))
             tt--;
     else if(g_BmsModeFlag == RECHARGING) 
@@ -469,7 +475,7 @@ void cpuToCHMBRO(void)
 	mg.len = 1;
 	mg.prty = 0;
     
-    if(BROErrorAA==0)
+    if((BROErrorAA==0) && ((Relay_State >> 2) & 0x01 == 0x01))	// KFastChg_P_Switch(ON) then send 0xAA.
     {
         mg.data[0] = 0xaa;
     }

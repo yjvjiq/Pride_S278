@@ -182,118 +182,82 @@ void HighVoltDetectPart1(void)
     static unsigned char tt=0;
     static unsigned char pp=0;
     static unsigned char pc=0;
+	static U16 s_detect_part1_cnt_t = 0;
 
-    if(tmr_p1 <= 400)//400ms内 该时间在1ms中断里计数，目的是让时间准确，如果放在这里计数，则可能因为其它程序影响了时间准确性
-    {
-        /*
-        //高压互锁检测；若为高电平，说明高压连接异常。高压互锁状态=1，表示闭合,互锁正常
-        if(inputH_state()) 
+	s_detect_part1_cnt_t++; // record how many times run HighVoltDetectPart1 to cover the fault detect.
+	
+    //**************检测MSD******************************//////////////////////// 
+    if(g_highVoltageV1 < 100) 
+    {                       
+        tt++;   
+        if(tt>=12)//60ms才能判断出来
         {
-            hardware_error5.Bit.F1_Lock_Err = 1;
-            RelayErrorPowerOff = 1;
+            //to vcu
+            RelayErrorPowerOff = 1;//继电器下电故障
+            MSDError = 1;
+            g_caution_Flag_4 |=0x01; //to PC
+            tt=13;
+        }
+    } 
+    else   
+    {
+        tt=0;
+    }
+    
+    //********检测主负继电器粘连 *****************//////////////////////////////////
+    if(g_BmsModeFlag == DISCHARGING)
+    {
+        if(g_highVoltageV2 >= 200)
+        {
+            pp++;
+            if(pp>=12)//60ms
+            {
+                /////////////////负极粘连///////////////////
+                RelayErrorPowerOff = 1;//继电器下电故障
+                BmsCtlStat0 |= 0x01;//负极继电器状态闭合
+                g_caution_Flag_4 |= 0x02; //to PC
+                Error_Group3.Bit.F4_N_Con_Err = 1;//error to VCU
+                N_RelayConnetError = 1;
+                pp = 13;
+                /////////////////负极粘连///////////////////
+            }
         }
         else
-        {          
-            hardware_error5.Bit.F1_Lock_Err = 0;      
-        }
-        */
-        //**************检测MSD******************************//////////////////////// 
-        if(g_highVoltageV1 < 100) 
-        {                       
-            tt++;   
-            if(tt>=12)//60ms才能判断出来
-            {
-                //to vcu
-                RelayErrorPowerOff = 1;//继电器下电故障
-                MSDError = 1;
-                g_caution_Flag_4 |=0x01; //to PC
-                tt=13;
-            }
-        } 
-        else   
         {
-            tt=0;  
-        }
-        
-        //********检测主正继电器粘连 *****************//////////////////////////////////
-        /*if(g_BmsModeFlag == DISCHARGING)// 
-        {
-            if(g_highVoltageV2>=200) //
-            {
-                pp++; 
-                if(pp>=10)
-                {
-                    /////////////////正极粘连///////////////////
-                    RelayErrorPowerOff = 1;//继电器下电故障
-                    P_RelayConError = 1;
-                    BmsCtlStat0 |=0x02;//正极继电器状态闭合    to pc
-                    g_caution_Flag_4 |=0x10; //to PC预充或正极粘连
-                    Error_Group3.Bit.F2_P_Con_Err=1;//主正粘连
-                    pp=11;
-                    /////////////////预充或者正极粘连///////////////////
-                }
-            } 
-            else
-            {
-                 pp=0;
-            }
-        }*/
-        //********检测主负继电器粘连 *****************//////////////////////////////////
-        if(g_BmsModeFlag == DISCHARGING)
-        {
-            if(g_highVoltageV2 >= 200)
-            {
-                pp++;
-                if(pp>=12)//60ms
-                {
-                    /////////////////负极粘连///////////////////
-                    RelayErrorPowerOff = 1;//继电器下电故障
-                    BmsCtlStat0 |= 0x01;//负极继电器状态闭合
-                    g_caution_Flag_4 |= 0x02; //to PC
-                    Error_Group3.Bit.F4_N_Con_Err = 1;//error to VCU
-                    N_RelayConnetError = 1;
-                    pp = 13;
-                    /////////////////负极粘连///////////////////
-                }
-            }
-            else
-            {
-                 pp=0;
-            }
-        }
-        //********检测充电负继电器粘连 *****************//////////////////////////////////
-        else if((g_BmsModeFlag == RECHARGING)||(g_BmsModeFlag == FASTRECHARGING))
-        {
-            if(g_highVoltageV4>=200)
-            {
-                pc++;
-                if(pc>=20)//100ms
-                {
-                    /////////////////充电负极粘连///////////////////
-                    RelayErrorPowerOff = 1;//继电器下电故障
-                    Error_Group1.Bit.F2_DCChg_Neg_Relay_Con = 1;//直流充电负粘连报警位也作为受电弓负
-                    CHG_N_RelayConError = 1;
-                    pc=21;
-                    /////////////////充电负极粘连///////////////////
-                }
-            } 
-            else
-            {
-                 pc=0;
-            }
+             pp=0;
         }
     }
-    else  //需要400ms之后
+	
+    //********检测充电负继电器粘连 *****************//////////////////////////////////
+    if((g_BmsModeFlag == RECHARGING)||(g_BmsModeFlag == FASTRECHARGING))
     {
-        if(MSDError==0)//3种模式都检测
+        if(g_highVoltageV4>=200)
         {
-            if(((N_RelayConnetError==0)&&(stateCode == 12))//行车
-              ||((CHG_N_RelayConError==0)&&(stateCode == 82))//受电弓
-              ||((CHG_N_RelayConError==0)&&(stateCode == 142)))//快充
+            pc++;
+            if(pc>=20)//100ms
             {
-                bmsSelfcheckCounter=1; //正常状态 
-            } 
+                /////////////////充电负极粘连///////////////////
+                RelayErrorPowerOff = 1;//继电器下电故障
+                Error_Group1.Bit.F2_DCChg_Neg_Relay_Con = 1;//直流充电负粘连报警位也作为受电弓负
+                CHG_N_RelayConError = 1;
+                pc=21;
+                /////////////////充电负极粘连///////////////////
+            }
+        } 
+        else
+        {
+             pc=0;
         }
+    }
+
+    if(MSDError==0 && s_detect_part1_cnt_t >= 25)//all BMS mode need detect.
+    {
+        if(((N_RelayConnetError==0)&&(stateCode == 12))//行车
+          ||((CHG_N_RelayConError==0)&&(stateCode == 82))//受电弓
+          ||((CHG_N_RelayConError==0)&&(stateCode == 142)))//快充
+        {
+            bmsSelfcheckCounter=1; //正常状态 
+        } 
     }
 }
 //******************************************************************************
@@ -309,6 +273,9 @@ void HighVoltDetectPart2(void)//预充继电器已经闭合
     static unsigned char CCHGConnect_tt=0;
     static unsigned char DCCHGConnect_tt=0;
     static unsigned char CHGDisConnect_tt=0;
+	static U16 s_detect_part2_cnt_t = 0;
+
+	s_detect_part2_cnt_t++;
 	
     if((tmr_p2 <= 60)) //延时20ms或者大于500ms,不在运行 	//||(tmr_p2 >= 600)
         return;
@@ -413,14 +380,14 @@ void HighVoltDetectPart2(void)//预充继电器已经闭合
         }
     }
 
-	if(tmr_p2 > 500)
+	if(s_detect_part2_cnt_t >= 25)
     {
         if(((N_RelayDisConError==0)&&(P_RelayConError==0)&&(stateCode == 17))//负极断路&&正极粘连 
         ||((CHG_N_RelayDisConError==0)&&(CCHG_RelayConError==0)&&(stateCode == 87))//充电负断路&& 受电弓充电粘连
         ||((CHG_N_RelayDisConError==0)&&(DCCHG_RelayConError==0)&&(stateCode == 147)))//充电负断路&& 快充粘连
         {
             bmsSelfcheckCounter=2; //正常状态 
-        } 
+        }
     }
 }
 //******************************************************************************
@@ -434,12 +401,15 @@ void HighVoltDetectPart3(void)
     static unsigned char PDisConnect_tt=0;
     static unsigned char CCHGDisConnect_tt=0;
     static unsigned char DCHGDisConnect_tt=0;
+    static U16 s_detect_part3_cnt_t = 0;
+
+	s_detect_part3_cnt_t++;
+	
+    if(tmr_p3 <= 60)  //延时60ms
+       return;
     
-//    if(tmr_p3<=60)  //延时60ms
-//       return;
-    
-    if(tmr_p3 <= 400)
-    {
+//    if(tmr_p3 <= 500)
+//    {
         ///////////////正极继电器断路///////
   
         if((g_highVoltageV3 < 200)&&(stateCode == 20))
@@ -491,9 +461,9 @@ void HighVoltDetectPart3(void)
         {
             DCHGDisConnect_tt=0;  
         }
-    } 
-    else 
-    {
+//    } 
+//    else 
+    if(s_detect_part3_cnt_t >= 25) {
         if(((P_RelayDisConError==0)&&(stateCode == 20))
         ||((CCHG_RelayDisConError==0)&&(stateCode == 90))
         ||((DCCHG_RelayDisConError==0)&&(stateCode == 150)))
@@ -503,221 +473,6 @@ void HighVoltDetectPart3(void)
         }  
     } 
 }  
-//******************************************************************************
-//* Function name:   PreRelayConnectTest
-//* Description:     预充继电器粘连故障：在State=13,83,143时检测，断开后,开是否粘连
-//* EntryParameter : None
-//* ReturnValue    : None
-//******************************************************************************
-/*void PreRelayConnectTest(void)
-{
-    static unsigned char pred=0;
-    if(tmr_p4<60)
-        return;
-    
-    if(g_highVoltageV2>=200) 
-    {
-        pred++;
-        if(pred>=12) 
-        {
-            RelayErrorPowerOff = 1;//继电器下电故障
-            PreCha_RelayConError = 1;
-    //        state_group1.Bit.St_Pre_Relay=1;  //预充继电器状态  for VCU
-            BmsCtlStat0 |=0x08;//预充继电器状态闭合    to pc
-            g_caution_Flag_4 |=0x10; //to PC预充或正极粘连
-            pred=13; 
-            SelfCheck = 2; 
-        }   
-    }
-    else
-    {
-        SelfCheck = 1;
-        pred=0;  
-    }
-    
-
-}
-*/
-//******************************************************************************
-//* Function name:   PRelayConnectTest
-//* Description:     正极继电器粘连故障：在State=40时检测
-//* EntryParameter : None
-//* ReturnValue    : None
-//******************************************************************************
-/*void PRelayConnectTest(void)
-{
-    static unsigned char pd=0;
-    if(tmr_p6<200)
-        return;
-    
-    if(tmr_p6<=500) 
-    {
-        if(g_highVoltageV3>200) 
-        {
-            pd++;
-            if(pd>=12) 
-            {
-                RelayErrorPowerOff = 1;//继电器下电故障
-                P_RelayConError = 1;
-                BmsCtlStat0 |=0x02;//正极继电器状态闭合    to pc
-                g_caution_Flag_4 |=0x10; //to PC预充或正极粘连
-                Error_Group3.Bit.F2_P_Con_Err = 1;//error to VCU
-
-                pd=13; 
-            }   
-        }
-        else
-        {
-            pd=0;
-        }
-    }
-    else
-        bmsSelfcheckCounter=2;//超过时间，自检计数器2
-        
-    
-}*/
-//******************************************************************************
-//* Function name:   ChgRelayConnectTest
-//* Description:     受电弓充电继电器粘连故障：在State=120时检测
-//* EntryParameter : None
-//* ReturnValue    : None
-//******************************************************************************
-/*void ChgRelayConnectTest(void)
-{
-    static unsigned char cd=0;
-    if(tmr_p6<200)
-        return;
-    
-    if(tmr_p6<=500)
-    {
-        if(g_highVoltageV6>200) 
-        {
-            cd++;
-            if(cd>=20) 
-            {
-                RelayErrorPowerOff = 1;//继电器下电故障
-                CCHG_RelayConError = 1;
-                g_caution_Flag_2 |=0x20; //to PC
-                Error_Group1.Bit.F3_Ele_Relay_Con = 1;//error to VCU
-                status_group2.Bit.St_Ele_Relay = 2;//受电弓继电器连接
-                cd=23; 
-            }   
-        }
-        else
-        {
-            cd=0;
-        }
-    }
-    else
-        bmsSelfcheckCounter=2;//超过时间，自检计数器2
-        
-} */
-//******************************************************************************
-//* Function name:   DCChgRelayConnectTest
-//* Description:     快充继电器粘连故障：在State=180时检测
-//* EntryParameter : None
-//* ReturnValue    : None
-//******************************************************************************
-/*void DCChgRelayConnectTest(void)
-{
-    static unsigned char dcd=0;
-    if(tmr_p6<200)
-        return;
-    
-    if(tmr_p6<=500)
-    {
-        if(g_highVoltageV5>200) 
-        {
-            dcd++;
-            if(dcd>=20) 
-            {
-                RelayErrorPowerOff = 1;//继电器下电故障
-                g_caution_Flag_3 |=0x80; //to PC
-                Error_Group3.Bit.F5_DC_Con_Err = 1;//error to VCU
-                DCCHG_RelayConError = 1;//快充继电器粘连
-                dcd=23; 
-            }   
-        }
-        else
-        {
-            dcd=0;
-        }
-    }
-    else
-        bmsSelfcheckCounter=2;//超过时间，自检计数器2
-        
-}*/
-//******************************************************************************
-//* Function name:   NegRelayConnectTest
-//* Description:     负极继电器粘连故障：在State=46时检测
-//* EntryParameter : None
-//* ReturnValue    : None
-//******************************************************************************
-/*void NRelayConnectTest(void)
-{
-    static unsigned char nd=0;
-    if(tmr_p5<200)
-        return;
-    if(tmr_p5<=500) 
-    {
-        if(g_highVoltageV2>200)
-        {
-            nd++;
-            if(nd>=12) 
-            {
-                RelayErrorPowerOff = 1;//继电器下电故障
-                N_RelayConnetError = 1;
-                g_caution_Flag_4 |=0x02; //to PC 故障
-                BmsCtlStat0 |=0x01;            // to PC 
-                Error_Group3.Bit.F4_N_Con_Err = 1;//error to VCU
-                nd=13; 
-            }   
-        }
-        else
-        {
-            nd=0;
-        }
-    }
-    else
-        bmsSelfcheckCounter=1;//超过时间，自检计数器
-    
-}*/
-//******************************************************************************
-//* Function name:   ChgNRelayConnectTest
-//* Description:     充电负极继电器粘连故障：在State=126，,186时检测
-//* EntryParameter : None
-//* ReturnValue    : None
-//******************************************************************************
-/*void ChgNRelayConnectTest(void)
-{
-    static unsigned char Cnd=0;
-    if(tmr_p5<200)
-        return;
-    if(tmr_p5<=500) 
-    {
-        if(g_highVoltageV4>=200) //
-          {
-              Cnd++; 
-              if(Cnd>=20)//100ms
-              {
-                  /////////////////充电负极粘连///////////////////
-                  RelayErrorPowerOff = 1;//继电器下电故障
-                  Error_Group1.Bit.F2_DCChg_Neg_Relay_Con = 1;//直流充电负粘连报警位也作为受电弓负
-                  CHG_N_RelayConError = 1;
-                  Cnd=21;
-                  /////////////////充电负极粘连///////////////////
-              }
-          } 
-          else
-          {
-               Cnd=0;
-          }
-    }
-    else
-        bmsSelfcheckCounter=1;//没有故障，自检计数器
-    
-}
- */
 //***********************************************************************
 //************************************************************************
 //*************************the end*************************************

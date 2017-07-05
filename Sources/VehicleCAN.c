@@ -416,14 +416,15 @@ void BMS_To_VCU_BatteryMsg6(void)
     struct can_msg mg;
     unsigned char tt=100;
     //unsigned int buff;
-    static unsigned char life=14;
+    static unsigned char life = 0;
 
     mg.RTR= FALSE;  
     mg.len = 8;
     mg.prty = 0;
-    life--;
-    if(life < 0){
-        life = 14;
+	
+    life++;
+    if(life > 14){
+        life = 0;
     }
 	
 	status_group1.Bit.BMS_Life = life;

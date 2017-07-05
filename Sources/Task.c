@@ -310,7 +310,7 @@ void TaskGpioTest(void)
 //* EntryParameter : None
 //* ReturnValue    : None
 //************************************************************************
-void TaskStatusMachine(void)//5ms调用一次 
+void TaskStatusMachine(void)//task period = 5ms.
 {
     static unsigned char counter1_10ms=0;
     static unsigned char counter1_500ms=0;
@@ -321,10 +321,8 @@ void TaskStatusMachine(void)//5ms调用一次
     static unsigned char Delay14=0;
     static unsigned char TestDelay=0;//进入到调试模式下的时间延时
     static unsigned char dcMode,pcMode =0;//充电状态赋值标志位
-
     
     SignalOnOffJudge(); 
-//    HeatManage();  
 	CarFaultDone();
 	
     switch(stateCode)
@@ -359,21 +357,18 @@ void TaskStatusMachine(void)//5ms调用一次
         case 14:  //***********************闭合主负************/////////////
         case 84:
         case 144:
+			Kn_Switch(ON); // when in 14 state, it used for HV POWER, else turn on Kn to supply for DCDC in charge mode.
+            KChg_N_Switch(ON);	//闭合充电负
+            delay(25000);       //19ms
+            delay(25000);       //19ms
+            
             Delay14++;
-            if(stateCode == 14)
-				Kn_Switch(ON);
-            else
-            {
-                KChg_N_Switch(ON);	//闭合充电负
-                delay(25000);       //19ms
-                delay(25000);       //19ms
-            }
             if(Delay14 >= 4) 
             {
-                if(stateCode == 14)
-                    status_group3.Bit.St_N_Relay=1;
-                else
+				status_group3.Bit.St_N_Relay=1;
+                if(stateCode != 14){
                     BmsCtlStat0 |=0x08;//预充继电器状态闭合
+                }
                 Delay14=0;
             }
             break;
@@ -385,16 +380,16 @@ void TaskStatusMachine(void)//5ms调用一次
         case 20:   //*********************正极继电器闭合*******////////////
         case 90:
         case 150:
-            if(stateCode == 20)
-                closePosRelay();
-            else if(stateCode == 90) 
+			Kp_Switch(ON); // when in 20 state, it used for HV POWER, else turn on Kp to supply for DCDC in charge mode.
+			
+			if(stateCode == 90) 
             {
-                TurnOn_INA1K();
-                delay(25000); //20ms
+				KEleBand_P_Switch(ON);
+				delay(25000); //20ms
             }
             else if(stateCode == 150) 
             {
-                TurnOn_INA2K();
+				KFastChg_P_Switch(ON);
                 delay(25000); //20ms
             }
             HighVoltDetectPart3();
@@ -405,7 +400,7 @@ void TaskStatusMachine(void)//5ms调用一次
         //////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////      
         case 30:    //*********************行车状态***********/////////////
-            turnOnSW_Power();//打开软件开关
+//            turnOnSW_Power();//打开软件开关
             if(state30==0) 
             {
 //                tmr_p1=0;
@@ -414,11 +409,10 @@ void TaskStatusMachine(void)//5ms调用一次
                 state30=1;
                 pcMode=0; //防止进入状态机重复赋值充电状态，在30清0
                 dcMode=0; //防止进入状态机重复赋值充电状态，在30清0
-                
             }
     
             //YoungMan_LT_step();
-            if(plug_AC_CP_Connect == 0) 
+            if(plug_AC_CP_Connect == 0)
             {
                 BiggestDischargeCurt = BigDischargePowerAdjust();//SOF//30s
                 BiggestDisCurtContinuous = BigDischargePowerContinuous();//SOF//5min
@@ -430,7 +424,7 @@ void TaskStatusMachine(void)//5ms调用一次
                 BiggestDischargeCurt =0;//SOF//30s
                 BiggestDisCurtContinuous = 0;//SOF//5min
                 BiggestFeedbackCurt = 0; //制动能量回收30s 
-                BiggestFeedbackCurtContinuous = 0; //制动能量回收5min         
+                BiggestFeedbackCurtContinuous = 0; //制动能量回收5min 
             }
             //if((plug_DC_Connect==1)||(OffState==1)||(HighVolPowerOff==1))//状态机切换或者有下电故障或者有故障
             {

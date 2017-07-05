@@ -255,9 +255,9 @@ void stateCodeTransfer(void)
         }
         else if(stateCode==110)
         {
-            if((slowRechargeFinished == 1)||((PantographOff)&&(Error10S>=10000)&&(g_systemCurrent>-5))//延时10S下电
+            if((slowRechargeFinished == 1)
+			||((PantographOff)&&(Error10S>=10000)&&(g_systemCurrent>-5))//延时10S下电
 			||((PantographOff == 1)&&(E10SOverFlag)&&(Error20S>=20000)&&(g_systemCurrent <= -5))//故障延时10S&&电流大于5A，再持续20S
-			//||(plug_DC_Connect == 1)
             ){
                 stateCode=120;//充电已完成或者需下电的故障或者检测降弓开关==0||降弓到位==0||充电开关==0    
             }
@@ -345,7 +345,7 @@ void stateCodeTransfer(void)
         {  
             if((MSDError)||(CHG_N_RelayConError)||(plug_DC_Connect == 0)||(OffState))
                 stateCode=186;//高压检测1有故障||需下电的故障||CC2==0 ||ChargeIN==0
-            else if((plug_DC_Connect == 1)&&(bmsSelfcheckCounter==1))
+            else if((plug_DC_Connect == 1)&&(bmsSelfcheckCounter==1) && (DC_Start == 1))
                 stateCode=144;
         }
         else if(stateCode==144)
