@@ -519,8 +519,6 @@ void TaskStatusMachine(void)//task period = 5ms.
             TurnOff_INA2K();//断开快充继电器
             delay(25000); //19ms
             delay(25000); //19ms
-			Kp_Switch(OFF); // turn off the power supply for DCDC in charging
-            Kn_Switch(OFF);
             //DCChgRelayConnectTest();//快充继电器粘连
             bmsSelfcheckCounter=2;//没有故障，自检计数器
             break;
@@ -583,7 +581,7 @@ void TaskStatusMachine(void)//task period = 5ms.
             delay(25000); //19ms
             bmsSelfcheckCounter=1;
 			
-			if(stateCode == 86 || stateCode == 126){
+			if(stateCode == 186 || stateCode == 126){
 				Error_Group1.Bit.St_CHG_Allow = 1;	// not allowed.
 				status_group3.Bit.St_Charge = 3;	// charge invalid.
 			}
@@ -595,8 +593,10 @@ void TaskStatusMachine(void)//task period = 5ms.
         case 47:  //******************BMS断电***************////////////////
         case 127:
         case 187:
-            openPosRelay();//再断开正极继电器，确保正极继电器断开。 
-            openNegRelay();//再断开负极继电器，确保正极继电器断开。
+//			openPosRelay();//再断开正极继电器，确保正极继电器断开。 
+//			openNegRelay();//再断开负极继电器，确保正极继电器断开。
+			Kp_Switch(OFF); // turn off the power supply for DCDC in charging
+			Kn_Switch(OFF);
             bmsSelfcheckCounter=0;
             delay(25000); //20ms
             delay(25000); //20ms 

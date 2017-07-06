@@ -319,7 +319,6 @@ void Kp_Switch(byte status){
 		TurnOn_INZK();
 	
 		delay(25000); //20ms
-		delay(25000); //20ms
 		status_group3.Bit.St_P_Relay = 1;//to vcu
 		g_bms_status.status.Relay_P_Sts = 1;
 	}
