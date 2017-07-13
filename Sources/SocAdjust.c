@@ -30,11 +30,11 @@ void SocRechargeAdjust(void)//充电末端SOC修正子程序
     if((g_highestCellVoltage >=3.65)&&(g_highestCellVoltage<=4.0))
     {
         g_socValue=1;
+		Can_g_socValue = 1;
         g_leftEnergy = g_socValue*(g_realNominalCap*3600);	  
         g_energyOfUsed = 0;
         AdjustQ1Value();
     }
-    
 }
 //******************************************************************************
 //* Function name:   SocEndDischargeAdjust

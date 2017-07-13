@@ -283,7 +283,7 @@ void HighVoltDetectPart2(void)//预充继电器已经闭合
     if(g_BmsModeFlag == DISCHARGING)//行车
     {
 		/////负极断路/////// 
-        if(g_highVoltageV2<200) 
+        if(g_highVoltageV2<200)
         {
             NDisConnect_tt++;
             if (NDisConnect_tt>=12)//滤波延时60ms，电压是否能及时变化？
@@ -428,6 +428,7 @@ void HighVoltDetectPart3(void)
         {
             PDisConnect_tt=0;  
         }
+		
         /////////////受电带充电继电器断路///////
         if((g_highVoltageV6<200)&&(stateCode == 90)) 
         {
@@ -445,6 +446,7 @@ void HighVoltDetectPart3(void)
         {
             CCHGDisConnect_tt=0;  
         }
+		
          /////////////快充继电器断路///////
         if((g_highVoltageV5<200)&&(stateCode == 150)) 
         {

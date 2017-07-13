@@ -44,7 +44,7 @@ void cpuToCHMBHM(void)
 	mg.len = 2;
 	mg.prty = 0;
 
-	buff=HIGHEST_ALLOWED_CHARGE_V*10;
+	buff = HIGHEST_ALLOWED_CHARGE_V*10;
 
 	mg.data[0] = buff;     //最高允许充电电压低字节
 	mg.data[1] = buff>>8;  //最高允许充电电压高字节
@@ -81,20 +81,20 @@ void cpuToCHMBRM(void)
     }
     
     
-    mg.data[0] = 0x10;  //控制字：16
-    mg.data[1] = ByteNum;  //整个消息大小,49byte
-    mg.data[2] = 0x00;  //整个消息大小
-    mg.data[3] = Num;  //全部数据包的数目
-    mg.data[4] = 0xff;//保留给SAE设定使用，该字节应设为FF
-	  mg.data[5] = 0x00;//所装载数据的参数群编号 快充对应的PGN号：0x000200
-    mg.data[6] = 0x02;//所装载数据的参数群编号 快充对应的PGN号：0x000200
-	  mg.data[7] = 0x00;//所装载数据的参数群编号 快充对应的PGN号：0x000200
-	  
-	  mg.id= 0x1cec56f4;
-	  
-	  if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
-	      while((!MSCAN1SendMsg(mg))&&(tt>0))
-            tt--;
+	mg.data[0] = 0x10;  //控制字：16
+	mg.data[1] = ByteNum;  //整个消息大小,49byte
+	mg.data[2] = 0x00;  //整个消息大小
+	mg.data[3] = Num;  //全部数据包的数目
+	mg.data[4] = 0xff;//保留给SAE设定使用，该字节应设为FF
+	mg.data[5] = 0x00;//所装载数据的参数群编号 快充对应的PGN号：0x000200
+	mg.data[6] = 0x02;//所装载数据的参数群编号 快充对应的PGN号：0x000200
+	mg.data[7] = 0x00;//所装载数据的参数群编号 快充对应的PGN号：0x000200
+
+	mg.id= 0x1cec56f4;
+
+	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
+		while((!MSCAN1SendMsg(mg))&&(tt>0))
+			tt--;
     else if(g_BmsModeFlag == RECHARGING) 
 	      while((!MSCAN0SendMsg(mg))&&(tt>0))
             tt--; 
@@ -121,21 +121,21 @@ void cpuToCHMBRMDATA1(void)
     mg.data[3] = 0x00;  
     mg.data[4] = CELL_TYPE;//磷酸铁锂 
     
-    buff = (unsigned int)(SetCap*10);//动力电池系统额定容量:120Ah
-	  mg.data[5] = (unsigned char)buff;  
-    mg.data[6] = buff>>8;
-    
-    buff = SYS_NOMINAL_V*10;//576V
-	  mg.data[7] = (unsigned char)buff;//动力电池系统额定电压
-	  
-	  mg.id= 0x1ceb56f4;
-	  
-	  if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
-	      while((!MSCAN1SendMsg(mg))&&(tt>0))
-            tt--;
+	buff = (unsigned int)(SetCap*10);//动力电池系统额定容量:120Ah
+	mg.data[5] = (unsigned char)buff;  
+	mg.data[6] = buff>>8;
+
+	buff = SYS_NOMINAL_V*10;//576V
+	mg.data[7] = (unsigned char)buff;//动力电池系统额定电压
+
+	mg.id= 0x1ceb56f4;
+
+	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
+		while((!MSCAN1SendMsg(mg))&&(tt>0))
+			tt--;
     else if(g_BmsModeFlag == RECHARGING) 
-	      while((!MSCAN0SendMsg(mg))&&(tt>0))
-            tt--; 
+		while((!MSCAN0SendMsg(mg))&&(tt>0))
+			tt--; 
 } 
 //******************************************************************************
 //* Function name:   cpuToCHMBRMDATA2
@@ -145,26 +145,26 @@ void cpuToCHMBRMDATA1(void)
 //******************************************************************************
 void cpuToCHMBRMDATA2(void)
 {
-    struct can_msg mg;
-    unsigned int buff;
-    char tt=100;
-    
-    mg.RTR= FALSE;  
-    mg.len = 8;
-    mg.prty = 0;
-    
-    mg.data[0] = 0x02;
-    
-    buff = SYS_NOMINAL_V*10;//动力电池系统额定电压 
-    mg.data[1] = buff>>8;
-    mg.data[2] = 0xff; 
-    mg.data[3] = 0xff; 
-    mg.data[4]= 0xff;
-	  mg.data[5]= 0xff;
-    mg.data[6]= 0xff;
-	  mg.data[7]= 0xff;
+	struct can_msg mg;
+	unsigned int buff;
+	char tt=100;
 
-	  mg.id= 0x1ceb56f4;
+	mg.RTR= FALSE;  
+	mg.len = 8;
+	mg.prty = 0;
+
+	mg.data[0] = 0x02;
+
+	buff = SYS_NOMINAL_V*10;//动力电池系统额定电压 
+	mg.data[1] = buff>>8;
+	mg.data[2] = 0xff; 
+	mg.data[3] = 0xff; 
+	mg.data[4] = 0xff;
+	mg.data[5] = 0xff;
+	mg.data[6] = 0xff;
+	mg.data[7] = 0xff;
+
+	mg.id= 0x1ceb56f4;
 	  
 	  if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
 	      while((!MSCAN1SendMsg(mg))&&(tt>0))
@@ -181,22 +181,22 @@ void cpuToCHMBRMDATA2(void)
 //******************************************************************************
 void cpuToCHMBRMDATA3(void)
 {
-    struct can_msg mg;
-    char tt=100;
-    mg.RTR= FALSE;  
-    mg.len = 8;
-    mg.prty = 0;
-    
-    mg.data[0] = 0x03;
-    mg.data[1] = 0xff;
-    mg.data[2] = 0xff; 
-    mg.data[3] = 0xff; 
-    mg.data[4]= 0xff;
-	  mg.data[5]= 0xff;
-    mg.data[6]= 0xff;
-	  mg.data[7]= 0xff;
+	struct can_msg mg;
+	char tt=100;
+	mg.RTR= FALSE;  
+	mg.len = 8;
+	mg.prty = 0;
 
-	  mg.id= 0x1ceb56f4;
+	mg.data[0] = 0x03;
+	mg.data[1] = 0xff;
+	mg.data[2] = 0xff; 
+	mg.data[3] = 0xff; 
+	mg.data[4]= 0xff;
+	mg.data[5]= 0xff;
+	mg.data[6]= 0xff;
+	mg.data[7]= 0xff;
+
+	mg.id= 0x1ceb56f4;
 	    
 	  if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
 	      while((!MSCAN1SendMsg(mg))&&(tt>0))
@@ -396,10 +396,10 @@ void cpuToCHMBCP(void)
 	mg.data[2]= buff>>8;//单体最高允许充电电压
 
 	if(g_BmsModeFlag == FASTRECHARGING){
-		buff = (unsigned int)((400-HIGHEST_ALLOWED_CHARGE_A)*10);//已经乘以0.75了
+		buff = (unsigned int)((400 - FastChg_Max_Current)*10);//已经乘以0.75了
 	}
 	else if(g_BmsModeFlag == RECHARGING){
-		buff = (unsigned int)((400-HIGHEST_ALLOWED_CHARGE_A)*10);//已经乘以0.75了
+		buff = (unsigned int)((400 - EleBand_Max_Current)*10);//已经乘以0.75了
 	}
 	mg.data[3]= (unsigned char)buff;//动力最大允许电流低字节
 	mg.data[4]= buff>>8;//动力电池最大允许电流高字节
@@ -408,7 +408,7 @@ void cpuToCHMBCP(void)
 	mg.data[5]= (unsigned char)buff;//动力电池系统额定能量 
 	mg.data[6]= buff>>8;//动力电池系统额定能量
 
-	buff = (unsigned int)(HIGHEST_ALLOWED_CHARGE_V*10);
+	buff = (unsigned int)(HIGHEST_ALLOWED_CHARGE_V * 10);
 	mg.data[7]= (unsigned char)buff;//最高允许动力电池系统 总电压低字节
 
 	mg.id= 0x1ceb56f4;
@@ -440,7 +440,7 @@ void cpuToCHMBCP(void)
 
 	buff = (unsigned int)(HIGHEST_ALLOWED_CHARGE_V*10);
 	mg.data[1]= buff>>8;//最高允许动力电池系统 总电压高字节
-	mg.data[2] = 105;// the allowed highest temperature = 105-50=55 C
+	mg.data[2] = HIGHEST_ALLOWED_CHARGE_T + 50;// the allowed highest temperature = 105-50=55 C
 
 	buff = (unsigned int)(Can_g_socValue*1000); 
 	mg.data[3]= (unsigned char)buff;//SOC
@@ -475,7 +475,8 @@ void cpuToCHMBRO(void)
 	mg.len = 1;
 	mg.prty = 0;
     
-    if((BROErrorAA==0) && ((Relay_State >> 2) & 0x01 == 0x01))	// KFastChg_P_Switch(ON) then send 0xAA.
+    if(((BROErrorAA==0) && ((Relay_State >> 2) & 0x01 == 0x01) && (g_BmsModeFlag == FASTRECHARGING))
+		|| ((g_BmsModeFlag == RECHARGING) && (BROErrorAA == 0)))	// KFastChg_P_Switch(ON) then send 0xAA.
     {
         mg.data[0] = 0xaa;
     }
@@ -572,32 +573,32 @@ void cpuToCHMBCS(void)
 //******************************************************************************
 void cpuToCHMBCSDATA1(void)
 {
-   struct can_msg mg;
-    unsigned int buff;
-    char tt=100;
-    
-    mg.RTR= FALSE;  
-    mg.len = 8;
-    mg.prty = 0;
-    
-    
-	  mg.data[0]= 0x01;
-	  buff = (unsigned int)(g_systemVoltage*10);//电池组当前电压高字节 
-	  mg.data[1]= (unsigned char)buff;         //电池组当前电压di字节 
-    mg.data[2]= buff>>8;//电池组当前电流高字节 
-    
-	  buff = (unsigned int)((g_systemCurrent+400)*10);
-  	mg.data[3]= (unsigned char)buff;//电池组当前电流低字节 
-    mg.data[4]= buff>>8;//电池组当前电流高字节 
-    
-	  buff = (unsigned int)(g_highestCellVoltage*100);	   
-	  mg.data[5]= (unsigned char)buff;//电池单体最高电压低字节
-	  mg.data[6]= buff>>8;//电池单体最高电压高字节
-	  
-	  buff = (unsigned int)(Can_g_socValue*100); 
-	  mg.data[7]= (unsigned char)buff;//SOC at present
+	struct can_msg mg;
+	unsigned int buff;
+	char tt=100;
 
-    mg.id= 0x1ceb56f4;
+	mg.RTR= FALSE;  
+	mg.len = 8;
+	mg.prty = 0;
+
+
+	mg.data[0]= 0x01;
+	buff = (unsigned int)(g_systemVoltage*10);//电池组当前电压高字节 
+	mg.data[1]= (unsigned char)buff;         //电池组当前电压di字节 
+	mg.data[2]= buff>>8;//电池组当前电流高字节 
+
+	buff = (unsigned int)((g_systemCurrent+400)*10);
+	mg.data[3]= (unsigned char)buff;//电池组当前电流低字节 
+	mg.data[4]= buff>>8;//电池组当前电流高字节 
+
+	buff = (unsigned int)(g_highestCellVoltage*100);	   
+	mg.data[5]= (unsigned char)buff;//电池单体最高电压低字节
+	mg.data[6]= buff>>8;//电池单体最高电压高字节
+
+	buff = (unsigned int)(Can_g_socValue*100); 
+	mg.data[7]= (unsigned char)buff;//SOC at present
+
+	mg.id= 0x1ceb56f4;
     
     if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
 	      while((!MSCAN1SendMsg(mg))&&(tt>0))
@@ -655,21 +656,21 @@ void cpuToCHMBSM(void)
     struct can_msg mg;
     char tt=100;
     
-    mg.RTR= FALSE;  
-    mg.len = 7;
-    mg.prty = 0;
-   
-	  mg.data[0]= 0x01;
-	  mg.data[1]= g_highestTemperature+10;	
-	  mg.data[2]= 0x01;
-  	mg.data[3]= g_lowestTemperature+10;	   
-	  mg.data[4]= 0x01;
-	  mg.data[5]= fasterror11;
-	  mg.data[6]= fasterror12;
-	  
-    mg.id= 0x181356f4;
+	mg.RTR= FALSE;
+	mg.len = 7;
+	mg.prty = 0;
+
+	mg.data[0]= g_bms_msg.CellVoltageMaxPackNum - 1;
+	mg.data[1]= g_bms_msg.CellTempMax + 10; // offset: -40+50
+	mg.data[2]= g_bms_msg.CellTempMaxPackNum - 1;
+	mg.data[3]= g_bms_msg.CellTempMin + 10; // offset: -40+50
+	mg.data[4]= g_bms_msg.CellTempMinPackNum - 1;
+	mg.data[5]= fasterror11;
+	mg.data[6]= fasterror12;
+
+	mg.id= 0x181356f4;
     
-    if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
+    if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843))
 	      while((!MSCAN1SendMsg(mg))&&(tt>0))
             tt--;
     else if(g_BmsModeFlag == RECHARGING) 

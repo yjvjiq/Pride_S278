@@ -210,10 +210,6 @@ void TaskRechargeDC(void)
 		{
 		    m_askvoltage = HIGHEST_ALLOWED_CHARGE_V;	//3.65*204 = 744.6
 		}
-//		else if(((Tavg-40)<=0)||(((Tavg-40)<=5)))//温度<0或者上电前温度小于0当前温度小于5
-//		{
-//            m_askvoltage = LOWEST_ALLOWED_CHARGE_V;//3.3*204 =673.2
-//        }
         else	//if((Tavg-40) > 54)
         {
             m_askvoltage = 0;
@@ -271,7 +267,7 @@ void TaskRechargeDC(void)
 	{
         timer1S++;
         if(timer1S >= 100)//10ms*100=1000ms
-        {          
+        {
             if(DCFinish == 0)
             {
 				ChargerStopState = 1;
@@ -293,8 +289,9 @@ void TaskRechargeDC(void)
     {
         timer1S = 0;
     }
+	
     m_askcurrent = curr1;
-                  
+	
     //////////////////////////////充电时发送功率///////////////////////////
 	if(CHMStep)
 	{
@@ -350,10 +347,10 @@ void TaskRechargeDC(void)
 					else if(sendi1==6)
 					  cpuToCHMBRMDATA5();
 					else if(sendi1==7)
-					{       			            
+					{
 					  cpuToCHMBRMDATA6();
 					  if(DC_Vesion==1)
-					  {        			                
+					  {
 					      sendi1=0;
 					      CHMStep1=1;
 					  }
@@ -565,17 +562,16 @@ void TaskDC(void)
         if(DCStartState == 0)//当接收到之后，不再计时
         {
 			CRMOverTimeBefore60s++;
+			if(CRMOverTimeBefore60s>=6000)//10ms*6000
+			{
+				OverTimeState=1;//超时标志位置1 			   
+				CHMStep=0x07;
+				BEMError1|=0x01;//收不到CRM，30s后发送BEM
+				CRMOverTimeBefore60s = 0;	   
+			}
         }
 		
-        if(CRMOverTimeBefore60s>=6000)//10ms*6000
-        {
-            OverTimeState=1;//超时标志位置1                
-            CHMStep=0x07;
-            BEMError1|=0x01;//收不到CRM，30s后发送BEM
-            CRMOverTimeBefore60s = 0;      
-        }
-		
-        if((stateCode==110)||(stateCode==170)||(OverTimeState==1)){        
+        if((stateCode==110)||(stateCode==170)|| (DCStartState != 0) ||(OverTimeState==1)){        
             TaskRechargeDC();
         }
     }

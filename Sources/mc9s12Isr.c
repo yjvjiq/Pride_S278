@@ -417,8 +417,8 @@ interrupt void CAN0_RECEIVE_ISR(void)   //车载 /外部CAN / 500Hz
             break;
             
         case 0x0C0217A7://受电弓车载WiFi      /////////如果受电弓充电走整车CAN在此接收报文
-            VCU_ChgControl.byte = msgData[3];
             ACCOverTime = 0;//清零
+			VCU_ChgControl.byte = msgData[3];
             break;
         case 0x18FEF117:
             VCU_ParkBrake.byte = msgData[0];

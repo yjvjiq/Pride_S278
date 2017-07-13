@@ -45,7 +45,9 @@ void stateCodeTransfer(void)
     static unsigned int Delay186=0;
     static unsigned int Delay30_81=0;
 	static U16 DelayfPowerOffCnt = 0;
-    
+    static U16 charge_disable_cnt_t = 0;
+	static U16 fast_charge_end_cnt_t = 0;
+	
     //if((OffState == 1)&&(g_BmsModeFlag == DISCHARGING)&&(VehicleSpeed<=8))
     //    PowerOffError = 1;//行车模式需要下电的故障，车速降到8km/h    
         
@@ -223,8 +225,17 @@ void stateCodeTransfer(void)
                 stateCode=82;
         }
         else if(stateCode==82)
-        {  
-            if((MSDError==1)||(CHG_N_RelayConError==1)||(PantographOff)
+        {
+			if(g_bms_msg.CellVoltageMax >= (U16)(HIGHEST_ALLOWED_CHARGE_CV * 10000)
+				|| g_bms_msg.CellTempMax >= (U16)(HIGHEST_ALLOWED_CHARGE_T * 10000)
+				|| g_bms_msg.CellTempMin <= (LOWEST_ALLOWED_WORK_T + 40)){
+				charge_disable_cnt_t++;
+				if(charge_disable_cnt_t >= 1000){
+					charge_disable_cnt_t = 1000;
+					stateCode = 126;
+				}
+			}
+            else if((MSDError==1)||(CHG_N_RelayConError==1)||(PantographOff)
             ||(VCU_ChgControl.Bit.downC_Switch == 0)||(VCU_ChgControl.Bit.downC_OK == 0)||(VCU_ParkBrake.Bit.Parking_Brake==0))
                 stateCode=126; //MSD断路||充电负粘连||需要下电故障||||降弓开关==0||降弓到位==0||驻车信号==0
             else if(bmsSelfcheckCounter==1)
@@ -256,7 +267,7 @@ void stateCodeTransfer(void)
         else if(stateCode==110)
         {
             if((slowRechargeFinished == 1)
-			||((PantographOff)&&(Error10S>=10000)&&(g_systemCurrent>-5))//延时10S下电
+			||((PantographOff == 1)&&(Error10S>=10000)&&(g_systemCurrent>-5))//延时10S下电
 			||((PantographOff == 1)&&(E10SOverFlag)&&(Error20S>=20000)&&(g_systemCurrent <= -5))//故障延时10S&&电流大于5A，再持续20S
             ){
                 stateCode=120;//充电已完成或者需下电的故障或者检测降弓开关==0||降弓到位==0||充电开关==0    
@@ -265,14 +276,14 @@ void stateCodeTransfer(void)
             ||(VCU_ChgControl.Bit.downC_OK == 0)
             ||(VCU_ParkBrake.Bit.Parking_Brake==0)
 			||((fastendflag == 1) && (PantographOff != 1)) // charge finished and no fault.
-            )//充电信号无     5ms * 400 = 2.0S
+            )
             {
                 CDelay30++;
-				if(CDelay30 >= 400){
-					stateCode = 120;
+				if(CDelay30 >= 400){	//充电信号无     5ms * 400 = 2.0S
 					CDelay30 = 0;
+					stateCode = 120;
 				}
-            }  
+            }
         } 
         else if(stateCode==120)//断开受电弓继电器
         {
@@ -335,15 +346,24 @@ void stateCodeTransfer(void)
     else if(g_BmsModeFlag==FASTRECHARGING)
     {
         if(stateCode==141)
-        {   
+        {
             InsRelayControl=1;//快充时采绝缘控制给SBMS
             if((status_group3.Bit.St_N_Relay == 0)&&(status_group3.Bit.St_P_Relay == 0)
             &&(CC2VOL<=CC2VOLHIGH)&&(CC2VOL>=CC2VOLLOW)) //CC2电压在范围内
                 stateCode=142;
         }
         else if(stateCode==142)
-        {  
-            if((MSDError)||(CHG_N_RelayConError)||(plug_DC_Connect == 0)||(OffState))
+        {
+			if(g_bms_msg.CellVoltageMax >= (U16)(HIGHEST_ALLOWED_CHARGE_CV * 10000)
+				|| g_bms_msg.CellTempMax >= (U16)(HIGHEST_ALLOWED_CHARGE_T * 10000)
+				|| g_bms_msg.CellTempMin <= (LOWEST_ALLOWED_WORK_T + 40)){
+				charge_disable_cnt_t++;
+				if(charge_disable_cnt_t >= 1000){
+					charge_disable_cnt_t = 1000;
+					stateCode = 186;
+				}
+			}
+            else if((MSDError)||(CHG_N_RelayConError)||(plug_DC_Connect == 0)||(OffState))
                 stateCode=186;//高压检测1有故障||需下电的故障||CC2==0 ||ChargeIN==0
             else if((plug_DC_Connect == 1)&&(bmsSelfcheckCounter==1) && (DC_Start == 1))
                 stateCode=144;
@@ -380,6 +400,13 @@ void stateCodeTransfer(void)
             {                
                 DCDelay30++; 
             }
+			else if(fastendflag == 1){
+				fast_charge_end_cnt_t++;
+				if(fast_charge_end_cnt_t >= 1000){
+					fast_charge_end_cnt_t = 0;
+					stateCode=180;
+				}
+			}
         } 
         else if(stateCode==180)//断开快充继电器
         {

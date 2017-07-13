@@ -75,15 +75,15 @@ void main(void)
         Tavg=g_lowestTemperature;
     }
 	
-    if(Tavg<=40) //小于0度
+    if(Tavg<=40)        //小于0度
     {
         HeatFlag=1;
     }
-    else if (Tavg<=50) //0-10度
+    else if (Tavg<=50)  //0-10度
     {
         HeatFlag=2;
     }
-    else           //大于10度
+    else                //大于10度
         HeatFlag=3;
     
 	BMUOK = 1;

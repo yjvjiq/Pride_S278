@@ -321,7 +321,7 @@ void TaskStatusMachine(void)//task period = 5ms.
     static unsigned char Delay14=0;
     static unsigned char TestDelay=0;//进入到调试模式下的时间延时
     static unsigned char dcMode,pcMode =0;//充电状态赋值标志位
-    
+	
     SignalOnOffJudge(); 
 	CarFaultDone();
 	
