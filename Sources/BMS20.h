@@ -82,7 +82,8 @@
 #define STOP_ALLOWED_HEAT_CHARGE_TEM        15      //关闭加热阀值 
 #define BACK_HEAT_TEM                       -1      //关闭加热阀值 
 #define COOL_TYPE                           3       //1 自然冷却 2：风扇冷却 3：水冷
-
+#define Chg_Socet_Max_Temperatue_lv1		85
+#define Chg_Socet_Max_Temperatue_lv2		120
 ///////////////////////BMS最后保护的阀值///////////////////////
 #define LOWEST_CELL_VOL     2.0		//放电最小单体电压
 #define HIGHEST_CELL_VOL    3.85	//充电单体最大单体电压

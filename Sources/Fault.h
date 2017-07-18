@@ -18,9 +18,10 @@ extern unsigned char	g_caution_Flag_4;
 extern unsigned int		g_errorCounter;
 extern unsigned char	ACCha_Flag_BST;
 extern unsigned char	ACCOverTime;//交流充电机通信故障
+extern unsigned char	VCU_ParkBrakeOverTime;
 extern unsigned char	VCUOverTime;//VCU 通讯故障
 extern unsigned char	SBMSOverTime;
-
+extern unsigned char	BMU_OverTime;
 
 ///////////////////最大允许放电电流//////////////////////
 typedef union{

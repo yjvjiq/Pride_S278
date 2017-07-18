@@ -398,18 +398,18 @@ void Task15_R_Vn_GND_Value_Polling(void)
 //**********************************************************************
 void TaskInsulation(void)//调用函数TaskInsulation(void)需要400ms;
 {
-    float buff1=0;
-    float buff2=0;
-    static unsigned char isoCounter=0;
-    static unsigned char isoCounter1=0;
- 
-    //if((stateCode!=110) && (stateCode!=170)) //只有在快充。受电弓状态中才检测绝缘
-   if((!InsRelayState)||(stateCode!=170))//只有在快充和绝缘控制继电器闭合时才检绝缘
-        return;   
+	float buff1=0;
+	float buff2=0;
+	static unsigned char isoCounter=0;
+	static unsigned char isoCounter1=0;
+	
+	//if((stateCode!=110) && (stateCode!=170)) //只有在快充。受电弓状态中才检测绝缘
+	if((!InsRelayState)||(stateCode!=170))//只有在快充和绝缘控制继电器闭合时才检绝缘
+		return;
    
     if((flagV51==0)&&(isoCounter==0))
         Task14_R_Vp_GND_Value_Polling();//计算完成需要400*20=8s       
-       
+    
     if(flagV51)//8s后，到这 
     {
         isoCounter++;
@@ -425,15 +425,6 @@ void TaskInsulation(void)//调用函数TaskInsulation(void)需要400ms;
     {
         turnOffDO1();              //DO1 断开  
         turnOffDO2();             //DO2 断开 
-
-        /*
-        buff1 =(0.2+1000)*((float)V51_Voltage_CAL_Value-(float)V52_Voltage_CAL_Value)-2*(float)Vpn1_Voltage_CAL_Value;
-        Rp_Vpn_Value = buff1/(float)V52_Voltage_CAL_Value;
-        
-        buff1 =0;
-        buff1 =(0.2+1000)*((float)V52_Voltage_CAL_Value-(float)V51_Voltage_CAL_Value)+2*(float)Vpn1_Voltage_CAL_Value; 
-        Rn_Vpn_Value = buff1/(float)V51_Voltage_CAL_Value;
-        */
         
         buff1 =(RESVALUE+1000)*((float)V51_Voltage_CAL_Value-(float)V52_Voltage_CAL_Value)-RESVALUE*10*(float)Vpn1_Voltage_CAL_Value;
         Rp_Vpn_Value = buff1/(float)V52_Voltage_CAL_Value;

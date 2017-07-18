@@ -421,6 +421,7 @@ interrupt void CAN0_RECEIVE_ISR(void)   //≥µ‘ÿ /Õ‚≤øCAN / 500Hz
 			VCU_ChgControl.byte = msgData[3];
             break;
         case 0x18FEF117:
+			VCU_ParkBrakeOverTime = 0;
             VCU_ParkBrake.byte = msgData[0];
             
             buffer = msgData[2];

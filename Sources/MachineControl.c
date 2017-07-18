@@ -71,7 +71,8 @@ void stateCodeTransfer(void)
         else if(stateCode==12)
         {
             if((MSDError)||(N_RelayConnetError)||(HighVolPowerOff)||(acc_Connect == 0)
-            ||(VCU_Request.Bit.Finish_PreChg)||(plug_DC_Connect == 1))//CC2
+            ||(VCU_Request.Bit.Finish_PreChg)||(plug_DC_Connect == 1)//CC2
+            ||(g_bms_fault_msg.fault.HLVol_Lock_Alram == 1))
                 stateCode=46;//MSD断路||负极粘连||需要下电的故障||ON=0||整车预充已完成
             else if((VCU_Control.Bit.PowerOnOffReq == 1)&&(bmsSelfcheckCounter==1))
                 stateCode=14;
@@ -113,19 +114,15 @@ void stateCodeTransfer(void)
         } 
         else if(stateCode==30)
         {
-            if(//(VCU_Control.Bit.PowerOnOffReq == 2)
-				((VCU_Control.Bit.PowerOnOffReq != 2)&&(HighVolPowerOff == 1)&&(E10SOverFlag == 1)&&(Error_30s_delay_cnt >= 30000))
-				||((VCU_Control.Bit.PowerOnOffReq == 2)&&(E10SOverFlag == 1)&&(Error10S>=10000))//故障延时10S后收到高压下电指令                              
-//				||((HighVolPowerOff == 1)&&(Error10S>=10000)&&(g_systemCurrent<5))//故障延时10S后电流小于5A
-				||((E10SOverFlag)&&(Error20S>=20000) && (g_systemCurrent > 5))//故障延时10S&&电流大于5A，再持续20S
-//				||(plug_DC_Connect == 1)//CC2
+            if(((VCU_Control.Bit.PowerOnOffReq != 2)&&(E10SOverFlag == 1)&&(Error_30s_delay_cnt >= 30000))
+				||((VCU_Control.Bit.PowerOnOffReq == 2)&&(E10SOverFlag == 1))//fault occured, and has delay 10s already, then received the power off command.
 				||(Delay30>=400)
             )
             {
                  stateCode=40;
                  Delay30 = 0;
             }
-            else if(acc_Connect==0 || VCU_Control.Bit.PowerOnOffReq == 2)//ACC无或者收到高压下电指令 5ms*400=2S
+            else if(acc_Connect==0)//ACC disappear, 5ms*400=2S
             {
                 Delay30++;
             }
@@ -227,13 +224,10 @@ void stateCodeTransfer(void)
         else if(stateCode==82)
         {
 			if(g_bms_msg.CellVoltageMax >= (U16)(HIGHEST_ALLOWED_CHARGE_CV * 10000)
-				|| g_bms_msg.CellTempMax >= (U16)(HIGHEST_ALLOWED_CHARGE_T * 10000)
-				|| g_bms_msg.CellTempMin <= (LOWEST_ALLOWED_WORK_T + 40)){
-				charge_disable_cnt_t++;
-				if(charge_disable_cnt_t >= 1000){
-					charge_disable_cnt_t = 1000;
-					stateCode = 126;
-				}
+				|| g_bms_msg.CellTempMax >= (U16)(HIGHEST_ALLOWED_CHARGE_T + 40)
+				|| g_bms_msg.CellTempMin <= (LOWEST_ALLOWED_WORK_T + 40)
+				||(g_bms_fault_msg.fault.HLVol_Lock_Alram == 1)){
+				stateCode = 126;
 			}
             else if((MSDError==1)||(CHG_N_RelayConError==1)||(PantographOff)
             ||(VCU_ChgControl.Bit.downC_Switch == 0)||(VCU_ChgControl.Bit.downC_OK == 0)||(VCU_ParkBrake.Bit.Parking_Brake==0))
@@ -267,8 +261,8 @@ void stateCodeTransfer(void)
         else if(stateCode==110)
         {
             if((slowRechargeFinished == 1)
-			||((PantographOff == 1)&&(Error10S>=10000)&&(g_systemCurrent>-5))//延时10S下电
-			||((PantographOff == 1)&&(E10SOverFlag)&&(Error20S>=20000)&&(g_systemCurrent <= -5))//故障延时10S&&电流大于5A，再持续20S
+			||((PantographOff == 1)&&(E10SOverFlag == 1)&&(g_systemCurrent > -5))//延时10S下电
+			||((PantographOff == 1)&&(E10SOverFlag == 1)&&(Error20S>=20000)&&(g_systemCurrent <= -5))//故障延时10S&&电流大于5A，再持续20S
             ){
                 stateCode=120;//充电已完成或者需下电的故障或者检测降弓开关==0||降弓到位==0||充电开关==0    
             }
@@ -355,13 +349,29 @@ void stateCodeTransfer(void)
         else if(stateCode==142)
         {
 			if(g_bms_msg.CellVoltageMax >= (U16)(HIGHEST_ALLOWED_CHARGE_CV * 10000)
-				|| g_bms_msg.CellTempMax >= (U16)(HIGHEST_ALLOWED_CHARGE_T * 10000)
-				|| g_bms_msg.CellTempMin <= (LOWEST_ALLOWED_WORK_T + 40)){
-				charge_disable_cnt_t++;
-				if(charge_disable_cnt_t >= 1000){
-					charge_disable_cnt_t = 1000;
-					stateCode = 186;
+				|| g_bms_msg.CellTempMax >= (U16)(HIGHEST_ALLOWED_CHARGE_T + 40)
+				|| g_bms_msg.CellTempMin <= (LOWEST_ALLOWED_WORK_T + 40)
+				||(g_bms_fault_msg.fault.HLVol_Lock_Alram == 1)
+				||(DCTem1 >= Chg_Socet_Max_Temperatue_lv1)
+				||(DCTem2 >= Chg_Socet_Max_Temperatue_lv1)
+				){
+				stateCode = 186;
+				
+				if((DCTem1 >= Chg_Socet_Max_Temperatue_lv2)
+				||(DCTem2 >= Chg_Socet_Max_Temperatue_lv2)){
+					fastendflag=1;
+					fastend2|=0x40;//连接器温度过大
+					OffState=1;//请求下电
+					Error_Group0.Bit.F2_Ele_Relay_Con=3;//整车CAN赋值     
 				}
+				else if((DCTem1 >= Chg_Socet_Max_Temperatue_lv1)
+				||(DCTem2 >= Chg_Socet_Max_Temperatue_lv1)){
+					fastendflag=1;
+					fastend2|=0x40;//连接器温度过大
+					OffState=1;//请求下电
+					Error_Group0.Bit.F2_Ele_Relay_Con=2;//整车CAN赋值     
+				}
+				
 			}
             else if((MSDError)||(CHG_N_RelayConError)||(plug_DC_Connect == 0)||(OffState))
                 stateCode=186;//高压检测1有故障||需下电的故障||CC2==0 ||ChargeIN==0
@@ -391,7 +401,8 @@ void stateCodeTransfer(void)
         }
         else if(stateCode==170)
         {
-            if(((OffState)&&(Error5S>=5000))||(DCDelay30>=400))//
+            if(((OffState)&&(Error5S>=5000))
+				||(DCDelay30>=400))
             { 
                  stateCode=180;
                  DCDelay30 = 0; 

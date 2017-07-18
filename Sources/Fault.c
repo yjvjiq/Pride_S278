@@ -56,8 +56,11 @@ unsigned char	g_caution_Flag_4 = 0;
 unsigned int	g_errorCounter;
 unsigned char	ACCha_Flag_BST = 0;
 unsigned char	ACCOverTime = 0;//交流充电机通信故障
+unsigned char	VCU_ParkBrakeOverTime = 0;
 unsigned char	VCUOverTime = 0;//与VCU通讯故障
 unsigned char	SBMSOverTime = 0;//与另一主板SBMS通讯故障
+unsigned char	BMU_OverTime = 0;
+
 //unsigned char CarErrorLevel = 0;
 
 CUTDISCURT0  CutDisCurt0;
@@ -750,7 +753,12 @@ void ACChangerComError(void)
 void VCUComError(void)
 {
 	VCUOverTime++;
-	if(VCUOverTime>=30)//30s没有接收到充电机报文
+	if(g_BmsModeFlag == RECHARGING){
+		VCU_ParkBrakeOverTime++;
+	}
+	
+	if((VCUOverTime >= 30)
+		||((VCU_ParkBrakeOverTime >= 30) && (g_BmsModeFlag == RECHARGING)))//30s没有接收到充电机报文
 	{
 		CutDisCurt0.Bit.F7_VCU_Communiction=1;
 		CutChaCurt0.Bit.F7_VCU_Communiction=1;
@@ -771,7 +779,10 @@ void VCUComError(void)
 void innerCommOT3(void) 
 { 
     SBMSOverTime++;
-    if(((g_caution_Flag_3 & 0x01)!=0)||(SBMSOverTime>=30)) //BMU内部通讯故障或与SBMS故障
+	BMU_OverTime++;
+    if(((g_caution_Flag_3 & 0x01)!=0)
+		||(BMU_OverTime >= 30)
+		||(SBMSOverTime>=30)) //BMU内部通讯故障或与SBMS故障
     {
         status_group1.Bit.St_BMS =2;//BMS状态高压断开
         CutDisCurt0.Bit.F1_Inner_Communiction=1;
@@ -794,7 +805,8 @@ void Charge_Check(void)
 {
 	static unsigned char Check_Num=0;
 	
-	if(((g_BmsModeFlag == FASTRECHARGING)||(g_BmsModeFlag == RECHARGING))&&(g_systemCurrent > 10)) 
+	if(((g_BmsModeFlag == FASTRECHARGING)||(g_BmsModeFlag == RECHARGING))
+		&&((g_systemCurrent > 2) && g_bms_msg.CellVoltageMin <= 25000)) 
 	{
 		Check_Num++;
 		if(Check_Num>=100) 
@@ -820,14 +832,13 @@ void CHG_SocketOT(void)
     unsigned char i;
     unsigned char Error[4]={0}; 
     unsigned char Level=0;
-    float tmax;
+    float tmax = 0;
     
     if(DCTem1 >= DCTem2)
-        tmax = DCTem1;
+        tmax = DCTem1 + 40;
     else
-        tmax = DCTem2;
+        tmax = DCTem2 + 40;
     
-   
     //上报故障等级
     if(tmax >= 0){ //必须大于0
         Level = ChargeSocketOverTemp_custom((unsigned char)tmax);
@@ -839,15 +850,17 @@ void CHG_SocketOT(void)
     for(i=1;i<4;i++) 
        if(i == Level) 
            Error[i] = 1;
-       
-    Error_Group0.Bit.F2_Ele_Relay_Con = Level;//整车CAN赋值     
-	g_bms_fault_msg.fault.KEleBand_P_Adhesion_Flt = Level;
-	
-    ///////2级故障处理
-    CutDCChaCurt50.Bit.F5_CHG_Socket2 = Error[2];
-    
-    /////3级故障处理 
-    CutDCChaCurt0.Bit.F12_CHG_Socket1 = Error[3];
+
+	if(Error_Group0.Bit.F2_Ele_Relay_Con <= Level){
+	    Error_Group0.Bit.F2_Ele_Relay_Con = Level;//整车CAN赋值     
+		g_bms_fault_msg.fault.KEleBand_P_Adhesion_Flt = Level;
+		
+	    ///////2级故障处理
+	    CutDCChaCurt50.Bit.F5_CHG_Socket2 = Error[2];
+	    
+	    /////3级故障处理 
+	    CutDCChaCurt0.Bit.F12_CHG_Socket1 = Error[3];
+	}
 }
 //******************************************************************************
 //* Function name:    Fire_Warning
@@ -855,7 +868,7 @@ void CHG_SocketOT(void)
 //* EntryParameter : None
 //* ReturnValue    : None
 //******************************************************************************
-void Fire_Warning(void) 
+void Fire_Warning(void)
 {
     if(Error_Group0.Bit.F0_Fire_Warning==2) 
     {
@@ -892,7 +905,6 @@ void PowerSupplyError(void)//
     
     Level=Supply24V_custom(PowerVOL);
 
-	g_bms_fault_msg.fault.Bms_Power_Supply_Alarm = 1;
 	
     for(i=1;i<4;i++) 
        if(i==Level) 
@@ -901,7 +913,8 @@ void PowerSupplyError(void)//
     //1级故障处理 上报故障  
     if(Error[1]) 
     {
-        //Error_Group6.Bit.F0_Power_Vol=1;//整车CAN上报
+		g_bms_fault_msg.fault.Bms_Power_Supply_Alarm = 1;
+        Error_Group6.Bit.F0_Power_Vol=1;//整车CAN上报
         /*CutDisCurt0.Bit.F9_Supply_Power1=1;
         CutChaCurt0.Bit.F9_Supply_Power1=1;
         CutDCChaCurt0.Bit.F11_Supply_Power1=1;
@@ -909,6 +922,7 @@ void PowerSupplyError(void)//
         */
     } 
 }
+
 //**********************************************************************
 //* Function name:   CarFaultDone
 //* Description:     行车过程中故障的处理
@@ -932,10 +946,10 @@ void CarFaultDone()
 		||(Error_Group3.Bit.F0_Sub_Com_Err)			//内网通讯故障
 		||(Error_Group0.Bit.F0_Fire_Warning==3)		//火灾预警3级
 //		||(Error_Group6.Bit.F0_Power_Vol)			//整车CAN上报
-        ){
+		){
 			HighVolPowerOff=1;
 			Error_Group1.Bit.St_DisCHG_Allow = 1;//放电允许状态位不允许
-			g_bms_fault_msg.fault.DisChg_Allow_State = 1;
+			g_bms_fault_msg.fault.DisChg_Allow_State = 1; // not allowed
        }
     }
     //////////////////////////////快充发送高压下电请求////////////////////
@@ -973,7 +987,7 @@ void CarFaultDone()
 		||(ACCha_Flag_BST == 1)						//电流方向异常故障
 		||(Error_Group0.Bit.F0_Fire_Warning==3)		//火灾预警3级
 //		||(Error_Group6.Bit.F0_Power_Vol)			//整车CAN上报
-
+		||(Error_Group0.Bit.F2_Ele_Relay_Con ==3)	//充电插座过温
         )
         {
             PantographOff=1;//受电弓请求下电
@@ -1134,6 +1148,7 @@ void FaultLevel(void)
     ||(Error_Group0.Bit.F2_Ele_Relay_Con ==3)//充电插座过温
     ||(ACCha_Flag_BST) //充电电流方向异常
     ||(RelayErrorPowerOff)//继电器下电故障
+    ||(inputH_state() == 1)
     )
     {
         status_group3.Bit.Fault_Level = 3;//严重故障，降功率为0

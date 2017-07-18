@@ -192,11 +192,11 @@ void TaskRechargeDC(void)
     if((g_BmsModeFlag != FASTRECHARGING)&&(g_BmsModeFlag != RECHARGING))
         return;
     
-    if(g_highestTemperature>=(HIGHEST_ALLOWED_CHARGE_T+40))//40+57，40+0
-    {
-        fastend3|=0x01; //Temperature，中止充电
-        fastendflag=1; //快充停止充电标志  
-    }
+//    if(g_highestTemperature>=(HIGHEST_ALLOWED_CHARGE_T+40))//40+57，40+0
+//    {
+//        fastend3|=0x01; //Temperature，中止充电
+//        fastendflag=1; //快充停止充电标志  
+//    }
     
     YoungMan_LT_FastChrgPowerAjust();
     curr =m_askcurrent_Model;
@@ -226,20 +226,22 @@ void TaskRechargeDC(void)
     }
     else 
     {
-        if((CutDCChaCurt50.word != 0) || (CutACChaCurt50.word != 0)){
-            curr1 = 0.5 * curr;
-        }
-
 		if(g_BmsModeFlag == RECHARGING){
-	        if(curr1 >= EleBand_Max_Current){
-	            curr1 = EleBand_Max_Current;
+	        if(curr >= EleBand_Max_Current){
+	            curr = EleBand_Max_Current;
+				curr1 = curr;
 	        }
 		}
 		else if(g_BmsModeFlag == FASTRECHARGING){
-			if(curr1 >= FastChg_Max_Current){
-				curr1 = FastChg_Max_Current;
+			if(curr >= FastChg_Max_Current){
+				curr = FastChg_Max_Current;
+				curr1 = curr;
 			}
 		}
+		
+        if((CutDCChaCurt50.word != 0) || (CutACChaCurt50.word != 0)){
+            curr1 = 0.5 * curr;
+        }
     }
     
     if((g_highestCellVoltage >= CHARGE_CUTDOWN_CV1 ) || (ChanceCurt == 1))//电流为计数出来的一半
@@ -480,7 +482,7 @@ void TaskRechargeDC(void)
                 }
             }
 		}	  
-		if((CHMStep==0x06)||((CHMStep==0x05)&&(fastendflag==1)))//10ms发送一次,开始发的时候	
+		if((CHMStep==0x06)||((CHMStep==0x05)&&((fastendflag==1) ||(PantographOff == 1))))//10ms发送一次,开始发的时候	
 		{
 			//如果收到地面充电机充电截止报文或者单体电压、总电压超过保护值
 			if(OverTimeState==1)

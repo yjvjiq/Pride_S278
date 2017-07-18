@@ -336,13 +336,13 @@ void TaskStatusMachine(void)//task period = 5ms.
 			tmr_p3=0;
             status_group1.Bit.St_BMS =3;
             state46 = 0;
-            if((stateCode==141)&&((DCTem1>=85)||(DCTem2>=85))) //在此判断防止故障上报的慢
-            {
-                fastendflag=1;
-                fastend2|=0x40;//连接器温度过大
-                OffState=1;//请求下电
-                Error_Group0.Bit.F2_Ele_Relay_Con=2;//整车CAN赋值     
-            }
+//            if((stateCode==141)&&((DCTem1>=85)||(DCTem2>=85))) //在此判断防止故障上报的慢
+//            {
+//                fastendflag=1;
+//                fastend2|=0x40;//连接器温度过大
+//                OffState=1;//请求下电
+//                Error_Group0.Bit.F2_Ele_Relay_Con=2;//整车CAN赋值     
+//            }
             break;
         case 12:  //********************低压自检*************//////////////
         case 82:
@@ -358,7 +358,9 @@ void TaskStatusMachine(void)//task period = 5ms.
         case 84:
         case 144:
 			Kn_Switch(ON); // when in 14 state, it used for HV POWER, else turn on Kn to supply for DCDC in charge mode.
-            KChg_N_Switch(ON);	//闭合充电负
+			if(stateCode == 84 || stateCode == 144){
+    			KChg_N_Switch(ON);	//闭合充电负
+			}
             delay(25000);       //19ms
             delay(25000);       //19ms
             

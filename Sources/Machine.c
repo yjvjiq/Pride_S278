@@ -183,6 +183,7 @@ void HighVoltDetectPart1(void)
     static unsigned char pp=0;
     static unsigned char pc=0;
 	static U16 s_detect_part1_cnt_t = 0;
+	static U8 hv_lock_error_cnt = 0;
 
 	s_detect_part1_cnt_t++; // record how many times run HighVoltDetectPart1 to cover the fault detect.
 	
@@ -195,7 +196,7 @@ void HighVoltDetectPart1(void)
             //to vcu
             RelayErrorPowerOff = 1;//继电器下电故障
             MSDError = 1;
-            g_caution_Flag_4 |=0x01; //to PC
+            g_caution_Flag_4 |= 0x01; //to PC
             tt=13;
         }
     } 
@@ -203,6 +204,26 @@ void HighVoltDetectPart1(void)
     {
         tt=0;
     }
+
+
+	// hv lock detect
+	if(inputH_state() == 1){
+		hv_lock_error_cnt++;
+		if(hv_lock_error_cnt >= 20){
+			Error_Group6.Bit.F1_HLVol_Lock = 1;
+			g_bms_fault_msg.fault.HLVol_Lock_Alram = 1;
+			status_group3.Bit.Fault_Level = 3;
+			g_bms_status.status.Fault_Level = 3;
+			
+			status_group4.Bit.St_BMS_System = 1;
+			g_bms_fault_msg.fault.BMS_Sys_Flt_Sts = 1;
+
+			hv_lock_error_cnt = 21;
+		}
+	}
+	else{
+		hv_lock_error_cnt = 0;
+	}
     
     //********检测主负继电器粘连 *****************//////////////////////////////////
     if(g_BmsModeFlag == DISCHARGING)
@@ -231,7 +252,7 @@ void HighVoltDetectPart1(void)
     //********检测充电负继电器粘连 *****************//////////////////////////////////
     if((g_BmsModeFlag == RECHARGING)||(g_BmsModeFlag == FASTRECHARGING))
     {
-        if(g_highVoltageV4>=200)
+        if(g_highVoltageV4 >= 200)
         {
             pc++;
             if(pc>=20)//100ms
@@ -240,7 +261,7 @@ void HighVoltDetectPart1(void)
                 RelayErrorPowerOff = 1;//继电器下电故障
                 Error_Group1.Bit.F2_DCChg_Neg_Relay_Con = 1;//直流充电负粘连报警位也作为受电弓负
                 CHG_N_RelayConError = 1;
-                pc=21;
+				pc=21;
                 /////////////////充电负极粘连///////////////////
             }
         } 
@@ -250,7 +271,9 @@ void HighVoltDetectPart1(void)
         }
     }
 
-    if(MSDError==0 && s_detect_part1_cnt_t >= 25)//all BMS mode need detect.
+    if((MSDError == 0)
+		&& (g_bms_fault_msg.fault.HLVol_Lock_Alram == 0)
+		&& (s_detect_part1_cnt_t >= 25))//all BMS mode need detect.
     {
         if(((N_RelayConnetError==0)&&(stateCode == 12))//行车
           ||((CHG_N_RelayConError==0)&&(stateCode == 82))//受电弓
@@ -275,10 +298,15 @@ void HighVoltDetectPart2(void)//预充继电器已经闭合
     static unsigned char CHGDisConnect_tt=0;
 	static U16 s_detect_part2_cnt_t = 0;
 
-	s_detect_part2_cnt_t++;
 	
     if((tmr_p2 <= 60)) //延时20ms或者大于500ms,不在运行 	//||(tmr_p2 >= 600)
-        return;
+	{
+		s_detect_part2_cnt_t = 0;
+		return;
+    }
+	else{
+		s_detect_part2_cnt_t++;
+	}
 
     if(g_BmsModeFlag == DISCHARGING)//行车
     {
@@ -301,7 +329,7 @@ void HighVoltDetectPart2(void)//预充继电器已经闭合
         }
         
         /////正极粘连//////
-        if(g_highVoltageV3>200) 
+        if(g_highVoltageV3 > 200) 
         {
             PConnect_tt++;
             if (PConnect_tt>=12)//滤波延时60ms，电压是否能及时变化？
@@ -322,25 +350,26 @@ void HighVoltDetectPart2(void)//预充继电器已经闭合
     else if((g_BmsModeFlag == RECHARGING)||(g_BmsModeFlag == FASTRECHARGING))//快慢充 
     {
 		/////充电负继电器断路///////充电都检
-		if(g_highVoltageV4<200) 
+		if(g_highVoltageV4 < 200)
 		{
 			CHGDisConnect_tt++;
 			if (CHGDisConnect_tt>=20)//滤波延时60ms，电压是否能及时变化？
 			{
 				RelayErrorPowerOff = 1;//继电器下电故障
 				CHG_N_RelayDisConError = 1;//充电负断路故障
+				g_caution_Flag_4 |= (1 << 5); // precharge relay off error.
 				CHGDisConnect_tt = 23;
             }
         }
-        else   
+        else
         {
-            CHGDisConnect_tt=0;  
+            CHGDisConnect_tt=0;
         }
         
         if(g_BmsModeFlag == RECHARGING)
         {
             /////受电带充电继电器粘连///////
-            if(g_highVoltageV6>200)  
+            if(g_highVoltageV6 > 200)  
             {
                 CCHGConnect_tt++;
                 if (CCHGConnect_tt>=20)//滤波延时60ms，电压是否能及时变化？
@@ -402,11 +431,15 @@ void HighVoltDetectPart3(void)
     static unsigned char CCHGDisConnect_tt=0;
     static unsigned char DCHGDisConnect_tt=0;
     static U16 s_detect_part3_cnt_t = 0;
-
-	s_detect_part3_cnt_t++;
 	
     if(tmr_p3 <= 60)  //延时60ms
-       return;
+	{
+		s_detect_part3_cnt_t = 0;
+		return;
+    }
+	else{
+		s_detect_part3_cnt_t++;
+	}
     
 //    if(tmr_p3 <= 500)
 //    {
