@@ -543,7 +543,14 @@ interrupt void CAN0_RECEIVE_ISR(void)   //车载 /外部CAN / 500Hz
                 CHMStep=0x07;
             break;
             ///////////// 整车CAN接收受电弓报文 ///////////////
-        default:
+		case 0X0CFF13F4:
+		{
+			for(i=0;i<8;i++){ 
+				g_TMS_BMS_msg.data[i] = msgData[i];
+			}
+		}
+		break;
+		default:
             break;
     }
     CAN0RFLG = 0x01;   

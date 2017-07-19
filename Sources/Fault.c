@@ -685,13 +685,17 @@ void errorLowIsolation(void)
       if(i==Level)
         Error[i]=1;
       
-    Error_Group1.Bit.F6_Ins_Err=Level;//整车CAN赋值
+    Error_Group1.Bit.F6_Ins_Err = Level;//整车CAN赋值
 	g_bms_fault_msg.fault.Ins_Low_flt = Level;  
 	
     if(Level>=1){
         Error_Group6.Bit.F7_Chg_Ins_Low = 1;//充电绝缘过低报警
 		g_bms_fault_msg.fault.Chg_Ins_Low_Alarm = 1;
     }
+	else{
+        Error_Group6.Bit.F7_Chg_Ins_Low = 0;
+		g_bms_fault_msg.fault.Chg_Ins_Low_Alarm = 0;
+	}
 	
     //1级故障处理
     Can554Byte2.Bit.F4_insulationLow1=Error[1];//to PC
@@ -741,6 +745,7 @@ void ACChangerComError(void)
         CutACChaCurt0.Bit.F1_Communication_With_Charger=1;
         g_caution_Flag_2 |=0x10; //for 内部CAN
         Error_Group3.Bit.F1_V_CAN_Err =1; //整车CAN
+        fastend3 |= (1<<6);
 		g_bms_fault_msg.fault.ExternalCAN_Com_Flt = 1;
     }
 }
@@ -755,6 +760,7 @@ void VCUComError(void)
 	VCUOverTime++;
 	if(g_BmsModeFlag == RECHARGING){
 		VCU_ParkBrakeOverTime++;
+		VCUOverTime = 0;
 	}
 	
 	if((VCUOverTime >= 30)
@@ -765,7 +771,9 @@ void VCUComError(void)
 		//g_caution_Flag_2 |=0x10; //for 内部CAN
 		Error_Group3.Bit.F1_V_CAN_Err = 1; //整车CAN
 		status_group1.Bit.St_BMS = HV_Off_Status;//BMS状态高压断开
-
+		if(g_BmsModeFlag == RECHARGING){
+			fastend3 |= (1<<6); // other fault.
+		}
 		g_bms_fault_msg.fault.ExternalCAN_Com_Flt = 1;
 		g_bms_status.status.BMS_HV_Sts = HV_Off_Status;
 	}
@@ -870,7 +878,8 @@ void CHG_SocketOT(void)
 //******************************************************************************
 void Fire_Warning(void)
 {
-    if(Error_Group0.Bit.F0_Fire_Warning==2) 
+    if((Error_Group0.Bit.F0_Fire_Warning==1)
+		||(Error_Group0.Bit.F0_Fire_Warning==2)) 
     {
         CutDisCurt50.Bit.F6_Fire_Warning2=1;
         CutChaCurt50.Bit.F5_Fire_Warning2=1;
@@ -1237,6 +1246,7 @@ unsigned char TaskFaultProcess(void)
     if(g_BmsModeFlag == RECHARGING) //慢充模式
     {
         ACChangerComError();
+        VCUComError();//与VCU通讯故障
     }
     else if(g_BmsModeFlag == DISCHARGING)//行车模式 
     {

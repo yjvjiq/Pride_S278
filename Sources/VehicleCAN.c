@@ -29,8 +29,11 @@ unsigned long int chargeAH ;   //实际充电总安时
 unsigned long int dischargeAH ;//实际放电总安时
 float DC_ChargePower=0;//充电电量（输出电量）
 
-U_BMS_STATUS_TYPE g_bms_status;
-U_BMS_FAULT_TYPE  g_bms_fault_msg;
+U_BMS_STATUS_TYPE	g_bms_status;
+U_BMS_FAULT_TYPE	g_bms_fault_msg;
+U_TMS_BMS_MSG		g_TMS_BMS_msg;
+U_BMS_TMS_MSG		g_BMS_TMS_msg;
+
 
 
 /*futon Logistics use*/
@@ -63,6 +66,10 @@ STATUS_GROUP1 status_group1;
 STATUS_GROUP2 status_group2;
 STATUS_GROUP3 status_group3;
 STATUS_GROUP4 status_group4;
+
+
+#define CAN_BMS_TMS_ID 0X18FF45F3
+
 
 /*futon Logistics use end*/
 
@@ -704,6 +711,27 @@ void bmsToPcTestCar1(void)
 
 	while((!MSCAN0SendMsg(mg))&&(tt>0))
 		tt--;
+}
+
+
+void BMS_TMS_msg(void){
+    struct can_msg mg;
+    unsigned int buff;
+    unsigned char tt=100;
+	U8 i = 0;
+	
+	mg.RTR= FALSE;  
+	mg.len = 8;
+	mg.prty = 0;
+	mg.id= CAN_BMS_TMS_ID; 
+
+	for(i=0;i<8;i++){
+		mg.data[i] = g_BMS_TMS_msg.data[i];
+	}
+	
+	while((!MSCAN0SendMsg(mg))&&(tt>0)){
+		tt--;
+	}
 }
 //***********************************************************************
 //************************************************************************

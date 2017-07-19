@@ -336,13 +336,6 @@ void TaskStatusMachine(void)//task period = 5ms.
 			tmr_p3=0;
             status_group1.Bit.St_BMS =3;
             state46 = 0;
-//            if((stateCode==141)&&((DCTem1>=85)||(DCTem2>=85))) //在此判断防止故障上报的慢
-//            {
-//                fastendflag=1;
-//                fastend2|=0x40;//连接器温度过大
-//                OffState=1;//请求下电
-//                Error_Group0.Bit.F2_Ele_Relay_Con=2;//整车CAN赋值     
-//            }
             break;
         case 12:  //********************低压自检*************//////////////
         case 82:
@@ -353,19 +346,17 @@ void TaskStatusMachine(void)//task period = 5ms.
 			}
 			
             HighVoltDetectPart1();//行车：MSD与负极粘连 受电弓：MSD和充电负粘连
-            break;
+			break;
         case 14:  //***********************闭合主负************/////////////
         case 84:
         case 144:
 			Kn_Switch(ON); // when in 14 state, it used for HV POWER, else turn on Kn to supply for DCDC in charge mode.
 			if(stateCode == 84 || stateCode == 144){
-    			KChg_N_Switch(ON);	//闭合充电负
+    			KChg_N_Switch(ON);
 			}
-            delay(25000);       //19ms
-            delay(25000);       //19ms
             
             Delay14++;
-            if(Delay14 >= 4) 
+            if(Delay14 >= 4)
             {
 				status_group3.Bit.St_N_Relay=1;
                 if(stateCode != 14){
@@ -387,12 +378,10 @@ void TaskStatusMachine(void)//task period = 5ms.
 			if(stateCode == 90) 
             {
 				KEleBand_P_Switch(ON);
-				delay(25000); //20ms
             }
             else if(stateCode == 150) 
             {
 				KFastChg_P_Switch(ON);
-                delay(25000); //20ms
             }
             HighVoltDetectPart3();
             break;
@@ -402,12 +391,8 @@ void TaskStatusMachine(void)//task period = 5ms.
 		//////////////////////////////////////////////////////////////////////////////
 		/////////////////////////////////////////////////////////////////////////////      
         case 30:    //*********************行车状态***********/////////////
-//            turnOnSW_Power();//打开软件开关
             if(state30==0) 
             {
-//                tmr_p1=0;
-//                tmr_p2=0;
-//                tmr_p3=0;
                 state30=1;
                 pcMode=0; //防止进入状态机重复赋值充电状态，在30清0
                 dcMode=0; //防止进入状态机重复赋值充电状态，在30清0
@@ -502,14 +487,13 @@ void TaskStatusMachine(void)//task period = 5ms.
             }
             else if(stateCode == 120 && Error_Group6.Bit.F3_BMS_Protect != 1)
             {
-                TurnOff_INA1K();//断受电弓继电器
+//                TurnOff_INA1K();//断受电弓继电器
+				KEleBand_P_Switch(OFF);
                 //ChgRelayConnectTest();//受电弓继电器粘连
                 status_group3.Bit.St_Charge = 2; //充电结束
 				Kp_Switch(OFF); // turn off the power supply for DCDC
                 Kn_Switch(OFF);
             }
-            delay(25000); //19ms
-            delay(25000); //19ms
             bmsSelfcheckCounter=2;//没有故障，自检计数器
 			
             break;
@@ -518,9 +502,11 @@ void TaskStatusMachine(void)//task period = 5ms.
             TurnOffInsulation();//关闭绝缘检测的开关
             status_group3.Bit.St_Charge = 2; //充电结束
             status_group1.Bit.St_BMS =2;//高压断开
-            TurnOff_INA2K();//断开快充继电器
-            delay(25000); //19ms
-            delay(25000); //19ms
+//            TurnOff_INA2K();//断开快充继电器
+//            delay(25000); //19ms
+//            delay(25000); //19ms
+			KFastChg_P_Switch(OFF);
+
             //DCChgRelayConnectTest();//快充继电器粘连
             bmsSelfcheckCounter=2;//没有故障，自检计数器
             break;

@@ -406,10 +406,12 @@ extern unsigned char BMS_SW_Version[8];
 extern unsigned char BMUOK;
 extern unsigned char HeatFlag; //上电前温度标志位
 
-extern BMU_CELL_MSG g_bmu_msg;
-extern BMS_CELL_MSG g_bms_msg;
-extern U_BMS_STATUS_TYPE g_bms_status;
-extern U_BMS_FAULT_TYPE  g_bms_fault_msg;
+extern BMU_CELL_MSG			g_bmu_msg;
+extern BMS_CELL_MSG			g_bms_msg;
+extern U_BMS_STATUS_TYPE	g_bms_status;
+extern U_BMS_FAULT_TYPE		g_bms_fault_msg;
+extern U_TMS_BMS_MSG		g_TMS_BMS_msg;
+extern U_BMS_TMS_MSG		g_BMS_TMS_msg;
 
  //***********************************************************************************
 //*******************************the end**********************************************

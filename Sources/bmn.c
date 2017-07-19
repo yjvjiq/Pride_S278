@@ -44,7 +44,7 @@ float voltage_buffer2;
 unsigned int   V51_Voltage_AD_Value; 
 unsigned int  V52_Voltage_AD_Value;
 
-float	g_highVoltageV1; //V1A   电池电压 
+float g_highVoltageV1; //V1A   电池电压 
 float g_highVoltageV2; //V2A   预充电继电器与预充电阻之间的电压
 float g_highVoltageV3; //V3A   预充电继电器另一边的电压
  
@@ -54,12 +54,12 @@ unsigned long RR_Vn_GND_Value;           //总负对地绝缘电阻 0.01M 0.01M~50M  1~5
 float Rp_Vpn_Value=2000;              //总正对地绝缘电阻等级 10欧/V 1~500  1~5000 
 float Rn_Vpn_Value=2000;              //总负对地绝缘电阻等级 10欧/V 1~500  1~5000
 
-unsigned int Vpn_K1;              //
-int Vpn_B1;                       //
-unsigned int Vpn_K2;              //
-int Vpn_B2;                       //                      //
-unsigned int Vpn_K3;              //
-int Vpn_B3;                       //
+unsigned int Vpn_K1;
+int Vpn_B1;
+unsigned int Vpn_K2;
+int Vpn_B2;
+unsigned int Vpn_K3;
+int Vpn_B3;
 
 unsigned char flagV51;
 unsigned char flagV52;
@@ -193,15 +193,6 @@ void Task13_Vpn_Value_Calibrate(void)
     {
         BMNVPNflag.Bit.flag5=0;
         BMNVPNflag.Bit.flag7=0;
-       
-        /*
-        Vpn_K1=(uint)(((unsigned long)200*(unsigned long)1000)/(Vpn1_V2-Vpn1_V1));      
-        Vpn_B1=550*1000-Vpn_K1*Vpn1_V2;
-        Vpn_K2=(uint)((unsigned long)200*(unsigned long)1000/(Vpn2_V2-Vpn2_V1));      
-        Vpn_B2=550*1000-Vpn_K2*Vpn2_V2;
-        Vpn_K3=(uint)((unsigned long)200*(unsigned long)1000/(Vpn3_V2-Vpn3_V1));      
-        Vpn_B3=550*1000-Vpn_K3*Vpn3_V2;
-        */
          
         Vpn_K1=(uint)(((unsigned long)(HIGHVOL_23-HIGHVOL_19)*(unsigned long)1000)/(Vpn1_V2-Vpn1_V1));      
         Vpn_B1=HIGHVOL_23*1000-Vpn_K1*Vpn1_V2;
@@ -280,25 +271,21 @@ void Task14_R_Vp_GND_Value_Polling(void)
 {
     float voltage_buffer2;
     float k=0;
-    static isoCounter1=0;
-    static isoCounter2=0;
+    static U16 isoCounter1 = 0;
   
     flagV51 = 0;
     turnOffDO2();   //DO2 断开
     turnOnDO1();   //DO1 吸合
-    isoCounter2++;
+    isoCounter1++;
    
-    
-    //if(isoCounter2==20)//8000/400=20;20*400=8000
-    if(isoCounter2==2)//2*400ms 
+    if(isoCounter1 == 10) //2*300ms 
     { 
-        isoCounter2 =0;
+        isoCounter1 =0;
 
         CRGINT = 0x00; // disable rti interrupt
-        PITINTE  &=0xfe; ///disable the PIT Ch0 interrupt 
+        PITINTE  &=0xfe; ///disable the PIT Ch0 interrupt
+        
         V51_Voltage_AD_Value =GetInsulateVoltAd();
-        //if((V51_Voltage_AD_Value>=22528)&&(V51_Voltage_AD_Value<32768))
-            //V51_Voltage_AD_Value=22528;
         
         CRGINT = 0x80; // enable rti interrupt
         PITINTE  |=0x01; ///Enable the PIT Ch0 interrupt
@@ -339,8 +326,7 @@ void Task15_R_Vn_GND_Value_Polling(void)
 {   
     float voltage_buffer2; 
     float k=0;
-    static isoCounter1=0;
-    static isoCounter2=0;
+    static U16 isoCounter2=0;
 
     flagV52 = 0; 
     turnOffDO1();  //DO1 断开
@@ -348,16 +334,14 @@ void Task15_R_Vn_GND_Value_Polling(void)
     
     isoCounter2++; 
     
-    //if(isoCounter2==20)//400ms*20=8s
-    if(isoCounter2==2) 
+    if(isoCounter2 == 10) //300ms*5 = 1500ms
     { 
-        isoCounter2 =0;
+        isoCounter2 = 0;
 
         CRGINT = 0x00; // disable rti interrupt
         PITINTE  &=0xfe; ///disable the PIT Ch0 interrupt 
         V52_Voltage_AD_Value  =GetInsulateVoltAd();
-        //if(V52_Voltage_AD_Value>=65402)
-            //V52_Voltage_AD_Value=65402;
+		
         CRGINT = 0x80; // enable rti interrupt
         PITINTE  |=0x01; ///Enable the PIT Ch0 interrupt 
         
@@ -375,6 +359,7 @@ void Task15_R_Vn_GND_Value_Polling(void)
             k=8.073;
         else
             k=8.0;
+		
         V52_Voltage_CAL_Value = voltage_buffer2/k;
         
         //V52_Voltage_CAL_Value =voltage_buffer2/8; 
@@ -399,17 +384,15 @@ void Task15_R_Vn_GND_Value_Polling(void)
 void TaskInsulation(void)//调用函数TaskInsulation(void)需要400ms;
 {
 	float buff1=0;
-	float buff2=0;
 	static unsigned char isoCounter=0;
-	static unsigned char isoCounter1=0;
 	
-	//if((stateCode!=110) && (stateCode!=170)) //只有在快充。受电弓状态中才检测绝缘
 	if((!InsRelayState)||(stateCode!=170))//只有在快充和绝缘控制继电器闭合时才检绝缘
 		return;
    
     if((flagV51==0)&&(isoCounter==0))
         Task14_R_Vp_GND_Value_Polling();//计算完成需要400*20=8s       
-    
+    }
+	
     if(flagV51)//8s后，到这 
     {
         isoCounter++;
@@ -576,12 +559,7 @@ void Task22_CAN_SendGouup2(void)
     buff2 = Rn_Vpn_Value;
      
     mg.id = CANID_RPNTOGND;
-    /*
-    mg.data[0]=(unsigned char)((Rp_Vpn_Value/10)>>8);
-    mg.data[1]=(unsigned char)(Rp_Vpn_Value/10);
-    mg.data[2]=(unsigned char)((Rn_Vpn_Value/10)>>8);
-    mg.data[3]=(unsigned char)(Rn_Vpn_Value/10);
-    */
+	
     mg.data[0]=(unsigned char)((buff1/10)>>8);
     mg.data[1]=(unsigned char)(buff1/10);
     mg.data[2]=(unsigned char)((buff2/10)>>8);

@@ -304,9 +304,49 @@ typedef union{
 	byte data[10];
 }U_BMS_FAULT_TYPE;
 
-//////////////////////BMS发送的故障信息//////////////////////////
+//////////////////////BMS fault msg, send out end/////////////////////////////////
 
- 
+typedef struct{
+	U8 mode_cmd			:2;//bit0~bit1
+	U8 rsvd_0_2_4		:3;
+	U8 HV_on_request	:1;
+	U8 chg_mode			:1;
+	U8 HV_relay_status	:1;
+
+	U16 pack_volt;
+	
+	U8 rsvd_3;
+
+	U8 T_goal;
+	U8 cell_max_T;
+	U8 cell_min_T;
+	U8 rsvd_7;
+}S_BMS_TMS_MSG;
+
+typedef union{
+	S_BMS_TMS_MSG msg;
+	byte data[8];
+}U_BMS_TMS_MSG;
+
+typedef struct{
+	U8 mode_status				:2;//bit0~bit1
+	U8 rsvd_0_2_6				:5;
+	U8 TMS_HV_status			:1;
+
+	U8 TMS_T_out;
+	U8 TMS_T_in;
+	U8 freeze_T;
+	U8 compressor_frequency;
+	U8 rsvd_7_0_5				:6;
+	U8 fault_level				:2;
+}S_TMS_BMS_MSG;
+
+typedef union{
+	S_TMS_BMS_MSG msg;
+	byte data[8];
+}U_TMS_BMS_MSG;
+
+
 //******************************************************************************
 //* 以下是用于外部的变量
 //******************************************************************************

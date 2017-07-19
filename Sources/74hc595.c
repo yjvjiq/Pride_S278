@@ -319,12 +319,14 @@ void Kp_Switch(byte status){
 		TurnOn_INZK();
 	
 		delay(25000); //20ms
+		delay(25000); //20ms
 		status_group3.Bit.St_P_Relay = 1;//to vcu
 		g_bms_status.status.Relay_P_Sts = 1;
 	}
 	else{
 		TurnOff_INZK();
 		
+		delay(25000); //20ms
 		delay(25000); //20ms
 		status_group3.Bit.St_P_Relay = 0;//to vcu
 		g_bms_status.status.Relay_P_Sts = 0;
@@ -352,36 +354,52 @@ void Kn_Switch(byte status){
 void KChg_N_Switch(byte status){
 	if(status == ON){
 		TurnOn_INBK();
+		delay(25000);	//20ms
+		delay(25000);	//20ms
 	}
 	else{
 		TurnOff_INBK();
+		delay(25000);	//20ms
+		delay(25000);	//20ms
 	}
 }
 
 void KEleBand_P_Switch(byte status){
 	if(status == ON){
 		TurnOn_INA1K();
+		delay(25000);	//20ms
+		delay(25000);	//20ms
 	}
 	else{
 		TurnOff_INA1K();
+		delay(25000);	//20ms
+		delay(25000);	//20ms
 	}
 }
 
 void KFastChg_P_Switch(byte status){
 	if(status == ON){
 		TurnOn_INA2K();
+		delay(25000);	//20ms
+		delay(25000);	//20ms
 	}
 	else{
 		TurnOff_INA2K();
+		delay(25000);	//20ms
+		delay(25000);	//20ms
 	}
 }
 
 void KHeat_Switch(byte status){
 	if(status == ON){
 		TurnOn_INHK();
+		delay(25000);	//20ms
+		delay(25000);	//20ms
 	}
 	else{
 		TurnOff_INHK();
+		delay(25000);	//20ms
+		delay(25000);	//20ms
 	}
 }
 /************LCD******************************************
