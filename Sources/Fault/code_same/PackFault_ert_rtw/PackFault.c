@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'PackFault'.
  *
- * Model version                  : 1.118
+ * Model version                  : 1.119
  * Simulink Coder version         : 8.10 (R2016a) 10-Feb-2016
- * C/C++ source code generated on : Fri May 26 09:59:59 2017
+ * C/C++ source code generated on : Thu Jul 20 09:24:41 2017
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Freescale->HC(S)12
@@ -59,7 +59,7 @@ uint8_T PackFault_custom(real32_T I1, real32_T I2, real32_T I3)
 
   /* Chart: '<Root>/Chart' */
   /* Gateway: Chart */
-  if (PackFault_DW.temporalCounter_i1 < 7U) {
+  if (PackFault_DW.temporalCounter_i1 < 31U) {
     PackFault_DW.temporalCounter_i1++;
   }
 
@@ -89,12 +89,12 @@ uint8_T PackFault_custom(real32_T I1, real32_T I2, real32_T I3)
         /* Transition: '<S1>:187' */
         PackFault_DW.is_F3 = PackFault_IN_Wait3;
       } else {
-        if (PackFault_DW.temporalCounter_i1 >= 5) {
+        if (PackFault_DW.temporalCounter_i1 >= 20) {
           /* Transition: '<S1>:186' */
           PackFault_DW.is_F3 = PackFault_IN_Fault3;
 
           /* Entry 'Fault3': '<S1>:182' */
-          PackFault_B.F_lev_i = 3U;
+          PackFault_B.F_lev_i = 2U;
         }
       }
       break;

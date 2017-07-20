@@ -193,7 +193,6 @@ void TurnOn_INHK(void)      //加热继电器--- 加热反馈先不考虑
     Relay_State |= 0x10;
     Write_Hc595(Relay_State);
     delay10usHc595();
-    St_heatManage = 1;//动力电池热管理状态：0没工作；1加热过程中；2cooling
     BmsCtlStat0 |=0x04;//加热继电器状态  for pc
 }
 //******************************************************
@@ -207,7 +206,6 @@ void TurnOff_INHK(void)
     Relay_State &= 0xef;
     Write_Hc595(Relay_State);
     delay10usHc595();
-    St_heatManage = 0;//动力电池热管理状态：0没工作；1加热过程中；2cooling
     BmsCtlStat0 &=0xfb;//加热继电器状态  for pc 
 }
 //******************************************************
@@ -395,11 +393,13 @@ void KHeat_Switch(byte status){
 		TurnOn_INHK();
 		delay(25000);	//20ms
 		delay(25000);	//20ms
+	    St_heatManage = 1;//动力电池热管理状态：0没工作；1加热过程中；2cooling
 	}
 	else{
 		TurnOff_INHK();
 		delay(25000);	//20ms
 		delay(25000);	//20ms
+		St_heatManage = 0;//动力电池热管理状态：0没工作；1加热过程中；2cooling
 	}
 }
 /************LCD******************************************

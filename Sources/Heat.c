@@ -18,6 +18,19 @@ unsigned char heatingStart=0;//预加热停止标志位
 unsigned char BeforeTempFlag1=0;//上电前温度判断<0
 unsigned char BeforeTempFlag2=0;//上电前温度判断 <10
 //unsigned char BeforeTempFlag3=0;//上电前温度判断 >10
+
+typedef enum{
+	T_CMD_POWER_OFF = 0,
+	T_CMD_COOL,
+	T_CMD_HEAT,
+	T_CMD_SELF_LOOP
+} T_CMD;
+
+typedef enum{
+	T_CTRL_HV_ON_REQ = 0,
+	T_CTRL_HV_OFF_REQ
+}T_CTRL_HV_REQ;
+	
 //***********************************************************************
 //* Function name:   HeatManage
 //* Description:     状态机为100，110，170的时候进行热管理
@@ -132,3 +145,112 @@ void HeatAndChargeControl(void)
             time=0;
     }
 }
+
+
+//******************************************************************************
+//* Function name:   T_Control_Process
+//* Description:     used for water cool system, control the temperature by Tmax.
+//* EntryParameter : void
+//* ReturnValue    : void
+//******************************************************************************
+void T_Ctrl_Process(void){
+	U16 buff = 0;
+	static U8 T_ctrl_state = 0;
+	
+  	if(stateCode != 30 && stateCode != 110 && stateCode != 170){
+		return;
+	}
+
+	if((g_bms_msg.CellTempMax < (25 + 40)) && (g_bms_msg.CellTempMax != 0xff)){
+		if(T_ctrl_state == 3){
+			T_ctrl_state = 4;
+		}
+		else if(T_ctrl_state == 4){
+			T_ctrl_state = 4;
+		}
+		else{
+			T_ctrl_state = 1;
+		}
+	}
+	else if((g_bms_msg.CellTempMax >= (25 + 40)) 
+		&&(g_bms_msg.CellTempMax < (35 + 40))
+		&& (g_bms_msg.CellTempMax != 0xff)) {
+		if(T_ctrl_state == 1
+			&&(g_bms_msg.CellTempMax < (30 + 40))){
+			T_ctrl_state = 1; // wait here, power off cmd should be continued.
+		}
+		else if(T_ctrl_state == 4){
+			T_ctrl_state = 4;
+		}
+		else{
+			T_ctrl_state = 2;
+		}
+	}
+	else if((g_bms_msg.CellTempMax >= (35 + 40)) 
+		&& (g_bms_msg.CellTempMax != 0xff)){
+		if(T_ctrl_state == 2
+			&& (g_bms_msg.CellTempMax < (38 + 40))){
+			T_ctrl_state = 2;
+		}
+		else{
+			T_ctrl_state = 3;
+		}
+	}
+
+	if(g_TMS_BMS_msg.msg.fault_level == 1){
+		T_ctrl_state = 1;
+	}
+	else if(g_TMS_BMS_msg.msg.fault_level == 2){
+		T_ctrl_state = 4;
+	}
+	else if(g_TMS_BMS_msg.msg.fault_level == 3){
+		// do nothing, ignore the fault level.
+	}
+	
+
+	switch(T_ctrl_state){
+		case 1:
+			g_BMS_TMS_msg.msg.mode_cmd = T_CMD_POWER_OFF;
+			KHeat_Switch(OFF);
+			g_BMS_TMS_msg.msg.HV_relay_status = St_heatManage;
+			g_BMS_TMS_msg.msg.HV_on_request = T_CTRL_HV_OFF_REQ; // 0 = power on request, 1 = power off request
+			break;
+		case 2:
+			g_BMS_TMS_msg.msg.mode_cmd = T_CMD_SELF_LOOP;
+			KHeat_Switch(ON);
+			g_BMS_TMS_msg.msg.HV_relay_status = St_heatManage;
+			g_BMS_TMS_msg.msg.HV_on_request = T_CTRL_HV_ON_REQ; // 0 = power on request, 1 = power off request
+			break;
+		case 3:
+			g_BMS_TMS_msg.msg.mode_cmd = T_CMD_COOL;
+			KHeat_Switch(ON);
+			g_BMS_TMS_msg.msg.HV_relay_status = St_heatManage;
+			g_BMS_TMS_msg.msg.HV_on_request = T_CTRL_HV_ON_REQ; // 0 = power on request, 1 = power off request
+			break;
+		case 4:
+			g_BMS_TMS_msg.msg.mode_cmd = T_CMD_POWER_OFF;
+			g_BMS_TMS_msg.msg.HV_on_request = T_CTRL_HV_OFF_REQ; // 0 = power on request, 1 = power off request
+			if(g_TMS_BMS_msg.msg.TMS_HV_status == 0){
+				KHeat_Switch(OFF);
+				g_BMS_TMS_msg.msg.HV_relay_status = St_heatManage;
+				T_ctrl_state = 0;
+			}
+			
+			break;
+		default:
+			break;
+	}
+
+	g_BMS_TMS_msg.msg.CellTempMax	= g_bms_msg.CellTempMax;
+	g_BMS_TMS_msg.msg.CellTempMin	= g_bms_msg.CellTempMin;
+	g_BMS_TMS_msg.msg.pack_volt		= (U16)g_systemVoltage;
+	g_BMS_TMS_msg.msg.T_goal		= 20 + 40;
+	
+	if(g_BmsModeFlag == RECHARGING || g_BmsModeFlag == FASTRECHARGING){
+		g_BMS_TMS_msg.msg.chg_mode = 1;
+	}
+	else{
+		g_BMS_TMS_msg.msg.chg_mode = 0;
+	}
+}
+

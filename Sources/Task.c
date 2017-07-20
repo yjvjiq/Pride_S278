@@ -28,7 +28,7 @@ static TASK_COMPONENTS TaskComps[] =
     {0, 700,    700,    TaskSocProcess},            // SOC处理
     {0, 297,    300,    TaskBmuProcess},            // BMU数据处理任务//以前60ms
     {0, 17,     20,     TaskVoltage},               // 总电压计算   .
-    {0, 297,    300,    TaskInsulation},            // 绝缘电阻计算 //该处时间最小600MS，不能太小  80ms
+    {0, 2097,	2100,	TaskInsulation},            // 绝缘电阻计算 //该处时间最小600MS，不能太小  80ms
     {0, 97,     100,    TaskReport2PC},             // 发送报文到上位机
     {0, 5,      5,      TaskStatusMachine},         // 状态机处理
     {0, 997,    1000,   TaskFaultProcess},          // 100ms故障处理
@@ -228,9 +228,7 @@ void TaskReport2PC(void)
 			bmsToPcInfo554();
 			break;
 		case 6:
-			if(g_BmsModeFlag == FASTRECHARGING){
-				bmsToSBMSMessage1(); //0x000c0125
-			}
+			bmsToSBMSMessage1(); //0x000c0125
 			ct = 0;
 			break;
 		default:
@@ -324,6 +322,7 @@ void TaskStatusMachine(void)//task period = 5ms.
 	
     SignalOnOffJudge(); 
 	CarFaultDone();
+	T_Ctrl_Process();
 	
     switch(stateCode)
     {

@@ -389,7 +389,7 @@ void TaskInsulation(void)//调用函数TaskInsulation(void)需要400ms;
 	if((!InsRelayState)||(stateCode!=170))//只有在快充和绝缘控制继电器闭合时才检绝缘
 		return;
    
-    if((flagV51==0)&&(isoCounter==0))
+    if((flagV51==0)&&(isoCounter==0)){
         Task14_R_Vp_GND_Value_Polling();//计算完成需要400*20=8s       
     }
 	

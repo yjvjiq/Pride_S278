@@ -118,8 +118,11 @@ void SendMes(void)
     else if(PIT_1000ms_Counter0 == 108)      //1000ms
     {
         BMS_To_VCU_BasicMsg2();//0x1827D0D2
-        PIT_1000ms_Counter0=7;
     }
+	else if(PIT_1000ms_Counter0 == 109){
+		BMS_TMS_msg();
+        PIT_1000ms_Counter0=7;
+	}
     ///////////////////////100ms/////////////////////////// 
     if(PIT_10ms_Counter3 == 28)
     {  
@@ -539,7 +542,7 @@ interrupt void CAN0_RECEIVE_ISR(void)   //车载 /外部CAN / 500Hz
             break;
         case 0x081ff456:
             BEMStop = 1;
-            if(CHMStep<=0x07)     
+            if(CHMStep<=0x07)
                 CHMStep=0x07;
             break;
             ///////////// 整车CAN接收受电弓报文 ///////////////

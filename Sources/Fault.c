@@ -932,6 +932,43 @@ void PowerSupplyError(void)//
     } 
 }
 
+void Pack_branch_Disconnect_Fault(void){
+	byte level = 0;
+
+	level = PackFault_custom(g_SBMS_current1, g_SBMS_current2, g_systemCurrent);
+
+	if(level != 0){
+		switch(stateCode){
+			case 30:
+			{
+				CutDisCurt50.Bit.F6_Fire_Warning2=1;
+				CutChaCurt50.Bit.F5_Fire_Warning2=1;
+			}
+			break;
+			case 170:
+			{
+				CutDisCurt0.Bit.F8_Fire_Warning1=1;
+				CutChaCurt0.Bit.F8_Fire_Warning1=1;
+				CutDCChaCurt0.Bit.F10_Fire_Warning1=1;
+				CutACChaCurt0.Bit.F10_Fire_Warning1=1;
+				OffState = 1;
+			}
+			break;
+			case 110:
+			{
+				CutDisCurt0.Bit.F8_Fire_Warning1=1;
+				CutChaCurt0.Bit.F8_Fire_Warning1=1;
+				CutDCChaCurt0.Bit.F10_Fire_Warning1=1;
+				CutACChaCurt0.Bit.F10_Fire_Warning1=1;
+				PantographOff = 1;
+			}
+			break;
+			default:
+			break;
+		}
+	}
+}
+
 //**********************************************************************
 //* Function name:   CarFaultDone
 //* Description:     行车过程中故障的处理

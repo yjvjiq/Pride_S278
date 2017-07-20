@@ -18,6 +18,9 @@ extern unsigned char BeforeTempFlag1;//上电前温度判断
 extern unsigned char BeforeTempFlag2;//上电前温度判断
 extern void HeatManage(void);
 extern void HeatAndChargeControl(void);
+
+extern void T_Ctrl_Process(void);
+
 //**********************************************************************
 //**********************************************************************
 //**********************************************************************

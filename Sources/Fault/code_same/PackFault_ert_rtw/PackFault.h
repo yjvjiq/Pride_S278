@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'PackFault'.
  *
- * Model version                  : 1.118
+ * Model version                  : 1.119
  * Simulink Coder version         : 8.10 (R2016a) 10-Feb-2016
- * C/C++ source code generated on : Fri May 26 09:59:59 2017
+ * C/C++ source code generated on : Thu Jul 20 09:24:41 2017
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Freescale->HC(S)12
