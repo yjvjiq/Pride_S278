@@ -415,20 +415,30 @@ void TaskInsulation(void)//调用函数TaskInsulation(void)需要400ms;
         buff1 =0;
         buff1 =(RESVALUE+1000)*((float)V52_Voltage_CAL_Value-(float)V51_Voltage_CAL_Value)+RESVALUE*10*(float)Vpn1_Voltage_CAL_Value; 
         Rn_Vpn_Value = buff1/(float)V51_Voltage_CAL_Value;
-        
-        if(Rn_Vpn_Value<10)
-             Rn_Vpn_Value=10;
-        if(Rp_Vpn_Value<10)
-             Rp_Vpn_Value=10;
-        flagV52=0;
-        isoCounter=0;
-        flagV51=0;
+
+		if(Rn_Vpn_Value < 0){
+			Rn_Vpn_Value = 2000;
+		}
+		else if(Rn_Vpn_Value < 10){
+			Rn_Vpn_Value = 10;
+		}
+
+		if(Rp_Vpn_Value < 0){
+			Rp_Vpn_Value = 2000;
+		}
+		else if(Rp_Vpn_Value < 10){
+		     Rp_Vpn_Value = 10;
+		}
         
         if(Rp_Vpn_Value>10000)
             Rp_Vpn_Value=10000;
         if(Rn_Vpn_Value>10000)
             Rn_Vpn_Value=10000;
         
+		
+        flagV52=0;
+        isoCounter=0;
+        flagV51=0;
         
         if((Rp_Vpn_Value>0)&&(Rn_Vpn_Value>0)) //如果出现负值，则不发送
             Task22_CAN_SendGouup2();

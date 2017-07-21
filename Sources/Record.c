@@ -233,7 +233,7 @@ void StoreSysVariable(void)  //´æ´¢¹ÊÕÏÐÅÏ¢ºÍSOCÖµ£¬µØÖ·´Óat45db161 µÄ 0x3ff ¿ªÊ
     
     //ÏÈ´æºó°ëÒ³£¬ÔÙ´æÇ°°ëÒ³£¬ÒòÎªÐ£ÑéºÍÔÚÇ°°ëÒ³Àï
     for(i=0;i<=SYS_INSULATION_N;i++) 
-    {    
+    {
         buffer1[i]= g_storageSysVariable[i];//¼ÇÂ¼64Î»ÆäËû×Ö½Ú 
         check += buffer1[i];
     }
