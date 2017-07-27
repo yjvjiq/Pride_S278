@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'IsolationLow'.
  *
- * Model version                  : 1.122
+ * Model version                  : 1.125
  * Simulink Coder version         : 8.10 (R2016a) 10-Feb-2016
- * C/C++ source code generated on : Fri May 26 10:01:04 2017
+ * C/C++ source code generated on : Mon Jul 24 09:32:30 2017
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Freescale->HC(S)12

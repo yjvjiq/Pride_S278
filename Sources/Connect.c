@@ -58,6 +58,8 @@ void bmsModeAwake(void)
             acc_Connect=1;   //ON信号
             status_group4.Bit.Mode_BMS_Work = 1;//BMS当前工作状态=放电状态 
             stateCode=11;
+            status_group3.Bit.St_CHG_Mode=3;//not valid
+            status_group3.Bit.St_Charge = 3;//not valid
         }
     }
 }
@@ -137,6 +139,9 @@ void SignalOnOffJudge(void)
                 {
                     plug_AC_CP_Connect = 0;
                     AC_DisConnect = 0;
+					
+					status_group3.Bit.St_CHG_Mode=3;//not valid
+					status_group3.Bit.St_Charge = 3;//not valid
                 }
                 ////////////////////ACC钥匙开关ON检测/////////////////////  
                 if(input4_state()==0)//if ACC signal exist means ON signal also exist.

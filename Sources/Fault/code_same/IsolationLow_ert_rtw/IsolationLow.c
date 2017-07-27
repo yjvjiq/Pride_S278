@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'IsolationLow'.
  *
- * Model version                  : 1.122
+ * Model version                  : 1.125
  * Simulink Coder version         : 8.10 (R2016a) 10-Feb-2016
- * C/C++ source code generated on : Fri May 26 10:01:04 2017
+ * C/C++ source code generated on : Mon Jul 24 09:32:30 2017
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Freescale->HC(S)12
@@ -54,15 +54,15 @@ uint8_T IsolationLow_custom(real32_T Res)
    *  Inport: '<Root>/Res'
    */
   /* Gateway: Chart */
-  if (IsolationLow_DW.temporalCounter_i1 < 15U) {
+  if (IsolationLow_DW.temporalCounter_i1 < 31U) {
     IsolationLow_DW.temporalCounter_i1++;
   }
 
-  if (IsolationLow_DW.temporalCounter_i2 < 15U) {
+  if (IsolationLow_DW.temporalCounter_i2 < 31U) {
     IsolationLow_DW.temporalCounter_i2++;
   }
 
-  if (IsolationLow_DW.temporalCounter_i3 < 15U) {
+  if (IsolationLow_DW.temporalCounter_i3 < 31U) {
     IsolationLow_DW.temporalCounter_i3++;
   }
 
@@ -95,7 +95,7 @@ uint8_T IsolationLow_custom(real32_T Res)
         /* Transition: '<S1>:208' */
         IsolationLow_DW.is_F1 = IsolationLow_IN_Wait1;
       } else {
-        if (IsolationLow_DW.temporalCounter_i1 >= 10) {
+        if (IsolationLow_DW.temporalCounter_i1 >= 30) {
           /* Transition: '<S1>:203' */
           IsolationLow_DW.is_F1 = IsolationLow_IN_Fault1;
 
@@ -114,7 +114,7 @@ uint8_T IsolationLow_custom(real32_T Res)
         /* Entry 'Fault1': '<S1>:200' */
         IsolationLow_B.F_lev_i = 1U;
       } else {
-        if (IsolationLow_DW.temporalCounter_i1 >= 10) {
+        if (IsolationLow_DW.temporalCounter_i1 >= 30) {
           /* Transition: '<S1>:207' */
           IsolationLow_DW.is_F1 = IsolationLow_IN_Fault10;
 
@@ -157,7 +157,7 @@ uint8_T IsolationLow_custom(real32_T Res)
         /* Transition: '<S1>:18' */
         IsolationLow_DW.is_F2 = IsolationLow_IN_Wait2;
       } else {
-        if (IsolationLow_DW.temporalCounter_i2 >= 10) {
+        if (IsolationLow_DW.temporalCounter_i2 >= 30) {
           /* Transition: '<S1>:20' */
           IsolationLow_DW.is_F2 = IsolationLow_IN_Fault2;
 
@@ -169,7 +169,7 @@ uint8_T IsolationLow_custom(real32_T Res)
 
      case IsolationLow_IN_Delay21:
       /* During 'Delay21': '<S1>:118' */
-      if (IsolationLow_DW.temporalCounter_i2 >= 10) {
+      if (IsolationLow_DW.temporalCounter_i2 >= 30) {
         /* Transition: '<S1>:69' */
         IsolationLow_DW.is_F2 = IsolationLow_IN_Fault22;
 
@@ -195,7 +195,7 @@ uint8_T IsolationLow_custom(real32_T Res)
         /* Entry 'Fault2': '<S1>:17' */
         IsolationLow_B.F_lev_i = 2U;
       } else {
-        if (IsolationLow_DW.temporalCounter_i2 >= 10) {
+        if (IsolationLow_DW.temporalCounter_i2 >= 30) {
           /* Transition: '<S1>:215' */
           IsolationLow_DW.is_F2 = IsolationLow_IN_Fault21;
 
@@ -250,7 +250,7 @@ uint8_T IsolationLow_custom(real32_T Res)
         /* Transition: '<S1>:184' */
         IsolationLow_DW.is_F3 = IsolationLow_IN_Wait3;
       } else {
-        if (IsolationLow_DW.temporalCounter_i3 >= 10) {
+        if (IsolationLow_DW.temporalCounter_i3 >= 30) {
           /* Transition: '<S1>:194' */
           IsolationLow_DW.is_F3 = IsolationLow_IN_Fault3;
 

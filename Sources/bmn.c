@@ -278,14 +278,14 @@ void Task14_R_Vp_GND_Value_Polling(void)
     turnOnDO1();   //DO1 吸合
     isoCounter1++;
    
-    if(isoCounter1 == 10) //2*300ms 
+    if(isoCounter1 == 2) //2*2100ms 
     { 
         isoCounter1 =0;
 
         CRGINT = 0x00; // disable rti interrupt
-        PITINTE  &=0xfe; ///disable the PIT Ch0 interrupt
+        PITINTE  &= 0xfe; ///disable the PIT Ch0 interrupt
         
-        V51_Voltage_AD_Value =GetInsulateVoltAd();
+        V51_Voltage_AD_Value = GetInsulateVoltAd();
         
         CRGINT = 0x80; // enable rti interrupt
         PITINTE  |=0x01; ///Enable the PIT Ch0 interrupt
@@ -302,16 +302,17 @@ void Task14_R_Vp_GND_Value_Polling(void)
             k=8.027; 
         else
             k=8.0;
+		
         V51_Voltage_CAL_Value = voltage_buffer2/k;
        
         //V51_Voltage_CAL_Value =voltage_buffer2/8;  
-        if(V51_Voltage_AD_Value>=32768)
+        if(V51_Voltage_AD_Value >= 32768)
         {
-            V51_Voltage_CAL_Value =1;
+            V51_Voltage_CAL_Value = 1;
             //error21|=0x20;           //绝缘检测电路故障
         }
-        if(V51_Voltage_CAL_Value<1)
-            V51_Voltage_CAL_Value =1;
+        if(V51_Voltage_CAL_Value < 1)
+            V51_Voltage_CAL_Value = 1;
         flagV51 = 1;
     }
     
@@ -334,7 +335,7 @@ void Task15_R_Vn_GND_Value_Polling(void)
     
     isoCounter2++; 
     
-    if(isoCounter2 == 10) //300ms*5 = 1500ms
+    if(isoCounter2 == 2) //2100ms*2 = 4200ms
     { 
         isoCounter2 = 0;
 
@@ -347,7 +348,7 @@ void Task15_R_Vn_GND_Value_Polling(void)
         
         turnOffDO2();             //DO2 断开 
         
-        voltage_buffer2 =-1* (float)(65536-V52_Voltage_AD_Value)/32768*2048; 
+        voltage_buffer2 = -1 * (float)(65536 - V52_Voltage_AD_Value) / 32768 * 2048; 
           
         if((voltage_buffer2>=-33.508)&&(voltage_buffer2<=-11.456))
             k= 11.78234+0.20316*voltage_buffer2+0.00337*voltage_buffer2*voltage_buffer2;
