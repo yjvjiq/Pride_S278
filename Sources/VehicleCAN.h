@@ -211,7 +211,7 @@ typedef union{
 	struct {
 		byte flag				:4;  //bit0~3   预留
 		byte F4_HC_Rel_Error	:1;  //bit4     热管理机组接触器故障（只针对水冷系统）
-		byte F5_HC_Error		:1;  //bit5	    热管理机组接触器故障（只针对热管理系统）
+		byte F5_HC_Error		:1;  //bit5	    热管理机组系统故障（只针对热管理系统）
 		byte F6_H_Neg_Rel		:1;  //bit6     电池组加热负极接触器故障
 		byte F7_H_Pos_Rel		:1;  //bit7     电池组加热正极接触器故障
 	}Bit;

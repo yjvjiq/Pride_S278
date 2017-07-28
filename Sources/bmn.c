@@ -234,16 +234,16 @@ void TaskVoltage(void)
         //Can08f0Byte1.Bit.voltageSensor=1; //to vcu
     }
     
-    voltage_buffer2 = (unsigned long)Vpn1_Voltage_AD_Value*Vpn_K1;    //y=kx+b;
-    voltage_buffer2 = voltage_buffer2+Vpn_B1; 
+    voltage_buffer2 = (unsigned long)Vpn1_Voltage_AD_Value * Vpn_K1;    //y=kx+b;
+    voltage_buffer2 = voltage_buffer2 + Vpn_B1; 
     if(voltage_buffer2<0)
         voltage_buffer2=0;
     Vpn1_Voltage_CAL_Value =voltage_buffer2/10;
     g_highVoltageV1 = (float)(Vpn1_Voltage_CAL_Value/100.0); // 内部电压 v1
     /////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////
-    voltage_buffer2 = (unsigned long)Vpn2_Voltage_AD_Value*Vpn_K2;    //y=kx+b;
-    voltage_buffer2 = voltage_buffer2+Vpn_B2; 
+    voltage_buffer2 = (unsigned long)Vpn2_Voltage_AD_Value * Vpn_K2;    //y=kx+b;
+    voltage_buffer2 = voltage_buffer2 + Vpn_B2; 
     if(voltage_buffer2<0)//f防止溢出  
         voltage_buffer2=0;
     Vpn2_Voltage_CAL_Value =voltage_buffer2/10;

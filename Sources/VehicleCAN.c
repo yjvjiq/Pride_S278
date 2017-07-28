@@ -500,12 +500,12 @@ void BMS_To_VCU_BatteryMsg8(void)
 	mg.prty = 0;
 
 	if(g_TMS_BMS_msg.msg.fault_level != 0){
-		Error_Group7.Bit.F4_HC_Rel_Error] = 1;
-		g_bms_fault_msg.fault.Heat_Machine_Flt = 1;
+		Error_Group7.Bit.F5_HC_Error = 1;
+		g_bms_fault_msg.fault.Heat_Sys_Flt = 1;
 	}
 	else{
-		Error_Group7.Bit.F4_HC_Rel_Error] = 0;
-		g_bms_fault_msg.fault.Heat_Machine_Flt = 0;
+		Error_Group7.Bit.F5_HC_Error = 0;
+		g_bms_fault_msg.fault.Heat_Sys_Flt = 0;
 	}
 	mg.data[0] = Error_Group7.byte;
 	mg.data[1] = 0x00; 

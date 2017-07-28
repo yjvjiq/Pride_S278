@@ -55,6 +55,8 @@ float g_SBMS_current1 = 0;	//the channal 1 HV current received from SBMS.
 float g_SBMS_current2 = 0;	//the channal 2 HV current received from SBMS.
 
 unsigned char InsRelayState = 0;    //SBMS板绝缘控制继电器状态
+ 	
+static unsigned char CEMflag=0;
 
 //******************************************************************************
 //* Function name:   SendMes
@@ -596,121 +598,30 @@ interrupt void CAN1_RECEIVE_ISR(void)  //充电
        
     switch(can1ReceiveID)
     {
-        case 0x1826f456://CHM充电机握手
-        //if((fChg2bmsbyte[0]==0x01)&&(fChg2bmsbyte[1]==0x01)&&(fChg2bmsbyte[2]==0))
-        //{                    
-            DCStartState=2;//新国标开始的标志 
-            DC_Vesion = 2; //新国标
-            if(CHMStep<=0x01)
-                CHMStep=0x01;
-        //}
-            
+		case 0x0C0217A7://受电弓车载wife      /////////如果受电弓充电走快充CAN在此接收报文
+			VCU_ChgControl.byte = fChg2bmsbyte[3];
+//			WifeLife=fChg2bmsbyte[7];
+			ACCOverTime = 0;//清零
+			break;
+        case 0x1826f456: //CHM
+//			if((fChg2bmsbyte[0]==0x01)&&(fChg2bmsbyte[1]==0x01)&&(fChg2bmsbyte[2]==0))
+//			{
+				DCStartState=2;//新国标开始的标志 
+				DC_Vesion = 2; //新国标
+				if(CHMStep<=0x01)
+					CHMStep=0x01;
+//			}
             break;
-        case 0x1801f456:
-            CRMOverTimeBefore60s = 0;
-            if(fChg2bmsbyte[0]==0x00)
-            {
-                DCStartState=1;//老国标开始的标志 
-                CRMOverTimeBefore = 0;
-                if(CHMStep<=0x01)
-                    CHMStep=0x01;
-			}
-            else if(fChg2bmsbyte[0]==0xaa)
-            {
-                CRMOverTime=0;
-                DC_Start = 1;
-                if(CHMStep<=0x02)
-                    CHMStep=0x02;
-                //TurnOn_INA2K();
-                //SelfState2=1;
-            }
-            break;
-        case 0x1807f456:
-            //CHMStep=0x03;
-            break;  
-        case 0x1808f456:
-            VolHigh = fChg2bmsbyte[1];
-            VolHigh = VolHigh<<8;
-            VolHigh = (VolHigh+fChg2bmsbyte[0]);
-			
-            VolLow = fChg2bmsbyte[3];
-            VolLow = VolLow<<8;
-            VolLow = (VolLow+fChg2bmsbyte[2]);
-            if((VolLow>HIGHEST_VOL)||(VolHigh<LOWEST_VOL))
-            {
-                BROErrorAA=1;//不满足充电条件            
-            } 
-            else
-            {
-                BROErrorAA=0;//满足充电条件
-            }
-            if(CHMStep<=0x03)   
-                CHMStep=0x03;
-            break;  
-        case 0x100af456:
-            CROOverTime = 0;//收到CRO后清零
-            if( fChg2bmsbyte[0]==0xaa)
-            {
-                if(CHMStep<=0x04)
-                    CHMStep=0x04;
-                SelfState3=1;
-                CROOverTime60s = 0;//收到0xaa后清零           
-            } 
-            break; 
-        case 0x1812f456:   
-            CCSOverTime=0;
-            if(CHMStep<=0x05)
-                CHMStep=0x05;
-            break; 
-       case 0x101af456:
-            m_askcurrent=0;//请求电流为0 
-            CSTOverTime=0;
-            if(CHMStep<=0x06)    
-                CHMStep=0x06;
-            break;  
-                  
-       case 0x181df456:
-            CSDOverTime=0;
-            if(CHMStep<=0x07)     
-                CHMStep=0x07;
-            break;
-       case 0x081ff456:
-            BEMStop = 1;
-            if(CHMStep<=0x07)     
-                CHMStep=0x07;
-            break;
-      default:
-            break;
-    }//end of swtich
-    
-    
-    
-    
-    /*switch(can1ReceiveID)
-    {
-        
-        case 0x0C0217A7://受电弓车载WiFi      /////////如果受电弓充电走快充CAN在此接收报文
-            VCU_ChgControl.byte = fChg2bmsbyte[3];
-            WiFiLife=fChg2bmsbyte[7];
-            ACCOverTime = 0;//清零
-            break;
-        
-        case 0x1826f456:
-        //if((fChg2bmsbyte[0]==0x01)&&(fChg2bmsbyte[1]==0x01)&&(fChg2bmsbyte[2]==0))
-        //{                    
-            DCStartState=2;//新国标开始的标志 
-            DC_Vesion = 2; //新国标
-            if(CHMStep<=0x01)
-                CHMStep=0x01;
-        //}
-            break;
-        case 0x1801f456:
+        case 0x1801f456:  //CRM
+            BEMStop=0;
             CRMOverTimeBefore60s = 0;
             if( fChg2bmsbyte[0]==0x00)
             {              
-                DCStartState=1;//老国标开始的标志                 
+                DCStartState=1;//老国标开始的标志
+                //if(CHMStep==0x07) 
+                //    ReCRMFlag=1;
                 CRMOverTimeBefore = 0;
-                if(CHMStep<=0x01)                
+                if((CHMStep<=0x01)||((CHMStep==0x07)&&(OffState==0)))//如果发生超时故障重新开始充电                
                     CHMStep=0x01;
             }
             else if( fChg2bmsbyte[0]==0xaa)
@@ -733,7 +644,7 @@ interrupt void CAN1_RECEIVE_ISR(void)  //充电
             if((fChg2bmsbyte[0]==0x11)&&(fChg2bmsbyte[5]==0x00)&&(fChg2bmsbyte[6]==0x06)&&((fChg2bmsbyte[7]==0x00)))
                  FlagBCPSend = 1;
             //if((fChg2bmsbyte[0]==0x13)&&(fChg2bmsbyte[5]==0x00)&&(fChg2bmsbyte[6]==0x06)&&((fChg2bmsbyte[7]==0x00)))
-                 //BCPStep = 0;//将标志位清零,可以从新发生BRM
+                 //BCPStep = 0;//将标志位清零,可以从新发生BCP
             
             if((fChg2bmsbyte[0]==0x11)&&(fChg2bmsbyte[5]==0x00)&&(fChg2bmsbyte[6]==0x11)&&((fChg2bmsbyte[7]==0x00)))
                  FlagBCSSend = 1;
@@ -776,8 +687,9 @@ interrupt void CAN1_RECEIVE_ISR(void)  //充电
             } 
             break; 
         case 0x1812f456:
+            
             CCSOverTime=0;
-                        
+            CEMflag=0;///////防止充电桩乱发CEM            
             DC_ChargeTime = fChg2bmsbyte[5];
             DC_ChargeTime = VolHigh<<8;
             DC_ChargeTime = (VolHigh+fChg2bmsbyte[4]);  
@@ -804,12 +716,18 @@ interrupt void CAN1_RECEIVE_ISR(void)  //充电
             break;
         case 0x081ff456:
             BEMStop = 1;
-            if(CHMStep<=0x07)     
-                CHMStep=0x07;
+            CEMflag++;
+            if(CEMflag>=3) 
+            {
+                CEMflag=0;
+                if(CHMStep<=0x07)     
+                    CHMStep=0x07;
+            }
             break;
       default:
             break;
-    }//end of swtich */
+    }//end of swtich 
+    
     // Clear RXF flag (buffer ready to be read)
     CAN1RFLG = 0x01;        
 }

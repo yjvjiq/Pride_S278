@@ -206,8 +206,8 @@ void HighVoltDetectPart1(void)
     }
 
 
-	// hv lock detect
-	if(inputH_state() == 1){
+	// hv lock error detect, 1 means error.
+	if(HV_Lock_Error_state() == 1){
 		hv_lock_error_cnt++;
 		if(hv_lock_error_cnt >= 20){
 			Error_Group6.Bit.F1_HLVol_Lock = 1;
@@ -347,67 +347,67 @@ void HighVoltDetectPart2(void)//预充继电器已经闭合
             PConnect_tt=0;  
         }
     }  
-    else if((g_BmsModeFlag == RECHARGING)||(g_BmsModeFlag == FASTRECHARGING))//快慢充 
-    {
-		/////充电负继电器断路///////充电都检
-		if(g_highVoltageV4 < 200)
-		{
-			CHGDisConnect_tt++;
-			if (CHGDisConnect_tt>=20)//滤波延时60ms，电压是否能及时变化？
-			{
-				RelayErrorPowerOff = 1;//继电器下电故障
-				CHG_N_RelayDisConError = 1;//充电负断路故障
-				g_caution_Flag_4 |= (1 << 5); // precharge relay off error.
-				CHGDisConnect_tt = 23;
-            }
-        }
-        else
-        {
-            CHGDisConnect_tt=0;
-        }
-        
-        if(g_BmsModeFlag == RECHARGING)
-        {
-            /////受电带充电继电器粘连///////
-            if(g_highVoltageV6 > 200)  
-            {
-                CCHGConnect_tt++;
-                if (CCHGConnect_tt>=20)//滤波延时60ms，电压是否能及时变化？
-                {
-                    RelayErrorPowerOff = 1;//继电器下电故障
-                    g_caution_Flag_2 |=0x20; //to PC
-                    Error_Group1.Bit.F3_Ele_Relay_Con = 1;//error to VCU
-                    status_group2.Bit.St_Ele_Relay = 2;//受电弓继电器连接
-                    CCHG_RelayConError = 1;//受电弓充电继电器粘连
-                    CCHGConnect_tt = 23;
-                }
-            }
-            else   
-            {
-                CCHGConnect_tt=0;  
-            }
-        }
-        else if(g_BmsModeFlag == FASTRECHARGING)
-        {
-			/////充电继电器粘连///////
-			if(g_highVoltageV5>200)  
-			{
-				DCCHGConnect_tt++;
-				if (DCCHGConnect_tt>=20)//滤波延时60ms，电压是否能及时变化？
-				{
-					RelayErrorPowerOff = 1;//继电器下电故障
-					g_caution_Flag_3 |=0x80; //to PC
-					Error_Group3.Bit.F5_DC_Con_Err = 1;//error to VCU
-					DCCHG_RelayConError = 1;//快充继电器粘连
-					DCCHGConnect_tt = 23;
-                }
-            }
-            else   
-            {
-                DCCHGConnect_tt=0;  
-            }
-        }
-    }
+//    else if((g_BmsModeFlag == RECHARGING)||(g_BmsModeFlag == FASTRECHARGING))//快慢充 
+//    {
+//		/////充电负继电器断路///////充电都检
+//		if(g_highVoltageV4 < 200)
+//		{
+//			CHGDisConnect_tt++;
+//			if (CHGDisConnect_tt>=20)//滤波延时60ms，电压是否能及时变化？
+//			{
+//				RelayErrorPowerOff = 1;//继电器下电故障
+//				CHG_N_RelayDisConError = 1;//充电负断路故障
+//				g_caution_Flag_4 |= (1 << 5); // precharge relay off error.
+//				CHGDisConnect_tt = 23;
+//            }
+//        }
+//        else
+//        {
+//            CHGDisConnect_tt=0;
+//        }
+//        
+//        if(g_BmsModeFlag == RECHARGING)
+//        {
+//            /////受电带充电继电器粘连///////
+//            if(g_highVoltageV6 > 200)  
+//            {
+//                CCHGConnect_tt++;
+//                if (CCHGConnect_tt>=20)//滤波延时60ms，电压是否能及时变化？
+//                {
+//                    RelayErrorPowerOff = 1;//继电器下电故障
+//                    g_caution_Flag_2 |=0x20; //to PC
+//                    Error_Group1.Bit.F3_Ele_Relay_Con = 1;//error to VCU
+//                    status_group2.Bit.St_Ele_Relay = 2;//受电弓继电器连接
+//                    CCHG_RelayConError = 1;//受电弓充电继电器粘连
+//                    CCHGConnect_tt = 23;
+//                }
+//            }
+//            else   
+//            {
+//                CCHGConnect_tt=0;  
+//            }
+//        }
+//        else if(g_BmsModeFlag == FASTRECHARGING)
+//        {
+//			/////充电继电器粘连///////
+//			if(g_highVoltageV5>200)  
+//			{
+//				DCCHGConnect_tt++;
+//				if (DCCHGConnect_tt>=20)//滤波延时60ms，电压是否能及时变化？
+//				{
+//					RelayErrorPowerOff = 1;//继电器下电故障
+//					g_caution_Flag_3 |=0x80; //to PC
+//					Error_Group3.Bit.F5_DC_Con_Err = 1;//error to VCU
+//					DCCHG_RelayConError = 1;//快充继电器粘连
+//					DCCHGConnect_tt = 23;
+//                }
+//            }
+//            else   
+//            {
+//                DCCHGConnect_tt=0;  
+//            }
+//        }
+//    }
 
 	if(s_detect_part2_cnt_t >= 25)
     {
@@ -462,42 +462,41 @@ void HighVoltDetectPart3(void)
             PDisConnect_tt=0;  
         }
 		
-        /////////////受电带充电继电器断路///////
-        if((g_highVoltageV6<200)&&(stateCode == 90)) 
-        {
-            CCHGDisConnect_tt ++;
-            if (CCHGDisConnect_tt>=20)//滤波延时60ms，电压是否能及时变化？
-            {
-                RelayErrorPowerOff = 1;//继电器下电故障
-                g_caution_Flag_2 |=0x40; //to PC
-                CCHG_RelayDisConError = 1;//受电弓继电器断路故障
-                status_group2.Bit.St_Ele_Relay = 1;//受电弓继电器未连接
-                CCHGDisConnect_tt = 23;
-            }
-        }
-        else   
-        {
-            CCHGDisConnect_tt=0;  
-        }
+//        /////////////受电带充电继电器断路///////
+//        if((g_highVoltageV6<200)&&(stateCode == 90)) 
+//        {
+//            CCHGDisConnect_tt ++;
+//            if (CCHGDisConnect_tt>=20)//滤波延时60ms，电压是否能及时变化？
+//            {
+//                RelayErrorPowerOff = 1;//继电器下电故障
+//                g_caution_Flag_2 |=0x40; //to PC
+//                CCHG_RelayDisConError = 1;//受电弓继电器断路故障
+//                status_group2.Bit.St_Ele_Relay = 1;//受电弓继电器未连接
+//                CCHGDisConnect_tt = 23;
+//            }
+//        }
+//        else   
+//        {
+//            CCHGDisConnect_tt=0;  
+//        }
+//		
+//         /////////////快充继电器断路///////
+//        if((g_highVoltageV5<200)&&(stateCode == 150)) 
+//        {
+//            DCHGDisConnect_tt ++;
+//            if (DCHGDisConnect_tt>=20)//滤波延时60ms，电压是否能及时变化？
+//            {
+//                RelayErrorPowerOff = 1;//继电器下电故障
+//                g_caution_Flag_3 |=0x40; //to PC
+//                DCCHG_RelayDisConError = 1;//充电继电器断路故障
+//                DCHGDisConnect_tt = 23;
+//            }
+//        }
+//        else   
+//        {
+//            DCHGDisConnect_tt=0;  
+//        }
 		
-         /////////////快充继电器断路///////
-        if((g_highVoltageV5<200)&&(stateCode == 150)) 
-        {
-            DCHGDisConnect_tt ++;
-            if (DCHGDisConnect_tt>=20)//滤波延时60ms，电压是否能及时变化？
-            {
-                RelayErrorPowerOff = 1;//继电器下电故障
-                g_caution_Flag_3 |=0x40; //to PC
-                DCCHG_RelayDisConError = 1;//充电继电器断路故障
-                DCHGDisConnect_tt = 23;
-            }
-        }
-        else   
-        {
-            DCHGDisConnect_tt=0;  
-        }
-//    } 
-//    else 
     if(s_detect_part3_cnt_t >= 25) {
         if(((P_RelayDisConError==0)&&(stateCode == 20))
         ||((CCHG_RelayDisConError==0)&&(stateCode == 90))

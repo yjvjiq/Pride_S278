@@ -351,17 +351,14 @@ void TaskStatusMachine(void)//task period = 5ms.
         case 84:
         case 144:
 			Kn_Switch(ON); // when in 14 state, it used for HV POWER, else turn on Kn to supply for DCDC in charge mode.
-			if(stateCode == 84 || stateCode == 144){
-    			KChg_N_Switch(ON);
-			}
+//			if(stateCode == 84 || stateCode == 144){
+//    			KChg_N_Switch(ON);
+//			}
             
             Delay14++;
             if(Delay14 >= 4)
             {
 				status_group3.Bit.St_N_Relay=1;
-                if(stateCode != 14){
-                    BmsCtlStat0 |=0x08;//Ô¤³ä¼ÌµçÆ÷×´Ì¬±ÕºÏ
-                }
                 Delay14=0;
             }
             break;
@@ -482,14 +479,11 @@ void TaskStatusMachine(void)//task period = 5ms.
 			
             if(stateCode == 40 && Error_Group6.Bit.F3_BMS_Protect != 1) 
             {
-                openPosRelay(); //¶Ï¿ªÕý¼«¼ÌµçÆ÷
-                //PRelayConnectTest();//Õý¼«Õ³Á¬ÔÚ´Ë´¦¼ì²â Õ³Á¬²»ÔÙ¼ì²âÁË 
+                Kp_Switch(OFF); //¶Ï¿ªÕý¼«¼ÌµçÆ÷
             }
             else if(stateCode == 120 && Error_Group6.Bit.F3_BMS_Protect != 1)
             {
-//                TurnOff_INA1K();//¶ÏÊÜµç¹­¼ÌµçÆ÷
 				KEleBand_P_Switch(OFF);
-                //ChgRelayConnectTest();//ÊÜµç¹­¼ÌµçÆ÷Õ³Á¬
                 status_group3.Bit.St_Charge = 2; //³äµç½áÊø
 				Kp_Switch(OFF); // turn off the power supply for DCDC
                 Kn_Switch(OFF);
@@ -502,12 +496,8 @@ void TaskStatusMachine(void)//task period = 5ms.
             TurnOffInsulation();//¹Ø±Õ¾øÔµ¼ì²âµÄ¿ª¹Ø
             status_group3.Bit.St_Charge = 2; //³äµç½áÊø
             status_group1.Bit.St_BMS =2;//¸ßÑ¹¶Ï¿ª
-//            TurnOff_INA2K();//¶Ï¿ª¿ì³ä¼ÌµçÆ÷
-//            delay(25000); //19ms
-//            delay(25000); //19ms
 			KFastChg_P_Switch(OFF);
 
-            //DCChgRelayConnectTest();//¿ì³ä¼ÌµçÆ÷Õ³Á¬
             bmsSelfcheckCounter=2;//Ã»ÓÐ¹ÊÕÏ£¬×Ô¼ì¼ÆÊýÆ÷
             break;
              
@@ -516,57 +506,28 @@ void TaskStatusMachine(void)//task period = 5ms.
         case 184:
             if((stateCode==44)||(stateCode==184)) //ÊÜµç¹­³äµçÏÂµçÊ±²»¶Ï¿ªÕý¼«£¬·ÀÖ¹ÔÙ´ÎÉÏµçÉÕ¹­
             {
-                openPosRelay();//ÔÙ¶Ï¿ªÕý¼«¼ÌµçÆ÷£¬È·±£Õý¼«¼ÌµçÆ÷¶Ï¿ª¡
+				Kp_Switch(OFF);
 			}
-			
-			TurnOff_INA1K();//ÔÙ¶Ï¿ªÊÜµç¹­¼ÌµçÆ÷£¬È·±£¼ÌµçÆ÷¶Ï¿ª¡
-
-            if(stateCode == 44){
-                openNegRelay();//¶Ï¿ªÖ÷¸º¼ÌµçÆ÷
-            }
-            else{
-                TurnOff_INBK();//¶Ï¿ª³äµç¸º¼ÌµçÆ÷
-            }
+			KEleBand_P_Switch(OFF);
+			Kn_Switch(OFF);
             
-            delay(25000); //19ms
-            delay(25000); //19ms
             TurnOffNRelay=1;//¶Ï¸º¼«¼ÌµçÆ÷Íê³É±êÖ¾
             break;  
             
         case 46:   //*****************¸ßÑ¹µôµç¼ì²â************//////////////
         case 126:
         case 186:
-            /*
-            if(stateCode == 46)
-                NRelayConnectTest();//Ö÷¸ºÕ³Á¬    //ÏÂµç²»¼ì²âÕ³Á¬ÁË ËùÒÔ×¢ÊÍµô
-            else 
-                ChgNRelayConnectTest();//³äµç¸ºÕ³Á¬
-			*/
             if(state46==0)
             {
-                delay(25000); //20ms
-                delay(25000); //20ms
-               
-                TurnOff_INHK();//¹Ø±Õ¼ÓÈÈ¼ÌµçÆ÷ 
+                KHeat_Switch(OFF);//¹Ø±Õ¼ÓÈÈ¼ÌµçÆ÷ 
                 preChargeON=0;
-                /*
-                tmr_p1=0;
-                tmr_p2=0;
-                tmr_p3=0;
-                tmr_p4=0;
-                tmr_p6=0;
-                */
-
                 TurnOffNRelay=0;
-                //TurnOff_INBK();//¶Ï¿ªÔ¤³ä,·ÀÖ¹×´Ì¬»úÓÉ12Ìø×ªµ½46Ê±Ô¤³ä¼ÌµçÆ÷Ã»ÓÐ¶Ï¿ª
                 StoreSysVariable();
                 StoreSocRealvalue();
                 state46=1;
                 SelfCheck = 0;//×Ô¼ìÇåÁã,·ÀÖ¹²»¶ÏµçÔÚ×Ô¼ìÊ±³ÌÐò²»Æð×÷ÓÃ
             }
             
-            delay(25000); //19ms
-            delay(25000); //19ms
             bmsSelfcheckCounter=1;
 			
 			if(stateCode == 186 || stateCode == 126){
@@ -581,38 +542,32 @@ void TaskStatusMachine(void)//task period = 5ms.
         case 47:  //******************BMS¶Ïµç***************////////////////
         case 127:
         case 187:
-//			openPosRelay();//ÔÙ¶Ï¿ªÕý¼«¼ÌµçÆ÷£¬È·±£Õý¼«¼ÌµçÆ÷¶Ï¿ª¡£ 
-//			openNegRelay();//ÔÙ¶Ï¿ª¸º¼«¼ÌµçÆ÷£¬È·±£Õý¼«¼ÌµçÆ÷¶Ï¿ª¡£
 			Kp_Switch(OFF); // turn off the power supply for DCDC in charging
 			Kn_Switch(OFF);
             bmsSelfcheckCounter=0;
-            delay(25000); //20ms
-            delay(25000); //20ms 
-            delay(25000); //20ms
-            delay(25000); //20ms
             turnOffSW_Power();//close×ÜµçÔ´¿ª¹Ø  
             break;
-        case 177://µ÷ÊÔ½×¶Î
-            openNegRelay();//¶Ï¿ª¸º¼«¼ÌµçÆ÷
-            delay(25000); //20ms
-            
-            _FEED_COP();   //2sÄÚ²»Î¹ÄÚ¹·£¬ÔòÏµÍ³¸´Î»
-            
-            TurnOff_INHK();//¶Ï¿ª¼ÓÈÈ¼ÌµçÆ÷
-            delay(25000); //19ms
-            delay(25000); //19ms
-            TurnOff_INA2K();//¶Ï¿ª¿ì³ä¼ÌµçÆ÷
-            turnOffSW_Power();//close×ÜµçÔ´¿ª¹Ø 
-            State177End=1;//Ìø×ªµ½179µÈ´ý
-            break;
-        case 179://µ÷ÊÔ½×¶Î
-            TaskGpioTest();
-            TestDelay++;
-            if(TestDelay>80)//5*80=400
-            {
-                TestDelay=0;
-            }  
-            break;
+//        case 177://µ÷ÊÔ½×¶Î
+//            openNegRelay();//¶Ï¿ª¸º¼«¼ÌµçÆ÷
+//            delay(25000); //20ms
+//            
+//            _FEED_COP();   //2sÄÚ²»Î¹ÄÚ¹·£¬ÔòÏµÍ³¸´Î»
+//            
+//            TurnOff_INHK();//¶Ï¿ª¼ÓÈÈ¼ÌµçÆ÷
+//            delay(25000); //19ms
+//            delay(25000); //19ms
+//            TurnOff_INA2K();//¶Ï¿ª¿ì³ä¼ÌµçÆ÷
+//            turnOffSW_Power();//close×ÜµçÔ´¿ª¹Ø 
+//            State177End=1;//Ìø×ªµ½179µÈ´ý
+//            break;
+//        case 179://µ÷ÊÔ½×¶Î
+//            TaskGpioTest();
+//            TestDelay++;
+//            if(TestDelay>80)//5*80=400
+//            {
+//                TestDelay=0;
+//            }  
+//            break;
         default:
             break;                        
     }

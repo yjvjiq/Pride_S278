@@ -32,6 +32,7 @@ extern unsigned char input4_state(void);
 extern unsigned char input5_state(void);
 extern unsigned char input6_state(void);
 extern unsigned char inputH_state(void);
+extern unsigned char HV_Lock_Error_state();
 extern unsigned char inputAll_state(void);
 //***********************************************************************************
 //************************************************************************************

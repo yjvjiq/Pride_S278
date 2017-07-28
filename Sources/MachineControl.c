@@ -239,8 +239,9 @@ void stateCodeTransfer(void)
         {
             if((VCU_ChgControl.Bit.downC_Switch == 0)||(VCU_ChgControl.Bit.downC_OK == 0)||(VCU_ParkBrake.Bit.Parking_Brake==0)||(PantographOff))
                 stateCode=124;//降弓开关==0||降弓到位==0||驻车信号==0||需要下电故障
-            else if((BmsCtlStat0&0x08)!=0)//降弓到位&&降弓开关
+            else{// if((BmsCtlStat0&0x08)!=0)//降弓到位&&降弓开关
                 stateCode=87;//充电负已闭合
+            }
         }
         else if(stateCode==87)
         {
@@ -300,40 +301,6 @@ void stateCodeTransfer(void)
                 status_group4.Bit.Mode_BMS_Work = 1;//BMS当前工作状态=放电状态 
 
             }
-            /*if((plug_DC_Connect==1)&&(bmsSelfcheckCounter==1)) //直流充电枪,无粘连故障
-            {
-                InitialSoc();//SOC计算方式变化
-                First_g_socValue=g_socValue;
-                StoreAHSOC=g_socValue;
-                Can_g_socValue_Start=Can_g_socValue;
-                
-                g_BmsModeFlag = FASTRECHARGING;
-                stateCode = 141;
-                bmsSelfcheckCounter = 0;
-            }
-            else if((VCU_ChgControl.Bit.downC_OK == 1)&&(VCU_ParkBrake.Bit.Parking_Brake == 1)//驻车信号，降弓到位
-              &&(VCU_ChgControl.Bit.downC_Switch == 1)&&(bmsSelfcheckCounter==1)&&(OffState == 0)) //降弓开关
-                stateCode=81;
-            else if(acc_Connect==0)
-            {
-                if(bmsSelfcheckCounter==1)//无故障
-                    stateCode=127;
-                else 
-                {
-                    DisChangerDelay++;
-                    if(DisChangerDelay>=300) //延时判断,防止bmsSelfcheckCounter变化慢导致的误判
-                    {
-                        DisChangerDelay=0;//自检计数器没有置1,有粘连情况,不放电
-                        stateCode=127;
-                    }
-                }
-            }
-            else if((acc_Connect == 1)&&(plug_DC_Connect == 0)&&(VCU_ChgControl.Bit.downC_OK == 0)&&(VCU_ParkBrake.Bit.Parking_Brake == 0)&&(VCU_ChgControl.Bit.downC_Switch == 0)) 
-            {
-                stateCode = 11;
-                status_group4.Bit.Mode_BMS_Work = 1;//放电状态 
-                bmsSelfcheckCounter = 0;
-            } */
         } 
     }
     ///////////////////////////快充/////////////////////////////////
@@ -380,9 +347,9 @@ void stateCodeTransfer(void)
         }
         else if(stateCode==144)
         {
-            if((plug_DC_Connect == 0)||(OffState))
+            if((plug_DC_Connect == 0)||(OffState == 1))
                 stateCode=184; //需下电的故障||CC2==0 ||ChargeIN==0
-            else if((plug_DC_Connect == 1)&&((BmsCtlStat0&0x08)!=0))
+            else if(plug_DC_Connect == 1)//&&((BmsCtlStat0&0x08)!=0)
                 stateCode=147;//负极继电器已经闭合&&CC2==1&&ChargeIN==1
         }
         else if(stateCode==147)

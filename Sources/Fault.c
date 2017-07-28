@@ -1104,7 +1104,7 @@ void BMSProtect(void)//有风险，如果OffState判断失败,最好用实际电压比较**********
 				if(FastChg_cnt_t >= 30){
 					FastChg_cnt_t = 30;
 //					TurnOffAllRelay();
-					KChg_N_Switch(OFF);
+//					KChg_N_Switch(OFF);
 					KFastChg_P_Switch(OFF);
 				}
 			}
@@ -1132,7 +1132,7 @@ void BMSProtect(void)//有风险，如果OffState判断失败,最好用实际电压比较**********
 				if(EleBandChg_cnt_t >= 30){
 					EleBandChg_cnt_t = 30;
 //					TurnOffAllRelay();
-					KChg_N_Switch(OFF);
+//					KChg_N_Switch(OFF);
 					KEleBand_P_Switch(OFF);
 				}
 			}
@@ -1194,7 +1194,7 @@ void FaultLevel(void)
     ||(Error_Group0.Bit.F2_Ele_Relay_Con ==3)//充电插座过温
     ||(ACCha_Flag_BST) //充电电流方向异常
     ||(RelayErrorPowerOff)//继电器下电故障
-    ||(inputH_state() == 1)
+    ||(HV_Lock_Error_state() == 1)
     )
     {
         status_group3.Bit.Fault_Level = 3;//严重故障，降功率为0

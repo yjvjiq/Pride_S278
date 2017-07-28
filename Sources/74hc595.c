@@ -219,8 +219,6 @@ void TurnOn_INBK(void)     //Ô¤³äµç¼ÌµçÆ÷
     Relay_State |= 0x20;
     Write_Hc595(Relay_State);
     delay10usHc595();
-    //BmsCtlStat0 |=0x08;//Ô¤³ä¼ÌµçÆ÷×´Ì¬±ÕºÏ
-
 }
 //******************************************************
 //* Function name:   TurnOn_INBK
@@ -233,7 +231,6 @@ void TurnOff_INBK(void)
     Relay_State &= 0xdf;
     Write_Hc595(Relay_State);
     delay10usHc595();
-    BmsCtlStat0 &=0xf7;//Ô¤³ä½Ó´¥Æ÷×´Ì¬¶Ï¿ª
 }
 //******************************************************
 //* Function name:   TurnOn_INFK
@@ -354,11 +351,13 @@ void KChg_N_Switch(byte status){
 		TurnOn_INBK();
 		delay(25000);	//20ms
 		delay(25000);	//20ms
+		BmsCtlStat0 |=0x08;
 	}
 	else{
 		TurnOff_INBK();
 		delay(25000);	//20ms
 		delay(25000);	//20ms
+		BmsCtlStat0 &=0xf7;//Ô¤³ä½Ó´¥Æ÷×´Ì¬¶Ï¿ª
 	}
 }
 

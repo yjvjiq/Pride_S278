@@ -216,6 +216,10 @@ unsigned char inputH_state(void)   //INh      ///////////////¸ßµÍÑ¹»¥Ëø
         return 1;    
     return 0;        
 }
+
+unsigned char HV_Lock_Error_state(void){
+	return inputH_state();
+}
 //**********************************************************************
 //* Function name:   input4_state
 //* Description:     IN4
