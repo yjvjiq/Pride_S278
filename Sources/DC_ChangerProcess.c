@@ -186,7 +186,7 @@ void TaskRechargeDC(void)
     static unsigned char ChangeTimeState=0;//³äµç½áÊøºó×Ô½øĞĞÒ»´Î¼Ó·¨
     float curr=0;
     float curr1=0;
-
+	static U16 counter_30s = 0;
     unsigned char ErrorState = 0;
   
     if((g_BmsModeFlag != FASTRECHARGING)&&(g_BmsModeFlag != RECHARGING))
@@ -334,34 +334,47 @@ void TaskRechargeDC(void)
 			if(CHMStep1==0)
 			{ 
 				if(DCStartState==1)//Èç¹ûÒÑ¾­½ÓÊÕµ½¾É¹ú±ê¿ªÊ¼
-				{       			          
-					sendi1++;
-					if(sendi1==1)
-					  cpuToCHMBRM();
-					else if(sendi1==2)
-					  cpuToCHMBRMDATA1();
-					else if(sendi1==3)
-					  cpuToCHMBRMDATA2();
-					else if(sendi1==4)
-					  cpuToCHMBRMDATA3();
-					else if(sendi1==5)
-					  cpuToCHMBRMDATA4();
-					else if(sendi1==6)
-					  cpuToCHMBRMDATA5();
-					else if(sendi1==7)
-					{
-					  cpuToCHMBRMDATA6();
-					  if(DC_Vesion==1)
-					  {
-					      sendi1=0;
-					      CHMStep1=1;
-					  }
+				{
+					if(BRMStep == 0){ // if bms can send BRM, then continue send.
+						BRMStep = 1; // if received CTS, clear it, set 1 when have sent BRM
+						cpuToCHMBRM();
+						counter_250ms1=0;
+						sendi1++;
 					}
-					else if(sendi1==8)
-					{  
-					  cpuToCHMBRMDATA7();
-					  sendi1=0;        			          
-					  CHMStep1=1;
+					else if((BRMStep == 1)&&(FlagBRMSend==1)){
+						sendi1++;
+//						if(sendi1==1)
+//						  cpuToCHMBRM();
+//						else 
+						if(sendi1==2)
+						  cpuToCHMBRMDATA1();
+						else if(sendi1==3)
+						  cpuToCHMBRMDATA2();
+						else if(sendi1==4)
+						  cpuToCHMBRMDATA3();
+						else if(sendi1==5)
+						  cpuToCHMBRMDATA4();
+						else if(sendi1==6)
+						  cpuToCHMBRMDATA5();
+						else if(sendi1==7)
+						{
+							cpuToCHMBRMDATA6();
+							if(DC_Vesion==1)
+							{
+								sendi1=0;
+								CHMStep1=1;
+								FlagBRMSend = 0;
+								BRMStep = 0;//æ¥æ”¶åˆ°CRMåå¼€å§‹å‘é€BRMä»¥åŠä¸‹æ¬¡å‘é€BRMçš„æ—¶æœº
+							}
+						}
+						else if(sendi1==8)
+						{  
+							cpuToCHMBRMDATA7();
+							sendi1=0;        			          
+							CHMStep1=1;
+							FlagBRMSend = 0;
+							BRMStep = 0;//æ¥æ”¶åˆ°CRMåå¼€å§‹å‘é€BRMä»¥åŠä¸‹æ¬¡å‘é€BRMçš„æ—¶æœº  
+						}
 					}
 				}
 			}
@@ -396,8 +409,10 @@ void TaskRechargeDC(void)
 			if(CHMStep3==0)
 			{
 				CROOverTime++;
-				if(SelfState3==0)
+				if(SelfState3==0){
 					cpuToCHMBRO();  //100956f4 aa
+//					CloseNegControl=1;
+				}
 				if((CROOverTime>=20)||(CROOverTime60s>=240))//ÊÕµ½CRO,µ«Ã»ÓĞÊÕµ½0xaa,5sºó³¬Ê± 
 				{
 					OverTimeState=1;//³¬Ê±±êÖ¾Î»ÖÃ1                
@@ -534,8 +549,9 @@ void TaskRechargeDC(void)
 		}
 		
 		if(CHMStep==0x07) //¿ì³ä³äµç½áÊø 
-		{     
-			if(counter_250ms7%25==0)
+		{
+			SelfState3=0;//ä¹‹å‰æ”¶åˆ°CROä»¥åå†ä¹Ÿä¸å‘é€äº†ï¼Œæµç¨‹å¦‚æœé‡æ–°æ¥ï¼Œéœ€è¦æ¸…é™¤
+			if(counter_250ms7 % 25==0)
 			{
 				if((OverTimeState==1)||(BROErrorAA==1))//Èç¹ûÓĞ³¬Ê±¹ÊÕÏ²ÅÉÏ±¨,Ã»ÓĞ²»ÉÏ±¨
 				{	                
@@ -545,9 +561,21 @@ void TaskRechargeDC(void)
 				counter_250ms7 = 0;
 			}
 			counter_250ms7++;
-			OffState = 1;//×´Ì¬»úÓÉ170Ìø×ª40µÄ±êÖ¾Î» 
-			Error_Group1.Bit.St_CHG_Allow = 1; //³äµçÔÊĞí×´Ì¬Î»²»ÔÊĞí
-			PantNormalEndFlag=1;//ÊÜµç¹­Õı³£ÏÂµç              
+			if(BEMStop == 1){
+				counter_30s++;
+				if(counter_30s>3000)//30Sä»¥å†… 3000*10ms=30S 
+				{
+					OffState = 1;//×´Ì¬»úÓÉ170Ìø×ª40µÄ±êÖ¾Î» 
+					Error_Group1.Bit.St_CHG_Allow = 1; //³äµçÔÊĞí×´Ì¬Î»²»ÔÊĞí
+					PantNormalEndFlag=1;//ÊÜµç¹­Õı³£ÏÂµç			  
+					counter_30s=3002;
+				}
+			}
+			else{
+				OffState=1;//çŠ¶æ€æœºç”±170è·³è½¬180çš„æ ‡å¿—ä½ 
+				Error_Group1.Bit.St_CHG_Allow=1; //å……ç”µå…è®¸çŠ¶æ€ä½ä¸å…è®¸
+				PantNormalEndFlag=1;//å—ç”µå¼“æ­£å¸¸ä¸‹ç”µ
+			}
 		}
 	}/////////END¿ì³ä·¢ËÍÏûÏ¢
 }

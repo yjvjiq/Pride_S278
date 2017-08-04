@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'PackFault'.
  *
- * Model version                  : 1.119
+ * Model version                  : 1.121
  * Simulink Coder version         : 8.10 (R2016a) 10-Feb-2016
- * C/C++ source code generated on : Thu Jul 20 09:24:41 2017
+ * C/C++ source code generated on : Tue Aug 01 17:19:25 2017
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Freescale->HC(S)12
@@ -80,12 +80,10 @@ uint8_T PackFault_custom(real32_T I1, real32_T I2, real32_T I3)
     switch (PackFault_DW.is_F3) {
      case PackFault_IN_Delay30:
       /* During 'Delay30': '<S1>:184' */
-      if (!(((rtb_Abs3 <= 100.0F) && (rtb_Abs1 <= 20.0F)) || ((rtb_Abs3 <=
-             100.0F) && (rtb_Abs2 <= 20.0F)) || ((rtb_Abs3 > 100.0F) &&
-            (rtb_Abs1 < rtb_Abs3 / 3.0F * 0.8)) || ((rtb_Abs3 > 100.0F) &&
-            (rtb_Abs1 > rtb_Abs3 / 3.0F * 1.2)) || ((rtb_Abs3 > 100.0F) &&
-            (rtb_Abs2 < rtb_Abs3 / 3.0F * 0.8)) || ((rtb_Abs3 > 100.0F) &&
-            (rtb_Abs2 > rtb_Abs3 / 3.0F * 1.2)))) {
+      if (!(((rtb_Abs3 > 100.0F) && (rtb_Abs1 < rtb_Abs3 / 3.0F * 0.8)) ||
+            ((rtb_Abs3 > 100.0F) && (rtb_Abs1 > rtb_Abs3 / 3.0F * 1.2)) ||
+            ((rtb_Abs3 > 100.0F) && (rtb_Abs2 < rtb_Abs3 / 3.0F * 0.8)) ||
+            ((rtb_Abs3 > 100.0F) && (rtb_Abs2 > rtb_Abs3 / 3.0F * 1.2)))) {
         /* Transition: '<S1>:187' */
         PackFault_DW.is_F3 = PackFault_IN_Wait3;
       } else {
@@ -105,12 +103,10 @@ uint8_T PackFault_custom(real32_T I1, real32_T I2, real32_T I3)
 
      default:
       /* During 'Wait3': '<S1>:190' */
-      if (((rtb_Abs3 <= 100.0F) && (rtb_Abs1 <= 20.0F)) || ((rtb_Abs3 <= 100.0F)
-           && (rtb_Abs2 <= 20.0F)) || ((rtb_Abs3 > 100.0F) && (rtb_Abs1 <
-            rtb_Abs3 / 3.0F * 0.8)) || ((rtb_Abs3 > 100.0F) && (rtb_Abs1 >
-            rtb_Abs3 / 3.0F * 1.2)) || ((rtb_Abs3 > 100.0F) && (rtb_Abs2 <
-            rtb_Abs3 / 3.0F * 0.8)) || ((rtb_Abs3 > 100.0F) && (rtb_Abs2 >
-            rtb_Abs3 / 3.0F * 1.2))) {
+      if (((rtb_Abs3 > 100.0F) && (rtb_Abs1 < rtb_Abs3 / 3.0F * 0.8)) ||
+          ((rtb_Abs3 > 100.0F) && (rtb_Abs1 > rtb_Abs3 / 3.0F * 1.2)) ||
+          ((rtb_Abs3 > 100.0F) && (rtb_Abs2 < rtb_Abs3 / 3.0F * 0.8)) ||
+          ((rtb_Abs3 > 100.0F) && (rtb_Abs2 > rtb_Abs3 / 3.0F * 1.2))) {
         /* Transition: '<S1>:188' */
         PackFault_DW.is_F3 = PackFault_IN_Delay30;
         PackFault_DW.temporalCounter_i1 = 0U;

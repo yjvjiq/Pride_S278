@@ -750,7 +750,8 @@ interrupt void CAN2_RECEIVE_ISR(void)   //内部  BMU   250Hz
     unsigned long DBuffer[1];
     unsigned int DBuffer1[1];
     unsigned int buffer = 0;
-    unsigned int Current = 0;
+    unsigned int sbms_current1_t = 0;
+	unsigned int sbms_current2_t = 0;
     unsigned int V4 = 0;
     unsigned int V5 = 0;
     unsigned int V6 = 0;
@@ -784,8 +785,8 @@ interrupt void CAN2_RECEIVE_ISR(void)   //内部  BMU   250Hz
         case 0x000c0123://SBMS信息1
         
             SBMSOverTime=0;//超时计时标志位清0
-            Current = (((unsigned int)g_mboxData[0][0]&0x00ff)<<8) | g_mboxData[0][1];
-            g_SBMS_current1 = Current*0.02;//加热电流
+            sbms_current1_t = (((unsigned int)g_mboxData[0][0]&0x00ff)<<8) | g_mboxData[0][1];
+            g_SBMS_current1 = sbms_current1_t*0.02 - 400;//加热电流
             V4 = (((unsigned int)g_mboxData[0][2]&0x00ff)<<8) | g_mboxData[0][3];
             g_highVoltageV4 = V4*0.02;
             V5 = (((unsigned int)g_mboxData[0][4]&0x00ff)<<8) | g_mboxData[0][5];
@@ -811,7 +812,8 @@ interrupt void CAN2_RECEIVE_ISR(void)   //内部  BMU   250Hz
             }
 			
             InsRelayState = g_mboxData[0][1];   //绝缘控制继电器状态
-            g_SBMS_current2 = (((U16)g_mboxData[0][2] << 8) + ((U16)g_mboxData[0][3])) * 0.02;
+			sbms_current2_t = (((unsigned int)g_mboxData[0][2]&0x00ff)<<8) | g_mboxData[0][3];
+			g_SBMS_current2 = sbms_current2_t * 0.02 - 400;
             break;
         case 0xC01EE3F:
             if((g_mboxData[0][0]==0x55)&&(g_mboxData[0][1]==0xAA))

@@ -966,6 +966,7 @@ void Pack_branch_Disconnect_Fault(void){
 			default:
 			break;
 		}
+		g_bms_fault_msg.fault.HVBranch_CircuitOff_Flt = level;
 	}
 }
 
