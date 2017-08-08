@@ -224,7 +224,7 @@ void T_Ctrl_Process(void){
 				g_BMS_TMS_msg.msg.HV_on_request = T_CTRL_HV_OFF_REQ;
 				KHeat_Switch(OFF);
 				cnt++;
-				if(cnt >= 20){ //20*5ms = 100ms
+				if(cnt >= 400){ //400*5ms = 2000ms = 2s
 					T_power_on_flag = 1;
 					KHeat_Switch(ON);
 					cnt = 0;
@@ -241,14 +241,11 @@ void T_Ctrl_Process(void){
 			g_BMS_TMS_msg.msg.HV_relay_status = St_heatManage;
 			break;
 		case 3:
-			if((g_TMS_BMS_msg.msg.TMS_HV_status == 1)
-				&& (T_power_on_flag == 0)
-				&& (St_heatManage == 0)){
-				
+			if((g_TMS_BMS_msg.msg.TMS_HV_status == 1) && (T_power_on_flag == 0) && (St_heatManage == 0)){
 				g_BMS_TMS_msg.msg.HV_on_request = T_CTRL_HV_OFF_REQ;
 				KHeat_Switch(OFF);
 				cnt_2++;
-				if(cnt_2 >= 20){ //20*5ms = 100ms
+				if(cnt_2 >= 400){ //400*5ms = 2000ms = 2s
 					T_power_on_flag = 1;
 					KHeat_Switch(ON);
 					cnt_2 = 0;

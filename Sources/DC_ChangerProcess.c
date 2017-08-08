@@ -497,13 +497,13 @@ void TaskRechargeDC(void)
                 }
             }
 		}	  
-		if((CHMStep==0x06)||((CHMStep==0x05)&&((fastendflag==1) ||(PantographOff == 1))))//10ms发送一次,开始发的时候	
+		if(((CHMStep==0x06)||(CHMStep==0x05))&&((fastendflag==1) ||(PantographOff == 1) || (OffState == 1)))//10ms发送一次,开始发的时候	
 		{
 			//如果收到地面充电机充电截止报文或者单体电压、总电压超过保护值
 			if(OverTimeState==1)
 			{
 				if(counter_250ms6_1%25==0)
-				{    			        
+				{
 					counter_250ms6_1 = 0;
 					cpuToCHMBEM();
 				}

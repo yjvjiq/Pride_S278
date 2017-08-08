@@ -29,6 +29,7 @@
 #include "IsolationLow.h"
 #include "ChargeSocketOverTemp.h"
 #include "Supply24V.h"
+#include "PackFault.h"
 
 ///////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////// 
@@ -144,25 +145,34 @@ void errorSystemVoltageOV(void)
     unsigned char Error[4]={0};
     unsigned char i;
     unsigned char Level=0; 
+	float reharge_pack_v = 0;
 	
     //judge by different BMS work mode, as the input is different.
-	if(g_BmsModeFlag == DISCHARGING) //discharge mode.
+	if(g_BmsModeFlag == DISCHARGING){ //discharge mode.
         Level=TotalVoltageOverVoltage_custom(g_systemVoltage,g_highVoltageV3,DISCHARGING);
-           
-	else if(g_BmsModeFlag == FASTRECHARGING)//fast charge mode.
-        Level=TotalVoltageOverVoltage_custom(g_systemVoltage,g_highVoltageV5,FASTRECHARGING);
-    
-	else if(g_BmsModeFlag == RECHARGING) // ACC charge mode.(re-charging mode)
-        Level=TotalVoltageOverVoltage_custom(g_systemVoltage,g_highVoltageV6,RECHARGING);
+	}
+	else if(g_BmsModeFlag == FASTRECHARGING){//fast charge mode.
+        Level=TotalVoltageOverVoltage_custom(g_systemVoltage,g_highVoltageV4,FASTRECHARGING);
+	}
+	else if(g_BmsModeFlag == RECHARGING){ // ACC charge mode.(re-charging mode)
+		if(g_highVoltageV5 >= g_highVoltageV6){
+			reharge_pack_v = g_highVoltageV5;
+		}
+		else{
+			reharge_pack_v = g_highVoltageV6;
+		}
+        Level=TotalVoltageOverVoltage_custom(g_systemVoltage,reharge_pack_v,RECHARGING);
+	}
 	
     Error_Group4.Bit.F6_Bat_Over_V = Level;//send to vehicle CAN.
     g_bms_fault_msg.fault.Pack_V_High_Flt = Level; //the same as above.
 
     ///////////////////The fault level process and send out/////////////////////////   
-    for(i=1;i<4;i++) 
-       if(i==Level) 
+    for(i=1;i<4;i++){
+       if(i==Level) {
            Error[i]=1;
-       
+       }
+    }
 	//level 1 process
 	Can554Byte2.Bit.F2_systemOV1 				= Error[1]; // send to PC software.
     
@@ -173,8 +183,9 @@ void errorSystemVoltageOV(void)
     CutACChaCurt0.Bit.F0_Battery_Over_Voltage21	= Error[2];
     
     //level 3 process
-    if(Error[3] == 1)
+    if(Error[3] == 1){
         g_caution_Flag_1 |= 0x04;// 0000 0100
+    }
     else
     {
 //		if(stateCode == 30){
@@ -892,9 +903,10 @@ void Fire_Warning(void)
         CutChaCurt0.Bit.F8_Fire_Warning1=1;
         CutDCChaCurt0.Bit.F10_Fire_Warning1=1;
         CutACChaCurt0.Bit.F10_Fire_Warning1=1;
-        if(g_BmsModeFlag == DISCHARGING)
+        if(g_BmsModeFlag == DISCHARGING){
             status_group1.Bit.St_BMS = HV_Off_Status;//BMS状态高压断开
             g_bms_status.status.BMS_HV_Sts = HV_Off_Status;
+        }
     }
 }
 
@@ -1095,7 +1107,7 @@ void BMSProtect(void)//有风险，如果OffState判断失败,最好用实际电压比较**********
 	if(g_BmsModeFlag == FASTRECHARGING){
 		if((g_highestCellVoltage >= HIGHEST_CELL_VOL)
 			|| (g_systemVoltage >= HIGHEST_BATT_VOL)
-			|| (g_highVoltageV5 >= HIGHEST_BATT_VOL)){
+			|| (g_highVoltageV4 >= HIGHEST_BATT_VOL)){
 			FastChgHCDelaytime++;
 			if(FastChgHCDelaytime >= 10){
 				FastChgHCDelaytime = 10;
@@ -1107,6 +1119,8 @@ void BMSProtect(void)//有风险，如果OffState判断失败,最好用实际电压比较**********
 //					TurnOffAllRelay();
 //					KChg_N_Switch(OFF);
 					KFastChg_P_Switch(OFF);
+					Kp_Switch(OFF);
+					Kn_Switch(OFF);
 				}
 			}
 		}
@@ -1123,6 +1137,7 @@ void BMSProtect(void)//有风险，如果OffState判断失败,最好用实际电压比较**********
 	if(g_BmsModeFlag == RECHARGING){
 		if(g_highestCellVoltage >= HIGHEST_CELL_VOL
 			|| (g_systemVoltage >= HIGHEST_BATT_VOL)
+			|| (g_highVoltageV5 >= HIGHEST_BATT_VOL)
 			|| (g_highVoltageV6 >= HIGHEST_BATT_VOL)){
 			EleBandChgHCDelaytime++;
 			if(EleBandChgHCDelaytime >= 10){
@@ -1135,6 +1150,8 @@ void BMSProtect(void)//有风险，如果OffState判断失败,最好用实际电压比较**********
 //					TurnOffAllRelay();
 //					KChg_N_Switch(OFF);
 					KEleBand_P_Switch(OFF);
+					Kp_Switch(OFF);
+					Kn_Switch(OFF);
 				}
 			}
 		}
@@ -1217,6 +1234,7 @@ void FaultLevel(void)
     ||(Error_Group0.Bit.F0_Fire_Warning==2)       //火灾预警2级
     //||(Error_Group6.Bit.F0_Power_Vol)//整车CAN上报
     ||(Error_Group0.Bit.F2_Ele_Relay_Con ==2)//充电插座过温
+    ||(g_bms_fault_msg.fault.HVBranch_CircuitOff_Flt == 2)
     )
     {
         status_group3.Bit.Fault_Level = 2;//轻微，降功率至50%
@@ -1262,7 +1280,7 @@ unsigned char TaskFaultProcess(void)
 	
 	errorSystemVoltageOV();//总电压过压
 	errorChargeOC();   //充电过流 
-	
+	Pack_branch_Disconnect_Fault();
 	if(g_BmsModeFlag == DISCHARGING) 
 	{
 		errorSystemVoltageUV();//总电压欠压
