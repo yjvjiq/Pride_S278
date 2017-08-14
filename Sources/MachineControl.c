@@ -71,7 +71,7 @@ void stateCodeTransfer(void)
         else if(stateCode==12)
         {
             if((MSDError)||(N_RelayConnetError)||(HighVolPowerOff)||(acc_Connect == 0)
-            ||(VCU_Request.Bit.Finish_PreChg)||(plug_DC_Connect == 1)//CC2
+            ||(VCU_Request.Bit.Finish_PreChg)
             ||(g_bms_fault_msg.fault.HLVol_Lock_Alram == 1))
                 stateCode=46;//MSD断路||负极粘连||需要下电的故障||ON=0||整车预充已完成
             else if((VCU_Control.Bit.PowerOnOffReq == 1)&&(bmsSelfcheckCounter==1))

@@ -433,7 +433,7 @@ interrupt void CAN0_RECEIVE_ISR(void)   //车载 /外部CAN / 500Hz
             buffer = buffer<<8;
             VCUSpeed = buffer+msgData[1];
             VehicleSpeed = VCUSpeed*0.00390625;
-            break;    
+            break;
           
 		    ///////////// 整车CAN接收受电弓报文 ///////////////
 		case 0x1826f456:
