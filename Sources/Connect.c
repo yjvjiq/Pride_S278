@@ -51,17 +51,20 @@ void bmsModeAwake(void)
             status_group3.Bit.St_CHG_Mode=2;//充电模式等于AC充电
             status_group3.Bit.St_Charge = 1;//正在充电 
             stateCode = 81;
-        } 
-        else if(input4_state()==0)
-        {
-            g_BmsModeFlag = DISCHARGING;//放电模式
-            acc_Connect=1;   //ON信号
-            status_group4.Bit.Mode_BMS_Work = 1;//BMS当前工作状态=放电状态 
-            stateCode=11;
-            status_group3.Bit.St_CHG_Mode=3;//not valid
-            status_group3.Bit.St_Charge = 3;//not valid
         }
     }
+	
+	if(input4_state()==0) // ON signal exist
+	{
+		acc_Connect=1;	 //ON信号
+		if(stateCode != 141 && stateCode != 81){
+			g_BmsModeFlag = DISCHARGING;//放电模式
+			status_group4.Bit.Mode_BMS_Work = 1;//BMS当前工作状态=放电状态 
+			stateCode=11;
+			status_group3.Bit.St_CHG_Mode=3;//not valid
+			status_group3.Bit.St_Charge = 3;//not valid
+		}
+	}
 }
 //******************************************************************************
 //* Function name:   SignalOnJudge
@@ -143,32 +146,35 @@ void SignalOnOffJudge(void)
 					status_group3.Bit.St_CHG_Mode=3;//not valid
 					status_group3.Bit.St_Charge = 3;//not valid
                 }
-                ////////////////////ACC钥匙开关ON检测/////////////////////  
-                if(input4_state()==0)//if ACC signal exist means ON signal also exist.
-                {
-                    KEY_DisConnect = 0;
-                    KEY_Connect++;
-                    if(KEY_Connect>=100)
-                    {                  
-                        acc_Connect = 1;    //ON signal exist.
-                        status_group4.Bit.Mode_BMS_Work = 1;//BMS mode is discharge.
-                        KEY_Connect = 0;
-                    } 
-                }
-                else
-                {
-                ////////////////////ACC钥匙开关OFF检测/////////////////////
-                    KEY_Connect = 0;
-                    KEY_DisConnect++;
-                    if(KEY_DisConnect>=100)
-                    {
-                        acc_Connect = 0;    //OFF信
-                        KEY_DisConnect = 0;                
-                    }
-                }
-            } 
+            }
       
         }    
+		
+		////////////////////ACC钥匙开关ON检测/////////////////////	
+		if(input4_state()==0)//if ACC signal exist means ON signal also exist.
+		{
+			KEY_DisConnect = 0;
+			KEY_Connect++;
+			if(KEY_Connect>=100)
+			{				   
+				acc_Connect = 1;	//ON signal exist.
+				if(status_group4.Bit.Mode_BMS_Work != 2){
+					status_group4.Bit.Mode_BMS_Work = 1;//BMS mode is discharge.
+				}
+				KEY_Connect = 0;
+			} 
+		}
+		else
+		{
+		////////////////////ACC钥匙开关OFF检测/////////////////////
+			KEY_Connect = 0;
+			KEY_DisConnect++;
+			if(KEY_DisConnect>=100)
+			{
+				acc_Connect = 0;	//OFF信
+				KEY_DisConnect = 0; 			   
+			}
+		}
         ////////////////////ChangerIN检测/////////////////////     
         if(input6_state()==1)
         {

@@ -405,7 +405,7 @@ interrupt void CAN0_RECEIVE_ISR(void)   //车载 /外部CAN / 500Hz
     }
 	
     switch(msgCan0RxID) 
-    {   
+    {
         case 0x1801D2D0://
              VCUOverTime = 0;//清零
              VCU_CellRequest.byte = msgData[0];

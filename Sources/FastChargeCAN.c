@@ -475,9 +475,9 @@ void cpuToCHMBRO(void)
 	mg.len = 1;
 	mg.prty = 0;
     
-    if(((BROErrorAA==0) && ((Relay_State >> 2) & 0x01 == 0x01) && (g_BmsModeFlag == FASTRECHARGING))
-		|| ((g_BmsModeFlag == RECHARGING) && (BROErrorAA == 0)))	// KFastChg_P_Switch(ON) then send 0xAA.
-    {
+     if(((BROErrorAA==0) && ((Relay_State >> 2) & 0x01 == 0x01) && (g_BmsModeFlag == FASTRECHARGING)) // KFastChg_P_Switch(ON) then send 0xAA.
+		|| ((BROErrorAA==0) && (status_group2.Bit.St_Ele_Relay == 2) && (g_BmsModeFlag == RECHARGING)) // KFastChg_P_Switch(ON) then send 0xAA.
+	){
         mg.data[0] = 0xaa;
     }
     else if(BROErrorAA==1){

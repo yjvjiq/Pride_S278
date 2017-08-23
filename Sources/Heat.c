@@ -164,7 +164,7 @@ void T_Ctrl_Process(void){
 		return;
 	}
 
-	if((g_bms_msg.CellTempMax < (25 + 40)) && (g_bms_msg.CellTempMax != 0xff)){
+	if((g_bms_msg.CellTempMax <= (25 + 40)) && (g_bms_msg.CellTempMax != 0xff)){
 		if(T_ctrl_state == 3){
 			T_ctrl_state = 4;
 		}
@@ -226,7 +226,6 @@ void T_Ctrl_Process(void){
 				cnt++;
 				if(cnt >= 400){ //400*5ms = 2000ms = 2s
 					T_power_on_flag = 1;
-					KHeat_Switch(ON);
 					cnt = 0;
 				}
 			}
@@ -247,7 +246,6 @@ void T_Ctrl_Process(void){
 				cnt_2++;
 				if(cnt_2 >= 400){ //400*5ms = 2000ms = 2s
 					T_power_on_flag = 1;
-					KHeat_Switch(ON);
 					cnt_2 = 0;
 				}
 			}

@@ -60,7 +60,7 @@ unsigned char	ACCOverTime = 0;//交流充电机通信故障
 unsigned char	VCU_ParkBrakeOverTime = 0;
 unsigned char	VCUOverTime = 0;//与VCU通讯故障
 unsigned char	SBMSOverTime = 0;//与另一主板SBMS通讯故障
-unsigned char	BMU_OverTime = 0;
+unsigned char	BMU_OverTime[BMU_NUMBER] = 0;
 
 //unsigned char CarErrorLevel = 0;
 
@@ -796,12 +796,22 @@ void VCUComError(void)
 //* ReturnValue    : Bool类型 0-无；1-有
 //******************************************************************************
 void innerCommOT3(void) 
-{ 
+{
+	U8 cnt = 0;
+	U8 BMU_overTime_flag_t = 0;
+	
     SBMSOverTime++;
-	BMU_OverTime++;
-    if(((g_caution_Flag_3 & 0x01)!=0)
-		||(BMU_OverTime >= 30)
-		||(SBMSOverTime>=30)) //BMU内部通讯故障或与SBMS故障
+	
+	for(cnt = 0; cnt < BMU_NUMBER; cnt++){
+		BMU_OverTime[cnt]++;
+		if(BMU_OverTime[cnt] >= 30){
+			BMU_overTime_flag_t = 1;
+		}
+	}
+	
+    if(((g_caution_Flag_3 & 0x01) != 0)
+		||(SBMSOverTime >= 30)
+		||(BMU_overTime_flag_t == 1)) //BMU内部通讯故障或与SBMS故障
     {
         status_group1.Bit.St_BMS =2;//BMS状态高压断开
         CutDisCurt0.Bit.F1_Inner_Communiction=1;
@@ -1047,6 +1057,7 @@ void CarFaultDone()
 		||(Error_Group0.Bit.F0_Fire_Warning==3)		//火灾预警3级
 //		||(Error_Group6.Bit.F0_Power_Vol)			//整车CAN上报
 		||(Error_Group0.Bit.F2_Ele_Relay_Con ==3)	//充电插座过温
+		||(acc_Connect == 0) // ON signal disapper
         )
         {
             PantographOff=1;//受电弓请求下电

@@ -28,6 +28,7 @@ unsigned int Charge_Times;     //充电次数
 unsigned long int chargeAH ;   //实际充电总安时
 unsigned long int dischargeAH ;//实际放电总安时
 float DC_ChargePower=0;//充电电量（输出电量）
+unsigned char St_heatManage;
 
 U_BMS_STATUS_TYPE	g_bms_status;
 U_BMS_FAULT_TYPE	g_bms_fault_msg;

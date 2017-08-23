@@ -321,7 +321,7 @@ void TaskStatusMachine(void)//task period = 5ms.
     static unsigned char TestDelay=0;//进入到调试模式下的时间延时
     static unsigned char dcMode,pcMode =0;//充电状态赋值标志位
 	
-    SignalOnOffJudge(); 
+	SignalOnOffJudge(); 
 	CarFaultDone();
 	T_Ctrl_Process();
 	
@@ -341,7 +341,7 @@ void TaskStatusMachine(void)//task period = 5ms.
         case 82:
         case 142:
             Error10S=0;
-            if(stateCode == 12){
+            if(stateCode == 12 || stateCode == 82){
 				turnOnSW_Power();
 			}
 			

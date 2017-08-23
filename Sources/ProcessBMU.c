@@ -110,11 +110,11 @@ void BMU_Processure(void)
                 //if(recogBMUtoBMSmessage != bufL)
                 //	recogBMStoBMUflag = 0; //recognise error.
                 //else
-				BMU_OverTime = 0;
+				BMU_OverTime[g_group] = 0;
 				recogBMStoBMUflag = 1; //recognise ok.
                 break;
             case 0x018FF13://cell config msg1(CC1):the number of 6802, the number of cell_v and cell_T channals;
-				BMU_OverTime = 0;
+				BMU_OverTime[g_group] = 0;
 				switch(g_group) 
                 {
                     case 0:
@@ -195,10 +195,10 @@ void BMU_Processure(void)
 																	
 			    break;
             case 0x018FF14:	//battery config msg3:the number of 6802, the number of cell and temperature channals;CC3
-				BMU_OverTime = 0;
+				BMU_OverTime[g_group] = 0;
 				break;
 		    case 0x018FF16:	//judge the life cycle, whether has received all datas.
-			    BMU_OverTime = 0;
+			    BMU_OverTime[g_group] = 0;
                 switch(g_group) 
                 {
 					case 0:
@@ -264,49 +264,49 @@ void BMU_Processure(void)
             //******group, cell voltages*******
             //*********************************
             case 0x0018FF21://BMU number = group; #1 frame, 4 cells each frame.
-	            BMU_OverTime = 0;
+	            BMU_OverTime[g_group] = 0;
                 for(i=0;i<4;i++)
                 {
 					g_bmu_msg.cell_V[g_group][i] =  (U16)g_mboxData[boxNumber][2*i+1]|(U16)g_mboxData[boxNumber][2*i]<<8;
                 }
                 break;
             case 0x0018FF22://BMU number = group; #2 frame, 4 cells each frame.
-				BMU_OverTime = 0;
+				BMU_OverTime[g_group] = 0;
 				for(i=0;i<4;i++)
                 {
                     g_bmu_msg.cell_V[g_group][4+i] = (U16)g_mboxData[boxNumber][2*i+1]|(U16)g_mboxData[boxNumber][2*i]<<8;
                 }
                 break;
             case 0x0018FF23://BMU number = group; #3 frame, 4 cells each frame.		  
-				BMU_OverTime = 0;
+				BMU_OverTime[g_group] = 0;
 				for(i=0;i<4;i++)
                 {
                     g_bmu_msg.cell_V[g_group][8+i] = (U16)g_mboxData[boxNumber][2*i+1]|(U16)g_mboxData[boxNumber][2*i]<<8;
                 }
                 break;
 			case 0x0018FF24://BMU number = group; #4 frame, 4 cells each frame.
-				BMU_OverTime = 0;
+				BMU_OverTime[g_group] = 0;
 				for(i=0;i<4;i++)
 				{
 					g_bmu_msg.cell_V[g_group][12+i] = (U16)g_mboxData[boxNumber][2*i+1]|(U16)g_mboxData[boxNumber][2*i]<<8;
 				}
 				break;
 			case 0x0018FF25://BMU number = group; #5 frame, 4 cells each frame.
-				BMU_OverTime = 0;
+				BMU_OverTime[g_group] = 0;
 				for(i=0;i<4;i++)
 				{
 					g_bmu_msg.cell_V[g_group][16+i] = (U16)g_mboxData[boxNumber][2*i+1]|(U16)g_mboxData[boxNumber][2*i]<<8;
 				}
 				break;
 			case 0x0018FF26://BMU number = group; #6 frame, 4 cells each frame.
-				BMU_OverTime = 0;
+				BMU_OverTime[g_group] = 0;
 				for(i=0;i<4;i++)
 				{
 					g_bmu_msg.cell_V[g_group][20+i] = (U16)g_mboxData[boxNumber][2*i+1]|(U16)g_mboxData[boxNumber][2*i]<<8;
 				}
 				break;						
 			case 0x0018FF27://BMU number = group; #7 frame, 4 cells each frame.
-				BMU_OverTime = 0;
+				BMU_OverTime[g_group] = 0;
 				if(g_group == 1 || g_group == 7 || g_group == 13){
     				for(i=0;i<4;i++)
     				{
@@ -321,7 +321,7 @@ void BMU_Processure(void)
 				}
 				break;
 			case 0x0018FF28://BMU number = group; #8 frame, 4 cells each frame.
-				BMU_OverTime = 0;
+				BMU_OverTime[g_group] = 0;
 				if(g_group == 1 || g_group == 7 || g_group == 13){
     				for(i=0;i<4;i++)
     				{
@@ -336,7 +336,7 @@ void BMU_Processure(void)
 				}
 				break;
 			case 0x0018FF29://BMU number = group; #9 frame, 4 cells each frame.
-				BMU_OverTime = 0;
+				BMU_OverTime[g_group] = 0;
 				if(g_group == 1 || g_group == 7 || g_group == 13){
     				for(i=0;i<4;i++)
     				{
@@ -351,19 +351,19 @@ void BMU_Processure(void)
 				}
 				break;
 			case 0x0018FF41://BMU number = group; #1 frame, 1 temperature each frame.
-				BMU_OverTime = 0;
+				BMU_OverTime[g_group] = 0;
 				for(i=0;i<1;i++){
 					g_bmu_msg.cell_T[g_group][i]= g_mboxData[boxNumber][i];
 				}
 				break;	
 			case 0x0018FF42://BMU number = group; #2 frame, 1 temperature each frame.	 
-				BMU_OverTime = 0;
+				BMU_OverTime[g_group] = 0;
 				for(i=0;i<1;i++){
 					g_bmu_msg.cell_T[g_group][i+1]= g_mboxData[boxNumber][i];
 				}
 				break;
              case 0x0018FF43://BMU number = group; #3 frame, 1 temperature each frame.
-				BMU_OverTime = 0;
+				BMU_OverTime[g_group] = 0;
 				if(g_group == 1 || g_group == 7 || g_group == 13){
 	                for(i=0;i<1;i++){
 	                    g_bmu_msg.cell_T[g_group][i+2]= 0;
@@ -377,7 +377,7 @@ void BMU_Processure(void)
                 break;  	
 			/* new add, the max and min voltage/temperature in erery pack */
 		    case 0x0018FF36://组号＃1，电压最值   3601 表示BMU1的所有口的电压最值
-				BMU_OverTime = 0;
+				BMU_OverTime[g_group] = 0;
 				g_bmu_msg.cell_V_max[g_group]= g_mboxData[boxNumber][3]|(unsigned int)g_mboxData[boxNumber][2]<<8;
 				g_bmu_msg.cell_V_min[g_group]= g_mboxData[boxNumber][5]|(unsigned int)g_mboxData[boxNumber][4]<<8;
 				g_bmu_msg.cell_V_max_group_num[g_group] = (g_mboxData[boxNumber][6] & 0xF0) >> 4;
@@ -386,7 +386,7 @@ void BMU_Processure(void)
 				g_bmu_msg.cell_V_min_num[g_group]= g_mboxData[boxNumber][7] & 0x0F;
                 break;
             case 0x0018FF4B://组号＃1，温度最值       
-				BMU_OverTime = 0;
+				BMU_OverTime[g_group] = 0;
 				g_bmu_msg.cell_T_max[g_group]= g_mboxData[boxNumber][0];
 				g_bmu_msg.cell_T_min[g_group]= g_mboxData[boxNumber][1];
 				g_bmu_msg.cell_T_max_group_num[g_group]= (g_mboxData[boxNumber][2] & 0xF0) >> 4;
@@ -500,7 +500,7 @@ unsigned char bmuProcess2(void)//
 		if(Cell_V_Max == 0xffff){
 			g_highestCellVoltage		= 0;
 			g_highestCellVoltage_Num	= 1;
-			
+
 			g_bms_msg.CellVoltageMax = 0;
 			g_bms_msg.CellVoltageMaxNum = 1;
 			g_bms_msg.CellVoltageMaxPackNum = 1;
@@ -515,8 +515,8 @@ unsigned char bmuProcess2(void)//
 		}
 
 		if(Cell_V_Min == 0){
-			g_lowestCellVoltage 		= 0; 
-			g_lowestCellVoltage_Num 	= 1;	  
+			g_lowestCellVoltage 		= 0;
+			g_lowestCellVoltage_Num 	= 1;
 			
 			g_bms_msg.CellVoltageMin = 0;
 			g_bms_msg.CellVoltageMinNum = 1;
