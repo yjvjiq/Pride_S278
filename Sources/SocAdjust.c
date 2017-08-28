@@ -48,7 +48,7 @@ void SocEndDischargeAdjust(void)//放电末端SOC修正子程序
     static unsigned int time10S=0;
     static unsigned int counter5S1=0;
     static unsigned int counter5S2=0;
-        
+	
     if((g_lowestTemperature>=(40+5))&&(g_lowestCellVoltage!=0))//Tmin<5
     {
         if((g_lowestCellVoltage<=2.6)&&(g_systemCurrent<=0.5*SetCap))
@@ -60,9 +60,9 @@ void SocEndDischargeAdjust(void)//放电末端SOC修正子程序
                 Can_g_socValue_Start=0; //SOC修正为0
 	              CanSocIntegral();
             }
-        } 
+        }
         else if(g_lowestCellVoltage<=2.9)
-        {   
+        {
             time10S++;
             counter5S1=0;
             if((time10S>=1400)&&(Can_g_socValue>0.1))   // 10s
@@ -71,9 +71,9 @@ void SocEndDischargeAdjust(void)//放电末端SOC修正子程序
                 Can_g_socValue_Start=0.1;//SOC修正为10%
 	              CanSocIntegral();
             }
-        } 
+        }
         else
-        {          
+        {
             time10S=0;
             counter5S1=0;
         }
@@ -85,9 +85,9 @@ void SocEndDischargeAdjust(void)//放电末端SOC修正子程序
             counter5S2++;
             if(counter5S2>=700)   //5S
             {
-                counter5S2=707;
-                Can_g_socValue_Start=0;
-	              CanSocIntegral();
+				counter5S2=707;
+				Can_g_socValue_Start=0;
+				CanSocIntegral();
             }
         } 
         else

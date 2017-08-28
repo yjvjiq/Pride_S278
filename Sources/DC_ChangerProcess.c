@@ -341,11 +341,8 @@ void TaskRechargeDC(void)
 						counter_250ms1=0;
 						sendi1++;
 					}
-					else if((BRMStep == 1)&&(FlagBRMSend==1)){
+					else if((BRMStep == 1) && (FlagBRMSend==1)){
 						sendi1++;
-//						if(sendi1==1)
-//						  cpuToCHMBRM();
-//						else 
 						if(sendi1==2)
 						  cpuToCHMBRMDATA1();
 						else if(sendi1==3)
@@ -368,7 +365,7 @@ void TaskRechargeDC(void)
 							}
 						}
 						else if(sendi1==8)
-						{  
+						{
 							cpuToCHMBRMDATA7();
 							sendi1=0;        			          
 							CHMStep1=1;
@@ -387,8 +384,8 @@ void TaskRechargeDC(void)
 				CHMStep2=0;
 				counter_250ms2=0;
 			}
-			if(CHMStep2==0)
-			{ 
+			if(CHMStep2==0 && FlagBCPSend == 1)
+			{
 				sendi2++;
 				if(sendi2 == 1)
 					cpuToCHMBCP();

@@ -341,9 +341,6 @@ void TaskStatusMachine(void)//task period = 5ms.
         case 82:
         case 142:
             Error10S=0;
-            if(stateCode == 12 || stateCode == 82){
-				turnOnSW_Power();
-			}
 			
             HighVoltDetectPart1();//行车：MSD与负极粘连 受电弓：MSD和充电负粘连
 			break;
@@ -388,7 +385,8 @@ void TaskStatusMachine(void)//task period = 5ms.
 		//////////////////////////////////////////////////////////////////////////////
 		/////////////////////////////////////////////////////////////////////////////      
         case 30:    //*********************行车状态***********/////////////
-            if(state30==0) 
+			turnOnSW_Power();
+			if(state30==0) 
             {
                 state30=1;
                 pcMode=0; //防止进入状态机重复赋值充电状态，在30清0
@@ -497,7 +495,7 @@ void TaskStatusMachine(void)//task period = 5ms.
             status_group3.Bit.St_Charge = 2; //充电结束
             status_group1.Bit.St_BMS =2;//高压断开
 			KFastChg_P_Switch(OFF);
-
+			
             bmsSelfcheckCounter=2;//没有故障，自检计数器
             break;
              
@@ -544,30 +542,9 @@ void TaskStatusMachine(void)//task period = 5ms.
         case 187:
 			Kp_Switch(OFF); // turn off the power supply for DCDC in charging
 			Kn_Switch(OFF);
+			turnOffSW_Power();//close总电源开关  
             bmsSelfcheckCounter=0;
-            turnOffSW_Power();//close总电源开关  
             break;
-//        case 177://调试阶段
-//            openNegRelay();//断开负极继电器
-//            delay(25000); //20ms
-//            
-//            _FEED_COP();   //2s内不喂内狗，则系统复位
-//            
-//            TurnOff_INHK();//断开加热继电器
-//            delay(25000); //19ms
-//            delay(25000); //19ms
-//            TurnOff_INA2K();//断开快充继电器
-//            turnOffSW_Power();//close总电源开关 
-//            State177End=1;//跳转到179等待
-//            break;
-//        case 179://调试阶段
-//            TaskGpioTest();
-//            TestDelay++;
-//            if(TestDelay>80)//5*80=400
-//            {
-//                TestDelay=0;
-//            }  
-//            break;
         default:
             break;                        
     }

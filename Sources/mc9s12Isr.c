@@ -305,7 +305,7 @@ interrupt void RTI_ISR(void)      //1ms中断一次
             E10SOverFlag=0;
         }
     }
-
+	
 	if((HighVolPowerOff==1) && (E10SOverFlag == 1)){
 		Error_30s_delay_cnt++;
 		if(Error_30s_delay_cnt >= 30000){
@@ -322,15 +322,11 @@ interrupt void RTI_ISR(void)      //1ms中断一次
 		if((OffState==1)&&(stateCode ==170)){	//快充下高压故障
 			Error5S++;
 		}
-		
-        //if(HighVolPowerOff==1)
-         //   if(||(stateCode ==170))
-         //       Error5S++;
 	}
-        
+	
     if((g_systemCurrent > -500)&&(g_systemCurrent < 500))  //防止负数溢出
     {
-		g_energyOfUsed =g_energyOfUsed+ g_systemCurrent*0.0011+0.0000042;// // 1m秒积分一次
+		g_energyOfUsed = g_energyOfUsed+ g_systemCurrent*0.0011+0.0000042;// // 1m秒积分一次
     }
 	
 	//turnOffLED0(); 	     // for debug 
@@ -467,21 +463,24 @@ interrupt void CAN0_RECEIVE_ISR(void)   //车载 /外部CAN / 500Hz
             break;
             
         case 0x1cecf456:
-			if((msgData[0]==0x11)&&(msgData[5]==0x00)&&(msgData[6]==0x02)&&((msgData[7]==0x00)))
+			if((msgData[0]==0x11)&&(msgData[5]==0x00)&&(msgData[6]==0x02)&&((msgData[7]==0x00))){
 				FlagBRMSend = 1; //标志位置1,开始发送多帧保证,并且不发送BRM
+			}
+			
+            if((msgData[0]==0x11)&&(msgData[5]==0x00)&&(msgData[6]==0x06)&&((msgData[7]==0x00))){
+                 FlagBCPSend = 1;
+            }
+			
+            if((msgData[0]==0x11)&&(msgData[5]==0x00)&&(msgData[6]==0x11)&&((msgData[7]==0x00))){
+                 FlagBCSSend = 1;
+            }
+			
 //			if((fChg2bmsbyte[0]==0x13)&&(fChg2bmsbyte[5]==0x00)&&(fChg2bmsbyte[6]==0x02)&&((fChg2bmsbyte[7]==0x00)))
 //				BRMStep = 0;//将标志位清零,可以从新发生BRM
-                     
-            if((msgData[0]==0x11)&&(msgData[5]==0x00)&&(msgData[6]==0x06)&&((msgData[7]==0x00)))
-                 FlagBCPSend = 1;
 //			if((fChg2bmsbyte[0]==0x13)&&(fChg2bmsbyte[5]==0x00)&&(fChg2bmsbyte[6]==0x06)&&((fChg2bmsbyte[7]==0x00)))
 //				BCPStep = 0;//将标志位清零,可以从新发生BRM
-            
-            if((msgData[0]==0x11)&&(msgData[5]==0x00)&&(msgData[6]==0x11)&&((msgData[7]==0x00)))
-                 FlagBCSSend = 1;
-            
-            //if((fChg2bmsbyte[0]==0x13)&&(fChg2bmsbyte[5]==0x00)&&(fChg2bmsbyte[6]==0x11)&&((fChg2bmsbyte[7]==0x00)))
-                 //BCSStep = 0;//将标志位清零,可以从新发生BRM
+//			if((fChg2bmsbyte[0]==0x13)&&(fChg2bmsbyte[5]==0x00)&&(fChg2bmsbyte[6]==0x11)&&((fChg2bmsbyte[7]==0x00)))
+//				BCSStep = 0;//将标志位清零,可以从新发生BRM
             break;
                 
         case 0x1807f456:    
