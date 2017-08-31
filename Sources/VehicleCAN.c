@@ -513,15 +513,15 @@ void BMS_To_VCU_BatteryMsg8(void)
 	mg.data[2] = 0x00;   
 	mg.data[3] = 0x00;  
 
-//	mg.data[4] = 0x00;
-//	mg.data[5] = 0x00;
-//	mg.data[6] = 0x00;
-//	mg.data[7] = 0x00;
+	mg.data[4] = 0x00;
+	mg.data[5] = 0x00;
+	mg.data[6] = 0x00;
+	mg.data[7] = 0x00;
 
-	mg.data[4] = (U8)((U16)((g_SBMS_current1+400)*10) & 0x00FF);
-	mg.data[5] = (U8)(((U16)((g_SBMS_current1+400)*10) >> 8) & 0x00FF);
-	mg.data[6] = (U8)((U16)((g_SBMS_current2+400)*10) & 0x00FF);
-	mg.data[7] = (U8)(((U16)((g_SBMS_current2+400)*10) >> 8) & 0x00FF);
+//	mg.data[4] = (U8)((U16)((g_SBMS_current1+400)*10) & 0x00FF);
+//	mg.data[5] = (U8)(((U16)((g_SBMS_current1+400)*10) >> 8) & 0x00FF);
+//	mg.data[6] = (U8)((U16)((g_SBMS_current2+400)*10) & 0x00FF);
+//	mg.data[7] = (U8)(((U16)((g_SBMS_current2+400)*10) >> 8) & 0x00FF);
 
 	mg.id= 0x0C1ED0D2;
 	while((!MSCAN0SendMsg(mg))&&(tt>0))

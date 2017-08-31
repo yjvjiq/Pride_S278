@@ -33,7 +33,7 @@ void bmsModeAwake(void)
             status_group3.Bit.St_CHG_Mode = 1;//充电模式等于DC充电
             status_group3.Bit.St_Charge = 1;//正在充电 
             InsRelayControl=1;//快充时采绝缘控制给SBMS
-            stateCode=141;      
+            stateCode=141;
         }
         else
         {
@@ -58,8 +58,8 @@ void bmsModeAwake(void)
 	{
 		acc_Connect=1;	 //ON信号
 		if(stateCode != 141 && stateCode != 81){
-			g_BmsModeFlag = DISCHARGING;//放电模式
-			status_group4.Bit.Mode_BMS_Work = 1;//BMS当前工作状态=放电状态 
+			g_BmsModeFlag = DISCHARGING;
+			status_group4.Bit.Mode_BMS_Work = 1;//BMS mode is discharge
 			stateCode=11;
 			status_group3.Bit.St_CHG_Mode=3;//not valid
 			status_group3.Bit.St_Charge = 3;//not valid

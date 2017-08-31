@@ -563,7 +563,7 @@ interrupt void CAN0_RECEIVE_ISR(void)   //车载 /外部CAN / 500Hz
 #pragma CODE_SEG DEFAULT
 //******************************************************************************
 //* Function name:   CAN1_RECEIVE_ISR
-//* Description:     CAN1接收中断子程序,用于快充通信  250bd /扩展帧模式                
+//* Description:     CAN1接收中断子程序,用于快充通信  250bd /扩展帧模式                , charge CAN
 //* EntryParameter : None
 //* ReturnValue    : None
 //******************************************************************************

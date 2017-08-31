@@ -61,6 +61,7 @@ void stateCodeTransfer(void)
     /////////////////行车//////////////////////
     if(g_BmsModeFlag == DISCHARGING)
     {
+		Error_Group1.Bit.St_CHG_Allow = 1;	// charge not allowed.
         if(stateCode == 11)
         {   
             stateCode = 12;
@@ -168,6 +169,7 @@ void stateCodeTransfer(void)
     ///////////////受电弓充电 //////////////////
     else if(g_BmsModeFlag == RECHARGING)
     {
+		Error_Group1.Bit.St_DisCHG_Allow = 1;	// discharge not allowed.
         if(stateCode == 81)
         {   
             if((VCU_ChgControl.Bit.downC_Switch)&&(VCU_ChgControl.Bit.downC_OK)&&(VCU_ParkBrake.Bit.Parking_Brake))
@@ -254,6 +256,7 @@ void stateCodeTransfer(void)
     ///////////////////////////快充/////////////////////////////////
     else if(g_BmsModeFlag == FASTRECHARGING)
     {
+		Error_Group1.Bit.St_DisCHG_Allow = 1;	// discharge not allowed.
         if(stateCode == 141)
         {
             InsRelayControl = 1;//快充时采绝缘控制给SBMS

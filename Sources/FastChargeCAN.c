@@ -51,7 +51,7 @@ void cpuToCHMBHM(void)
 
 	mg.id= 0x182756f4;
 
-	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
+	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==278)) 
 		while((!MSCAN1SendMsg(mg))&&(tt>0))
 			tt--;
 	else if((g_BmsModeFlag == RECHARGING)) 
@@ -92,7 +92,7 @@ void cpuToCHMBRM(void)
 
 	mg.id= 0x1cec56f4;
 
-	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
+	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==278)) 
 		while((!MSCAN1SendMsg(mg))&&(tt>0))
 			tt--;
     else if(g_BmsModeFlag == RECHARGING) 
@@ -130,7 +130,7 @@ void cpuToCHMBRMDATA1(void)
 
 	mg.id= 0x1ceb56f4;
 
-	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
+	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==278)) 
 		while((!MSCAN1SendMsg(mg))&&(tt>0))
 			tt--;
     else if(g_BmsModeFlag == RECHARGING) 
@@ -166,7 +166,7 @@ void cpuToCHMBRMDATA2(void)
 
 	mg.id= 0x1ceb56f4;
 	  
-	  if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
+	  if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==278)) 
 	      while((!MSCAN1SendMsg(mg))&&(tt>0))
             tt--;
     else if(g_BmsModeFlag == RECHARGING) 
@@ -198,7 +198,7 @@ void cpuToCHMBRMDATA3(void)
 
 	mg.id= 0x1ceb56f4;
 	    
-	  if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
+	  if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==278)) 
 	      while((!MSCAN1SendMsg(mg))&&(tt>0))
             tt--;
     else if(g_BmsModeFlag == RECHARGING) 
@@ -230,7 +230,7 @@ void cpuToCHMBRMDATA4(void)
 
 	mg.id= 0x1ceb56f4;
 
-	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
+	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==278)) 
 	      while((!MSCAN1SendMsg(mg))&&(tt>0))
             tt--;
     else if(g_BmsModeFlag == RECHARGING) 
@@ -263,7 +263,7 @@ void cpuToCHMBRMDATA5(void)
 
 	mg.id= 0x1ceb56f4;
 
-	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
+	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==278)) 
 	      while((!MSCAN1SendMsg(mg))&&(tt>0))
             tt--;
     else if(g_BmsModeFlag == RECHARGING) 
@@ -296,7 +296,7 @@ void cpuToCHMBRMDATA6(void)
 
 	mg.id= 0x1ceb56f4;
 
-	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)){
+	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==278)){
 		while((!MSCAN1SendMsg(mg))&&(tt>0)){
 			tt--;
 		}
@@ -333,7 +333,7 @@ void cpuToCHMBRMDATA7(void)
 	  
 	  mg.id= 0x1ceb56f4;
 	  
-	  if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
+	  if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==278)) 
 	      while((!MSCAN1SendMsg(mg))&&(tt>0))
             tt--;
     else if(g_BmsModeFlag == RECHARGING) 
@@ -366,7 +366,7 @@ void cpuToCHMBCP(void)
 
 	mg.id= 0x1cec56f4;
 
-	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
+	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==278)) 
 	      while((!MSCAN1SendMsg(mg))&&(tt>0))
             tt--;
     else if(g_BmsModeFlag == RECHARGING) 
@@ -413,7 +413,7 @@ void cpuToCHMBCP(void)
 
 	mg.id= 0x1ceb56f4;
 
-	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
+	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==278)) 
 	      while((!MSCAN1SendMsg(mg))&&(tt>0))
             tt--;
     else if(g_BmsModeFlag == RECHARGING) 
@@ -453,7 +453,7 @@ void cpuToCHMBCP(void)
 
 	mg.id= 0x1ceb56f4;
 
-	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
+	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==278)) 
 		while((!MSCAN1SendMsg(mg))&&(tt>0))
 			tt--;
     else if(g_BmsModeFlag == RECHARGING) 
@@ -486,7 +486,7 @@ void cpuToCHMBRO(void)
     
 	mg.id= 0x100956f4;
 
-	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
+	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==278)) 
 	      while((!MSCAN1SendMsg(mg))&&(tt>0))
             tt--;
     else if(g_BmsModeFlag == RECHARGING) 
@@ -521,7 +521,7 @@ void cpuToCHMBCL(void)
 
 	mg.id= 0x181056f4;
 
-	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)){ 
+	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==278)){ 
 		while((!MSCAN1SendMsg(mg))&&(tt>0)){
 			tt--;
 		}
@@ -558,7 +558,7 @@ void cpuToCHMBCS(void)
     
     mg.id= 0x1cec56f4;
     
-   	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
+   	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==278)) 
 	      while((!MSCAN1SendMsg(mg))&&(tt>0))
             tt--;
     else if(g_BmsModeFlag == RECHARGING) 
@@ -600,7 +600,7 @@ void cpuToCHMBCSDATA1(void)
 
 	mg.id= 0x1ceb56f4;
     
-    if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
+    if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==278)) 
 	      while((!MSCAN1SendMsg(mg))&&(tt>0))
             tt--;
             
@@ -638,7 +638,7 @@ void cpuToCHMBCSDATA2(void)
     
     mg.id= 0x1ceb56f4;
     
-    if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
+    if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==278)) 
 	      while((!MSCAN1SendMsg(mg))&&(tt>0))
             tt--;
     else if(g_BmsModeFlag == RECHARGING) 
@@ -670,7 +670,7 @@ void cpuToCHMBSM(void)
 
 	mg.id= 0x181356f4;
     
-    if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843))
+    if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==278))
 	      while((!MSCAN1SendMsg(mg))&&(tt>0))
             tt--;
     else if(g_BmsModeFlag == RECHARGING) 
@@ -702,7 +702,7 @@ void cpuToCHMBST(void)
 
 	mg.id= 0x101956f4;
 
-	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
+	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==278)) 
 		while((!MSCAN1SendMsg(mg))&&(tt>0))
 			tt--;
     else if(g_BmsModeFlag == RECHARGING) 
@@ -740,7 +740,7 @@ void cpuToCHMBSD(void)
 	  
     mg.id= 0x181c56f4;
     
-    if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
+    if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==278)) 
 	      while((!MSCAN1SendMsg(mg))&&(tt>0))
             tt--;
     else if(g_BmsModeFlag == RECHARGING) 
@@ -769,7 +769,7 @@ void cpuToCHMBEM(void)
 	  
     mg.id= 0x081e56f4;
     
-    if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
+    if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==278)) 
 	      while((!MSCAN1SendMsg(mg))&&(tt>0))
             tt--;
     else if(g_BmsModeFlag == RECHARGING) 
@@ -802,7 +802,7 @@ void J1939_TP_CM_Abort(void)
 	  
     mg.id= 0x1cec56f4;
     
-    if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==6843)) 
+    if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==278)) 
 	      while((!MSCAN1SendMsg(mg))&&(tt>0))
             tt--;
     else if(g_BmsModeFlag == RECHARGING) 

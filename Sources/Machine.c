@@ -191,9 +191,9 @@ void HighVoltDetectPart1(void)
 	
     //**************检测MSD******************************//////////////////////// 
     if(g_highVoltageV1 < 100) 
-    {                       
-        tt++;   
-        if(tt>=12)//60ms才能判断出来
+    {
+        tt++;
+        if(tt >= 12)//60ms才能判断出来
         {
             //to vcu
             RelayErrorPowerOff = 1;//继电器下电故障
@@ -201,8 +201,8 @@ void HighVoltDetectPart1(void)
             g_caution_Flag_4 |= 0x01; //to PC
             tt=13;
         }
-    } 
-    else   
+    }
+    else
     {
         tt=0;
     }
@@ -210,7 +210,7 @@ void HighVoltDetectPart1(void)
 	// hv lock error detect, 1 means error.
 	if(HV_Lock_Error_state() == 1){
 		hv_lock_error_cnt++;
-		if(hv_lock_error_cnt >= 20){
+		if(hv_lock_error_cnt >= 12){
 			Error_Group6.Bit.F1_HLVol_Lock = 1;
 			g_bms_fault_msg.fault.HLVol_Lock_Alram = 1;
 			status_group3.Bit.Fault_Level = 3;

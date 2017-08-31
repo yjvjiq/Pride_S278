@@ -563,14 +563,14 @@ void TaskRechargeDC(void)
 				if(counter_30s>3000)//30Sä»¥å†… 3000*10ms=30S 
 				{
 					OffState = 1;//×´Ì¬»úÓÉ170Ìø×ª40µÄ±êÖ¾Î» 
-					Error_Group1.Bit.St_CHG_Allow = 1; //³äµçÔÊĞí×´Ì¬Î»²»ÔÊĞí
+					Error_Group1.Bit.St_CHG_Allow = 1; //charge not allowed
 					PantNormalEndFlag=1;//ÊÜµç¹­Õı³£ÏÂµç			  
 					counter_30s=3002;
 				}
 			}
 			else{
 				OffState=1;//çŠ¶æ€æœºç”±170è·³è½¬180çš„æ ‡å¿—ä½ 
-				Error_Group1.Bit.St_CHG_Allow=1; //å……ç”µå…è®¸çŠ¶æ€ä½ä¸å…è®¸
+				Error_Group1.Bit.St_CHG_Allow=1; //charge not allowed
 				PantNormalEndFlag=1;//å—ç”µå¼“æ­£å¸¸ä¸‹ç”µ
 			}
 		}

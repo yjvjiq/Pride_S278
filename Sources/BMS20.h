@@ -63,7 +63,7 @@
 #define HIGHEST_VOL                 7344    //CML充电机规格:最大输出能力  3.6*204*10
 #define LOWEST_VOL                  6528    //CML充电机规格:最小输出能力   3.2*204*10
 
-#define POWER_SUPPLY 12	// when it's 24 means the BMS power supply is 24V.	
+#define POWER_SUPPLY 24	// when it's 24 means the BMS power supply is 24V.	
 // below is the 24V power supply
 #if(POWER_SUPPLY == 24)
 #define CC2VOLHIGH                  7.5     //CC2测量范围高

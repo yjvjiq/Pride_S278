@@ -386,6 +386,7 @@ void TaskStatusMachine(void)//task period = 5ms.
 		/////////////////////////////////////////////////////////////////////////////      
         case 30:    //*********************行车状态***********/////////////
 			turnOnSW_Power();
+			
 			if(state30==0) 
             {
                 state30=1;
@@ -422,20 +423,20 @@ void TaskStatusMachine(void)//task period = 5ms.
             BiggestDisCurtContinuous = 0;//SOF//5min
             BiggestFeedbackCurt = 0; //制动能量回收30s 
             BiggestFeedbackCurtContinuous = 0; //制动能量回收5min         
-            counter1_500ms++;
             if(pcMode==0) 
             {
                 status_group3.Bit.St_Charge = 1; //充电中
                 pcMode=1;
             }
             
-            //state_group2.Bit.St_Charge_Achieve = 1;   //充电中        
-            if(counter1_500ms>=70) //7*70=490ms
-            {
-                counter1_500ms=0;
-                Error_Group1.Bit.St_DisCHG_Allow=1;//放电允许状态位不允许
-   
-            }
+//            //state_group2.Bit.St_Charge_Achieve = 1;   //充电中        
+//            counter1_500ms++;
+//            if(counter1_500ms>=70) //7*70=490ms
+//            {
+//                counter1_500ms=0;
+//                Error_Group1.Bit.St_DisCHG_Allow=1;//放电允许状态位不允许
+//   
+//            }
             
 //			CarFaultDone();//过程故障处理,功率为循环上报,防止由于时序误报
     
@@ -454,13 +455,13 @@ void TaskStatusMachine(void)//task period = 5ms.
                 dcMode=1;
             }
  
-            counter1_500ms++;
-            if(counter1_500ms>=70)
-            {
-				counter1_500ms=0;
-//				HeatAndChargeControl();
-				Error_Group1.Bit.St_DisCHG_Allow=1;//放电允许状态位不允许
-            }
+//            counter1_500ms++;
+//            if(counter1_500ms>=70)
+//            {
+//				counter1_500ms=0;
+//				//HeatAndChargeControl();
+//				Error_Group1.Bit.St_DisCHG_Allow=1;//放电允许状态位不允许
+//            }
             
 //			CarFaultDone();//过程故障处理,功率为循环上报,防止由于时序误报
 
