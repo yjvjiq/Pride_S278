@@ -35,7 +35,7 @@ static TASK_COMPONENTS TaskComps[] =
     {0, 997,    1000,   TaskFaultProcess},          // 100ms故障处理
     //{0, 8,      8,    TaskRechargeDC},            // 直流充电 不能放开
     {0, 9,      10,     TaskRecordProcess},         // 历史记录处理
-      
+	
 };
 
 //**************************************************************************************
@@ -134,16 +134,16 @@ void TaskSocProcess(void)
         {
             ft=(StoreAHSOC-g_socValue)*SetCap;//计算累积充放电AH容量
             if(ft>1)
-            {			        
+            {
                 dischargeAH += (unsigned int)ft;
                 StoreAHSOC=First_g_socValue;
             }
-        } 
+        }
         else if((g_BmsModeFlag == FASTRECHARGING)&&((StoreAHState==1)))
         {
             ft=(g_socValue-StoreAHSOC)*SetCap;//计算累积充放电AH容量
             if(ft>1)
-            {			        
+            {
                 chargeAH += (unsigned int)ft;
                 StoreAHSOC=First_g_socValue;
             }

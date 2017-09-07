@@ -385,7 +385,7 @@ void TaskRecordProcess(void)
 		delay(1000);
 		RecordVoltKB();
 		delay(1000);
-		delay(1000);	      		       
+		delay(1000);
 		for(j=0;j<50;j++) 
 		{	        
 			RecordCellVoltage(j);//0~4*49+3=199

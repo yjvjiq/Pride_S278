@@ -175,29 +175,22 @@ void T_Ctrl_Process(void){
 			T_ctrl_state = 1;
 		}
 	}
-	else if((g_bms_msg.CellTempMax >= (25 + 40)) 
-		&&(g_bms_msg.CellTempMax < (35 + 40))
+	else if((g_bms_msg.CellTempMax >= (25 + 40))
+		&&(g_bms_msg.CellTempMax < (32 + 40))
 		&& (g_bms_msg.CellTempMax != 0xff)) {
-		if(T_ctrl_state == 1
-			&&(g_bms_msg.CellTempMax < (30 + 40))){
-			T_ctrl_state = 1; // wait here, power off cmd should be continued.
-		}
-		else if(T_ctrl_state == 4){
+		if(T_ctrl_state == 4){
 			T_ctrl_state = 4;
+		}
+		else if(T_ctrl_state == 3){
+			T_ctrl_state = 3;
 		}
 		else{
 			T_ctrl_state = 2;
 		}
 	}
-	else if((g_bms_msg.CellTempMax >= (35 + 40)) 
+	else if((g_bms_msg.CellTempMax >= (32 + 40))
 		&& (g_bms_msg.CellTempMax != 0xff)){
-		if(T_ctrl_state == 2
-			&& (g_bms_msg.CellTempMax < (38 + 40))){
-			T_ctrl_state = 2;
-		}
-		else{
-			T_ctrl_state = 3;
-		}
+		T_ctrl_state = 3;
 	}
 
 	if(g_TMS_BMS_msg.msg.fault_level == 1){
@@ -215,8 +208,8 @@ void T_Ctrl_Process(void){
 		case 1:
 			g_BMS_TMS_msg.msg.mode_cmd = T_CMD_POWER_OFF;
 			KHeat_Switch(OFF);
-			T_power_on_flag = 0;
 			g_BMS_TMS_msg.msg.HV_relay_status = St_heatManage;
+			T_power_on_flag = 0;
 			g_BMS_TMS_msg.msg.HV_on_request = T_CTRL_HV_OFF_REQ; // 0 = power on request, 1 = power off request
 			break;
 		case 2:
@@ -276,7 +269,7 @@ void T_Ctrl_Process(void){
 	g_BMS_TMS_msg.msg.CellTempMax	= g_bms_msg.CellTempMax;
 	g_BMS_TMS_msg.msg.CellTempMin	= g_bms_msg.CellTempMin;
 	g_BMS_TMS_msg.msg.pack_volt		= (U16)g_systemVoltage;
-	g_BMS_TMS_msg.msg.T_goal		= 20 + 40;
+	g_BMS_TMS_msg.msg.T_goal		= 13 + 40;
 	
 	if(g_BmsModeFlag == RECHARGING || g_BmsModeFlag == FASTRECHARGING){
 		g_BMS_TMS_msg.msg.chg_mode = 1;
