@@ -417,20 +417,28 @@ interrupt void CAN0_RECEIVE_ISR(void)   //车载 /外部CAN / 500Hz
             VCU_Request.byte = msgData[2];
             break;
             
-        case 0x0C0217A7://受电弓车载WiFi      /////////如果受电弓充电走整车CAN在此接收报文
+        case 0x0C0117A7://受电弓车载WiFi      /////////如果受电弓充电走整车CAN在此接收报文
             ACCOverTime = 0;//清零
 			VCU_ChgControl.byte = msgData[3];
             break;
-        case 0x18FEF117:
-			VCU_ParkBrakeOverTime = 0;
-            VCU_ParkBrake.byte = msgData[0];
-            
+			
+		case 0x18010027:
+			ACCOverTime = 0;//清零
+			VCU_ChgControl_2.byte = msgData[2];
+			break;
+			
+		case 0x18FEF117:
             buffer = msgData[2];
             buffer = buffer<<8;
             VCUSpeed = buffer+msgData[1];
             VehicleSpeed = VCUSpeed*0.00390625;
             break;
-          
+				
+        case 0x18FFDD17:		//0x18FEF117:
+			VCU_ParkBrakeOverTime = 0;
+            VCU_ParkBrake.byte = msgData[0];
+			break;
+			
 		    ///////////// 整车CAN接收受电弓报文 ///////////////
 		case 0x1826f456:
         //if((fChg2bmsbyte[0]==0x01)&&(fChg2bmsbyte[1]==0x01)&&(fChg2bmsbyte[2]==0))
@@ -696,8 +704,8 @@ interrupt void CAN1_RECEIVE_ISR(void)  //充电
                 CHMStep=0x05;
             break;
         case 0x101af456:
-            
-            m_askcurrent=0;//请求电流为0 
+            g_received_CST = 1;
+            m_askcurrent = 0;//请求电流为0 
             if(((fChg2bmsbyte[0])&(0x40)) == 0)
             {
                 fastend1 = 0x40;

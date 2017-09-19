@@ -43,8 +43,10 @@ void bmsModeAwake(void)
     } 
     else //IN5==1,means charger not plugged in.
     {
-        //received car WIFI's downC_Switch or downC_OK signal.
-        if((VCU_ChgControl.Bit.downC_Switch)||(VCU_ChgControl.Bit.downC_OK))
+        //received car WIFI's rise_Eleband_Switch or downC_OK signal.
+        if((VCU_ChgControl.Bit.rise_Eleband_Switch)
+//			||(VCU_ChgControl.Bit.downC_OK == 0)
+			||(VCU_ChgControl_2.Bit.rise_Eleband_No_OK == 0))
         {
             g_BmsModeFlag = RECHARGING;//进入受电弓充电模式
             status_group4.Bit.Mode_BMS_Work = 2;//BMS当前工作状态=充电
@@ -122,7 +124,9 @@ void SignalOnOffJudge(void)
             }
             
             //////////////////受电弓充电检测/////////////////////////////
-            if((VCU_ChgControl.Bit.downC_Switch)&&(VCU_ChgControl.Bit.downC_OK))
+            if((VCU_ChgControl.Bit.rise_Eleband_Switch)
+//				&&(VCU_ChgControl.Bit.downC_OK == 0) // downC_OK == 0 means the Eleband isn't at the vehicle side.
+				&&(VCU_ChgControl_2.Bit.rise_Eleband_No_OK == 0))
             {
                 AC_DisConnect = 0;
                 AC_Connect++;

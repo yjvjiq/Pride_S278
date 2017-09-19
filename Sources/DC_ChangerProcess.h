@@ -61,7 +61,7 @@ extern unsigned char SelfState3;     //自检计数器变成3标志
 extern unsigned char BEMStop;
 extern unsigned char ChargerStopState;
 extern unsigned char PantNormalEndFlag;//受电弓正常下电标志位
-
+extern unsigned char g_received_CST;
 ///////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////
 extern float GetRequestCurrentDC(void);

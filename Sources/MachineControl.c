@@ -71,8 +71,10 @@ void stateCodeTransfer(void)
             if((MSDError)||(N_RelayConnetError)||(HighVolPowerOff)||(acc_Connect == 0)
             ||(VCU_Request.Bit.Finish_PreChg)
             ||(g_bms_fault_msg.fault.HLVol_Lock_Alram == 1)
-            ||(VCU_ChgControl.Bit.downC_Switch)
-            || (VCU_ChgControl.Bit.downC_OK)){
+            ||(VCU_ChgControl.Bit.rise_Eleband_Switch)
+//            ||(VCU_ChgControl.Bit.downC_OK == 0)
+            ||(VCU_ChgControl_2.Bit.rise_Eleband_No_OK == 0)
+            ){
                 stateCode = 46;//MSD断路||负极粘连||需要下电的故障||ON=0||整车预充已完成
             }
             else if((VCU_Control.Bit.PowerOnOffReq == 1)&&(bmsSelfcheckCounter==1)){
@@ -152,7 +154,9 @@ void stateCodeTransfer(void)
                 if(bmsSelfcheckCounter==1)//无故障
                     stateCode = 47;
             }
-            else if(((VCU_ChgControl.Bit.downC_Switch)||(VCU_ChgControl.Bit.downC_OK))
+            else if(((VCU_ChgControl.Bit.rise_Eleband_Switch)
+//				||(VCU_ChgControl.Bit.downC_OK == 0)
+				||(VCU_ChgControl_2.Bit.rise_Eleband_No_OK == 0))
 				&&(bmsSelfcheckCounter==1))
             {
                 //降弓开关&&降弓到位&&自检计数器==1
@@ -172,8 +176,12 @@ void stateCodeTransfer(void)
 		Error_Group1.Bit.St_DisCHG_Allow = 1;	// discharge not allowed.
         if(stateCode == 81)
         {   
-            if((VCU_ChgControl.Bit.downC_Switch)&&(VCU_ChgControl.Bit.downC_OK)&&(VCU_ParkBrake.Bit.Parking_Brake))
+            if((VCU_ChgControl.Bit.rise_Eleband_Switch)
+//				&&(VCU_ChgControl.Bit.downC_OK == 0)
+				&&(VCU_ChgControl_2.Bit.rise_Eleband_No_OK == 0)
+				&&(VCU_ParkBrake.Bit.Parking_Brake)){
                 stateCode = 82;
+				}
         }
         else if(stateCode == 82)
         {
@@ -184,7 +192,9 @@ void stateCodeTransfer(void)
 				stateCode = 126;
 			}
             else if((MSDError==1)||(CCHG_RelayConError == 1)||(PantographOff)
-            ||(VCU_ChgControl.Bit.downC_Switch == 0)||(VCU_ChgControl.Bit.downC_OK == 0)
+            ||(VCU_ChgControl.Bit.rise_Eleband_Switch == 0)
+            ||(VCU_ChgControl.Bit.downC_OK == 1)
+            ||(VCU_ChgControl_2.Bit.rise_Eleband_No_OK == 1)
             ||(VCU_ParkBrake.Bit.Parking_Brake==0))
                 stateCode=126; //MSD断路||充电负粘连||需要下电故障||||降弓开关==0||降弓到位==0||驻车信号==0
             else if((bmsSelfcheckCounter==1) && (DC_Start == 1))
@@ -192,8 +202,12 @@ void stateCodeTransfer(void)
         }
         else if(stateCode == 84)
         {
-            if((VCU_ChgControl.Bit.downC_Switch == 0)||(VCU_ChgControl.Bit.downC_OK == 0)||(VCU_ParkBrake.Bit.Parking_Brake==0)||(PantographOff))
+            if((VCU_ChgControl.Bit.rise_Eleband_Switch == 0)
+				||(VCU_ChgControl.Bit.downC_OK == 1)
+				||(VCU_ChgControl_2.Bit.rise_Eleband_No_OK == 1)
+				||(VCU_ParkBrake.Bit.Parking_Brake==0)||(PantographOff)){
                 stateCode = 124;//降弓开关==0||降弓到位==0||驻车信号==0||需要下电故障
+				}
             else{// if((BmsCtlStat0&0x08)!=0)//降弓到位&&降弓开关
                 stateCode = 87;//充电负已闭合
             }
@@ -201,18 +215,28 @@ void stateCodeTransfer(void)
         else if(stateCode == 87)
         {
             if((CHG_N_RelayDisConError)||(CCHG_RelayConError)||(PantographOff)
-             ||(VCU_ChgControl.Bit.downC_Switch == 0)||(VCU_ChgControl.Bit.downC_OK == 0)||(VCU_ParkBrake.Bit.Parking_Brake==0)) 
+             ||(VCU_ChgControl.Bit.rise_Eleband_Switch == 0)
+             ||(VCU_ChgControl.Bit.downC_OK == 1)
+             ||(VCU_ChgControl_2.Bit.rise_Eleband_No_OK == 1)
+             ||(VCU_ParkBrake.Bit.Parking_Brake==0)){
                 stateCode = 124;//高压检测2有故障||需下电的故障||降弓开关==0||降弓到位==0（车载WIFI)||驻车信号
-            else if(bmsSelfcheckCounter==2) 
+			}
+            else if(bmsSelfcheckCounter==2) {
                 stateCode = 90;//自检计数器==2&&降弓开关==1&&降弓到位==1（车载WIFI)
+            }
         }
         else if(stateCode == 90)
         {
-            if((VCU_ChgControl.Bit.downC_Switch == 0)||(VCU_ChgControl.Bit.downC_OK == 0)
-            ||(PantographOff)||(CCHG_RelayDisConError)||(VCU_ParkBrake.Bit.Parking_Brake==0))
+            if((VCU_ChgControl.Bit.rise_Eleband_Switch == 0)
+				||(VCU_ChgControl.Bit.downC_OK == 1)
+				||(VCU_ChgControl_2.Bit.rise_Eleband_No_OK == 1)
+				||(VCU_ParkBrake.Bit.Parking_Brake==0)
+            	||(PantographOff)||(CCHG_RelayDisConError)){
                 stateCode = 120; //高压检测3有故障||需下电的故障||降弓开关==0||降弓到位==0（车载WIFI)||驻车信号 
-            else if(bmsSelfcheckCounter==3) 
+            }
+            else if(bmsSelfcheckCounter==3){
                 stateCode = 110;//自检计数器==3&&降弓开关==1&&降弓到位==1&&充电开关==1
+            }
         }
         else if(stateCode == 110)
         {
@@ -222,9 +246,10 @@ void stateCodeTransfer(void)
             ){
                 stateCode = 120;//充电已完成或者需下电的故障或者检测降弓开关==0||降弓到位==0||充电开关==0    
             }
-            else if((VCU_ChgControl.Bit.downC_Switch == 0)
-            ||(VCU_ChgControl.Bit.downC_OK == 0)
-            ||(VCU_ParkBrake.Bit.Parking_Brake==0)
+            else if((VCU_ChgControl.Bit.rise_Eleband_Switch == 0)
+            ||(VCU_ChgControl.Bit.downC_OK == 1)
+            ||(VCU_ChgControl_2.Bit.rise_Eleband_No_OK == 1)
+            ||(VCU_ParkBrake.Bit.Parking_Brake==0) 
 			||((fastendflag == 1) && (PantographOff != 1)) // charge finished and no fault.
 			)
             {

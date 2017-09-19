@@ -1306,14 +1306,20 @@ unsigned char TaskFaultProcess(void)
 	
     if((g_BmsModeFlag == FASTRECHARGING)||(g_BmsModeFlag == RECHARGING))
     {
-        DCChangerComError();//直流充电通信故障
+		DCChangerComError();//直流充电通信故障
+//		if(CHMStep != 0) //means start to communicate with the charger.
+//		{
+//		}
         Charge_Check();//充电电流正负检测
     }
     
     if(g_BmsModeFlag == RECHARGING) //慢充模式
     {
-        ACChangerComError();
-        VCUComError();//与VCU通讯故障
+		if(CHMStep != 0)//means start to communicate with the charger.
+		{
+        	ACChangerComError();
+			VCUComError();//与VCU通讯故障
+		}
     }
     else if(g_BmsModeFlag == DISCHARGING)//行车模式 
     {

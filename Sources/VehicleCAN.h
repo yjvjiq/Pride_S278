@@ -51,22 +51,33 @@ typedef union{
 	unsigned char byte;
 	
 	struct {
-		byte flag1			:2;	//bit0~1    预留
-		byte Charge_Switch	:1;	//bit2      充电开关
-		byte downC_Switch	:1;	//bit3      降弓开关
-		byte flag2			:1;	//bit4      预留
-		byte downC_OK		:1;	//bit5      降弓到位
-		byte flag3			:2;	//bit6~7    预留
+		byte flag1					:2;	//bit0~1    预留
+		byte Charge_Switch			:1;	//bit2      充电开关
+		byte rise_Eleband_Switch	:1;	//bit3      降弓开关
+		byte flag2					:1;	//bit4      预留
+		byte downC_OK				:1;	//bit5      降弓到位
+		byte flag3					:2;	//bit6~7    预留
 	}Bit;
 }VCU_CHGCONTROL;
+
+typedef union{
+	unsigned char byte;
+	struct{
+		byte flag1					:5;	//bit0~5    预留
+		byte Eleband_feedback_alarm	:1;	//bit6      预留
+		byte rise_Eleband_No_OK		:1;	//bit7
+		byte rise_Eleband_Switch	:1;	//bit8    预留
+	}Bit;
+}VCU_CHGCONTROL_2;
 
 typedef union{
 	unsigned char byte;
 	
 	struct {
 		byte flag1			:2;	//bit0~1    预留
-		byte Parking_Brake	:2;	//bit2~3    驻车信号
-		byte flag2			:4;	//bit6~7    预留
+		byte falg2			:2; //bit2~3
+		byte Parking_Brake	:2;	//bit4~5    驻车信号
+		byte flag2			:2;	//bit6~7    预留
 	}Bit;
 }VCU_PARKINGBRAKE;
 //////////////////////VCU发送的//////////////////////////
@@ -356,6 +367,7 @@ extern VCU_REQUEST VCU_Request;			//0x0CFF0BEF
 extern VCU_CELLREQUEST VCU_CellRequest;	//0x1801D2D0
 extern VCU_CONTROL VCU_Control;			//0x1802D2D0
 extern VCU_CHGCONTROL VCU_ChgControl;	//0x0C0217A7
+extern VCU_CHGCONTROL_2 VCU_ChgControl_2;	//0x0C0217A7
 extern VCU_PARKINGBRAKE VCU_ParkBrake;	//0x18FEF117
 
 extern STATUS_GROUP1 status_group1;
@@ -395,7 +407,6 @@ extern unsigned int Charge_Times;           //充电次数
 extern float DC_ChargePower;                //充电电量
 extern float VehicleSpeed;                  //车速信号
 extern unsigned char WiFiLife;
-
 //******************************************************************************
 //* 以下是用于外部的函数
 //******************************************************************************

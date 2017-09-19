@@ -121,11 +121,11 @@ void cpuToCHMBRMDATA1(void)
     mg.data[3] = 0x00;  
     mg.data[4] = CELL_TYPE;//磷酸铁锂 
     
-	buff = (unsigned int)(SetCap*10);//动力电池系统额定容量:120Ah
+	buff = (unsigned int)(SetCap*10);//动力电池系统额定容量:150Ah
 	mg.data[5] = (unsigned char)buff;  
 	mg.data[6] = buff>>8;
 
-	buff = SYS_NOMINAL_V*10;//576V
+	buff = SYS_NOMINAL_V*10;//652.8V
 	mg.data[7] = (unsigned char)buff;//动力电池系统额定电压
 
 	mg.id= 0x1ceb56f4;
@@ -322,16 +322,16 @@ void cpuToCHMBRMDATA7(void)
     mg.len = 8;
     mg.prty = 0;
     
-    mg.data[0] = 0x07;
-    mg.data[1] = 0xff;
-    mg.data[2] = 0xff; 
-    mg.data[3] = 0xff; 
-    mg.data[4]= 0xff;
-	  mg.data[5]= 0xff;
-    mg.data[6]= 0xff;
-	  mg.data[7]= 0xff;
-	  
-	  mg.id= 0x1ceb56f4;
+	mg.data[0] = 0x07;
+	mg.data[1] = 0xff;
+	mg.data[2] = 0xff; 
+	mg.data[3] = 0xff; 
+	mg.data[4] = 0xff;
+	mg.data[5] = 0xff;
+	mg.data[6] = 0xff;
+	mg.data[7] = 0xff;
+
+	mg.id= 0x1ceb56f4;
 	  
 	  if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==278)) 
 	      while((!MSCAN1SendMsg(mg))&&(tt>0))
@@ -514,7 +514,7 @@ void cpuToCHMBCL(void)
 	mg.data[0]= (unsigned char)buff;//电压需求
 	mg.data[1]= buff>>8;
 
-	buff = (unsigned int)((500 - m_askcurrent)*10);
+	buff = (unsigned int)((400 - m_askcurrent)*10);
 	mg.data[2]= (unsigned char)buff;//电流需求
 	mg.data[3]=  buff>>8;
 	mg.data[4] = m_chmmode;//恒流控制
@@ -627,14 +627,15 @@ void cpuToCHMBCSDATA2(void)
     else if(Can_g_socValue>=0.992)
         chargeRemainderTime=2;
     chargeRemainderTime=DCLeftTime*60;
-	  mg.data[0]= 0x2;//
-	  mg.data[1]=(unsigned char)DCLeftTime;//	
-	  mg.data[2]= DCLeftTime>>8;//
-  	mg.data[3]= 0xff;//
-	  mg.data[4]= 0xff;// 
-	  mg.data[5]= 0xff;// 
-	  mg.data[6]= 0xff;// 	  
-    mg.data[7]= 0xff;//
+	
+	mg.data[0]= 0x2;//
+	mg.data[1]=(unsigned char)DCLeftTime;//	
+	mg.data[2]= DCLeftTime>>8;//
+	mg.data[3]= 0xff;//
+	mg.data[4]= 0xff;// 
+	mg.data[5]= 0xff;// 
+	mg.data[6]= 0xff;// 	  
+	mg.data[7]= 0xff;//
     
     mg.id= 0x1ceb56f4;
     

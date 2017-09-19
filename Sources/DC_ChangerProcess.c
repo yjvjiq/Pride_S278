@@ -60,6 +60,7 @@ static unsigned char SetBSD = 0;//BSDÊÇ·ñÒÑ¾­·¢ËÍ
 static unsigned char SetBST = 0;//BSTÊÇ·ñÒÑ¾­·¢ËÍ
 unsigned char ChargerStopState = 0;//³äµçÊ±Èç¹ûÃ»ÓĞ³äÂú£¬ÔòSOCÍ£ÁôÔÚ99.2%
 unsigned char PantNormalEndFlag=0;//ÊÜµç¹­Õı³£ÏÂµç±êÖ¾Î»
+unsigned char g_received_CST = 0;
 
 //******************************************************************************
 //* Function name:   GetRequestCurrentDC
@@ -130,9 +131,14 @@ unsigned char DCFaultDone(void)
 	if(((g_caution_Flag_2 & 0x80) != 0)//³äµç»úÍ¨ĞÅ¹ÊÕÏ
 	||(Error_Group3.Bit.F0_Sub_Com_Err)//ÄÚÍøÍ¨Ñ¶¹ÊÕÏ
 	||(ACCha_Flag_BST)//³äµçÊ±µçÁ÷·½ÏòÒì³£
-	||(Error_Group0.Bit.F0_Fire_Warning == 3))//»ğÔÖÔ¤¾¯3¼¶ 
-//	||(Error_Group6.Bit.F0_Power_Vol)  ///¹©µçµçÔ´µçÑ¹Òì³£
-    {
+	||(Error_Group0.Bit.F0_Fire_Warning == 3)//»ğÔÖÔ¤¾¯3¼¶ 
+//	||((CHMStep != 0) && (g_BmsModeFlag == RECHARGING) &&(
+//	||(VCU_ChgControl.Bit.rise_Eleband_Switch == 0)
+//	||(VCU_ChgControl.Bit.downC_OK == 1)
+//	||(VCU_ChgControl_2.Bit.rise_Eleband_No_OK == 1)
+//	||(VCU_ParkBrake.Bit.Parking_Brake==0)
+//	))
+    ){
         fastendflag = 1;
         fastend3 |= 0x40;//ÆäËû¹ÊÕÏ
         OffState = 1;//ÇëÇóÏÂµç
@@ -341,7 +347,7 @@ void TaskRechargeDC(void)
 						counter_250ms1=0;
 						sendi1++;
 					}
-					else if((BRMStep == 1) && (FlagBRMSend==1)){
+					else if((BRMStep == 1)){// && (FlagBRMSend==1)
 						sendi1++;
 						if(sendi1==2)
 						  cpuToCHMBRMDATA1();
@@ -361,7 +367,7 @@ void TaskRechargeDC(void)
 								sendi1=0;
 								CHMStep1=1;
 								FlagBRMSend = 0;
-								BRMStep = 0;//æ¥æ”¶åˆ°CRMåå¼€å§‹å‘é€BRMä»¥åŠä¸‹æ¬¡å‘é€BRMçš„æ—¶æœº
+								BRMStep = 0;//æ¥æ”¶åˆ°CRMåå¼€å§‹å‘é€BRMä»¥åŠä¸‹æ¬¡å‘é€BRMçš„æ—¶æœ?
 							}
 						}
 						else if(sendi1==8)
@@ -370,7 +376,7 @@ void TaskRechargeDC(void)
 							sendi1=0;        			          
 							CHMStep1=1;
 							FlagBRMSend = 0;
-							BRMStep = 0;//æ¥æ”¶åˆ°CRMåå¼€å§‹å‘é€BRMä»¥åŠä¸‹æ¬¡å‘é€BRMçš„æ—¶æœº  
+							BRMStep = 0;//æ¥æ”¶åˆ°CRMåå¼€å§‹å‘é€BRMä»¥åŠä¸‹æ¬¡å‘é€BRMçš„æ—¶æœ? 
 						}
 					}
 				}
@@ -384,7 +390,7 @@ void TaskRechargeDC(void)
 				CHMStep2=0;
 				counter_250ms2=0;
 			}
-			if(CHMStep2==0 && FlagBCPSend == 1)
+			if(CHMStep2==0)// && FlagBCPSend == 1
 			{
 				sendi2++;
 				if(sendi2 == 1)
@@ -465,7 +471,7 @@ void TaskRechargeDC(void)
 				counter_250ms4=0;
 			}
 			if(CHMStep4_5==0)
-			{			        
+			{
 				sendi1++;
 				if(sendi1 == 1){
 					cpuToCHMBCS();
@@ -494,8 +500,16 @@ void TaskRechargeDC(void)
                 }
             }
 		}	  
-		if(((CHMStep==0x06)||(CHMStep==0x05))&&((fastendflag==1) ||(PantographOff == 1) || (OffState == 1) || (g_BmsModeFlag == RECHARGING && acc_Connect == 0)))//10ms·¢ËÍÒ»´Î,¿ªÊ¼·¢µÄÊ±ºò	
-		{
+		if(
+			((CHMStep==0x06)||(CHMStep==0x05))
+			&&(
+				(fastendflag == 1) 
+				||(PantographOff == 1) 
+				||(OffState == 1) 
+				||(g_BmsModeFlag == RECHARGING && acc_Connect == 0)
+				||(g_received_CST == 1)
+			)
+			){//10ms·¢ËÍÒ»´Î,¿ªÊ¼·¢µÄÊ±ºò	
 			//Èç¹ûÊÕµ½µØÃæ³äµç»ú³äµç½ØÖ¹±¨ÎÄ»òÕßµ¥ÌåµçÑ¹¡¢×ÜµçÑ¹³¬¹ı±£»¤Öµ
 			if(OverTimeState==1)
 			{
@@ -547,7 +561,7 @@ void TaskRechargeDC(void)
 		
 		if(CHMStep==0x07) //¿ì³ä³äµç½áÊø 
 		{
-			SelfState3=0;//ä¹‹å‰æ”¶åˆ°CROä»¥åå†ä¹Ÿä¸å‘é€äº†ï¼Œæµç¨‹å¦‚æœé‡æ–°æ¥ï¼Œéœ€è¦æ¸…é™¤
+			SelfState3=0;//ä¹‹å‰æ”¶åˆ°CROä»¥åå†ä¹Ÿä¸å‘é€äº†ï¼Œæµç¨‹å¦‚æœé‡æ–°æ¥ï¼Œéœ€è¦æ¸…é™?
 			if(counter_250ms7 % 25==0)
 			{
 				if((OverTimeState==1)||(BROErrorAA==1))//Èç¹ûÓĞ³¬Ê±¹ÊÕÏ²ÅÉÏ±¨,Ã»ÓĞ²»ÉÏ±¨
@@ -569,9 +583,9 @@ void TaskRechargeDC(void)
 				}
 			}
 			else{
-				OffState=1;//çŠ¶æ€æœºç”±170è·³è½¬180çš„æ ‡å¿—ä½ 
+				OffState=1;//çŠ¶æ€æœºç”?70è·³è½¬180çš„æ ‡å¿—ä½ 
 				Error_Group1.Bit.St_CHG_Allow=1; //charge not allowed
-				PantNormalEndFlag=1;//å—ç”µå¼“æ­£å¸¸ä¸‹ç”µ
+				PantNormalEndFlag=1;//å—ç”µå¼“æ­£å¸¸ä¸‹ç”?
 			}
 		}
 	}/////////END¿ì³ä·¢ËÍÏûÏ¢

@@ -324,6 +324,7 @@ void TaskStatusMachine(void)//task period = 5ms.
 	SignalOnOffJudge(); 
 	CarFaultDone();
 	T_Ctrl_Process();
+
 	
     switch(stateCode)
     {

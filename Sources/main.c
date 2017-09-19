@@ -21,7 +21,7 @@
 
 /* global variables definitions */
 //BMS Software Version define
-unsigned char BMS_SW_Version[8]={0x0b,0x01,0x16,0x09,0x06,0x00,0x01,0x00};//b116.0830.011 //s278 project
+unsigned char BMS_SW_Version[8]={0x0b,0x01,0x16,0x09,0x16,0x00,0x01,0x03};//b116.0830.011 //s278 project
 unsigned char BMUOK=0;
 unsigned char HeatFlag; //上电前温度标志位
 //**********************************************************************
