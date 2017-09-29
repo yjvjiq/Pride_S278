@@ -98,37 +98,37 @@ void InitialBMS(void)
     //TurnOn_CC2();//12V系统 屏蔽就是24V
     g_sysPara[PARA_BMU_NUMBER]=BMU_NUMBER;
 		
-	  if(ENDFLAG != ReadEndFlag())   //ENDFLAG=98 //是否要下载出厂参数？
-	  {
-		    InitDefaultParam();
-		    //设置时钟
-		    SetTime[0]=1;//秒
-		    SetTime[1]=21;//分
-		    SetTime[2]=14;//时
-		
-		    SetTime[3]=3;//星期
-		    SetTime[4]=18;//日
-		    SetTime[5]=6;//月
-		    SetTime[6]=12;//年
-		    I2CWriteDate(SetTime);  //设置初始时间
-	  }
+	if(ENDFLAG != ReadEndFlag())   //ENDFLAG=98 //是否要下载出厂参数？
+	{
+		InitDefaultParam();
+		//设置时钟
+		SetTime[0]=1;//秒
+		SetTime[1]=21;//分
+		SetTime[2]=14;//时
+
+		SetTime[3]=3;//星期
+		SetTime[4]=18;//日
+		SetTime[5]=6;//月
+		SetTime[6]=12;//年
+		I2CWriteDate(SetTime);  //设置初始时间
+	}
      
-	  LoadParamter();   //系统参数初始化
-	  StoreParameter();
-	  
-	  KB_DATA_RECALL();//调用绝缘检测的系数，为绝缘做准备。
+	LoadParamter();   //系统参数初始化
+	StoreParameter();
 
-	  g_errorCounter=ReadErrorIndex(); //读出当前故障记录条数
-	  //g_errorCounter=0;
-	    
-	  parametersClean();  //一些全局变量清零
-	  
-	  I2CReadDate();  //读取系统时间
-	  g_oldTime[0] = CurrentTime[0];  //秒
-	  g_oldTime[1] = CurrentTime[1];  //分
+	KB_DATA_RECALL();//调用绝缘检测的系数，为绝缘做准备。
 
-    if(StoreAHState==1)
-        ReadChargeDischargeAH();//读出累积充放电的AH容量
+	g_errorCounter=ReadErrorIndex(); //读出当前故障记录条数
+	//g_errorCounter=0;
+
+	parametersClean();  //一些全局变量清零
+
+	I2CReadDate();  //读取系统时间
+	g_oldTime[0] = CurrentTime[0];  //秒
+	g_oldTime[1] = CurrentTime[1];  //分
+
+	if(StoreAHState==1)
+		ReadChargeDischargeAH();//读出累积充放电的AH容量
     //state_group3.Bit.St_BMS_Operation = 1;//初始化状态
 }
 //******************************************************************************
@@ -138,32 +138,41 @@ void InitialBMS(void)
 //* ReturnValue    : None
 //******************************************************************************
 void InitialSoc(void)
-{		
+{
     //if(OCVState == 0)//如果没有进行OCV修正,则调用上一次的值
-    {      
+    {
         g_socValue = ReadOutSocStoreValue(); //SOC实际值，但不是显示值    
-        g_realNominalCap= ReadOutQ1StoreValue();//读取Q1值
+        g_realNominalCap = ReadOutQ1StoreValue();//读取Q1值
     }
     //当OCVState==1,Q1:g_realNominalCap与g_socValue在OCV函数中赋值
     Can_g_socValue = ReadOutCanSocStoreValue();//SOC显示值
-    First_g_socValue=g_socValue;
-    StoreAHSOC=g_socValue;
-    Can_g_socValue_Start=Can_g_socValue;
-	  
-	  if(g_socValue<0)
-	      g_socValue = 0.22;	   
-	  if(Can_g_socValue<0)
-	      Can_g_socValue = 0.44;
-	  
-	  g_originalCapacity = SYS_NOMINAL_AH;
-	  if(g_realNominalCap>=g_originalCapacity)
-	      g_realNominalCap=g_originalCapacity;
-	  Q2 = Q2nominalCalculate(g_realNominalCap); //计算出额定容量
-	  if(Q2>=g_realNominalCap)
-	      Q2=g_realNominalCap;
-	  g_leftEnergy = g_socValue*(g_realNominalCap*3600);  //剩余容量(上电时的容量	  
-	  g_energyOfUsed = 0;      
-	 
+    First_g_socValue = g_socValue;
+    StoreAHSOC = g_socValue;
+    Can_g_socValue_Start = Can_g_socValue;
+	
+	if(g_socValue < 0)
+	{
+		g_socValue = 0.22;
+	}
+	if(Can_g_socValue < 0)
+	{
+		Can_g_socValue = 0.44;
+	}
+	
+	g_originalCapacity = SYS_NOMINAL_AH;
+	if(g_realNominalCap >= g_originalCapacity)
+	{
+		g_realNominalCap = g_originalCapacity;
+	}
+	
+	Q2 = Q2nominalCalculate(g_realNominalCap); //计算出额定容量
+	if(Q2 >= g_realNominalCap)
+	{
+		Q2=g_realNominalCap;
+	}
+	
+	g_leftEnergy = g_socValue*(g_realNominalCap*3600);  //剩余容量(上电时的容量	  
+	g_energyOfUsed = 0;      
 }
 //******************************************************************************
 //* Function name:   ReadEndFlag

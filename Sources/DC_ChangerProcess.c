@@ -61,6 +61,7 @@ static unsigned char SetBST = 0;//BST是否已经发送
 unsigned char ChargerStopState = 0;//充电时如果没有充满，则SOC停留在99.2%
 unsigned char PantNormalEndFlag=0;//受电弓正常下电标志位
 unsigned char g_received_CST = 0;
+unsigned char g_BST_send_ok = 0;
 
 //******************************************************************************
 //* Function name:   GetRequestCurrentDC
@@ -194,7 +195,7 @@ void TaskRechargeDC(void)
     float curr1=0;
 	static U16 counter_30s = 0;
     unsigned char ErrorState = 0;
-  
+	
     if((g_BmsModeFlag != FASTRECHARGING)&&(g_BmsModeFlag != RECHARGING))
         return;
     
@@ -311,6 +312,7 @@ void TaskRechargeDC(void)
 				if(DCStartState == 2)//new GB-T start flag, reveiced CHM
 				{
 					cpuToCHMBHM();
+					g_BST_send_ok = 0;
 					CRMOverTimeBefore++;
 					if(CRMOverTimeBefore >= 120)//如果30s接收不到CRM则超时 
 					{
@@ -500,8 +502,7 @@ void TaskRechargeDC(void)
                 }
             }
 		}	  
-		if(
-			((CHMStep==0x06)||(CHMStep==0x05))
+		if(((CHMStep==0x06)||(CHMStep==0x05))
 			&&(
 				(fastendflag == 1) 
 				||(PantographOff == 1) 
@@ -523,6 +524,7 @@ void TaskRechargeDC(void)
 			if(SetBSD==0)//如果BSD已经发送,则BST不再发送
 			{
 				cpuToCHMBST();
+				g_BST_send_ok = 1;
 				m_askcurrent=0;//请求电流为0
 				CSTOverTime++;//10ms*200
 				if(CSTOverTime>=500)//防止收不到CST报文5s延时,10ms*500 

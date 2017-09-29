@@ -382,30 +382,30 @@ void sendRealtimeToBMU(void) //给BMU发送BMS当前实时时间
 //******************************************************************************
 void RecordSystem(void)//
 {
-    struct can_msg mg;
-    char tt=100;
-    
-    mg.RTR= FALSE;  
-    mg.len = 8;
-    mg.prty = 0;
-    
-    mg.data[0]= g_storageSysVariableOut[INDEX]>>8;
-    mg.data[1]= g_storageSysVariableOut[INDEX];
-    
-	  mg.data[2]= g_storageSysVariableOut[TOTAL_VOLTAGE]>>8;//电池组当前电压高字节 
-	  mg.data[3]= g_storageSysVariableOut[TOTAL_VOLTAGE];//电池组当前电压低字节 
-	  	
-	  mg.data[4]= g_storageSysVariableOut[TOTAL_CURRENT]>>8;//电池组当前电流高字节 
-  	mg.data[5]= g_storageSysVariableOut[TOTAL_CURRENT];//电池组当前电流低字节 
-  	
-    mg.data[6] = g_storageSysVariableOut[PARA_SOC_DISPLAY];// 电池荷电状态SOC 分辨率0.4,单位%
+	struct can_msg mg;
+	char tt=100;
 
-    mg.data[7]= g_storageSysVariableOut[SYS_CONTACTORS_STATE];//BMS控制状态
+	mg.RTR= FALSE;  
+	mg.len = 8;
+	mg.prty = 0;
 
-    
-    mg.id = 0x18ff6000;
-	  while((!MSCAN2SendMsg(mg))&&(tt>0))
-	      tt--;
+	mg.data[0]= g_storageSysVariableOut[INDEX]>>8;
+	mg.data[1]= g_storageSysVariableOut[INDEX];
+
+	mg.data[2]= g_storageSysVariableOut[TOTAL_VOLTAGE]>>8;//电池组当前电压高字节 
+	mg.data[3]= g_storageSysVariableOut[TOTAL_VOLTAGE];//电池组当前电压低字节 
+
+	mg.data[4]= g_storageSysVariableOut[TOTAL_CURRENT]>>8;//电池组当前电流高字节 
+	mg.data[5]= g_storageSysVariableOut[TOTAL_CURRENT];//电池组当前电流低字节 
+
+	mg.data[6] = g_storageSysVariableOut[PARA_SOC_DISPLAY];// 电池荷电状态SOC 分辨率0.4,单位%
+
+	mg.data[7]= g_storageSysVariableOut[SYS_CONTACTORS_STATE];//BMS控制状态
+
+
+	mg.id = 0x18ff6000;
+	while((!MSCAN2SendMsg(mg))&&(tt>0))
+		tt--;
 	  
 }
 //******************************************************************************

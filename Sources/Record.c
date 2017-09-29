@@ -157,7 +157,7 @@ void storeErrorIndex(unsigned int index)
 void StoreSysVariable(void)  //´æ´¢¹ÊÕÏÐÅÏ¢ºÍSOCÖµ£¬µØÖ·´Óat45db161 µÄ 0x3ff ¿ªÊ¼
 {
 	unsigned char i=0,j=0; 
-	unsigned int buffer1[STORE_NUMBER],buffer2_1[128];//buffer2_2[72],test_1[128],test_2[72],test1[32]
+	unsigned int buffer1[STORE_NUMBER],buffer2_1[128],buffer2_2[72];//,test_1[128],test_2[72],test1[32]
 	unsigned int check=0;   //Ð£ÑéºÍ
 
 	g_errorCounter++;
@@ -178,21 +178,15 @@ void StoreSysVariable(void)  //´æ´¢¹ÊÕÏÐÅÏ¢ºÍSOCÖµ£¬µØÖ·´Óat45db161 µÄ 0x3ff ¿ªÊ
     for(j=SYS_REALTIME_SECOND;j<SYS_REALTIME_YEAR+1;j++){
         g_storageSysVariable[j]= CurrentTime[j-10];
     }
-	
-//	g_storageSysVariable[CELL_MAX_TEM] =(unsigned int)((g_highestTemperature-40)+48);
-//	g_storageSysVariable[CELL_MIN_TEM] = (unsigned int)((g_lowestTemperature-40)+48);
-//	g_storageSysVariable[CELL_MAX_VOLTAGE] = (unsigned int)(g_highestCellVoltage*10000);
-//	g_storageSysVariable[CELL_MIN_VOLTAGE] = (unsigned int)(g_lowestCellVoltage*10000);
 
-	g_storageSysVariable[CELL_MAX_TEM] =(unsigned int)((g_bms_msg.CellTempMax-40)+48);
-	g_storageSysVariable[CELL_MIN_TEM] = (unsigned int)((g_bms_msg.CellTempMin-40)+48);
-	g_storageSysVariable[CELL_MAX_VOLTAGE] = (unsigned int)(g_bms_msg.CellVoltageMax);
-	g_storageSysVariable[CELL_MIN_VOLTAGE] = (unsigned int)(g_bms_msg.CellVoltageMin);
-	
-	g_storageSysVariable[CELL_AVERAGE_TEM] = (unsigned int)((g_averageTemperature-40)+48);
-	g_storageSysVariable[CELL_AVERAGE_VOLTAGE] = (unsigned int)(g_averageVoltage*10000); 
-	g_storageSysVariable[SYS_INSULATION_P] = Rp_Vpn_Value;
-	g_storageSysVariable[SYS_INSULATION_N] = Rn_Vpn_Value;
+	g_storageSysVariable[CELL_MAX_TEM]			= (unsigned int)((g_bms_msg.CellTempMax-40)+48);
+	g_storageSysVariable[CELL_MIN_TEM]			= (unsigned int)((g_bms_msg.CellTempMin-40)+48);
+	g_storageSysVariable[CELL_AVERAGE_TEM]		= (unsigned int)((g_averageTemperature-40)+48);
+	g_storageSysVariable[CELL_MAX_VOLTAGE]		= (unsigned int)(g_bms_msg.CellVoltageMax);
+	g_storageSysVariable[CELL_MIN_VOLTAGE]		= (unsigned int)(g_bms_msg.CellVoltageMin);
+	g_storageSysVariable[CELL_AVERAGE_VOLTAGE]	= (unsigned int)(g_averageVoltage*10000); 
+	g_storageSysVariable[SYS_INSULATION_P]		= Rp_Vpn_Value;
+	g_storageSysVariable[SYS_INSULATION_N]		= Rn_Vpn_Value;
 	
     //µ¥ÌåµçÑ¹ÖµÔÚBMUÊý¾Ý´¦ÀíÀï
     //´æÈëAD45DB161
@@ -200,36 +194,36 @@ void StoreSysVariable(void)  //´æ´¢¹ÊÕÏÐÅÏ¢ºÍSOCÖµ£¬µØÖ·´Óat45db161 µÄ 0x3ff ¿ªÊ
     //ÕâÀï³öÏÖ¿çÒ³´íÎóÎÊÌâ¡£¡£¡£ËùÒÔ£¬Ã¿Ìõ¼ÇÂ¼Õ¼Ò»ÕûÒ³¡£528×Ö½ÚÒ»Ò³¡£      
     for(i=0;i<=35;i++) 
     {    
-        buffer2_1[i] = g_storageSysVariableCell[i];//¼ÇÂ¼ËùÓÐµ¥ÌåµçÑ¹
+        buffer2_1[i] = g_storageSysVariableCell[i];//¼ÇÂ¼ËùÓÐµ¥ÌåµçÑ¹¼«Öµ
         check += buffer2_1[i];
     }
-    M95_Write_Memory(256*(unsigned long)2*g_errorCounter,(unsigned char* )buffer2_1,36*2);//´ÓµÚ1Ò³¿ªÊ¼£¨µØÖ·´Ó0¿ªÊ¼,0~255,´æ128¸öµ¥ÌåµçÑ¹
+    M95_Write_Memory(256*(unsigned long)2*g_errorCounter,(unsigned char* )buffer2_1,36*2);//´ÓµÚ1Ò³¿ªÊ¼£¨µØÖ·´Ó0¿ªÊ¼,0~255,´æ18¸ö×î¸ßµ¥ÌåµçÑ¹ºÍ18¸ö×îµÍµ¥ÌåµçÑ¹, 18*2bytes*2, max and min
     
     //for test
     /*
-    DisableInterrupts; //
-        M95_Read_Memory(256*(unsigned long)2*g_errorCounter,(unsigned char* )test_1,256);//´ÓµÚ1Ò³¿ªÊ¼£¨µØÖ·´Ó0¿ªÊ¼,0~255,´æ128¸öµ¥ÌåµçÑ¹  
+    DisableInterrupts;
+    M95_Read_Memory(256*(unsigned long)2*g_errorCounter,(unsigned char* )test_1,256);//´ÓµÚ1Ò³¿ªÊ¼£¨µØÖ·´Ó0¿ªÊ¼,0~255,´æ128¸öµ¥ÌåµçÑ¹  
     EnableInterrupts; //¿ªÖÐ¶Ï£
     */
-    //for test
+    //end of test
     
-    /*for(i=128;i<200;i++)
+    for(i=128;i<200;i++)
     {
-        buffer2_2[i-128] = g_storageSysVariableCell[i];//¼ÇÂ¼ËùÓÐµ¥ÌåµçÑ¹
-        check += buffer2_2[i-128];  
+//		buffer2_2[i-128] = g_storageSysVariableCell[i];//¼ÇÂ¼ËùÓÐµ¥ÌåµçÑ¹
+		buffer2_2[i-128] = 0;   //fill 0 for unused area. just check calculate, project name S278.
+
+		check += buffer2_2[i-128];  
     }
-    
       
     M95_Write_Memory(256*(unsigned long)(2*g_errorCounter+1),buffer2_2,72*2);//´ÓµÚ1Ò³¿ªÊ¼£¨µØÖ·´Ó256¿ªÊ¼£¬256~399,´æÁíÍâ72¸öµçÑ¹
     
-    *///for test
+    //for test
     /*
-    DisableInterrupts; //
-        M95_Read_Memory(256*(unsigned long)(2*g_errorCounter+1),(unsigned char* )test_2,72*2);//´ÓµÚ1Ò³¿ªÊ¼£¨µØÖ·´Ó0¿ªÊ¼,0~255,´æ128¸öµ¥ÌåµçÑ¹  
-    EnableInterrupts; //¿ªÖÐ¶Ï£
+    DisableInterrupts;
+    M95_Read_Memory(256*(unsigned long)(2*g_errorCounter+1),(unsigned char* )test_2,72*2);//´ÓµÚ1Ò³¿ªÊ¼£¨µØÖ·´Ó0¿ªÊ¼,0~255,´æ128¸öµ¥ÌåµçÑ¹  
+    EnableInterrupts; //¿ªÖÐ¶Ï
     */
-    //for test  
-    
+    //end of test  
     
     //ÏÈ´æºó°ëÒ³£¬ÔÙ´æÇ°°ëÒ³£¬ÒòÎªÐ£ÑéºÍÔÚÇ°°ëÒ³Àï
     for(i=0;i<=SYS_INSULATION_N;i++) 
@@ -432,7 +426,9 @@ void parametersClean(void)
         g_storageSysVariableOut[i] = 0;
 	}
 
-
+	VCU_ChgControl_2.Bit.rise_Eleband_No_OK = 1;
+	VCU_ChgControl.Bit.rise_Eleband_Switch = 0;
+	VCU_ChgControl.Bit.downC_OK = 1;
 }
 //********************************************************************************************
 //***********************************the end*************************************************

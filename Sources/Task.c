@@ -403,7 +403,7 @@ void TaskStatusMachine(void)//task period = 5ms.
                 BiggestFeedbackCurt = PulseRechargePowerAdjust1(); //制动能量回收30s 
                 BiggestFeedbackCurtContinuous = ContinueRechargeCurt(); //制动能量回收5min         
             }
-            else if((plug_AC_CP_Connect == 1)||(HighVolPowerOff == 1))//检测到受电弓
+            else if((plug_AC_CP_Connect == 1)||(HighVolPowerOff == 1)||(VCU_Control.Bit.PowerOnOffReq == 2))//检测到受电弓
             {
                 BiggestDischargeCurt =0;//SOF//30s
                 BiggestDisCurtContinuous = 0;//SOF//5min

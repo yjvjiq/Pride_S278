@@ -62,6 +62,8 @@ extern unsigned char BEMStop;
 extern unsigned char ChargerStopState;
 extern unsigned char PantNormalEndFlag;//受电弓正常下电标志位
 extern unsigned char g_received_CST;
+extern unsigned char g_BST_send_ok;
+
 ///////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////
 extern float GetRequestCurrentDC(void);

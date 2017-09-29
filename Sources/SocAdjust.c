@@ -118,24 +118,25 @@ void SocOCVAdjust(unsigned int delaytime)
 {
     unsigned int timenow=0;
     unsigned int timeold=0;
-
+	
 	ReadOutErrorRecord(g_errorCounter);//为了得到上次下电时的时间
 	timenow=CurrentTime[4]*1440+CurrentTime[2]*60+CurrentTime[1];
 	timeold=g_storageSysVariableOut[SYS_REALTIME_DAY]*1440+g_storageSysVariableOut[SYS_REALTIME_HOUR]*60+g_storageSysVariableOut[SYS_REALTIME_MINUTE];
-	if(timenow < (timeold+delaytime)) //间隔时间没有超过间隔时间 30min
+	if(timenow < (timeold + delaytime)) //间隔时间没有超过间隔时间 30min
 	{
 		//OCVState = 0;
 		return;
 	}
+	
 	if((g_lowestCellVoltage==0)||(g_highestCellVoltage>=5.0))//防止单体电压为0或者最高单体检测故障
 		return;
 	
-	if(g_lowestCellVoltage>=3.34)//
+	if(g_lowestCellVoltage>=3.34)
 	{
 		if(g_socValue<0.95)
 		{	        
 			g_socValue=0.95;
-			g_leftEnergy = g_socValue*(g_realNominalCap*3600);	  
+			g_leftEnergy = g_socValue*(g_realNominalCap*3600);
 			g_energyOfUsed = 0; 
 			//OCVState = 1;
 		}

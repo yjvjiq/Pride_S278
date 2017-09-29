@@ -142,7 +142,7 @@ void SocIntegral(void)
 				
 				if(g_leftEnergy<=g_realNominalCap*3600)//如果容量未满
 				{ 
-						ft = g_leftEnergy-g_energyOfUsed;					        
+						ft = g_leftEnergy-g_energyOfUsed;
 						g_socValue = ft/(g_realNominalCap*3600);
 						CanSocIntegral();
 				}
@@ -150,13 +150,13 @@ void SocIntegral(void)
 				
 		if(g_systemCurrent>0)// //放电
 		{
-				//if(g_leftEnergy>=1.0)
-				if(g_leftEnergy>=0)
-				{    
-						ft = g_leftEnergy-g_energyOfUsed;
-						g_socValue = ft/(g_realNominalCap*3600);
-						CanSocIntegral();					               				
-				}
+			//if(g_leftEnergy>=1.0)
+			if(g_leftEnergy>=0)
+			{    
+				ft = g_leftEnergy-g_energyOfUsed;
+				g_socValue = ft/(g_realNominalCap*3600);
+				CanSocIntegral();					               				
+			}
 		} //end of 放电
 						 			
 		if(g_socValue>=1.0)	

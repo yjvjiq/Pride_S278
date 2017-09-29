@@ -161,6 +161,7 @@ void T_Ctrl_Process(void){
 	static U16 cnt_2 = 0;
 	
   	if(stateCode != 30 && stateCode != 110 && stateCode != 170){
+		g_BMS_TMS_msg.msg.HV_on_request = T_CTRL_HV_OFF_REQ;
 		return;
 	}
 

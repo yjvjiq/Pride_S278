@@ -932,14 +932,22 @@ void PowerSupplyError(void)//
     unsigned char Error[4]={0}; 
     unsigned char Level=0;
 
-    //上报故障等级
-    
-    Level=Supply24V_custom(PowerVOL);
-
+    //send the fault level
+	if(g_BmsModeFlag == FASTRECHARGING)
+	{
+		if(g_BST_send_ok != 1) // if not send BST, then detect the fault.
+		{
+			Level = Supply24V_custom(PowerVOL);
+		}
+	}
+	else
+	{
+		Level = Supply24V_custom(PowerVOL);
+	}
 	
     for(i=1;i<4;i++) 
-       if(i==Level) 
-           Error[i]=1;
+       if(i == Level) 
+           Error[i] = 1;
     
     //1级故障处理 上报故障  
     if(Error[1]) 
