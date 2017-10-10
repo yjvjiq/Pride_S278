@@ -393,7 +393,7 @@ void HighVoltDetectPart3(void)
     static unsigned char DCHGDisConnect_tt=0;
     static U16 s_detect_part3_cnt_t = 0;
 	
-    if(tmr_p3 <= 60)  //延时60ms
+    if(tmr_p3 <= 100)  //延时100ms
 	{
 		s_detect_part3_cnt_t = 0;
 		return;
@@ -425,7 +425,7 @@ void HighVoltDetectPart3(void)
 		&&(stateCode == 90))
     {
         CCHGDisConnect_tt ++;
-        if (CCHGDisConnect_tt>=20)//滤波延时60ms，电压是否能及时变化？
+        if (CCHGDisConnect_tt>=20)//滤波延时100ms，电压是否能及时变化？
         {
             RelayErrorPowerOff = 1;//继电器下电故障
             g_caution_Flag_2 |=0x40; //to PC
@@ -442,11 +442,11 @@ void HighVoltDetectPart3(void)
 	/////////////快充继电器断路///////
 	if((g_highVoltageV4 < 200) && (stateCode == 150))
 	{
-	    DCHGDisConnect_tt ++;
-	    if (DCHGDisConnect_tt>=20)//滤波延时60ms，电压是否能及时变化？
+	    DCHGDisConnect_tt++;
+	    if (DCHGDisConnect_tt >= 20)//滤波延时100ms，电压是否能及时变化？
 	    {
 	        RelayErrorPowerOff = 1;//继电器下电故障
-	        g_caution_Flag_3 |=0x40; //to PC
+	        g_caution_Flag_3 |= 0x40; //to PC
 	        DCCHG_RelayDisConError = 1;//充电继电器断路故障
 	        DCHGDisConnect_tt = 23;
 	    }
