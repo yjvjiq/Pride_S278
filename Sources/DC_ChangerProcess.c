@@ -294,7 +294,7 @@ void TaskRechargeDC(void)
 			m_askvoltage = 0;//请求电压降为0
         }
     } 
-    else 
+    else
     {
         timer1S = 0;
     }
@@ -509,6 +509,10 @@ void TaskRechargeDC(void)
 				||(OffState == 1) 
 				||(g_BmsModeFlag == RECHARGING && acc_Connect == 0)
 				||(g_received_CST == 1)
+				||(stateCode == 110 && ((VCU_ChgControl.Bit.rise_Eleband_Switch == 0)
+	            ||(VCU_ChgControl.Bit.downC_OK == 1)
+	            ||(VCU_ChgControl_2.Bit.rise_Eleband_No_OK == 1)
+	            ||(VCU_ParkBrake.Bit.Parking_Brake==0)))
 			)
 			){//10ms发送一次,开始发的时候	
 			//如果收到地面充电机充电截止报文或者单体电压、总电压超过保护值

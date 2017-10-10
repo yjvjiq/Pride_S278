@@ -35,7 +35,7 @@
 //#define C                         150     //充电倍率
 #define SetCap                      150     //充电倍率  为了区分C  C查找起来太多了  
 #define EleBand_Max_Current			500
-#define FastChg_Max_Current			300
+#define FastChg_Max_Current			240
 
 #define DubugMode                   1       //发送状态机报文
 
