@@ -195,6 +195,8 @@ void TaskRechargeDC(void)
     float curr1=0;
 	static U16 counter_30s = 0;
     unsigned char ErrorState = 0;
+	#define DECERASE_CURRENT_STEP	5 // decrease current step is 5A each time.
+	#define DECERASE_CURRENT_STEP_2 2 // decrease current step is 2A each time.
 	
     if((g_BmsModeFlag != FASTRECHARGING)&&(g_BmsModeFlag != RECHARGING))
         return;
@@ -208,8 +210,15 @@ void TaskRechargeDC(void)
     YoungMan_LT_FastChrgPowerAjust();
     curr =m_askcurrent_Model;
     ErrorState = DCFaultDone();
-	curr1 = curr;
-      
+	if(ChanceCurt == 0)
+	{
+		curr1 = curr;
+	}
+	else
+	{
+		curr1 = m_askcurrent;
+	}
+	
 	if(g_BmsModeFlag == FASTRECHARGING) 
 	{
 		////////////请求电压//////////
@@ -251,27 +260,6 @@ void TaskRechargeDC(void)
         }
     }
     
-    if((g_highestCellVoltage >= CHARGE_CUTDOWN_CV1 ) || (ChanceCurt == 1))//电流为计数出来的一半
-    {
-        timer2S++;
-        if(timer2S >= 80)//10*80 = 800ms
-        {
-            timer2S = 81;
-            if(curr1 > 0.1 * SetCap){
-                curr1 = 0.1 * SetCap;
-            }
-            else if(curr1 == 0){
-                curr1 = 0;
-            }
-            
-            ChanceCurt = 1;
-        }
-    }
-    else
-    {
-        timer2S=0;
-    }
-	
 	if(g_highestCellVoltage >= HIGHEST_ALLOWED_CHARGE_CV)  //3.65V = stop charge, charge finished.
 	{
         timer1S++;
@@ -294,9 +282,36 @@ void TaskRechargeDC(void)
 			m_askvoltage = 0;//请求电压降为0
         }
     } 
-    else
+	else if(g_highestCellVoltage >= CHARGE_CUTDOWN_CV2)//电流为计数出来的一半
+	{
+		timer3S++;
+		if(timer3S >= 100)//10*100 = 1000ms = 1s
+		{
+			timer3S = 0;
+			if(curr1 > 0.1 * SetCap)
+			{
+				curr1 -= DECERASE_CURRENT_STEP_2; // decrease current step by step. 2A
+			}
+            else{
+				//keep the current.
+            }
+		}
+		ChanceCurt = 1;
+	}
+	else if(g_highestCellVoltage >= CHARGE_CUTDOWN_CV1)//电流为计数出来的一半
     {
-        timer1S = 0;
+        timer2S++;
+        if(timer2S >= 100) //10*100 = 1000ms = 1s
+        {
+            timer2S = 0;
+            if(curr1 > 0.5 * SetCap){
+                curr1 -= DECERASE_CURRENT_STEP; // decrease current step by step.5A
+            }
+            else{
+				//keep the current.
+            }
+        }
+		ChanceCurt = 1;
     }
 	
     m_askcurrent = curr1;

@@ -49,7 +49,7 @@
 #define LOWEST_ALLOWED_WORK_T       -30     //最低允许工作温度   -30
 
 #define CHARGE_CUTDOWN_CV1          3.55    //第一次降流电压
-#define CHARGE_CUTDOWN_CV2          3.55    //第二次降流电压
+#define CHARGE_CUTDOWN_CV2          3.60    //第二次降流电压
 #define HIGHEST_ALLOWED_CHARGE_A    300.0   //直流最大允许充电电流 A
 #define SYS_NOMINAL_AH              150     //系统额定容量 AH
 #define SYS_NOMINAL_V               652.8   //系统额定电压 V//3.2*204= 652.8
@@ -261,44 +261,44 @@ enum parameter_list
 };
 enum storage_list 
 {
-    INDEX,
-    TOTAL_VOLTAGE,
-    TOTAL_CURRENT,
-    PARA_SOC_DISPLAY, // SOC值
-    SYS_CONTACTORS_STATE,  //总正总负继电器状态
+    INDEX = 0,
+    TOTAL_VOLTAGE,			// 1
+    TOTAL_CURRENT,			// 2
+    PARA_SOC_DISPLAY,		// 3 SOC值
+    SYS_CONTACTORS_STATE,	// 4 总正总负继电器状态
 
-    PARA_ERROR_LEVER,//故障等级值  1:1级故障  2:2级故障
-    CAUTION_FLAG_1,
-    CAUTION_FLAG_2,
-    CAUTION_FLAG_3,
-    CAUTION_FLAG_4,
+    PARA_ERROR_LEVER,		// 5 故障等级值  1:1级故障  2:2级故障
+    CAUTION_FLAG_1,			// 6
+    CAUTION_FLAG_2,			// 7
+    CAUTION_FLAG_3,			// 8
+    CAUTION_FLAG_4,			// 9
 
-    SYS_REALTIME_SECOND,
-    SYS_REALTIME_MINUTE,
-    SYS_REALTIME_HOUR,
-    SYS_REALTIME_WEEK,
-    SYS_REALTIME_DAY,
+    SYS_REALTIME_SECOND,	// 10
+    SYS_REALTIME_MINUTE,	// 11
+    SYS_REALTIME_HOUR,		// 12
+    SYS_REALTIME_WEEK,		// 13
+    SYS_REALTIME_DAY,		// 14
 
-    SYS_REALTIME_MONTH,
-    SYS_REALTIME_YEAR,
-    CELL_MAX_TEM,
-    CELL_MIN_TEM,
-    CELL_AVERAGE_TEM,
+    SYS_REALTIME_MONTH,		// 15
+    SYS_REALTIME_YEAR,		// 16
+    CELL_MAX_TEM,			// 17
+    CELL_MIN_TEM,			// 18
+    CELL_AVERAGE_TEM,		// 19
 
-    CELL_MAX_VOLTAGE,
-    CELL_MIN_VOLTAGE,
-    CELL_AVERAGE_VOLTAGE,
-    SYS_INSULATION_P,
-    SYS_INSULATION_N,
+    CELL_MAX_VOLTAGE,		// 20
+    CELL_MIN_VOLTAGE,		// 21
+    CELL_AVERAGE_VOLTAGE,	// 22
+    SYS_INSULATION_P,		// 23
+    SYS_INSULATION_N,		// 24
     
-    VOLT_K1,
-    VOLT_B1,
-    VOLT_K2,
-    VOLT_B2,
-    VOLT_K3,
-    VOLT_B3,
+    VOLT_K1,				// 25
+    VOLT_B1,				// 26
+    VOLT_K2,				// 27
+    VOLT_B2,				// 28
+    VOLT_K3,				// 29
+    VOLT_B3,				// 30
     
-    VERIFICATION  //校验
+    VERIFICATION			// 31 校验		
 };
 
 enum storage_cell_vol_list 

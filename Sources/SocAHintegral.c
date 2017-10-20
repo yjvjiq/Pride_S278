@@ -89,7 +89,7 @@ void CanSocIntegral(void)
     if(g_BmsModeFlag == DISCHARGING)
     {
         if(First_g_socValue!=0)
-            CANSOC= Can_g_socValue_Start*g_socValue/First_g_socValue/FactorA+(1.0-1.0/FactorA)*Can_g_socValue_Start; 
+            CANSOC= Can_g_socValue_Start * g_socValue / First_g_socValue / FactorA + (1.0 - 1.0 / FactorA) * Can_g_socValue_Start; 
         else//Èç¹û
         {          
             CANSOC=0;

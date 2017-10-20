@@ -448,7 +448,7 @@ void HighVoltDetectPart3(void)
 	        RelayErrorPowerOff = 1;//继电器下电故障
 	        g_caution_Flag_3 |= 0x40; //to PC
 	        DCCHG_RelayDisConError = 1;//充电继电器断路故障
-	        DCHGDisConnect_tt = 23;
+	        DCHGDisConnect_tt = 20;
 	    }
 	}
 	else   

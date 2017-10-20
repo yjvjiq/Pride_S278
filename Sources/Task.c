@@ -378,6 +378,8 @@ void TaskStatusMachine(void)//task period = 5ms.
             {
 				KFastChg_P_Switch(ON);
             }
+			delay(25000); //20ms
+			delay(25000); //20ms
             HighVoltDetectPart3();
             break;
 		//////////////////////////////////////////////////////////////////////////////

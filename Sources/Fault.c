@@ -1290,7 +1290,7 @@ void FaultLevel(void)
 //******************************************************************************
 unsigned char TaskFaultProcess(void) 
 {
-	unsigned char lever = 0;
+	unsigned char level = 0;
 	//unsigned char i,j,k=0;
 	static unsigned char caution1=0;
 	static unsigned char caution2=0;
@@ -1350,6 +1350,13 @@ unsigned char TaskFaultProcess(void)
 
     BMSProtect();////////BMS最后断继电器
 
+	//////////////////////////////////////////////////////////////////
+	////Caution_Flag_4：Bit 0：高压母线连接故障；Bit 1：烟雾检测故障；    
+	///////////////////  
+	g_storageSysVariable[PARA_ERROR_LEVER] = level;
+	g_storageSysVariable[CAUTION_FLAG_1] = g_caution_Flag_1;	
+	g_storageSysVariable[CAUTION_FLAG_2] = g_caution_Flag_2;	
+	g_storageSysVariable[CAUTION_FLAG_3] = g_caution_Flag_3;	
     //*****************************************************************************************
     //******************************************************************************************
     ////////////当故障与之前相比，没有变化时，不进行存储，只有1分钟才存储；如果有更新，才进行存储
@@ -1362,13 +1369,6 @@ unsigned char TaskFaultProcess(void)
 	caution2 =  g_caution_Flag_2;
 	caution3 =  g_caution_Flag_3;
 	caution4 =  g_caution_Flag_4;
-	//////////////////////////////////////////////////////////////////
-	////Caution_Flag_4：Bit 0：高压母线连接故障；Bit 1：烟雾检测故障；    
-	///////////////////  
-	g_storageSysVariable[PARA_ERROR_LEVER] = lever;
-	g_storageSysVariable[CAUTION_FLAG_1] = g_caution_Flag_1;	
-	g_storageSysVariable[CAUTION_FLAG_2] = g_caution_Flag_2;	
-	g_storageSysVariable[CAUTION_FLAG_3] = g_caution_Flag_3;	
 	g_storageSysVariable[CAUTION_FLAG_4] = g_caution_Flag_4;	
 
 	return g_storageSysVariable[PARA_ERROR_LEVER];   

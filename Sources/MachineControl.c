@@ -48,16 +48,16 @@ void stateCodeTransfer(void)
     static U16 charge_disable_cnt_t = 0;
 	static U16 fast_charge_end_cnt_t = 0;
 	        
-    if(State177End==1)//在177状态下将变量State177End置1
-    {
-        stateCode=179;//调试模式
-        return;
-    }
-    else if(TestState==1)
-    {
-        stateCode=177;//关闭继电器状态
-        return;
-    }
+//    if(State177End==1)//在177状态下将变量State177End置1
+//    {
+//        stateCode=179;//调试模式
+//        return;
+//    }
+//    else if(TestState==1)
+//    {
+//        stateCode=177;//关闭继电器状态
+//        return;
+//    }
     /////////////////行车//////////////////////
     if(g_BmsModeFlag == DISCHARGING)
     {

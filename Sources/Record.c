@@ -168,17 +168,17 @@ void StoreSysVariable(void)  //´æ´¢¹ÊÕÏÐÅÏ¢ºÍSOCÖµ£¬µØÖ·´Óat45db161 µÄ 0x3ff ¿ªÊ
     storeErrorIndex(g_errorCounter);//¸üÐÂ¹ÊÕÏ¼ÆÊýÆ÷ 
 	
     g_storageSysVariable[INDEX]= g_errorCounter;
-    g_storageSysVariable[TOTAL_VOLTAGE]= (unsigned int)g_highVoltageV1;   
-    g_storageSysVariable[TOTAL_CURRENT]= (unsigned int)((g_systemCurrent+400)*50);
-    g_storageSysVariable[PARA_SOC_DISPLAY]= (unsigned int)(g_socValue*100*2.5);
-    g_storageSysVariable[SYS_CONTACTORS_STATE]= BmsCtlStat0 & 0xff;//BMS¿ØÖÆ×´Ì¬ 
+    g_storageSysVariable[TOTAL_VOLTAGE]			= (unsigned int)g_highVoltageV1;   
+    g_storageSysVariable[TOTAL_CURRENT]			= (unsigned int)((g_systemCurrent+400)*50);
+    g_storageSysVariable[PARA_SOC_DISPLAY]		= (unsigned int)(g_socValue*100*2.5);
+    g_storageSysVariable[SYS_CONTACTORS_STATE]	= BmsCtlStat0 & 0xff;//BMS¿ØÖÆ×´Ì¬ 
     
     //¹ÊÕÏÐÅÏ¢ÔÚ¹ÊÕÏ´¦Àí³ÌÐòÀï
     //ÊµÊ±Ê±¼ä
     for(j=SYS_REALTIME_SECOND;j<SYS_REALTIME_YEAR+1;j++){
         g_storageSysVariable[j]= CurrentTime[j-10];
     }
-
+	
 	g_storageSysVariable[CELL_MAX_TEM]			= (unsigned int)((g_bms_msg.CellTempMax-40)+48);
 	g_storageSysVariable[CELL_MIN_TEM]			= (unsigned int)((g_bms_msg.CellTempMin-40)+48);
 	g_storageSysVariable[CELL_AVERAGE_TEM]		= (unsigned int)((g_averageTemperature-40)+48);
@@ -207,15 +207,14 @@ void StoreSysVariable(void)  //´æ´¢¹ÊÕÏÐÅÏ¢ºÍSOCÖµ£¬µØÖ·´Óat45db161 µÄ 0x3ff ¿ªÊ
     */
     //end of test
     
-    for(i=128;i<200;i++)
-    {
-//		buffer2_2[i-128] = g_storageSysVariableCell[i];//¼ÇÂ¼ËùÓÐµ¥ÌåµçÑ¹
-		buffer2_2[i-128] = 0;   //fill 0 for unused area. just check calculate, project name S278.
+//    for(i=128;i<200;i++)
+//    {
+//		buffer2_2[i-128] = 0;   //fill 0 for unused area. just check calculate, project name S278.
 
-		check += buffer2_2[i-128];  
-    }
-      
-    M95_Write_Memory(256*(unsigned long)(2*g_errorCounter+1),buffer2_2,72*2);//´ÓµÚ1Ò³¿ªÊ¼£¨µØÖ·´Ó256¿ªÊ¼£¬256~399,´æÁíÍâ72¸öµçÑ¹
+//		check += buffer2_2[i-128];  
+//    }
+//      
+//    M95_Write_Memory(256*(unsigned long)(2*g_errorCounter+1),buffer2_2,72*2);//´ÓµÚ1Ò³¿ªÊ¼£¨µØÖ·´Ó256¿ªÊ¼£¬256~399,´æÁíÍâ72¸öµçÑ¹
     
     //for test
     /*
@@ -223,7 +222,7 @@ void StoreSysVariable(void)  //´æ´¢¹ÊÕÏÐÅÏ¢ºÍSOCÖµ£¬µØÖ·´Óat45db161 µÄ 0x3ff ¿ªÊ
     M95_Read_Memory(256*(unsigned long)(2*g_errorCounter+1),(unsigned char* )test_2,72*2);//´ÓµÚ1Ò³¿ªÊ¼£¨µØÖ·´Ó0¿ªÊ¼,0~255,´æ128¸öµ¥ÌåµçÑ¹  
     EnableInterrupts; //¿ªÖÐ¶Ï
     */
-    //end of test  
+    //end of test
     
     //ÏÈ´æºó°ëÒ³£¬ÔÙ´æÇ°°ëÒ³£¬ÒòÎªÐ£ÑéºÍÔÚÇ°°ëÒ³Àï
     for(i=0;i<=SYS_INSULATION_N;i++) 
@@ -281,19 +280,19 @@ unsigned char ReadOutErrorRecord(unsigned int counter) //   1:Ð£Ñé²»Í¨¹ý
         M95_Read_Memory(256*(unsigned long)2*counter,(unsigned char* )buffer2_1,256);//´ÓµÚ1Ò³¿ªÊ¼£¨µØÖ·´Ó0¿ªÊ¼,0~255,´æ128¸öµ¥ÌåµçÑ¹  
 	EnableInterrupts; //¿ªÖÐ¶Ï
 
-	for(i=0;i<128;i++) 
+	for(i=0;i<36;i++) 
 	{      
          check += buffer2_1[i];
     }
 
 
-    DisableInterrupts; //
-        M95_Read_Memory(256*((unsigned long)2*counter+1),(unsigned char* )buffer2_2,72*2);//´ÓµÚ1Ò³¿ªÊ¼£¨µØÖ·´Ó0¿ªÊ¼,0~255,´æ128¸öµ¥ÌåµçÑ¹  
-    EnableInterrupts; //¿ªÖÐ¶Ï  
-    for(i=0;i<72;i++) 
-    {      
-         check += buffer2_2[i];
-    }
+//    DisableInterrupts; //
+//        M95_Read_Memory(256*((unsigned long)2*counter+1),(unsigned char* )buffer2_2,72*2);//´ÓµÚ1Ò³¿ªÊ¼£¨µØÖ·´Ó0¿ªÊ¼,0~255,´æ128¸öµ¥ÌåµçÑ¹  
+//    EnableInterrupts; //¿ªÖÐ¶Ï  
+//    for(i=0;i<72;i++) 
+//    {      
+//         check += buffer2_2[i];
+//    }
     
     
     DisableInterrupts; //
