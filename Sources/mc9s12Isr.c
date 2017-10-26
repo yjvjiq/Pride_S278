@@ -403,15 +403,15 @@ interrupt void CAN0_RECEIVE_ISR(void)   //车载 /外部CAN / 500Hz
     switch(msgCan0RxID) 
     {
         case 0x1801D2D0://
-             VCUOverTime = 0;//清零
-             VCU_CellRequest.byte = msgData[0];
-             break;
-             
+			VCUOverTime = 0;//清零
+			VCU_CellRequest.byte = msgData[0];
+			break;
+            
         case 0x1802D2D0:
-             VCUOverTime = 0;//清零      
-             VCU_Control.byte = msgData[1];
-             break;
-                
+			VCUOverTime = 0;//清零      
+			VCU_Control.byte = msgData[1];
+			break;
+			
         case 0x0CFFEBEF:  
             VCUOverTime = 0;//清零
             VCU_Request.byte = msgData[2];
@@ -422,7 +422,7 @@ interrupt void CAN0_RECEIVE_ISR(void)   //车载 /外部CAN / 500Hz
 			VCU_ChgControl.byte = msgData[3];
             break;
 			
-		case 0x18010027:
+		case 0x18010027: // used in Eleband Charge, CarWiFi.
 			ACCOverTime = 0;//清零
 			VCU_ChgControl_2.byte = msgData[2];
 			break;
@@ -433,7 +433,7 @@ interrupt void CAN0_RECEIVE_ISR(void)   //车载 /外部CAN / 500Hz
             VCUSpeed = buffer+msgData[1];
             VehicleSpeed = VCUSpeed*0.00390625;
             break;
-				
+			
         case 0x18FFDD17:		//0x18FEF117:
 			VCU_ParkBrakeOverTime = 0;
             VCU_ParkBrake.byte = msgData[0];
@@ -442,7 +442,7 @@ interrupt void CAN0_RECEIVE_ISR(void)   //车载 /外部CAN / 500Hz
 		    ///////////// 整车CAN接收受电弓报文 ///////////////
 		case 0x1826f456:
         //if((fChg2bmsbyte[0]==0x01)&&(fChg2bmsbyte[1]==0x01)&&(fChg2bmsbyte[2]==0))
-        //{                    
+        //{
             DCStartState=2;//新国标开始的标志 
             DC_Vesion = 2; //新国标
             if(CHMStep<=0x01)

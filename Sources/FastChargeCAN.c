@@ -540,23 +540,23 @@ void cpuToCHMBCL(void)
 //******************************************************************************
 void cpuToCHMBCS(void)
 {
-    struct can_msg mg;
-    char tt=100;
-    
-    mg.RTR= FALSE;  
-    mg.len = 8;
-    mg.prty = 0;
-    
-	  mg.data[0]= 0x10;//
-	  mg.data[1]= 0x09;	
-	  mg.data[2]= 0x00;//
-  	mg.data[3]= 0x02;//  
-	  mg.data[4]= 0xff;// 
-	  mg.data[5]= 0x00;//
-	  mg.data[6]= 0x11;	  
-    mg.data[7]= 0x00;
-    
-    mg.id= 0x1cec56f4;
+	struct can_msg mg;
+	char tt=100;
+
+	mg.RTR= FALSE;  
+	mg.len = 8;
+	mg.prty = 0;
+
+	mg.data[0]= 0x10;//
+	mg.data[1]= 0x09;	
+	mg.data[2]= 0x00;//
+	mg.data[3]= 0x02;//  
+	mg.data[4]= 0xff;// 
+	mg.data[5]= 0x00;//
+	mg.data[6]= 0x11;	  
+	mg.data[7]= 0x00;
+
+	mg.id= 0x1cec56f4;
     
    	if((g_BmsModeFlag == FASTRECHARGING)||(PROJECT_NAME==278)) 
 	      while((!MSCAN1SendMsg(mg))&&(tt>0))

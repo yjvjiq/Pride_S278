@@ -618,22 +618,33 @@ void TaskRechargeDC(void)
 //* ReturnValue    : None
 //******************************************************************************
 void TaskDC(void)
-{  
+{
     if((FASTRECHARGING==g_BmsModeFlag)||(RECHARGING==g_BmsModeFlag)) ////快充或受电弓充电
     {
         if(DCStartState == 0)//当接收到之后，不再计时
         {
 			CRMOverTimeBefore60s++;
-			if(CRMOverTimeBefore60s>=6000)//10ms*6000
-			{
-				OverTimeState=1;//超时标志位置1 			   
-				CHMStep=0x07;
-				BEMError1|=0x01;//收不到CRM，30s后发送BEM
-				CRMOverTimeBefore60s = 0;	   
+			if(FASTRECHARGING == g_BmsModeFlag){
+				if(CRMOverTimeBefore60s >= 6000)//10ms*6000 == 60 000 ms = 60s = 1min
+				{
+					OverTimeState = 1;//超时标志位置1 			   
+					CHMStep = 0x07;
+					BEMError1 |= 0x01;//收不到CRM，30s后发送BEM
+					CRMOverTimeBefore60s = 0;	   
+				}
+			}
+			else if(RECHARGING == g_BmsModeFlag){
+				if(CRMOverTimeBefore60s >= 60000)//10ms*60000 = 600 000ms = 600s = 10min
+				{
+					OverTimeState = 1;//超时标志位置1 			   
+					CHMStep = 0x07;
+					BEMError1 |= 0x01;//收不到CRM，30s后发送BEM
+					CRMOverTimeBefore60s = 0;	   
+				}
 			}
         }
 		
-        if((stateCode==110)||(stateCode==170)|| (DCStartState != 0) ||(OverTimeState==1)){        
+        if((stateCode==110)||(stateCode==170)|| (DCStartState != 0) ||(OverTimeState==1)){
             TaskRechargeDC();
         }
     }

@@ -734,7 +734,7 @@ void errorLowIsolation(void)
 //******************************************************************************
 void DCChangerComError(void)
 {
-	if(OverTimeState==1)
+	if(OverTimeState==1) // charge prorocal over time flag, in each step.
 	{
 		CutDCChaCurt0.Bit.F1_Communication_With_Charger=1;//故障动作
 		g_caution_Flag_2 |=0x80; //for 内部CAN
@@ -1304,37 +1304,38 @@ unsigned char TaskFaultProcess(void)
 	{
 		errorSystemVoltageUV();//总电压欠压
 		errorDischargeOC();//放电过流
-	}
-	if(g_BmsModeFlag == FASTRECHARGING)
-	{
-		errorLowIsolation();//绝缘过低
-		CHG_SocketOT(); //充电插座过温 
-	}
-
-	
-    if((g_BmsModeFlag == FASTRECHARGING)||(g_BmsModeFlag == RECHARGING))
-    {
-		DCChangerComError();//直流充电通信故障
-//		if(CHMStep != 0) //means start to communicate with the charger.
-//		{
-//		}
-        Charge_Check();//充电电流正负检测
-    }
-    
-    if(g_BmsModeFlag == RECHARGING) //慢充模式
-    {
-		if(CHMStep != 0)//means start to communicate with the charger.
-		{
-        	ACChangerComError();
-			VCUComError();//与VCU通讯故障
-		}
-    }
-    else if(g_BmsModeFlag == DISCHARGING)//行车模式 
-    {
         errorCellVoltageUV();//单体电压过低 
         errorSOCLow();//SOC低
         VCUComError();//与VCU通讯故障
-    }                        
+	}
+    
+	if(g_BmsModeFlag == FASTRECHARGING)
+	{
+		errorLowIsolation();	//绝缘过低
+		CHG_SocketOT();			//充电插座过温 
+
+        Charge_Check();			//charge current direction check.
+		DCChangerComError();	//直流充电通信故障
+	}
+
+    if(g_BmsModeFlag == RECHARGING) //慢充模式
+    {
+		ACChangerComError();	// VCU_ChgControl and VCU_ChgControl_2
+		VCUComError();			//与VCU通讯故障
+		Charge_Check(); 		//charge current direction check.
+		DCChangerComError();	//直流充电通信故障
+		
+//		if(CHMStep != 0)//means start to communicate with the charger.This will be later than DCStartState, so it will ignore the CRM OverTime.
+//		{
+//		}
+    }
+	
+//    if((g_BmsModeFlag == FASTRECHARGING)||(g_BmsModeFlag == RECHARGING))
+//    {
+//		DCChangerComError();//直流充电通信故障
+//        Charge_Check();//charge current direction check.
+//    }
+	
     innerCommOT3();//内部通信故障 
     errorCellVoltageOV(); //单体电压过高 
     errorCurrSensorIniatial(); //电流传感器故障
