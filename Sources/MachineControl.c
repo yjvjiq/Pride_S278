@@ -165,6 +165,7 @@ void stateCodeTransfer(void)
 				status_group4.Bit.Mode_BMS_Work = 2;//BMS当前工作状态=充电
 				status_group3.Bit.St_CHG_Mode=2;//充电模式等于AC充电
 				status_group3.Bit.St_Charge = 1;//正在充电 
+				Error_Group1.Bit.St_CHG_Allow = 0; //charge allowed
                 stateCode = 81;
                 bmsSelfcheckCounter = 0;            
             }
