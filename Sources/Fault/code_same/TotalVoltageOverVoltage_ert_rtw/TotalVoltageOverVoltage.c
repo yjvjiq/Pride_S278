@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'TotalVoltageOverVoltage'.
  *
- * Model version                  : 1.113
+ * Model version                  : 1.102
  * Simulink Coder version         : 8.10 (R2016a) 10-Feb-2016
- * C/C++ source code generated on : Tue Aug 08 09:52:32 2017
+ * C/C++ source code generated on : Wed Nov 01 16:36:21 2017
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Freescale->HC(S)12
@@ -112,7 +112,7 @@ uint8_T TotalVoltageOverVoltage_custom(real32_T V0, real32_T V3, uint8_T
 
      case TotalVoltageOverVolt_IN_Delay11:
       /* During 'Delay11': '<S1>:185' */
-      if (!((V0 < 734.0F) && (V3 < 734.0F) && (ModelFlag == 0))) {
+      if (!((V0 < 734.0F) && (V3 < 734.0F))) {
         /* Transition: '<S1>:181' */
         TotalVoltageOverVoltage_DW.is_F1 = TotalVoltageOverVolta_IN_Fault1;
 
@@ -131,7 +131,7 @@ uint8_T TotalVoltageOverVoltage_custom(real32_T V0, real32_T V3, uint8_T
 
      case TotalVoltageOverVolta_IN_Fault1:
       /* During 'Fault1': '<S1>:182' */
-      if ((V0 < 734.0F) && (V3 < 734.0F) && (ModelFlag == 0)) {
+      if ((V0 < 734.0F) && (V3 < 734.0F)) {
         /* Transition: '<S1>:193' */
         TotalVoltageOverVoltage_DW.is_F1 = TotalVoltageOverVolt_IN_Delay11;
         TotalVoltageOverVoltage_DW.temporalCounter_i1 = 0U;
@@ -255,31 +255,31 @@ uint8_T TotalVoltageOverVoltage_custom(real32_T V0, real32_T V3, uint8_T
 
      case TotalVoltageOverVolt_IN_Delay32:
       /* During 'Delay32': '<S1>:205' */
-      if (!((V0 < 754.0F) && (V3 < 754.0F) && (ModelFlag == 0))) {
-        /* Transition: '<S1>:208' */
-        TotalVoltageOverVoltage_DW.is_F3 = TotalVoltageOverVolta_IN_Fault3;
+      if (TotalVoltageOverVoltage_DW.temporalCounter_i3 >= 10) {
+        /* Transition: '<S1>:210' */
+        /* Exit Internal 'F': '<S1>:103' */
+        /* Exit Internal 'F3': '<S1>:102' */
+        /* Exit Internal 'F2': '<S1>:101' */
+        /* Exit Internal 'F1': '<S1>:192' */
+        TotalVoltageOverVoltage_DW.is_F1 = TotalVoltageOverVolta_IN_Fault1;
 
-        /* Entry 'Fault3': '<S1>:23' */
-        TotalVoltageOverVoltage_B.F_lev_i = 3U;
+        /* Entry 'Fault1': '<S1>:182' */
+        TotalVoltageOverVoltage_B.F_lev_i = 1U;
+
+        /* Entry Internal 'F2': '<S1>:101' */
+        /* Transition: '<S1>:173' */
+        TotalVoltageOverVoltage_DW.is_F2 = TotalVoltageOverVoltag_IN_Wait2;
+
+        /* Entry Internal 'F3': '<S1>:102' */
+        /* Transition: '<S1>:108' */
+        TotalVoltageOverVoltage_DW.is_F3 = TotalVoltageOverVoltag_IN_Wait3;
       } else {
-        if (TotalVoltageOverVoltage_DW.temporalCounter_i3 >= 10) {
-          /* Transition: '<S1>:210' */
-          /* Exit Internal 'F': '<S1>:103' */
-          /* Exit Internal 'F3': '<S1>:102' */
-          /* Exit Internal 'F2': '<S1>:101' */
-          /* Exit Internal 'F1': '<S1>:192' */
-          TotalVoltageOverVoltage_DW.is_F1 = TotalVoltageOverVolta_IN_Fault1;
+        if (!((V0 < 754.0F) && (V3 < 754.0F) && (ModelFlag == 0))) {
+          /* Transition: '<S1>:208' */
+          TotalVoltageOverVoltage_DW.is_F3 = TotalVoltageOverVolta_IN_Fault3;
 
-          /* Entry 'Fault1': '<S1>:182' */
-          TotalVoltageOverVoltage_B.F_lev_i = 1U;
-
-          /* Entry Internal 'F2': '<S1>:101' */
-          /* Transition: '<S1>:173' */
-          TotalVoltageOverVoltage_DW.is_F2 = TotalVoltageOverVoltag_IN_Wait2;
-
-          /* Entry Internal 'F3': '<S1>:102' */
-          /* Transition: '<S1>:108' */
-          TotalVoltageOverVoltage_DW.is_F3 = TotalVoltageOverVoltag_IN_Wait3;
+          /* Entry 'Fault3': '<S1>:23' */
+          TotalVoltageOverVoltage_B.F_lev_i = 3U;
         }
       }
       break;
